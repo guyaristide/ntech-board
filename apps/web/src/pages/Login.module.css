@@ -28,15 +28,6 @@
   }
 }
 
-.kicker {
-  margin: 0;
-  color: var(--text-faint);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 .title {
   margin: 4px 0 4px;
   font-size: 24px;
@@ -122,8 +113,26 @@
   text-decoration: underline;
 }
 
-.footer {
-  margin-top: 20px;
+.signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 28px;
+  user-select: none;
+}
+
+/* Grande signature discrète, comme un filigrane sous la carte */
+.product {
+  color: var(--text);
+  font-size: clamp(40px, 9vw, 72px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  opacity: 0.09;
+}
+
+.company {
+  margin-top: 6px;
   color: var(--text-faint);
   font-size: 12px;
 }

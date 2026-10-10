@@ -25,7 +25,6 @@ export function Login() {
     <main className={styles.page}>
       <div className={styles.card}>
         <img src={BRAND.logo} alt={BRAND.publisher} className={styles.logo} />
-        <p className={styles.kicker}>{BRAND.product}</p>
         <h1 className={styles.title}>{project?.title ?? 'Connexion'}</h1>
         {project?.subtitle ? <p className={styles.subtitle}>{project.subtitle}</p> : null}
         {params.get('erreur') === 'lien' ? (
@@ -69,9 +68,10 @@ export function Login() {
           </form>
         )}
       </div>
-      <p className={styles.footer}>
-        {BRAND.product} · un outil {BRAND.company}
-      </p>
+      <div className={styles.signature} aria-label={`${BRAND.product}, un outil ${BRAND.company}`}>
+        <span className={styles.product}>{BRAND.product}</span>
+        <span className={styles.company}>un outil {BRAND.company}</span>
+      </div>
     </main>
   );
 }
