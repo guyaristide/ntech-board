@@ -56,7 +56,7 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `SMTP_SECURE` | `false` pour STARTTLS sur 587 ; `true` seulement pour du SSL direct sur 465 | non |
 | `SMTP_USER` | `contact@neiba-technologies.com` (valeur par défaut) | non |
 | `SMTP_FROM` | `NTECH Board <contact@neiba-technologies.com>` (valeur par défaut) | non |
-| `PROJECT_HOSTS` | `{slug}-board.neiba-technologies.com` (valeur par défaut) | non |
+| `PROJECT_HOSTS` | Laisser **vide** : le modèle par défaut est `{slug}-board.neiba-technologies.com`. Si vous le renseignez, il doit contenir `{slug}`, et **jamais** un domaine complet comme `etourisme-board.neiba-technologies.com` | non |
 | `DEFAULT_PROJECT` | Vide. À renseigner uniquement pour une instance dédiée à un seul projet | non |
 | `SESSION_DAYS` | `30` | non |
 | `LOGIN_TOKEN_MINUTES` | `20` | non |

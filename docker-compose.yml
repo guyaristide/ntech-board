@@ -12,7 +12,8 @@ services:
       PGDATABASE: board
       PGUSER: board
       PGPASSWORD: ${POSTGRES_PASSWORD:?Définir POSTGRES_PASSWORD}
-      PROJECT_HOSTS: ${PROJECT_HOSTS:-{slug}-board.neiba-technologies.com}
+      # Vide : {slug}-board.neiba-technologies.com. Toujours avec {slug}, jamais un domaine complet.
+      PROJECT_HOSTS: ${PROJECT_HOSTS:-}
       DEFAULT_PROJECT: ${DEFAULT_PROJECT:-}
       SUPERADMIN_EMAILS: ${SUPERADMIN_EMAILS:?Définir SUPERADMIN_EMAILS}
       SMTP_HOST: ${SMTP_HOST-smtp-relay.brevo.com}

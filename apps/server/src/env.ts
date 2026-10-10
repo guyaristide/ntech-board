@@ -12,13 +12,26 @@ const databaseUrl = () => {
   throw new Error('Configurez DATABASE_URL ou PGHOST/PGUSER/PGPASSWORD/PGDATABASE.');
 };
 
+const DEFAULT_HOSTS = ['{slug}-board.neiba-technologies.com', '{slug}-board.localhost'];
+
+function projectHosts(value: string | undefined) {
+  const all = list(value);
+  const valid = all.filter(p => p.includes('{slug}'));
+  for (const p of all.filter(p => !p.includes('{slug}')))
+    console.warn(
+      `PROJECT_HOSTS : « ${p} » ignoré, il doit contenir {slug} (exemple : {slug}-board.neiba-technologies.com).`,
+    );
+  return valid.length ? valid : DEFAULT_HOSTS;
+}
+
 export const env = {
   port: Number(process.env.PORT ?? 3000),
   databaseUrl: databaseUrl(),
-  /** Modèles d'hôte, {slug} étant le projet : « {slug}-board.neiba-technologies.com ». */
-  projectHosts: list(
-    process.env.PROJECT_HOSTS ?? '{slug}-board.neiba-technologies.com,{slug}-board.localhost',
-  ),
+  /**
+   * Modèles d'hôte, {slug} étant le projet : « {slug}-board.neiba-technologies.com ».
+   * Vide ou absent : modèle par défaut. Un modèle sans {slug} est ignoré (avertissement au démarrage).
+   */
+  projectHosts: projectHosts(process.env.PROJECT_HOSTS),
   /** Projet servi quand l'hôte ne correspond à aucun modèle (instance dédiée, développement). */
   defaultProject: process.env.DEFAULT_PROJECT ?? '',
   superadmins: list(process.env.SUPERADMIN_EMAILS).map(e => e.toLowerCase()),

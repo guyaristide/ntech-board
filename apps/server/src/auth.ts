@@ -64,9 +64,11 @@ export async function closeSession(c: Context) {
 
 /** Résout le projet (sous-domaine) puis l'utilisateur et son rôle (cookie de session). */
 export const context: MiddlewareHandler<AppEnv> = async (c, next) => {
-  const slug = projectSlug(c.req.header('x-forwarded-host') ?? c.req.header('host'));
+  const host = c.req.header('x-forwarded-host') ?? c.req.header('host') ?? '';
+  const slug = projectSlug(host);
   const project = slug ? await findProject(slug) : null;
-  if (!project) return c.json({ error: 'project_not_found', slug }, 404);
+  // Diagnostic : l'hôte reçu et le projet déduit (null si l'hôte ne correspond à aucun modèle).
+  if (!project) return c.json({ error: 'project_not_found', host, slug: slug ?? null }, 404);
   c.set('project', project);
   c.set('user', null);
   c.set('role', null);
