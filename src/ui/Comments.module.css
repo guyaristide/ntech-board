@@ -1,0 +1,78 @@
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.comment {
+  display: flex;
+  gap: 10px;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--tag-blue);
+  color: var(--tag-blue-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.meta {
+  margin: 0;
+  font-size: 13px;
+}
+
+.meta time {
+  margin-left: 6px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.body {
+  margin: 2px 0 0;
+  white-space: pre-wrap;
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.author {
+  width: 120px;
+  padding: 4px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 2px;
+  border: 0;
+  background: transparent;
+  outline: none;
+}
+
+.send {
+  padding: 3px 10px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+}
+
+.send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
