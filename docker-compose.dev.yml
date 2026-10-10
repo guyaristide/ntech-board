@@ -1,0 +1,14 @@
+# Base PostgreSQL pour le développement local : npm run dev:db
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: board
+      POSTGRES_USER: board
+      POSTGRES_PASSWORD: board
+    ports:
+      - '55433:5432'
+    volumes:
+      - board-dev-db:/var/lib/postgresql/data
+volumes:
+  board-dev-db:

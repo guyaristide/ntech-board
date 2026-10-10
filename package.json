@@ -1,35 +1,33 @@
 {
-  "name": "cadrage-etourisme",
+  "name": "ntech-board",
   "private": true,
-  "version": "0.1.0",
-  "description": "Espace de cadrage eTourisme : backlog des user stories et programme des ateliers",
+  "version": "1.0.0",
+  "description": "NTECH Board : espace collaboratif de cadrage (backlog de user stories et programme d'ateliers), outil NTECH SARL",
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc -b",
-    "import:planning": "python3 scripts/import_planning.py",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
+    "dev": "npm run dev -w @board/server & npm run dev -w @board/web",
+    "dev:db": "docker compose -f docker-compose.dev.yml up -d",
+    "build": "npm run build -w @board/web && npm run build -w @board/server",
+    "start": "node apps/server/dist/index.js",
+    "cli": "npm run cli -w @board/server --",
+    "typecheck": "tsc -p packages/shared && tsc -p apps/web && tsc -p apps/server",
+    "test": "npm test -w @board/server",
+    "format": "prettier --write \"apps/*/src/**/*.{ts,tsx,css}\" \"packages/*/src/**/*.ts\""
   },
   "prettier": {
     "singleQuote": true,
     "printWidth": 110,
     "arrowParens": "avoid"
   },
-  "dependencies": {
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "react-router-dom": "^7.18.4",
-    "zustand": "^5.0.15"
-  },
   "devDependencies": {
-    "@types/node": "^26.6.5",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
     "prettier": "^3.9.10",
-    "typescript": "~6.0.2",
-    "vite": "^8.3.4"
+    "typescript": "~6.0.2"
   }
 }

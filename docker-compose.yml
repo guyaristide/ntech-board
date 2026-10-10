@@ -1,0 +1,52 @@
+# NTECH Board : déploiement Docker Compose (Coolify). Voir docs/DEPLOIEMENT.md.
+# Les ${VARIABLES} sont saisies dans Coolify (Environment Variables) ou dans un fichier .env.
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    expose:
+      - '3000'
+    environment:
+      PGHOST: db
+      PGPORT: '5432'
+      PGDATABASE: board
+      PGUSER: board
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Définir POSTGRES_PASSWORD}
+      PROJECT_HOSTS: ${PROJECT_HOSTS:-{slug}-board.neiba-technologies.com}
+      DEFAULT_PROJECT: ${DEFAULT_PROJECT:-}
+      SUPERADMIN_EMAILS: ${SUPERADMIN_EMAILS:?Définir SUPERADMIN_EMAILS}
+      SMTP_HOST: ${SMTP_HOST-smtp-relay.brevo.com}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-contact@neiba-technologies.com}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:?Définir SMTP_PASSWORD}
+      SMTP_FROM: ${SMTP_FROM:-NTECH Board <contact@neiba-technologies.com>}
+      SESSION_DAYS: ${SESSION_DAYS:-30}
+      LOGIN_TOKEN_MINUTES: ${LOGIN_TOKEN_MINUTES:-20}
+      COOKIE_SECURE: ${COOKIE_SECURE:-auto}
+    volumes:
+      - board-storage:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: board
+      POSTGRES_USER: board
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Définir POSTGRES_PASSWORD}
+    volumes:
+      - board-db:/var/lib/postgresql/data
+      - board-backups:/backups
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U board -d board']
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  board-db:
+  board-storage:
+  board-backups:
