@@ -71,5 +71,5 @@ docker-compose.yml Déploiement : application + PostgreSQL + volumes
 ## Documentation
 
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) : choix techniques, modèle de données, temps réel, sécurité.
-- [docs/DEPLOIEMENT.md](docs/DEPLOIEMENT.md) : mise en production sur Coolify, pas à pas (DNS, variables, domaines, volumes, sauvegardes).
+- [docs/DEPLOIEMENT.md](docs/DEPLOIEMENT.md) : mise en production sur Coolify, pas à pas (DNS, variables, paramètres SMTP Brevo, domaines, volumes, sauvegardes, **ajout d'un projet**).
 - [docs/EXPLOITATION.md](docs/EXPLOITATION.md) : nouveau projet, membres, imports, sauvegarde et restauration, mises à jour, dépannage.

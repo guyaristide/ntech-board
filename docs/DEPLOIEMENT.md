@@ -64,7 +64,34 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 
 Marquez `POSTGRES_PASSWORD` et `SMTP_PASSWORD` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
 
-Côté Brevo, l'adresse d'expédition `contact@neiba-technologies.com` doit être validée, et le domaine authentifié (SPF, DKIM). Sans cela, les liens de connexion risquent d'arriver en indésirables.
+### Paramètres SMTP (Brevo)
+
+**Où les saisir.** En production, dans l'onglet **Environment Variables** de la ressource Coolify. En local, dans le fichier `.env` à la racine du dépôt, qui n'est pas versionné. Le code ne contient aucun paramètre SMTP.
+
+**Obtenir le mot de passe (`SMTP_PASSWORD`).** Ce n'est pas le mot de passe du compte Brevo, mais une **clé SMTP** :
+
+1. Brevo, menu du compte, puis **SMTP & API**, onglet **SMTP**.
+2. **Générer une nouvelle clé SMTP**, et la copier aussitôt : elle ne s'affiche qu'une fois.
+3. Sur la même page, relever le **Login** SMTP et le mettre dans `SMTP_USER`. Selon l'ancienneté du compte, Brevo affiche l'adresse du compte (`contact@neiba-technologies.com`) ou un identifiant du type `xxxxxx@smtp-brevo.com`. L'expéditeur vu par les destinataires reste celui de `SMTP_FROM`.
+
+**Délivrabilité.** Côté Brevo, l'expéditeur `contact@neiba-technologies.com` doit être validé (menu **Expéditeurs**) et le domaine `neiba-technologies.com` authentifié (menu **Domaines**, enregistrements DNS SPF et DKIM). Sans cela, les liens de connexion risquent d'arriver en indésirables.
+
+**Appliquer une modification.** Après avoir modifié une variable SMTP, faites **Restart** de la ressource : les variables sont lues au démarrage, aucune reconstruction n'est nécessaire.
+
+**En local**, ajouter au `.env` :
+
+```dotenv
+SMTP_HOST=smtp-relay.brevo.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=contact@neiba-technologies.com
+SMTP_PASSWORD=la-clé-smtp-brevo
+SMTP_FROM=NTECH Board <contact@neiba-technologies.com>
+```
+
+Sans `SMTP_HOST`, aucun e-mail ne part : le lien de connexion s'affiche dans la console du serveur.
+
+**Vérifier.** Demandez un lien depuis la page de connexion. Si l'envoi échoue, la page affiche « L'envoi a échoué, réessayez dans un instant ». Les logs du service **app** contiennent alors la cause, sur une ligne `Envoi du lien de connexion impossible (...)`. Une réponse `535 Authentication failed` signale un mauvais `SMTP_USER` ou une mauvaise clé.
 
 ## 4. Domaines
 
@@ -158,14 +185,42 @@ La commande fait la même chose que `deploy/backup.sh` : un fichier par nuit, 14
 
 La restauration est décrite dans [EXPLOITATION.md](EXPLOITATION.md#restaurer-une-sauvegarde).
 
-## 9. Ajouter un projet
+## 9. Ajouter un projet (nouveau tenant)
 
-Il n'y a rien à reconstruire :
+Un tenant est un projet, servi à l'adresse `<slug>-board.neiba-technologies.com`. L'ajouter ne demande ni reconstruction ni modification du code. Exemple avec le projet `pfo` :
 
-1. **DNS :** ajoutez `nouveau-board.neiba-technologies.com`, enregistrement A vers le serveur.
-2. **Coolify :** dans le service **app**, champ **Domains**, ajoutez `https://nouveau-board.neiba-technologies.com:3000`, puis **Redeploy** pour que le proxy prenne le domaine.
-3. **Terminal :** lancez `node apps/server/dist/cli.js project:create nouveau --title "…" --admin …`.
-4. **Contenu :** importez le backlog et le planning, depuis l'écran **Administration** du nouveau tableau ou en ligne de commande.
+1. **DNS.** Créez l'enregistrement du sous-domaine vers le serveur Coolify :
+
+   ```
+   pfo-board.neiba-technologies.com.   A   <IP du serveur Coolify>
+   ```
+
+2. **Domaine dans Coolify.** Dans le service **app**, champ **Domains**, ajoutez le domaine à la suite des autres, séparé par une virgule :
+
+   ```
+   https://etourisme-board.neiba-technologies.com:3000,https://pfo-board.neiba-technologies.com:3000
+   ```
+
+   Enregistrez puis faites **Redeploy** : le proxy prend en compte le domaine et Coolify obtient le certificat HTTPS.
+
+3. **Créer le projet.** Dans le **Terminal** du service **app** :
+
+   ```bash
+   node apps/server/dist/cli.js project:create pfo \
+     --title "Cadrage PFO" \
+     --subtitle "Description courte du projet" \
+     --admin vous@neiba-technologies.com
+   ```
+
+   Le slug (`pfo`) doit être **exactement** le début du sous-domaine (`pfo-board…`) : 2 à 41 caractères, minuscules, chiffres et tirets. `--admin` désigne le premier administrateur du projet. Les adresses de `SUPERADMIN_EMAILS` sont de toute façon administratrices de tous les projets.
+
+4. **Remplir et inviter.** Ouvrez `https://pfo-board.neiba-technologies.com` et connectez-vous par le lien reçu. Puis, dans **Administration** :
+   - **Imports** : déposez le planning des ateliers (`.xlsx`) et le backlog des US (`.json` au format `{ epics, stories }`) ;
+   - **Membres** : invitez les participants, avec leur e-mail et leur rôle.
+
+   Ces opérations existent aussi en ligne de commande : `import:planning`, `import:stories`, `member:add` (voir [EXPLOITATION.md](EXPLOITATION.md#ligne-de-commande)).
+
+5. **Vérifier.** `node apps/server/dist/cli.js project:list` liste les projets avec leurs membres et leurs US. Si l'adresse affiche « Tableau introuvable », le slug ne correspond pas au sous-domaine, ou le domaine n'est pas encore pris en compte par Coolify.
 
 ## 10. Mises à jour
 
