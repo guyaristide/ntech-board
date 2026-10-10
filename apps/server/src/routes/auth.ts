@@ -38,6 +38,11 @@ authRoutes.post('/auth/login', async c => {
   );
   let userId = rows[0]?.id;
   if (!userId && isSuperadmin(email)) userId = await ensureUser(email);
+  // La réponse au navigateur est toujours la même ; les logs, eux, disent ce qui s'est passé.
+  if (!userId)
+    console.log(
+      `[connexion] ${email} sur « ${project.slug} » : ignoré, ni membre du projet ni dans SUPERADMIN_EMAILS.`,
+    );
   if (userId) {
     // Au plus 5 liens par quart d'heure et par personne.
     const recent = await pool.query<{ n: number }>(
@@ -59,10 +64,17 @@ authRoutes.post('/auth/login', async c => {
           origin,
           env.loginTokenMinutes,
         );
+        console.log(`[connexion] ${email} sur « ${project.slug} » : lien envoyé.`);
       } catch (e) {
-        console.error(`Envoi du lien de connexion impossible (${email}) : ${(e as Error).message}`);
+        console.error(
+          `[connexion] Envoi du lien de connexion impossible (${email}) : ${(e as Error).message}`,
+        );
         return c.json({ error: 'mail_failed' }, 502);
       }
+    } else {
+      console.log(
+        `[connexion] ${email} sur « ${project.slug} » : ignoré, limite de 5 liens en 15 minutes atteinte.`,
+      );
     }
   }
   return c.json({ ok: true });

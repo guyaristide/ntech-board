@@ -2,11 +2,13 @@ import { serve } from '@hono/node-server';
 import { createApp } from './app';
 import { migrate, pool } from './db';
 import { env } from './env';
+import { checkMail } from './mail';
 import { listen } from './realtime';
 import { ensureStorage } from './storage';
 
 await migrate();
 ensureStorage();
+void checkMail();
 await listen();
 
 const server = serve({ fetch: createApp().fetch, port: env.port }, info =>

@@ -34,12 +34,30 @@ const layout = (
 </table><p style="color:#8a8984;font-size:12px;margin-top:16px">NTECH Board · un outil NTECH SARL</p>
 </td></tr></table></body></html>`;
 
+/** Vérifie la connexion au relais SMTP au démarrage et l'écrit dans les logs (sans le mot de passe). */
+export async function checkMail() {
+  if (!transport) {
+    console.log('[mail] SMTP_HOST vide : les e-mails ne partent pas, les liens sont écrits dans les logs.');
+    return;
+  }
+  const where = `${env.mail.host}:${env.mail.port} (utilisateur ${env.mail.user || 'aucun'}, expéditeur ${env.mail.from})`;
+  if (!env.mail.password)
+    console.warn(`[mail] SMTP_PASSWORD vide : l'authentification sur ${where} va échouer.`);
+  try {
+    await transport.verify();
+    console.log(`[mail] Connexion SMTP vérifiée : ${where}`);
+  } catch (e) {
+    console.error(`[mail] Connexion SMTP impossible : ${where} : ${(e as Error).message}`);
+  }
+}
+
 export async function sendMail(to: string, subject: string, html: string, text: string) {
   if (!transport) {
     console.log(`\n[mail] À : ${to}\n[mail] Objet : ${subject}\n${text}\n`);
     return;
   }
-  await transport.sendMail({ from: env.mail.from, to, subject, html, text });
+  const info = await transport.sendMail({ from: env.mail.from, to, subject, html, text });
+  console.log(`[mail] Accepté par le relais pour ${to} : ${info.response} (id ${info.messageId})`);
 }
 
 export function sendLoginLink(to: string, board: string, url: string, origin: string, minutes: number) {
