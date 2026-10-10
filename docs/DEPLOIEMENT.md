@@ -159,7 +159,7 @@ Ouvrez le **Terminal** du service **app** dans Coolify, ou lancez `docker exec -
 node apps/server/dist/cli.js project:create etourisme \
   --title "Cadrage eTourisme" \
   --subtitle "Plateforme nationale eTourisme, programme SGAT" \
-  --admin tech@mstudio.vc
+  --admin k.neiba@neiba-technologies.com
 
 # Contenu de départ, livré dans l'image (dossier seeds/)
 node apps/server/dist/cli.js import:stories  etourisme seeds/etourisme/stories.json
