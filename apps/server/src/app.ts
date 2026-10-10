@@ -38,8 +38,11 @@ export function createApp() {
     return c.json({ ok: true });
   });
 
+  // Journal de toutes les requêtes /api, y compris les routes inconnues.
+  app.use('/api/*', accessLog);
+
   const api = new Hono<AppEnv>();
-  api.use('*', accessLog, context, sameOrigin);
+  api.use('*', context, sameOrigin);
   api.onError((err, c) => {
     fail('erreur', `${c.req.method} ${new URL(c.req.url).pathname}`, err);
     return c.json({ error: 'server_error' }, 500);
@@ -49,6 +52,8 @@ export function createApp() {
   api.route('/admin', adminRoutes);
   api.notFound(c => c.json({ error: 'not_found' }, 404));
   app.route('/api', api);
+  // Une route d'API inconnue répond en JSON, jamais par la page du front.
+  app.all('/api/*', c => c.json({ error: 'not_found' }, 404));
 
   if (existsSync(webDist)) {
     const index = readFileSync(join(webDist, 'index.html'), 'utf8');
