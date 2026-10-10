@@ -70,7 +70,7 @@ export function Login() {
         )}
       </div>
       <p className={styles.footer}>
-        {BRAND.product} · un outil {BRAND.company} · {BRAND.publisher}
+        {BRAND.product} · un outil {BRAND.company}
       </p>
     </main>
   );

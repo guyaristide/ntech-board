@@ -31,7 +31,7 @@ const layout = (
 <tr><td><h1 style="margin:0 0 12px;font-size:20px">${esc(title)}</h1>${body}
 <p style="margin:24px 0"><a href="${cta.url}" style="display:inline-block;padding:10px 18px;background:#2383e2;color:#fff;border-radius:4px;text-decoration:none;font-weight:600">${esc(cta.label)}</a></p>
 <p style="margin:0;color:#8a8984;font-size:12px">Si le bouton ne fonctionne pas, copiez ce lien : <br>${esc(cta.url)}</p></td></tr>
-</table><p style="color:#8a8984;font-size:12px;margin-top:16px">NTECH Board · un outil NTECH SARL · Neiba Technologies</p>
+</table><p style="color:#8a8984;font-size:12px;margin-top:16px">NTECH Board · un outil NTECH SARL</p>
 </td></tr></table></body></html>`;
 
 export async function sendMail(to: string, subject: string, html: string, text: string) {
