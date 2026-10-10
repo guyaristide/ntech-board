@@ -73,7 +73,9 @@ export interface Notification {
 }
 
 /** Écoute le canal PostgreSQL ; se reconnecte en cas de coupure. */
-export async function listen(log = console.log) {
+export async function listen(
+  log = (m: string) => console.log(`${new Date().toISOString()} [temps-réel] ${m}`),
+) {
   const client = new pg.Client({ connectionString: env.databaseUrl });
   client.on('error', err => {
     log(`Écoute temps réel interrompue (${err.message}), reconnexion…`);
@@ -91,4 +93,5 @@ export async function listen(log = console.log) {
   });
   await client.connect();
   await client.query(`LISTEN ${CHANNEL}`);
+  log(`écoute du canal ${CHANNEL} active`);
 }

@@ -2,7 +2,10 @@ import { serve } from '@hono/node-server';
 import { createApp } from './app';
 import { migrate, pool } from './db';
 import { env } from './env';
+import { log } from './log';
 import { checkMail } from './mail';
+import { listProjects } from './projects';
+import { storageRoot } from './storage';
 import { listen } from './realtime';
 import { ensureStorage } from './storage';
 
@@ -12,7 +15,22 @@ void checkMail();
 await listen();
 
 const server = serve({ fetch: createApp().fetch, port: env.port }, info =>
-  console.log(`NTECH Board à l'écoute sur le port ${info.port} (hôtes : ${env.projectHosts.join(', ')})`),
+  log(
+    'démarrage',
+    `NTECH Board à l'écoute sur le port ${info.port} (hôtes : ${env.projectHosts.join(', ')})`,
+  ),
+);
+
+// Résumé de configuration, utile pour diagnostiquer un déploiement.
+const projects = await listProjects();
+log(
+  'démarrage',
+  `${projects.length} projet(s) : ${projects.map(p => `${p.slug} (${p.members} membre(s), ${p.stories} US)`).join(' ; ') || 'aucun, créez-en un avec project:create'}`,
+);
+log('démarrage', `super-administrateurs : ${env.superadmins.join(', ') || 'aucun (SUPERADMIN_EMAILS vide)'}`);
+log(
+  'démarrage',
+  `projet par défaut : ${env.defaultProject || 'aucun'} · stockage : ${storageRoot()} · sessions : ${env.sessionDays} j`,
 );
 
 // Arrêt propre (redéploiement Coolify) : on ferme les connexions avant de quitter.

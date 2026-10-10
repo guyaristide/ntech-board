@@ -37,7 +37,9 @@ const migrationsDir = () =>
   }) ?? resolve(here, '../migrations');
 
 /** Applique les migrations SQL manquantes, dans l'ordre, sous verrou (plusieurs instances possibles). */
-export async function migrate(log = console.log) {
+export async function migrate(
+  log = (m: string) => console.log(`${new Date().toISOString()} [migration] ${m}`),
+) {
   const dir = migrationsDir();
   const files = readdirSync(dir)
     .filter(f => f.endsWith('.sql'))

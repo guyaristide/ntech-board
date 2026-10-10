@@ -7,6 +7,7 @@ import { secureHeaders } from 'hono/secure-headers';
 import { context, sameOrigin, type AppEnv } from './auth';
 import { pool } from './db';
 import { env } from './env';
+import { accessLog, fail } from './log';
 import { adminRoutes } from './routes/admin';
 import { authRoutes } from './routes/auth';
 import { workspaceRoutes } from './routes/workspace';
@@ -38,7 +39,11 @@ export function createApp() {
   });
 
   const api = new Hono<AppEnv>();
-  api.use('*', context, sameOrigin);
+  api.use('*', accessLog, context, sameOrigin);
+  api.onError((err, c) => {
+    fail('erreur', `${c.req.method} ${new URL(c.req.url).pathname}`, err);
+    return c.json({ error: 'server_error' }, 500);
+  });
   api.route('/', authRoutes);
   api.route('/', workspaceRoutes);
   api.route('/admin', adminRoutes);

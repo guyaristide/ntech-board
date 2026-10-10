@@ -6,6 +6,7 @@ import type { Comment, ServerEvent, Story, Workshop } from '@board/shared';
 import { requireRole, type AppEnv, type User } from '../auth';
 import { createStory, deleteStory, getEntity, getWorkspace, history, mutate, NotFound } from '../repo';
 import { setPresence, subscribe } from '../realtime';
+import { fail, log } from '../log';
 import { uid } from '../merge';
 import {
   CommentBody,
@@ -42,7 +43,7 @@ const comment = (user: User, text: string): Comment => ({
 
 workspaceRoutes.onError((err, c) => {
   if (err instanceof NotFound) return c.json({ error: 'not_found' }, 404);
-  console.error(err);
+  fail('erreur', `${c.req.method} ${new URL(c.req.url).pathname}`, err);
   return c.json({ error: 'server_error' }, 500);
 });
 
@@ -278,7 +279,11 @@ workspaceRoutes.get('/events', read, c => {
         wake?.();
       },
     });
-    stream.onAbort(unsubscribe);
+    log('temps-réel', `ouvert · ${c.get('project').slug} · ${user.email}`);
+    stream.onAbort(() => {
+      log('temps-réel', `fermé · ${c.get('project').slug} · ${user.email}`);
+      unsubscribe();
+    });
     await stream.writeSSE({ event: 'ready', data: key });
     // Battement toutes les 25 s : les proxys (Traefik) ne coupent pas une connexion silencieuse.
     while (!stream.aborted) {

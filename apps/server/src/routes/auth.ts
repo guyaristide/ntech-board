@@ -5,6 +5,7 @@ import { closeSession, hash, isSuperadmin, newToken, openSession, originOf, type
 import { pool } from '../db';
 import { env } from '../env';
 import { sendLoginLink } from '../mail';
+import { clientIp, fail, log } from '../log';
 import { ensureUser } from '../projects';
 
 export const authRoutes = new Hono<AppEnv>();
@@ -37,11 +38,18 @@ authRoutes.post('/auth/login', async c => {
     [email, project.id],
   );
   let userId = rows[0]?.id;
-  if (!userId && isSuperadmin(email)) userId = await ensureUser(email);
+  const superadmin = isSuperadmin(email);
+  if (!userId && superadmin) userId = await ensureUser(email);
+  if (userId)
+    log(
+      'connexion',
+      `${email} sur « ${project.slug} » : demande de lien (${rows[0] ? 'membre' : 'super-administrateur'}) depuis ${clientIp(n => c.req.header(n))}.`,
+    );
   // La réponse au navigateur est toujours la même ; les logs, eux, disent ce qui s'est passé.
   if (!userId)
-    console.log(
-      `[connexion] ${email} sur « ${project.slug} » : ignoré, ni membre du projet ni dans SUPERADMIN_EMAILS.`,
+    log(
+      'connexion',
+      `${email} sur « ${project.slug} » : ignoré, ni membre du projet ni dans SUPERADMIN_EMAILS.`,
     );
   if (userId) {
     // Au plus 5 liens par quart d'heure et par personne.
@@ -64,16 +72,15 @@ authRoutes.post('/auth/login', async c => {
           origin,
           env.loginTokenMinutes,
         );
-        console.log(`[connexion] ${email} sur « ${project.slug} » : lien envoyé.`);
+        log('connexion', `${email} sur « ${project.slug} » : lien envoyé.`);
       } catch (e) {
-        console.error(
-          `[connexion] Envoi du lien de connexion impossible (${email}) : ${(e as Error).message}`,
-        );
+        fail('connexion', `Envoi du lien de connexion impossible (${email}) : ${(e as Error).message}`);
         return c.json({ error: 'mail_failed' }, 502);
       }
     } else {
-      console.log(
-        `[connexion] ${email} sur « ${project.slug} » : ignoré, limite de 5 liens en 15 minutes atteinte.`,
+      log(
+        'connexion',
+        `${email} sur « ${project.slug} » : ignoré, limite de 5 liens en 15 minutes atteinte.`,
       );
     }
   }
@@ -89,12 +96,25 @@ authRoutes.get('/auth/callback', async c => {
       RETURNING user_id`,
     [hash(token), project.id],
   );
-  if (!rows[0]) return c.redirect('/connexion?erreur=lien');
+  if (!rows[0]) {
+    log(
+      'connexion',
+      `lien invalide, expiré ou déjà utilisé sur « ${project.slug} » depuis ${clientIp(n => c.req.header(n))}.`,
+    );
+    return c.redirect('/connexion?erreur=lien');
+  }
   await openSession(c, rows[0].user_id, project.id);
+  const who = await pool.query<{ email: string }>('SELECT email FROM users WHERE id = $1', [rows[0].user_id]);
+  log(
+    'connexion',
+    `session ouverte pour ${who.rows[0]?.email ?? rows[0].user_id} sur « ${project.slug} » depuis ${clientIp(n => c.req.header(n))}.`,
+  );
   return c.redirect('/');
 });
 
 authRoutes.post('/auth/logout', async c => {
+  if (c.get('user'))
+    log('connexion', `déconnexion de ${c.get('user')!.email} sur « ${c.get('project').slug} ».`);
   await closeSession(c);
   return c.json({ ok: true });
 });

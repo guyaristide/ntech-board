@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { env } from './env';
+import { fail, log, warn } from './log';
 
 /**
  * Envoi des e-mails (lien de connexion, invitation) par SMTP, ici le relais Brevo.
@@ -37,27 +38,27 @@ const layout = (
 /** Vérifie la connexion au relais SMTP au démarrage et l'écrit dans les logs (sans le mot de passe). */
 export async function checkMail() {
   if (!transport) {
-    console.log('[mail] SMTP_HOST vide : les e-mails ne partent pas, les liens sont écrits dans les logs.');
+    log('mail', 'SMTP_HOST vide : les e-mails ne partent pas, les liens sont écrits dans les logs.');
     return;
   }
   const where = `${env.mail.host}:${env.mail.port} (utilisateur ${env.mail.user || 'aucun'}, expéditeur ${env.mail.from})`;
-  if (!env.mail.password)
-    console.warn(`[mail] SMTP_PASSWORD vide : l'authentification sur ${where} va échouer.`);
+  if (!env.mail.password) warn('mail', `SMTP_PASSWORD vide : l'authentification sur ${where} va échouer.`);
   try {
     await transport.verify();
-    console.log(`[mail] Connexion SMTP vérifiée : ${where}`);
+    log('mail', `Connexion SMTP vérifiée : ${where}`);
   } catch (e) {
-    console.error(`[mail] Connexion SMTP impossible : ${where} : ${(e as Error).message}`);
+    fail('mail', `Connexion SMTP impossible : ${where} : ${(e as Error).message}`);
   }
 }
 
 export async function sendMail(to: string, subject: string, html: string, text: string) {
   if (!transport) {
-    console.log(`\n[mail] À : ${to}\n[mail] Objet : ${subject}\n${text}\n`);
+    log('mail', `(non envoyé, SMTP_HOST vide) à ${to} · ${subject}\n${text}`);
     return;
   }
+  log('mail', `envoi à ${to} · ${subject}`);
   const info = await transport.sendMail({ from: env.mail.from, to, subject, html, text });
-  console.log(`[mail] Accepté par le relais pour ${to} : ${info.response} (id ${info.messageId})`);
+  log('mail', `Accepté par le relais pour ${to} : ${info.response} (id ${info.messageId})`);
 }
 
 export function sendLoginLink(to: string, board: string, url: string, origin: string, minutes: number) {
