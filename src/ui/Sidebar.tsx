@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { exportCsv, exportJson } from '../model/exporters';
+import { BRAND } from '../brand';
 import { useWorkspace, type SaveState } from '../model/store';
 import type { Workspace } from '../model/types';
 import styles from './Sidebar.module.css';
@@ -45,12 +46,18 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
 
   return (
     <nav className={styles.sidebar} aria-label="Navigation">
+      <a
+        className={styles.brand}
+        href={BRAND.site}
+        target="_blank"
+        rel="noreferrer"
+        title={`${BRAND.publisher} · ${BRAND.company}`}
+      >
+        <img src={BRAND.logo} alt={BRAND.publisher} className={styles.logo} />
+      </a>
       <div className={styles.workspace}>
-        <span className={styles.logo} aria-hidden="true">
-          eT
-        </span>
         <div>
-          <strong>Cadrage eTourisme</strong>
+          <strong>{BRAND.board}</strong>
           <span className={styles.save} data-state={ws.save} title={SAVE_LABEL[ws.save]}>
             {SAVE_LABEL[ws.save]}
           </span>
@@ -145,6 +152,9 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         >
           <span className={styles.icon}>↺</span> Réinitialiser
         </button>
+        <p className={styles.publisher}>
+          Un outil {BRAND.company} · {BRAND.publisher}
+        </p>
       </div>
     </nav>
   );

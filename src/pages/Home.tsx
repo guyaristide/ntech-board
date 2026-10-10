@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { STATUSES, TONE, VERSIONS } from '../model/options';
+import { BRAND } from '../brand';
 import { useWorkspace } from '../model/store';
 import { Tag } from '../ui/Tag';
 import page from './Page.module.css';
@@ -26,7 +27,7 @@ export function Home() {
       <span className={page.icon} aria-hidden="true">
         🌍
       </span>
-      <h1 className={page.h1}>Cadrage eTourisme SGAT</h1>
+      <h1 className={page.h1}>{BRAND.board}</h1>
       <p className={page.lead}>
         Espace de travail du groupement VIEPE × WEVIOO : le backlog des user stories issu du cahier des
         charges v2.1 et le programme des ateliers de cadrage avec le Ministère, SIVIS et Cybastion.

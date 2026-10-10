@@ -24,17 +24,27 @@
   min-width: 0;
 }
 
+.brand {
+  display: block;
+  padding: 8px 10px 4px;
+}
+
 .logo {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 24px;
-  height: 24px;
-  border-radius: var(--radius);
-  background: #e8833a;
-  color: #fff;
+  display: block;
+  width: 118px;
+  height: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  .logo {
+    filter: invert(1);
+  }
+}
+
+.publisher {
+  margin: 10px 8px 0;
+  color: var(--text-faint);
   font-size: 11px;
-  font-weight: 700;
 }
 
 .save {
@@ -128,6 +138,8 @@ kbd {
 }
 
 .footer {
+  display: flex;
+  flex-direction: column;
   margin-top: auto;
   padding-top: 16px;
   font-size: 13px;
