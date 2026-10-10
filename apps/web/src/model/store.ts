@@ -1,0 +1,290 @@
+import { create } from 'zustand';
+import type {
+  Comment,
+  Epic,
+  EntityKind,
+  PresenceEntry,
+  Question,
+  ServerEvent,
+  Session,
+  SessionInfo,
+  Story,
+  Workshop,
+  WorkspaceData,
+} from '@board/shared';
+import { api, ApiError, clientId } from './api';
+
+export type Phase = 'loading' | 'login' | 'ready' | 'notfound' | 'error';
+export type SaveState = 'saved' | 'saving' | 'error' | 'offline';
+
+interface State extends WorkspaceData {
+  phase: Phase;
+  session: SessionInfo | null;
+  save: SaveState;
+  presence: PresenceEntry[];
+  init: () => Promise<void>;
+  load: () => Promise<void>;
+  logout: () => Promise<void>;
+  rename: (name: string) => Promise<void>;
+  updateStory: (id: string, patch: Partial<Story>) => void;
+  createStory: (epic: string, patch?: Partial<Story>) => Promise<string>;
+  deleteStory: (id: string) => Promise<void>;
+  duplicateStory: (id: string) => Promise<string>;
+  commentStory: (id: string, text: string) => Promise<void>;
+  updateEpic: (id: string, patch: Pick<Epic, 'body'>) => void;
+  updateWorkshop: (id: string, patch: Partial<Pick<Workshop, 'notes' | 'pvStatus'>>) => void;
+  updateSession: (workshop: string, code: string, patch: Pick<Session, 'notes'>) => void;
+  updateQuestion: (workshop: string, code: string, questionId: string, patch: Partial<Question>) => void;
+  addQuestion: (workshop: string, code: string, text: string) => Promise<void>;
+  commentWorkshop: (id: string, text: string) => Promise<void>;
+}
+
+const EMPTY: WorkspaceData = { planning: null, references: [], epics: [], stories: [], workshops: [] };
+const KEY: Record<EntityKind, 'stories' | 'epics' | 'workshops'> = {
+  story: 'stories',
+  epic: 'epics',
+  workshop: 'workshops',
+};
+
+/**
+ * Écritures différées : les frappes successives sur un même champ sont regroupées (400 ms)
+ * puis envoyées en un seul PATCH. Tant qu'une écriture est en attente ou en vol pour une entité,
+ * les mises à jour reçues des autres sont ignorées pour elle ; la réponse du serveur, qui
+ * fusionne les champs, les réintègre ensuite.
+ */
+const queue = new Map<
+  string,
+  {
+    entity: string;
+    payload: Record<string, unknown>;
+    send: (p: Record<string, unknown>) => Promise<unknown>;
+    timer: ReturnType<typeof setTimeout>;
+  }
+>();
+const inflight = new Map<string, number>();
+const busy = (entity: string) =>
+  (inflight.get(entity) ?? 0) > 0 || [...queue.values()].some(q => q.entity === entity);
+
+export const useWorkspace = create<State>((set, get) => {
+  const replace = <K extends EntityKind>(kind: K, id: string, data: unknown | null) =>
+    set(s => {
+      const list = s[KEY[kind]] as { id: string }[];
+      if (data === null) return { [KEY[kind]]: list.filter(x => x.id !== id) } as Partial<State>;
+      const exists = list.some(x => x.id === id);
+      return {
+        [KEY[kind]]: exists ? list.map(x => (x.id === id ? data : x)) : [...list, data],
+      } as Partial<State>;
+    });
+
+  const local = <K extends EntityKind>(kind: K, id: string, change: (x: never) => unknown) =>
+    set(
+      s =>
+        ({
+          [KEY[kind]]: (s[KEY[kind]] as { id: string }[]).map(x => (x.id === id ? change(x as never) : x)),
+        }) as Partial<State>,
+    );
+
+  const settle = () => {
+    if (get().save === 'error') return;
+    set({ save: queue.size || [...inflight.values()].some(n => n > 0) ? 'saving' : 'saved' });
+  };
+
+  const failed = (e: unknown) => {
+    if (e instanceof ApiError && e.status === 401) set({ phase: 'login' });
+    set({ save: e instanceof TypeError ? 'offline' : 'error' });
+  };
+
+  /** Envoie une écriture et remplace l'entité par la version du serveur si rien d'autre n'est en attente. */
+  const send = async <T>(kind: EntityKind, id: string, call: () => Promise<T>): Promise<T> => {
+    const entity = `${kind}:${id}`;
+    inflight.set(entity, (inflight.get(entity) ?? 0) + 1);
+    set({ save: 'saving' });
+    try {
+      const result = await call();
+      inflight.set(entity, (inflight.get(entity) ?? 1) - 1);
+      if (!busy(entity) && result && typeof result === 'object' && 'id' in result) replace(kind, id, result);
+      if (get().save === 'error' || get().save === 'offline') set({ save: 'saved' });
+      settle();
+      return result;
+    } catch (e) {
+      inflight.set(entity, (inflight.get(entity) ?? 1) - 1);
+      failed(e);
+      throw e;
+    }
+  };
+
+  const defer = (
+    key: string,
+    kind: EntityKind,
+    id: string,
+    payload: Record<string, unknown>,
+    call: (p: Record<string, unknown>) => Promise<unknown>,
+  ) => {
+    const entity = `${kind}:${id}`;
+    const prev = queue.get(key);
+    if (prev) clearTimeout(prev.timer);
+    const merged = { ...prev?.payload, ...payload };
+    const timer = setTimeout(() => {
+      queue.delete(key);
+      void send(kind, id, () => call(merged)).catch(() => undefined);
+    }, 400);
+    queue.set(key, { entity, payload: merged, send: call, timer });
+    set({ save: 'saving' });
+  };
+
+  let events: EventSource | null = null;
+  const connect = () => {
+    events?.close();
+    let first = true;
+    events = new EventSource(`/api/events?client=${clientId}`);
+    events.addEventListener('ready', () => {
+      // Après une coupure, on recharge pour rattraper ce qui a changé entre-temps.
+      if (!first) void get().load();
+      first = false;
+      if (get().save === 'offline') set({ save: 'saved' });
+    });
+    events.onmessage = msg => {
+      const event = JSON.parse(msg.data) as ServerEvent;
+      if (event.type === 'presence') set({ presence: event.users });
+      else if (event.type === 'reload') void get().load();
+      else if (!busy(`${event.kind}:${event.id}`)) replace(event.kind, event.id, event.data);
+    };
+    events.onerror = () => {
+      if (events?.readyState === EventSource.CLOSED) setTimeout(connect, 3000);
+    };
+  };
+
+  const comment = (author: string, text: string): Comment => ({
+    id: 'local',
+    author,
+    at: new Date().toISOString(),
+    text,
+  });
+  const me = () => get().session?.user?.name || get().session?.user?.email || '';
+  const onSession = (w: Workshop, code: string, change: (s: Session) => Session): Workshop => ({
+    ...w,
+    sessions: w.sessions.map(s => (s.code === code ? change(s) : s)),
+  });
+
+  return {
+    ...EMPTY,
+    phase: 'loading',
+    session: null,
+    save: 'saved',
+    presence: [],
+
+    init: async () => {
+      try {
+        const session = await api.get<SessionInfo>('/session');
+        set({ session });
+        if (!session.user) return set({ phase: 'login' });
+        await get().load();
+        connect();
+        set({ phase: 'ready' });
+      } catch (e) {
+        set({ phase: e instanceof ApiError && e.code === 'project_not_found' ? 'notfound' : 'error' });
+      }
+    },
+
+    load: async () => {
+      try {
+        const data = await api.get<WorkspaceData>('/workspace');
+        set({ ...data });
+      } catch (e) {
+        failed(e);
+      }
+    },
+
+    logout: async () => {
+      await api.post('/auth/logout');
+      events?.close();
+      set({ ...EMPTY, phase: 'login', session: { ...get().session!, user: null, role: null } });
+    },
+
+    rename: async name => {
+      const user = await api.patch<SessionInfo['user']>('/me', { name });
+      set(s => ({ session: s.session ? { ...s.session, user } : s.session }));
+    },
+
+    updateStory: (id, patch) => {
+      local('story', id, (s: Story) => ({ ...s, ...patch, updatedAt: new Date().toISOString() }));
+      defer(`story:${id}`, 'story', id, patch, p => api.patch(`/stories/${id}`, p));
+    },
+
+    createStory: async (epic, patch) => {
+      const story = await send('story', 'new', () => api.post<Story>('/stories', { epic, patch }));
+      replace('story', story.id, story);
+      return story.id;
+    },
+
+    deleteStory: async id => {
+      await send('story', id, () => api.delete(`/stories/${id}`));
+      replace('story', id, null);
+    },
+
+    duplicateStory: async id => {
+      const story = await send('story', 'new', () => api.post<Story>(`/stories/${id}/duplicate`));
+      replace('story', story.id, story);
+      return story.id;
+    },
+
+    commentStory: async (id, text) => {
+      local('story', id, (s: Story) => ({ ...s, comments: [...s.comments, comment(me(), text)] }));
+      await send('story', id, () => api.post<Story>(`/stories/${id}/comments`, { text }));
+    },
+
+    updateEpic: (id, patch) => {
+      local('epic', id, (e: Epic) => ({ ...e, ...patch }));
+      defer(`epic:${id}`, 'epic', id, patch, p => api.patch(`/epics/${id}`, p));
+    },
+
+    updateWorkshop: (id, patch) => {
+      local('workshop', id, (w: Workshop) => ({ ...w, ...patch }));
+      defer(`workshop:${id}`, 'workshop', id, patch, p => api.patch(`/workshops/${id}`, p));
+    },
+
+    updateSession: (workshop, code, patch) => {
+      local('workshop', workshop, (w: Workshop) => onSession(w, code, s => ({ ...s, ...patch })));
+      defer(`session:${workshop}:${code}`, 'workshop', workshop, patch, p =>
+        api.patch(`/workshops/${workshop}/sessions/${encodeURIComponent(code)}`, p),
+      );
+    },
+
+    updateQuestion: (workshop, code, questionId, patch) => {
+      local('workshop', workshop, (w: Workshop) =>
+        onSession(w, code, s => ({
+          ...s,
+          questions: s.questions.map(q => (q.id === questionId ? { ...q, ...patch } : q)),
+        })),
+      );
+      defer(`question:${workshop}:${code}:${questionId}`, 'workshop', workshop, patch, p =>
+        api.patch(`/workshops/${workshop}/sessions/${encodeURIComponent(code)}/questions/${questionId}`, p),
+      );
+    },
+
+    addQuestion: async (workshop, code, text) => {
+      await send('workshop', workshop, () =>
+        api.post<Workshop>(`/workshops/${workshop}/sessions/${encodeURIComponent(code)}/questions`, { text }),
+      );
+    },
+
+    commentWorkshop: async (id, text) => {
+      local('workshop', id, (w: Workshop) => ({ ...w, comments: [...w.comments, comment(me(), text)] }));
+      await send('workshop', id, () => api.post<Workshop>(`/workshops/${id}/comments`, { text }));
+    },
+  };
+});
+
+/** Vrai si l'utilisateur peut modifier (éditeur ou administrateur). */
+export const useCanEdit = () =>
+  useWorkspace(s => s.session?.role === 'editor' || s.session?.role === 'admin');
+export const useIsAdmin = () => useWorkspace(s => s.session?.role === 'admin');
+
+// Écritures en attente : envoyées immédiatement si l'onglet se ferme.
+window.addEventListener('pagehide', () => {
+  for (const [key, q] of queue) {
+    clearTimeout(q.timer);
+    queue.delete(key);
+    void q.send(q.payload);
+  }
+});

@@ -1,0 +1,37 @@
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px var(--bg);
+}
+
+.viewers {
+  position: sticky;
+  top: 10px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  float: right;
+  margin: 10px 16px 0 0;
+  padding: 3px 10px 3px 4px;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--shadow-pop);
+  font-size: 12px;
+}
+
+.label {
+  margin-left: 4px;
+  color: var(--text-muted);
+}
+
+@media (max-width: 720px) {
+  .label {
+    display: none;
+  }
+}

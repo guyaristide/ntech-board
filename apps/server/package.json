@@ -1,0 +1,30 @@
+{
+  "name": "@board/server",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=../../.env src/index.ts",
+    "build": "tsc -p . && node build.mjs",
+    "start": "node dist/index.js",
+    "cli": "tsx --env-file-if-exists=../../.env src/cli.ts",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@board/shared": "*",
+    "@hono/node-server": "^1.19.0",
+    "exceljs": "^4.4.0",
+    "hono": "^4.10.0",
+    "nodemailer": "^7.0.0",
+    "pg": "^8.16.0",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/nodemailer": "^7.0.0",
+    "@types/pg": "^8.15.0",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.20.0",
+    "typescript": "~6.0.2"
+  }
+}

@@ -1,0 +1,165 @@
+:root {
+  --bg: #ffffff;
+  --bg-sidebar: #f7f7f5;
+  --bg-hover: rgba(55, 53, 47, 0.06);
+  --bg-active: rgba(55, 53, 47, 0.1);
+  --bg-subtle: #fbfbfa;
+  --text: #37352f;
+  --text-muted: rgba(55, 53, 47, 0.65);
+  --text-faint: rgba(55, 53, 47, 0.45);
+  --line: rgba(55, 53, 47, 0.09);
+  --line-strong: rgba(55, 53, 47, 0.16);
+  --accent: #2383e2;
+  --accent-soft: rgba(35, 131, 226, 0.14);
+  --danger: #eb5757;
+  --shadow-pop:
+    0 0 0 1px rgba(15, 15, 15, 0.05), 0 3px 6px rgba(15, 15, 15, 0.1), 0 9px 24px rgba(15, 15, 15, 0.2);
+  --radius: 4px;
+  --sidebar-w: 260px;
+  --font:
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial,
+    sans-serif;
+  --mono: 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --tag-gray: rgba(227, 226, 224, 0.5);
+  --tag-gray-text: #32302c;
+  --tag-brown: #eee0da;
+  --tag-brown-text: #442a1e;
+  --tag-orange: #fadec9;
+  --tag-orange-text: #49290e;
+  --tag-yellow: #fdecc8;
+  --tag-yellow-text: #402c1b;
+  --tag-green: #dbeddb;
+  --tag-green-text: #1c3829;
+  --tag-blue: #d3e5ef;
+  --tag-blue-text: #183347;
+  --tag-purple: #e8deee;
+  --tag-purple-text: #412454;
+  --tag-pink: #f5e0e9;
+  --tag-pink-text: #4c2337;
+  --tag-red: #ffe2dd;
+  --tag-red-text: #5d1715;
+  --callout: #f1f1ef;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #191919;
+    --bg-sidebar: #202020;
+    --bg-hover: rgba(255, 255, 255, 0.055);
+    --bg-active: rgba(255, 255, 255, 0.09);
+    --bg-subtle: #1f1f1f;
+    --text: rgba(255, 255, 255, 0.86);
+    --text-muted: rgba(255, 255, 255, 0.55);
+    --text-faint: rgba(255, 255, 255, 0.36);
+    --line: rgba(255, 255, 255, 0.09);
+    --line-strong: rgba(255, 255, 255, 0.16);
+    --shadow-pop:
+      0 0 0 1px rgba(255, 255, 255, 0.08), 0 3px 6px rgba(0, 0, 0, 0.4), 0 9px 24px rgba(0, 0, 0, 0.5);
+    --tag-gray: rgba(90, 90, 90, 0.5);
+    --tag-gray-text: rgba(255, 255, 255, 0.85);
+    --tag-brown: #603b2c;
+    --tag-brown-text: rgba(255, 255, 255, 0.88);
+    --tag-orange: #854c1d;
+    --tag-orange-text: rgba(255, 255, 255, 0.88);
+    --tag-yellow: #89632a;
+    --tag-yellow-text: rgba(255, 255, 255, 0.88);
+    --tag-green: #2b593f;
+    --tag-green-text: rgba(255, 255, 255, 0.88);
+    --tag-blue: #28456c;
+    --tag-blue-text: rgba(255, 255, 255, 0.88);
+    --tag-purple: #492f64;
+    --tag-purple-text: rgba(255, 255, 255, 0.88);
+    --tag-pink: #69314c;
+    --tag-pink-text: rgba(255, 255, 255, 0.88);
+    --tag-red: #6e3630;
+    --tag-red-text: rgba(255, 255, 255, 0.88);
+    --callout: #252525;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Les zones d'écriture se signalent par le curseur, comme dans Notion. */
+textarea:focus-visible {
+  outline: none;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.boot {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background: var(--bg-sidebar);
+}
+
+.boot img {
+  width: 140px;
+  opacity: 0.5;
+  animation: boot 1.2s ease-in-out infinite alternate;
+}
+
+@media (prefers-color-scheme: dark) {
+  .boot img {
+    filter: invert(1);
+  }
+}
+
+@keyframes boot {
+  to {
+    opacity: 1;
+  }
+}

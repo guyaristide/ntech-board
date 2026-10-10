@@ -1,0 +1,75 @@
+# NTECH Board
+
+Espace collaboratif de cadrage, édité par **NTECH SARL** (Neiba Technologies). Chaque projet client a son tableau, à son adresse :
+
+- `etourisme-board.neiba-technologies.com`
+- `pfo-board.neiba-technologies.com`
+- …
+
+Un tableau réunit :
+
+- le **backlog des user stories**, en tableau ou en Kanban. Chaque US se modifie sur sa page : récit, critères d'acceptation, notes et commentaires ;
+- le **programme des ateliers**, importé d'un planning Excel. On y retrouve les séquences et leur déroulé, les points à trancher avec leur réponse, et les notes de séance ;
+- les **références au cahier des charges**, reliées aux séquences et aux épiques.
+
+L'édition est collaborative et en temps réel : on voit les modifications des autres sans recharger, et qui consulte la même page. La connexion se fait par un lien envoyé par e-mail, sur invitation, avec trois rôles : administrateur, éditeur, lecteur.
+
+## Démarrage en local
+
+Prérequis : Node 22, Docker.
+
+```bash
+npm install
+cp .env.example .env            # puis adapter (voir « .env de développement » ci-dessous)
+npm run dev:db                  # PostgreSQL 17 sur le port 55433
+npm run cli -- project:create etourisme --title "Cadrage eTourisme" --admin vous@exemple.com
+npm run cli -- import:stories etourisme seeds/etourisme/stories.json
+npm run cli -- import:planning etourisme seeds/etourisme/workshops.json
+npm run dev                     # API sur :3000, front sur :5190
+```
+
+Ouvrir ensuite <http://etourisme-board.localhost:5190>. Le navigateur résout `*.localhost` vers la machine.
+
+En local, sans `SMTP_HOST`, le lien de connexion n'est pas envoyé : il s'affiche dans la console du serveur.
+
+`.env` de développement :
+
+```dotenv
+DATABASE_URL=postgres://board:board@localhost:55433/board
+PROJECT_HOSTS={slug}-board.localhost
+DEFAULT_PROJECT=etourisme
+SUPERADMIN_EMAILS=vous@exemple.com
+STORAGE_DIR=./storage
+COOKIE_SECURE=false
+```
+
+## Structure du dépôt
+
+```
+apps/web/          Front React (Vite) : pages, éditeur de blocs, temps réel
+apps/server/       API Node (Hono) : authentification, données, temps réel, imports, CLI
+  migrations/      Schéma PostgreSQL, appliqué au démarrage
+packages/shared/   Types et contrats partagés entre le front et l'API
+seeds/etourisme/   Contenu de départ du projet eTourisme (backlog, programme)
+deploy/            Scripts serveur : préparation des volumes, sauvegarde
+docs/              Architecture, déploiement Coolify, exploitation
+Dockerfile         Image unique (API + front)
+docker-compose.yml Déploiement : application + PostgreSQL + volumes
+```
+
+## Commandes
+
+| Commande | Rôle |
+|---|---|
+| `npm run dev` | API et front en mode développement |
+| `npm run dev:db` | Base PostgreSQL locale (Docker) |
+| `npm run build` | Construit le front et le serveur |
+| `npm run typecheck` | Vérification TypeScript des trois paquets |
+| `npm test` | Tests du serveur (sous-domaines, règles d'import) |
+| `npm run cli -- <commande>` | Administration : projets, membres, imports (voir [docs/EXPLOITATION.md](docs/EXPLOITATION.md)) |
+
+## Documentation
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) : choix techniques, modèle de données, temps réel, sécurité.
+- [docs/DEPLOIEMENT.md](docs/DEPLOIEMENT.md) : mise en production sur Coolify, pas à pas (DNS, variables, domaines, volumes, sauvegardes).
+- [docs/EXPLOITATION.md](docs/EXPLOITATION.md) : nouveau projet, membres, imports, sauvegarde et restauration, mises à jour, dépannage.

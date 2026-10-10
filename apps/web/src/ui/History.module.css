@@ -1,0 +1,28 @@
+.history {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.history summary {
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.history ol {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history li {
+  padding: 3px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.history time {
+  color: var(--text-faint);
+}
+
+.empty {
+  color: var(--text-faint);
+}
