@@ -5,6 +5,7 @@ import type { Question, Session } from '../../model/types';
 import { BlockEditor } from '../../ui/BlockEditor';
 import { EditableText } from '../../ui/EditableText';
 import { PropertySelect } from '../../ui/PropertySelect';
+import { ReferenceCard } from '../../ui/ReferenceCard';
 import { Tag } from '../../ui/Tag';
 import styles from './Workshop.module.css';
 
@@ -14,6 +15,8 @@ const range = (s: { start: string | null; end: string | null }) => (s.start ? `$
 export function SessionCard({ workshop, session }: { workshop: string; session: Session }) {
   const ws = useWorkspace();
   const [steps, setSteps] = useState(false);
+  const [cdc, setCdc] = useState(false);
+  const refs = ws.references.filter(r => session.refs.includes(r.id));
   const [draft, setDraft] = useState('');
   const open = session.questions.filter(q => q.status === 'Ouvert').length;
   const setQ = (q: Question, patch: Partial<Question>) =>
@@ -63,6 +66,27 @@ export function SessionCard({ workshop, session }: { workshop: string; session: 
                   </li>
                 ))}
               </ol>
+            ) : null}
+          </>
+        ) : null}
+
+        {refs.length ? (
+          <>
+            <button
+              type="button"
+              className={styles.toggle}
+              aria-expanded={cdc}
+              onClick={() => setCdc(c => !c)}
+            >
+              {cdc ? '▾' : '▸'} Cahier des charges{session.cdc ? ` : ${session.cdc}` : ''} (
+              {refs.map(r => r.id).join(', ')})
+            </button>
+            {cdc ? (
+              <div className={styles.refs}>
+                {refs.map(r => (
+                  <ReferenceCard key={r.id} reference={r} />
+                ))}
+              </div>
             ) : null}
           </>
         ) : null}

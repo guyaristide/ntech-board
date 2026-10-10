@@ -5,6 +5,7 @@ import { Backlog } from './pages/backlog/Backlog';
 import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Programme } from './pages/Programme';
+import { References } from './pages/References';
 import { StoryPage } from './pages/StoryPage';
 import { WorkshopPage } from './pages/workshop/WorkshopPage';
 import { Layout } from './ui/Layout';
@@ -24,6 +25,7 @@ export function App() {
           <Route path="epic/:id" element={<EpicPage />} />
           <Route path="programme" element={<Programme />} />
           <Route path="atelier/:id" element={<WorkshopPage />} />
+          <Route path="references" element={<References />} />
           <Route path="*" element={<Home />} />
         </Route>
       </Routes>

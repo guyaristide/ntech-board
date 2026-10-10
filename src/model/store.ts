@@ -31,6 +31,8 @@ interface State extends Workspace {
 
 const snapshot = (s: Workspace): Workspace => ({
   version: 1,
+  planning: s.planning,
+  references: s.references,
   epics: s.epics,
   stories: s.stories,
   workshops: s.workshops,
@@ -186,7 +188,10 @@ export const useWorkspace = create<State>((set, get) => {
         ...w,
         sessions: w.sessions.map(s =>
           s.code === code
-            ? { ...s, questions: [...s.questions, { id: uid(), text, answer: '', status: 'Ouvert' }] }
+            ? {
+                ...s,
+                questions: [...s.questions, { id: uid(), text, answer: '', status: 'Ouvert', custom: true }],
+              }
             : s,
         ),
       })),
@@ -207,7 +212,12 @@ export { snapshot };
 let timer: ReturnType<typeof setTimeout> | undefined;
 useWorkspace.subscribe((state, prev) => {
   if (!state.ready || !prev.ready) return;
-  if (state.epics === prev.epics && state.stories === prev.stories && state.workshops === prev.workshops)
+  if (
+    state.references === prev.references &&
+    state.epics === prev.epics &&
+    state.stories === prev.stories &&
+    state.workshops === prev.workshops
+  )
     return;
   clearTimeout(timer);
   useWorkspace.setState({ save: state.save === 'local' ? 'local' : 'saving' });

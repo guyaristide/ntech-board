@@ -86,13 +86,21 @@ export function WorkshopPage() {
             </div>
           </>
         ) : null}
-        {w.prep ? (
+        {w.prep.length ? (
+          <>
+            <span className={page.propLabel}>? Questionnaires</span>
+            <div className={page.propText}>
+              {w.prep.map(p => (
+                <div key={p.tab}>
+                  {p.tab}, {p.questions} questions, retour le {longDate(p.due)} <Tag value={p.status} />
+                </div>
+              ))}
+            </div>
+          </>
+        ) : w.questionnaire ? (
           <>
             <span className={page.propLabel}>? Questionnaire</span>
-            <div className={page.propText}>
-              {w.prep.tab}, {w.prep.questions} questions, retour le {longDate(w.prep.due)}{' '}
-              <Tag value={w.prep.status} />
-            </div>
+            <div className={page.propText}>{w.questionnaire}</div>
           </>
         ) : null}
         <span className={page.propLabel}>✓ Points tranchés</span>

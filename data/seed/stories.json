@@ -5,9 +5,9 @@
       "title": "Création de compte touriste",
       "summary": "Permettre à tout voyageur (local, corporate, diaspora, international) de créer un compte pour réserver, bénéficier de la fidélité et du parrainage, accéder à l'assistant IA et payer de façon sécurisée.",
       "workshops": [
-        "J4"
+        "J2"
       ],
-      "version": "MVP",
+      "version": "MVP ; vérification documentaire en V1",
       "source": "CDC v2.1 UC01 p.20-21",
       "toFrame": [
         "Quatre profils et champs par profil",
@@ -25,8 +25,8 @@
       "title": "Landing page",
       "summary": "Gérer, valider et publier dynamiquement les contenus de la landing page pour valoriser la destination et accroître la conversion, avec modération centrale et continuité de service.",
       "workshops": [
-        "J4",
-        "J7"
+        "J2",
+        "J5"
       ],
       "version": "MVP",
       "source": "CDC v2.1 UC02 p.21-23",
@@ -42,9 +42,11 @@
       "title": "Planification de voyage intelligente",
       "summary": "Offrir un parcours d'aide à la préparation de voyage combinant assistant IA, sélection de POI, réservation, paiement unifié et traçabilité fiscale.",
       "workshops": [
-        "J4"
+        "J2",
+        "J4",
+        "J6"
       ],
-      "version": "MVP",
+      "version": "MVP ; concierge en V1",
       "source": "CDC v2.1 UC03 p.23-25",
       "toFrame": [
         "Périmètre de l'assistant au MVP (orientation, formalités) puis concierge en V1",
@@ -60,8 +62,8 @@
       "title": "Réservation et paiement multi-services",
       "summary": "Composer un panier multi-services (hébergement, restauration, véhicule, guide), le valider et le payer de façon sécurisée avec répartition des fonds et retenue automatique des taxes.",
       "workshops": [
-        "J4",
-        "J3"
+        "J2",
+        "J4"
       ],
       "version": "MVP",
       "source": "CDC v2.1 UC04 p.26-28",
@@ -79,7 +81,7 @@
       "title": "Évaluation et avis",
       "summary": "Permettre au touriste de noter et commenter de manière vérifiée une prestation consommée, avec modération, droit de réponse de l'opérateur et arbitrage par l'administrateur.",
       "workshops": [
-        "J4"
+        "J2"
       ],
       "version": "V1",
       "source": "CDC v2.1 UC05 p.28-29",
@@ -97,7 +99,7 @@
       "title": "Publication d'une offre par un opérateur",
       "summary": "Permettre à un opérateur de créer, modifier, soumettre et publier ses offres (hébergements, excursions, packages, tarifs, disponibilités) avec contrôles, brouillons, modération et résilience réseau.",
       "workshops": [
-        "J5"
+        "J3"
       ],
       "version": "MVP",
       "source": "CDC v2.1 UC06 p.30-31",
@@ -114,7 +116,7 @@
       "title": "Pack thématique « Week-end à Assinie »",
       "summary": "Commercialiser et automatiser la vente d'un package national via la marketplace, de la campagne à l'évaluation, avec traçabilité fiscale instantanée.",
       "workshops": [
-        "J4"
+        "J2"
       ],
       "version": "V1",
       "source": "CDC v2.1 UC07 p.32-33",
@@ -133,7 +135,7 @@
       "title": "Fidélité à points et statuts",
       "summary": "Stimuler la récurrence des visites par l'accumulation de points échangeables et des statuts progressifs, avec utilisation chez les partenaires et contrôle de la fraude.",
       "workshops": [
-        "C2"
+        "C3"
       ],
       "version": "V2",
       "source": "CDC v2.1 UC08 p.34-35",
@@ -154,10 +156,10 @@
       "title": "Complexe multiservice et abonnement",
       "summary": "Permettre à un opérateur multiactivité de centraliser ses opérations via le PMS national, avec abonnement SaaS, facture unique, calcul des taxes et répartition entre prestataires.",
       "workshops": [
-        "J5",
-        "J3"
+        "J3",
+        "J4"
       ],
-      "version": "MVP",
+      "version": "MVP pour le PMS web ; abonnement et PMS Light en V1",
       "source": "CDC v2.1 UC09 p.36-37",
       "toFrame": [
         "Abonnement mensuel ou annuel par Mobile Money",
@@ -174,7 +176,7 @@
       "title": "Gestion financière et états financiers",
       "summary": "Automatiser la traçabilité financière de chaque transaction, la retenue à la source des taxes et la génération en temps réel des états financiers réglementaires de l'opérateur.",
       "workshops": [
-        "J3"
+        "J4"
       ],
       "version": "MVP",
       "source": "CDC v2.1 UC10 p.38-39",
@@ -193,8 +195,9 @@
       "title": "Points d'intérêt",
       "summary": "Permettre à un opérateur ou gestionnaire de site de référencer un point d'intérêt et à l'administration de le valider pour enrichir l'offre et valoriser la destination.",
       "workshops": [
-        "J4",
-        "J2"
+        "J2",
+        "J5",
+        "J6"
       ],
       "version": "MVP",
       "source": "CDC v2.1 UC11 p.40-42",
@@ -213,7 +216,7 @@
       "title": "Paiement unifié et traçabilité fiscale",
       "summary": "Permettre un encaissement multicanal (Mobile Money, carte 3D Secure, TPE, QR Code SGAT) avec routage instantané des fonds et retenue à la source automatisée des taxes.",
       "workshops": [
-        "J3"
+        "J4"
       ],
       "version": "MVP",
       "source": "CDC v2.1 UC12 p.42-44",
@@ -233,7 +236,8 @@
       "title": "Approvisionnements B2B",
       "summary": "Permettre à un opérateur d'acheter des biens ou capacités auprès d'un autre prestataire (y compris hors tourisme) avec traçabilité financière, fiscalité intégrée et sécurisation des paiements.",
       "workshops": [
-        "C1"
+        "J3",
+        "C3"
       ],
       "version": "V2",
       "source": "CDC v2.1 UC13 p.44-45",
@@ -252,7 +256,7 @@
       "title": "Logistique des livraisons",
       "summary": "Assurer la traçabilité, l'acheminement et la remise des biens commandés via la marketplace (B2C et B2B) avec coordination entre fournisseurs, transporteurs et clients.",
       "workshops": [
-        "C1"
+        "C3"
       ],
       "version": "V2",
       "source": "CDC v2.1 UC14 p.46-47",
@@ -270,7 +274,7 @@
       "title": "Tableaux de bord",
       "summary": "Permettre à chaque profil (touriste, opérateur, État, SIVIS, partenaire) de piloter son activité en temps réel selon ses privilèges, avec résilience face aux erreurs.",
       "workshops": [
-        "J8"
+        "J4"
       ],
       "version": "MVP",
       "source": "CDC v2.1 UC15 p.48-51 et §4 Tableau de bord p.9-10",
@@ -304,7 +308,7 @@
       "title": "Agenda culturel et billetterie",
       "summary": "Agenda touristique et culturel national décliné par région et ville, rattaché aux points d'intérêt, et billetterie événementielle.",
       "workshops": [
-        "J4"
+        "J2"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §4 Services, p.7 ; §5.b EXPLORER, p.12 ; CDC page d'accueil fév. 2025, p.12",
@@ -318,7 +322,7 @@
       "title": "Alertes sécurité, météo, bouton d'alerte et cartes hors connexion",
       "summary": "Accompagnement du voyageur pendant le séjour : alertes en temps réel, bouton d'alerte, navigation et consultation hors connexion des cartes et QR codes.",
       "workshops": [
-        "J4"
+        "J2"
       ],
       "version": "V1",
       "source": "CDC v2.1 §4 Formalités et sécurité, p.7 ; §5.b VIVRE et §5.c, p.12",
@@ -331,7 +335,8 @@
       "title": "Contenu utilisateur, affiliation et e-réputation",
       "summary": "Preuve sociale complémentaire aux avis : galerie et témoignages des utilisateurs, programme d'affiliation et d'influenceurs, agrégation de la e-réputation externe sur les fiches opérateurs.",
       "workshops": [
-        "J6"
+        "J5",
+        "C3"
       ],
       "version": "V1",
       "source": "CDC v2.1 §4 Fidélisation et preuve sociale, p.8 ; annexe, p.53",
@@ -345,7 +350,7 @@
       "title": "Channel Manager et OTA",
       "summary": "Connecteur bidirectionnel standardisé synchronisant le portail SGAT et le PMS avec les OTA internationales (Booking.com, Expedia, Trip.com).",
       "workshops": [
-        "J6",
+        "J5",
         "C2"
       ],
       "version": "V2",
@@ -361,7 +366,7 @@
       "title": "Centre d'aide",
       "summary": "Centre d'aide multicanal et multilingue : transfert vers le support humain, FAQ segmentée, ticketing avec routage et aide contextuelle.",
       "workshops": [
-        "J4",
+        "J2",
         "C3"
       ],
       "version": "V1",
@@ -376,8 +381,9 @@
       "title": "CRM opérateur, campagnes, stocks, plannings et caisse",
       "summary": "Services à valeur ajoutée pour les opérateurs : CRM par abonnement, campagnes ciblées, gestion des stocks et des plannings du personnel, caisse et tableaux de rentabilité.",
       "workshops": [
-        "J5",
-        "C2"
+        "J3",
+        "J4",
+        "C3"
       ],
       "version": "V2",
       "source": "CDC v2.1 §4 Services numériques à valeur ajoutée, p.11 ; §13 lot 4, p.16-17",
@@ -391,7 +397,8 @@
       "title": "PMS national et PMS Light",
       "summary": "Système mutualisé de gestion opérationnelle des établissements, déployé comme service public numérique, en version web et en version mobile PMS Light hors ligne pour les micro-opérateurs.",
       "workshops": [
-        "J5"
+        "J3",
+        "J4"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §4 PMS national, p.10-11 ; §13 lot 4, p.16-17",
@@ -404,7 +411,7 @@
       "title": "Données personnelles ARTCI",
       "summary": "Conformité à la réglementation ivoirienne sur les données à caractère personnel : formalités ARTCI, consentements, registre des traitements et conservation.",
       "workshops": [
-        "J6"
+        "J5"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §3, p.7 ; §6 Conformité réglementaire, p.13 ; §11, p.15",
@@ -421,7 +428,8 @@
       "title": "Interconnexions avec l'État",
       "summary": "Interconnexions avec les systèmes de l'État : base unique des opérateurs eAdministration, facturation normalisée FNE de la DGI, système HORA de la Police et plateforme de Data Management.",
       "workshops": [
-        "J6"
+        "J4",
+        "J5"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §2, p.6 ; §9, p.14 ; annexe, p.52",
@@ -432,7 +440,7 @@
       "title": "Interconnexions hors État",
       "summary": "Interconnexions avec les systèmes externes non étatiques : SIG, messagerie et OTP, fournisseurs d'identité tiers.",
       "workshops": [
-        "J6"
+        "J5"
       ],
       "version": "MVP",
       "source": "CDC v2.1 annexe, p.52-53",
@@ -447,7 +455,8 @@
       "title": "Sécurité",
       "summary": "Exigences de sécurité des accès, des données et des transactions : chiffrement, authentification forte, journalisation immuable et politique de sécurité.",
       "workshops": [
-        "J6"
+        "J5",
+        "J7"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §6 Sécurité, p.13 ; §13 lot 1, p.16",
@@ -458,7 +467,7 @@
       "title": "Design system, accessibilité et bilinguisme",
       "summary": "Exigences d'interface : approche mobile first, accessibilité WCAG 2.1 AA, français et anglais, charte graphique inspirée de la Côte d'Ivoire et immersion éditoriale.",
       "workshops": [
-        "J7"
+        "J5"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §5.c, p.12 ; §6, p.13 ; CDC page d'accueil fév. 2025, p.5-11",
@@ -469,7 +478,8 @@
       "title": "Exploitation et niveaux de service",
       "summary": "Niveaux de service, performances, volumétrie, reprise d'activité, maintenance et garantie.",
       "workshops": [
-        "J6"
+        "J5",
+        "J7"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §6, p.13 ; §11, p.15",
@@ -484,8 +494,8 @@
       "title": "Page d'accueil immersive",
       "summary": "Sections de la page d'accueil du site informationnel issues de l'atelier MTL de février 2025 : immersion, navigation segmentée, gastronomie, actualité, voyage responsable et récits.",
       "workshops": [
-        "J4",
-        "J7"
+        "J2",
+        "J5"
       ],
       "version": "MVP",
       "source": "CDC page d'accueil fév. 2025, p.3-19 ; CDC v2.1 §5.a-b, p.12",
@@ -498,8 +508,8 @@
       "title": "Assistant IA guide virtuel",
       "summary": "Assistant conversationnel bilingue présenté comme un guide virtuel ivoirien : orientation et formalités au MVP, conciergerie et fonctions avancées en V1, moteur prédictif en V2.",
       "workshops": [
-        "J4",
-        "C3"
+        "J2",
+        "J6"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §4 IA intégrée, p.9 ; §4 Centre d'aide, p.11 ; §13 lot 2-3, p.16 ; CDC page d'accueil fév. 2025, p.20-33",
@@ -514,7 +524,9 @@
       "title": "Conduite du changement, livrables et transfert de compétences",
       "summary": "Plan de déploiement et onboarding des opérateurs, documentation par profil, recettes, livrables de cadrage et transfert de compétences.",
       "workshops": [
-        "J5"
+        "J2",
+        "J3",
+        "J7"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §6 Transfert de compétences, p.13 ; §13 lots 1 et 8, p.16-17",
@@ -530,7 +542,8 @@
       "title": "Canaux digitaux, parrainage et viralité",
       "summary": "Mécanismes de diffusion, de partage et de parrainage favorisant la viralité des contenus et le référencement.",
       "workshops": [
-        "J4"
+        "J2",
+        "C3"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §4 Canaux digitaux et mécanisme de viralité, p.9 ; §5.b PARTAGER, p.12",
@@ -541,7 +554,9 @@
       "title": "Marketplace et module B2B agences, tour-opérateurs et MICE",
       "summary": "Marketplace nationale de commercialisation (commission sur réservations), module B2B pour agences et tour-opérateurs, tourisme domestique et MICE.",
       "workshops": [
-        "C1"
+        "J2",
+        "J4",
+        "C3"
       ],
       "version": "V2",
       "source": "CDC v2.1 §4 Marketing digital et eCommerce, p.8 ; §13 lot 3, p.16",
@@ -552,7 +567,8 @@
       "title": "Back-office administrateur central",
       "summary": "Gestion des habilitations, validation des comptes opérateurs, paramétrage et supervision technique de la plateforme.",
       "workshops": [
-        "J8"
+        "J3",
+        "J4"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §10, p.15 ; §13 lot 6, p.17",
@@ -563,8 +579,8 @@
       "title": "Application mobile touriste",
       "summary": "Application native iOS et Android intégrant le portail, les vouchers numériques, les QR codes d'accès et les avis.",
       "workshops": [
-        "J4",
-        "J7"
+        "J2",
+        "J5"
       ],
       "version": "MVP",
       "source": "CDC v2.1 §13 lot 2, p.16",
@@ -587,7 +603,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 1, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -607,7 +623,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 2, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -626,7 +642,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 3, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -645,7 +661,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 3, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -664,7 +680,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 3, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -683,7 +699,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 3, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -703,7 +719,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 3 et acteurs, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": false
     },
@@ -722,7 +738,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 4, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -742,7 +758,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 5, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -761,7 +777,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 6, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -780,7 +796,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 6, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": false
     },
@@ -800,7 +816,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC01 A1, p.20-21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -819,7 +835,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC01 A2, p.21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -838,7 +854,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC01 A2, p.21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": false
     },
@@ -857,7 +873,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC01 Er 1, p.21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -876,7 +892,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC01 Er 2, p.21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -896,7 +912,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC01 Er 3, p.21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -916,7 +932,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC01 Er 4, p.21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -935,7 +951,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 3, p.26 ; UC01 A1, p.20",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     },
@@ -954,7 +970,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 Er 1, p.21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     },
@@ -973,7 +989,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC02 étapes 1-2, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -992,7 +1008,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC02 étape 3, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1011,7 +1027,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC02 étape 4, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1030,7 +1046,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC02 étape 4, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1049,7 +1065,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC02 étape 5, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1068,7 +1084,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC02 étape 6, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1087,7 +1103,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC02 A1, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1106,7 +1122,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC02 A1, p.22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": true
     },
@@ -1125,7 +1141,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC02 A2, p.22",
       "version": "V2",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Could",
       "derived": false
     },
@@ -1144,7 +1160,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC02 Er 1, p.23",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1164,7 +1180,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC02 Er 2, p.23",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1183,7 +1199,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC02 Er 3, p.23",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1202,7 +1218,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 1, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1221,7 +1237,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 2, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1240,7 +1256,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 3, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1259,7 +1275,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 4, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1278,7 +1294,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 5, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1296,7 +1312,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 6, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1315,7 +1331,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 7, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1333,7 +1349,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC03 étape 7, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1352,7 +1368,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC03 A1, p.24",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1371,7 +1387,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC03 A2, p.24-25",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -1409,7 +1425,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC03 Er 1, p.25",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1429,7 +1445,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC03 Er 2, p.25",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1449,7 +1465,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC03 Er 3, p.25-26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1468,7 +1484,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 1, p.26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1487,7 +1503,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 2, p.26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1506,7 +1522,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 3, p.26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1525,7 +1541,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 3, p.26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1543,7 +1559,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 4, p.26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1562,7 +1578,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 5, p.26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1581,7 +1597,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 6, p.26-27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1600,7 +1616,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 6, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1618,7 +1634,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC04 étape 6, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1637,7 +1653,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC04 A1, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1656,7 +1672,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC04 A2, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1675,7 +1691,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC04 A3, p.27",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1694,7 +1710,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC04 A3, p.27",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1714,7 +1730,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC04 Er 1, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1734,7 +1750,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC04 Er 2, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1754,7 +1770,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC04 Er 3, p.27-28",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1772,7 +1788,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §5.c Fluidité et accessibilité, p.12",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -1791,7 +1807,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 1, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1810,7 +1826,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 2, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1828,7 +1844,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 3, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1846,7 +1862,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 3, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1865,7 +1881,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 4, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1884,7 +1900,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 5, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1902,7 +1918,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 6, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1921,7 +1937,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 7, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1940,7 +1956,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC05 1a-1b, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1959,7 +1975,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC05 6a, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1978,7 +1994,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC05 6b, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -1997,7 +2013,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC05 3a-3b, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2015,7 +2031,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC05 Er 1, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2034,7 +2050,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC05 Er 2, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2054,7 +2070,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC05 Er 3, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2073,7 +2089,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC05 Er 4, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2092,7 +2108,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC05 Er 4, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2111,7 +2127,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 préconditions et étape 1, p.30",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2129,7 +2145,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 étape 2, p.30",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2147,7 +2163,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 étape 2, p.30",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2166,7 +2182,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 étape 2, p.30",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2185,7 +2201,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 étape 2, p.30",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2204,7 +2220,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 étape 3, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2222,7 +2238,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 étape 4, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2241,7 +2257,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 étape 5, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2260,7 +2276,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC06 A1, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2297,7 +2313,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC06 A2, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2316,7 +2332,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC06 A3, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2334,7 +2350,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC06 A3, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2354,7 +2370,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC06 Er 1, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2372,7 +2388,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC06 Er 2, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2391,7 +2407,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC06 Er 3, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2409,7 +2425,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC06 Er 4, p.31",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2428,7 +2444,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 1, p.32",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2446,7 +2462,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 2, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2465,7 +2481,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 2, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2483,7 +2499,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 3, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2501,7 +2517,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 4, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2519,7 +2535,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 5, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2538,7 +2554,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 6, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2557,7 +2573,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 7, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2575,7 +2591,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 étape 7, p.33",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2593,7 +2609,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 acteurs, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2612,7 +2628,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC07 objectif, p.32",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": true
     },
@@ -2632,7 +2648,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC07 cas 1, p.33",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2651,7 +2667,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC07 cas 2, p.33",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2670,7 +2686,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC07 cas 2, p.33",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2690,7 +2706,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC07 cas 3, p.33",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -2709,7 +2725,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC07 cas 4, p.33",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -2728,7 +2744,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 A.1, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2747,7 +2763,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 A.2, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2766,7 +2782,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 B.1-B.2, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2785,7 +2801,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 B.3, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2804,7 +2820,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 C.1, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2822,7 +2838,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 C.2, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2841,7 +2857,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 C.3, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2860,7 +2876,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC08 A1, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2879,7 +2895,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC08 A2, p.35",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2898,7 +2914,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC08 Er 1, p.35",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2917,7 +2933,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC08 Er 2, p.35",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2936,7 +2952,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC08 Er 3, p.35",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2955,7 +2971,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC08 Er 3, p.35",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": true
     },
@@ -2974,7 +2990,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC08 Er 4, p.35",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -2993,7 +3009,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 1, p.36",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3012,7 +3028,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 1, p.36",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3031,7 +3047,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 2, p.36",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3049,7 +3065,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 3, p.36",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3068,7 +3084,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 3, p.36",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3087,7 +3103,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 4, p.36-37",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3106,7 +3122,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 5, p.37",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3124,7 +3140,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC09 étape 5, p.37",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3145,7 +3161,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC09 A, p.37",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3163,7 +3179,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC09 B, p.37",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3182,7 +3198,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC09 B, p.37",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3201,7 +3217,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC09 B (titre), p.37",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Should",
       "derived": true
     },
@@ -3221,7 +3237,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC09 Er 1, p.37",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3240,7 +3256,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC09 Er 2, p.37",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3260,7 +3276,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC09 Er 3, p.37",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -3280,7 +3296,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC09 Er 4, p.37",
       "version": "MVP",
-      "workshop": "J2",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -3300,7 +3316,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC10 étapes 1-2, p.38",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3322,7 +3338,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC10 étape 3, p.38",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3340,7 +3356,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 UC10 étape 3, p.38",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Should",
       "derived": true
     },
@@ -3359,7 +3375,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC10 étape 4, p.38",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3377,7 +3393,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC10 étape 4, p.38",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3395,7 +3411,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC10 étape 4, p.38",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3413,7 +3429,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC10 étape 4, p.38",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3432,7 +3448,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC10 Alt A, p.39",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3451,7 +3467,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC10 Alt A, p.39",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3470,7 +3486,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC10 Alt B, p.39",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -3489,7 +3505,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC10 Alt B, p.39",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -3508,7 +3524,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC10 Er 1, p.39",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3527,7 +3543,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC10 Er 2, p.39",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3547,7 +3563,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC10 Er 3, p.39",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3566,7 +3582,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC10 Er 3, p.39",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": true
     },
@@ -3585,7 +3601,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 1, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3604,7 +3620,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 2, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3622,7 +3638,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 2, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3641,7 +3657,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 2, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3659,7 +3675,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 2, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3677,7 +3693,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 2, p.40",
       "version": "V2",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3695,7 +3711,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 2, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3714,7 +3730,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étapes 3-4, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3732,7 +3748,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 5, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3752,7 +3768,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étapes 6-7, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3770,7 +3786,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étapes 4-5, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": true
     },
@@ -3788,7 +3804,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 UC11 préconditions, p.40",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3807,7 +3823,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC11 A1, p.41",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3826,7 +3842,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC11 A2, p.41",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Should",
       "derived": false
     },
@@ -3845,7 +3861,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC11 A3, p.41",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3864,7 +3880,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC11 Er 1, p.42",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3883,7 +3899,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC11 Er 2, p.42",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3902,7 +3918,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC11 Er 3, p.42",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3922,7 +3938,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC11 Er 4, p.42",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3941,7 +3957,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Gestion des POI, p.9, et §5.b EXPLORER, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -3960,7 +3976,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC11 étape 7, p.40, et §13 lot 2, p.16",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     },
@@ -3979,7 +3995,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 UC12 règles de gestion 1, p.42",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -3998,7 +4014,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 UC12 étape 6 et règles de gestion 3, p.42-43",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": true
     },
@@ -4018,7 +4034,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC12 étapes 2-5, p.43",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4037,7 +4053,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC12 règles de gestion 2, p.42",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4056,7 +4072,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC12 étape 6 et règles de gestion 3, p.42-43",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4074,7 +4090,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 UC12 règles de gestion 3, p.42",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4093,7 +4109,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC12 étape 7, p.43",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4112,7 +4128,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC12 étape 7, p.43",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4131,7 +4147,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC12 2a, p.43",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4149,7 +4165,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC12 2a, p.43",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4167,7 +4183,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC12 2a, p.43",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4185,7 +4201,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC12 2b, p.43",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4203,7 +4219,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC12 2b, p.43-44",
       "version": "V1",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4223,7 +4239,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC12 3a, p.44",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4243,7 +4259,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC12 3b, p.44",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4262,7 +4278,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §11, p.15",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4280,7 +4296,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC13 étape 1, p.44",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4299,7 +4315,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC13 étape 2, p.44, et §4 eCommerce, p.8",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4317,7 +4333,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC13 étape 2, p.44",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": true
     },
@@ -4335,7 +4351,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC13 étape 3, p.44",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4353,7 +4369,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC13 étape 4, p.44",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4372,7 +4388,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC13 étape 5, p.44",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4390,7 +4406,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC13 étape 6, p.44",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4409,7 +4425,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC13 A1, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4427,7 +4443,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC13 A2, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4446,7 +4462,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC13 A2, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4464,7 +4480,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC13 A3, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4483,7 +4499,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC13 Er 1, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4502,7 +4518,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC13 Er 2, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4521,7 +4537,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC13 Er 3, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4540,7 +4556,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC13 Er 4, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4558,7 +4574,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC13 Er 4, p.45",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4576,7 +4592,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC14 A.1-A.2, p.46",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4594,7 +4610,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC14 A.3, p.46",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4612,7 +4628,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC14 B.1, p.46",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4630,7 +4646,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC14 B.2, p.46",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4648,7 +4664,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC14 C.1-C.2, p.46",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4667,7 +4683,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC14 C.3, p.46",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4686,7 +4702,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC14 A1, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4704,7 +4720,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Gestion des moyens logistiques, p.8",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4723,7 +4739,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC14 A2, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4742,7 +4758,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC14 A3, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4760,7 +4776,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC14 Er 1, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4779,7 +4795,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC14 Er 2, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4798,7 +4814,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC14 Er 3, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4816,7 +4832,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC14 Er 4, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4835,7 +4851,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC14 Er 4, p.47",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -4854,7 +4870,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 A.1-A.2, p.48",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -4872,7 +4888,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 A.2, p.48",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -4908,7 +4924,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 A.2, p.48",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -4927,7 +4943,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 A.3, p.48",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -4945,7 +4961,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 B.2, p.48",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4963,7 +4979,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 B.2, p.48",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4981,7 +4997,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 B.2, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -4999,7 +5015,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 B.2, p.49",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5017,7 +5033,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 B.3, p.49",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -5036,7 +5052,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 C.1-C.2, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5054,7 +5070,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 C.2, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5072,7 +5088,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 6, p.17, et §4 PMS couche État, p.11",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5091,7 +5107,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 C.3, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5110,7 +5126,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 D.1-D.3, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5128,7 +5144,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 D.2, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5146,7 +5162,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 D.2, p.49",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5164,7 +5180,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 D.2, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5182,7 +5198,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 D.2, p.49",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5201,7 +5217,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC15 A1, p.49",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -5220,7 +5236,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC15 A2, p.49-50",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5238,7 +5254,7 @@
       "scenario": "alternatif",
       "source": "CDC v2.1 UC15 A3, p.50",
       "version": "V1",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5258,7 +5274,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC15 Er 1, p.50",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5296,7 +5312,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC15 Er 3, p.50-51",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5315,7 +5331,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 UC15 Er 4, p.51",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -5334,7 +5350,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.9",
       "version": "V1",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5352,7 +5368,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.9",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5370,7 +5386,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.9",
       "version": "V1",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5388,7 +5404,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.9-10",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5406,7 +5422,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.10",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5425,7 +5441,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.10",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5444,7 +5460,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.10",
       "version": "V1",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5462,7 +5478,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.10",
       "version": "V1",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5481,7 +5497,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Tableau de bord, p.10",
       "version": "V1",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5500,7 +5516,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §10 Profils utilisateurs, p.15",
       "version": "V1",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -5665,7 +5681,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Services, p.7 ; CDC page d'accueil fév. 2025, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5683,7 +5699,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5701,7 +5717,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Services, p.7",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     },
@@ -5720,7 +5736,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Services, p.7",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5738,7 +5754,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §5.b VIVRE, p.12",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5756,7 +5772,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §5.b VIVRE, p.12",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     },
@@ -5774,7 +5790,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Formalités et sécurité, p.7",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5792,7 +5808,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Formalités et sécurité, p.7",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5811,7 +5827,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Formalités et sécurité, p.7 ; §5.b VIVRE, p.12",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5829,7 +5845,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Formalités et sécurité, p.7",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": true
     },
@@ -5847,7 +5863,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Formalités et sécurité, p.7",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Should",
       "derived": true
     },
@@ -5865,7 +5881,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Mobilité, p.7 ; §5.c, p.12",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5883,7 +5899,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §5.c, p.12",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5901,7 +5917,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Mobilité, p.7",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -5919,7 +5935,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Fidélisation, p.8",
       "version": "V1",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -5937,7 +5953,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Fidélisation, p.8",
       "version": "V1",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -5955,7 +5971,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Fidélisation, p.8 ; §10, p.15",
       "version": "V1",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -5974,7 +5990,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Fidélisation, p.8 ; annexe Agrégateurs d'avis, p.53",
       "version": "V1",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -5992,7 +6008,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Fidélisation, p.8 ; §5.b PARTAGER, p.12",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Should",
       "derived": false
     },
@@ -6010,7 +6026,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Fidélisation, p.8",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Should",
       "derived": true
     },
@@ -6028,7 +6044,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §13 lot 3, p.16",
       "version": "V1",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6046,7 +6062,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 PMS couche Connectivité, p.11",
       "version": "V2",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6064,7 +6080,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 annexe Channel Manager, p.53",
       "version": "V2",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6082,7 +6098,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC15 B.2, p.48 ; §4 PMS, p.11",
       "version": "V2",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6100,7 +6116,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Assistant conversationnel IA, p.11",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -6118,7 +6134,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Centre d'aide et FAQ, p.11",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -6136,7 +6152,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Centre d'aide et FAQ, p.11",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -6154,7 +6170,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Centre d'aide et FAQ, p.11",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -6172,7 +6188,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Le centre d'aide, p.11",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     },
@@ -6281,7 +6297,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Relation client et marketing, p.11",
       "version": "V2",
-      "workshop": "J5",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6299,7 +6315,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Relation client et marketing, p.11",
       "version": "V2",
-      "workshop": "J5",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6317,7 +6333,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Relation client et marketing, p.11",
       "version": "V2",
-      "workshop": "J5",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6336,7 +6352,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Relation client, p.11 ; §13 lot 4, p.17",
       "version": "V2",
-      "workshop": "J5",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6354,7 +6370,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Relation client et marketing, p.11",
       "version": "V2",
-      "workshop": "J5",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6372,7 +6388,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Relation client et marketing, p.11",
       "version": "V2",
-      "workshop": "J5",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6390,7 +6406,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Gestion et opérations, p.11 ; §13 lot 4, p.16",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6408,7 +6424,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Gestion et opérations, p.11 ; §13 lot 4, p.16",
       "version": "V2",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6426,7 +6442,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Gestion et opérations, p.11",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6444,7 +6460,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Gestion et opérations, p.11 ; §13 lot 4, p.17",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6462,7 +6478,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 PMS couche Opérateur, p.10-11",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6480,7 +6496,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 PMS couche Opérateur, p.11",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6499,7 +6515,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 PMS couche Opérateur, p.11",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6517,7 +6533,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 PMS couche Opérateur, p.11",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6535,7 +6551,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 PMS couche État, p.11",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6553,7 +6569,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 PMS couche Conformité, p.11 ; §13 lot 4, p.17",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6571,7 +6587,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 4, p.17",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6590,7 +6606,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 4, p.17",
       "version": "V1",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -6609,7 +6625,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §6 Conformité réglementaire, p.13 ; UC02 A2, p.22",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -6627,7 +6643,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §6 Conformité réglementaire, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -6645,7 +6661,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Conformité réglementaire, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -6663,7 +6679,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Conformité réglementaire et Sécurité, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -6681,7 +6697,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §3, p.7 ; §6, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -6700,7 +6716,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §9, p.14 ; annexe eAdministration, p.52",
       "version": "MVP",
-      "workshop": "J2",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6719,7 +6735,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 annexe FNE, p.52",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -6737,7 +6753,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 annexe HORA, p.52",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6755,7 +6771,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §2, p.6 ; §9, p.14",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6773,7 +6789,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §9 Cohérence des parcours, p.14",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6792,7 +6808,7 @@
       "scenario": "erreur",
       "source": "CDC v2.1 annexe, p.52 ; UC12 3b, p.44",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -6810,7 +6826,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 annexe SIG, p.52",
       "version": "MVP",
-      "workshop": "J2",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6829,7 +6845,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 annexe Messagerie, p.53",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6848,7 +6864,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 UC01 acteurs, p.20 ; annexe Fournisseurs d'identité, p.53",
       "version": "V1",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6867,7 +6883,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Sécurité, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6885,7 +6901,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Sécurité, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6904,7 +6920,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Sécurité, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6923,7 +6939,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Sécurité, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6941,7 +6957,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §13 lot 1, p.16",
       "version": "MVP",
-      "workshop": "J9",
+      "workshop": "J7",
       "priority": "Must",
       "derived": false
     },
@@ -6960,7 +6976,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §5.c Approche mobile first, p.12",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6978,7 +6994,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Accessibilité et multilingue, p.13",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -6997,7 +7013,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Accessibilité et multilingue, p.13",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7016,7 +7032,7 @@
       "scenario": "exigence",
       "source": "CDC page d'accueil fév. 2025, p.5-8",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7034,7 +7050,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §5.c Immersion et storytelling, p.12",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7053,7 +7069,7 @@
       "scenario": "exigence",
       "source": "CDC page d'accueil fév. 2025, p.10-11",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Could",
       "derived": false
     },
@@ -7071,7 +7087,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Techniques, p.13 ; §4 Canaux digitaux, p.9",
       "version": "MVP",
-      "workshop": "J7",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7091,7 +7107,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 SLA, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7110,7 +7126,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 SLA, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7129,7 +7145,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 SLA, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7148,7 +7164,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 SLA, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7168,7 +7184,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Volumétrie, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7186,7 +7202,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 SLA, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": true
     },
@@ -7204,7 +7220,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Hébergement et maintenance, Transfert de compétences, p.13",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7223,7 +7239,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Techniques, p.13 ; §11, p.15",
       "version": "MVP",
-      "workshop": "J6",
+      "workshop": "J5",
       "priority": "Must",
       "derived": false
     },
@@ -7241,7 +7257,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §11, p.15 ; §13 lot 1, p.16",
       "version": "MVP",
-      "workshop": "J9",
+      "workshop": "J7",
       "priority": "Should",
       "derived": false
     },
@@ -7260,7 +7276,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.3-4",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7278,7 +7294,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.3",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Could",
       "derived": false
     },
@@ -7296,7 +7312,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.3-4",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7314,7 +7330,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.9",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7332,7 +7348,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.9",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7350,7 +7366,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.9",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7368,7 +7384,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.9 et p.26",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7386,7 +7402,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.9",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7404,7 +7420,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.9 ; CDC v2.1 §5.b RÊVER, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7422,7 +7438,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.10-11",
       "version": "V2",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Could",
       "derived": false
     },
@@ -7440,7 +7456,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.10",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7458,7 +7474,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.10",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7476,7 +7492,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.10",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7494,7 +7510,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.3 et p.12-13",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7512,7 +7528,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7530,7 +7546,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.14",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7548,7 +7564,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.15",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7566,7 +7582,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.18 ; CDC v2.1 §5.b RÊVER, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7584,7 +7600,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.18",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -7602,7 +7618,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.14 et p.18 ; CDC v2.1 UC02, p.21-22",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     },
@@ -7621,7 +7637,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.20-21",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7639,7 +7655,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7657,7 +7673,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Assistant conversationnel IA, p.11 ; §13 lot 2, p.16",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7675,7 +7691,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.27",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7694,7 +7710,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.15 et p.26 ; CDC v2.1 §4 IA intégrée, p.9",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7712,7 +7728,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.26",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7730,7 +7746,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.24",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7749,7 +7765,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.22",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7767,7 +7783,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7786,7 +7802,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.27",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7804,7 +7820,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.28",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7822,7 +7838,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Could",
       "derived": false
     },
@@ -7840,7 +7856,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.29",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7858,7 +7874,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.30",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Could",
       "derived": false
     },
@@ -7876,7 +7892,7 @@
       "scenario": "exigence",
       "source": "CDC page d'accueil fév. 2025, p.23 et p.30",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Could",
       "derived": false
     },
@@ -7894,7 +7910,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Services, p.7 ; §5.b VIVRE, p.12",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Must",
       "derived": false
     },
@@ -7912,7 +7928,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 IA intégrée, p.9 ; §13 lot 3, p.16",
       "version": "V2",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Should",
       "derived": false
     },
@@ -7930,7 +7946,7 @@
       "scenario": "nominal",
       "source": "CDC page d'accueil fév. 2025, p.30",
       "version": "V2",
-      "workshop": "J4",
+      "workshop": "J6",
       "priority": "Could",
       "derived": false
     },
@@ -7949,7 +7965,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §13 lot 8, p.17",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -7967,7 +7983,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §13 lot 8, p.17",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -7986,7 +8002,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §6 Transfert de compétences, p.13 ; §16, p.19",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": false
     },
@@ -8004,7 +8020,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §13 lot 8, p.17 ; §12, p.15",
       "version": "MVP",
-      "workshop": "J9",
+      "workshop": "J7",
       "priority": "Must",
       "derived": false
     },
@@ -8022,7 +8038,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §13 lot 1, p.16",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -8040,7 +8056,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Canaux digitaux, p.9 ; §5.b PARTAGER, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -8058,7 +8074,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC01 étape 6, p.20 ; UC03 étape 7, p.24 ; §5.b PARTAGER, p.12",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -8076,7 +8092,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC08 B.3, p.34",
       "version": "V2",
-      "workshop": "C2",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -8095,7 +8111,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §4 Marketing digital, p.8",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -8113,7 +8129,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 3, p.16",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -8131,7 +8147,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 eCommerce, p.8 ; §13 lot 3, p.16",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -8149,7 +8165,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 eCommerce, p.8 ; §13 lot 3, p.16",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Must",
       "derived": false
     },
@@ -8167,7 +8183,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 3, p.16",
       "version": "V2",
-      "workshop": "C1",
+      "workshop": "C3",
       "priority": "Could",
       "derived": false
     },
@@ -8186,7 +8202,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §4 Marketing digital, p.9 ; UC04 A3, p.27",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -8205,7 +8221,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC06 préconditions, p.30 ; §9, p.14",
       "version": "MVP",
-      "workshop": "J5",
+      "workshop": "J3",
       "priority": "Must",
       "derived": true
     },
@@ -8224,7 +8240,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 6, p.17",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -8243,7 +8259,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §10, p.15 ; §13 lot 6, p.17",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -8261,7 +8277,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §10, p.15 ; §6 Administration centralisée, p.13",
       "version": "MVP",
-      "workshop": "J8",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -8280,7 +8296,7 @@
       "scenario": "exigence",
       "source": "CDC v2.1 §3, p.7 ; UC09 Er 4, p.37",
       "version": "MVP",
-      "workshop": "J3",
+      "workshop": "J4",
       "priority": "Must",
       "derived": false
     },
@@ -8299,7 +8315,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 2, p.16",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -8317,7 +8333,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 2, p.16",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -8335,7 +8351,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 §13 lot 2, p.16",
       "version": "V1",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": false
     },
@@ -8353,7 +8369,7 @@
       "scenario": "nominal",
       "source": "CDC v2.1 UC05 étape 1, p.28 ; annexe Messagerie, p.53",
       "version": "MVP",
-      "workshop": "J4",
+      "workshop": "J2",
       "priority": "Must",
       "derived": true
     }

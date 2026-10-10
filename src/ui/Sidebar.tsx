@@ -70,6 +70,10 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         <NavLink to="/programme" className={link}>
           <span className={styles.icon}>▦</span> Programme des ateliers
         </NavLink>
+        <NavLink to="/references" className={link}>
+          <span className={styles.icon}>§</span> Références CdC{' '}
+          <span className={styles.count}>{ws.references.length}</span>
+        </NavLink>
 
         <button
           type="button"

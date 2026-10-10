@@ -1,17 +1,695 @@
 {
-  "source": "Planning_ateliers_cadrage_mis_a_jour.xlsx",
+  "source": "Planning_ateliers_cadrage_a_valider.xlsx",
+  "references": [
+    {
+      "id": "R01",
+      "subject": "Hypothèses de février 2025 (page d'accueil, guide virtuel, IA)",
+      "says": [
+        "Le cahier des charges v2.1 ne reprend pas les hypothèses de février 2025 en tant que telles. Les éléments qui s'y rapportent sont :",
+        "Page d'accueil et vision : porte d'entrée numérique portant la stratégie « Sublime Côte d'Ivoire » ; susciter l'émotion dès l'arrivée ; bannières vidéo HD, diaporamas, storytelling (§5).",
+        "Guide virtuel : l'assistant conversationnel IA est le « guide virtuel d'orientation et de recommandation » du parcours de planification (UC 03).",
+        "IA au démarrage : assistant conversationnel (orientation client et aide aux formalités), qui migrera ensuite vers un moteur prédictif (recommandations, cross-selling, Big Data) (§4 « IA intégrée ») ; widget 24h/24, 7j/7, français et anglais, avec transfert vers un humain (§4 « Centre d'aide »)."
+      ],
+      "where": "§4 IA intégrée (p. 9) ; §4 Centre d'aide (p. 11) ; §5 Vision UX (p. 12) ; UC 03 (p. 23)",
+      "gaps": "Le cahier des charges de février 2025 n'a pas été fourni : les hypothèses elles-mêmes restent à apporter en J1. Le nom « L'esprit de la Côte d'Ivoire » n'apparaît pas dans la v2.1.",
+      "sessions": [
+        "J1.3",
+        "J2.2",
+        "J6.1"
+      ]
+    },
+    {
+      "id": "R02",
+      "subject": "Parcours touriste en sept temps",
+      "says": [
+        "Parcours utilisateur expérientiel :",
+        "1. RÊVER : immersion visuelle (vitrine des régions, récits, ambiances Nature, Culture, Loisirs).",
+        "2. EXPLORER : points d'intérêt, agenda culturel, cartes interactives, guides.",
+        "3. SE PROJETER : assistant IA et outils de planification.",
+        "4. COMPOSER : panier modulaire (hébergement, restauration, transports, VTC, activités, guides, artisanat).",
+        "5. RÉSERVER : paiement multicanal (Mobile Money, 3D Secure, TPE, QR Code SGAT) et traçabilité fiscale.",
+        "6. VIVRE : e-billets QR, alertes météo et sécurité, conciergerie, assistance IA 24h/24, panic button, PMS Light.",
+        "7. PARTAGER : avis vérifiés, partages, parrainage et affiliation."
+      ],
+      "where": "§5 b. Parcours utilisateur expérientiel (p. 12)",
+      "gaps": "",
+      "sessions": [
+        "J1.2"
+      ]
+    },
+    {
+      "id": "R03",
+      "subject": "Positionnement dans le programme SGAT",
+      "says": [
+        "SGAT (Système de Gestion de l'Administration et du Tourisme) comprend trois plateformes interconnectées : eAdministration (actes administratifs), eTourisme (valorisation de la destination, offre, parcours transactionnels) et Data Management (centralisation des données pour le pilotage).",
+        "eTourisme s'interconnecte avec eAdministration et Data Management. La base des opérateurs et des établissements provient de la base unique d'eAdministration, consommée par API. Les interfaces sont uniformisées entre services administratifs et touristiques."
+      ],
+      "where": "§2 Programme SGAT (p. 6) ; §9 Positionnement (p. 14)",
+      "gaps": "",
+      "sessions": [
+        "J1.2"
+      ]
+    },
+    {
+      "id": "R04",
+      "subject": "Objectifs du cahier des charges",
+      "says": [
+        "Sept axes :",
+        "Promotion de la destination (visibilité internationale, patrimoine).",
+        "Structuration de l'offre (répertoire national unifié, intégration accompagnée du secteur informel).",
+        "Digitalisation des services (réservation en ligne, automatisation des flux).",
+        "Expérience utilisateur fluide (locaux, diaspora, internationaux).",
+        "Valorisation des opérateurs (vitrine numérique gratuite, outils de gestion).",
+        "Optimisation fiscale (TDT 2,5 %, TVA 18 %, taxe de nuitée 200 à 2 000 F CFA, collectées à la source).",
+        "Souveraineté des données (statistiques aux normes OMT, conformité ARTCI)."
+      ],
+      "where": "§3 Objectifs du portail (p. 6-7)",
+      "gaps": "Le cahier des charges ne fixe pas d'objectifs chiffrés à douze mois (question 1.2 du questionnaire de J1).",
+      "sessions": [
+        "J1.2"
+      ]
+    },
+    {
+      "id": "R05",
+      "subject": "Périmètre et hors périmètre",
+      "says": [
+        "Le périmètre du §4 couvre : information (landing page), planification, booking, e-commerce B2C et B2B, évaluation, gestion des contenus, moyens de paiement, logistique, marketing digital (marketplace, Channel Manager OTA, B2B, MICE), IA intégrée, points d'intérêt, viralité, tableau de bord, services aux opérateurs (gestion financière, PMS national, CRM, stocks, caisse) et centre d'aide.",
+        "Il inclut aussi : transport intégré (vols, transferts, VTC via acteurs existants), itinéraires et cartes hors ligne, conciergerie, agenda culturel, billetterie événementielle, assurance voyage (produit tiers), module e-visa, douane et santé, alertes sécurité et météo, panic button, contenu généré par les utilisateurs, affiliation, e-réputation externe."
+      ],
+      "where": "§4 Périmètre du projet (p. 7-11)",
+      "gaps": "Écart : le planning prévoit d'acter hors périmètre l'e-visa, l'assurance et le transport intégré (J1), alors que le §4 les inclut. Borne, réalité augmentée, avatar et casque ne figurent pas dans la v2.1. Le hors périmètre doit être confirmé par écrit (risque R18).",
+      "sessions": [
+        "J1.4",
+        "J1.6"
+      ]
+    },
+    {
+      "id": "R06",
+      "subject": "Profils utilisateurs (dont les quatre profils de touriste)",
+      "says": [
+        "Quatre familles d'utilisateurs : voyageurs et touristes ; opérateurs touristiques ; administrateurs et équipes d'exploitation ; partenaires institutionnels (tableaux de bord, données agrégées).",
+        "Quatre profils de touriste : local (résident), corporate (entreprise), diaspora (Ivoirien de l'étranger), international (visiteur étranger)."
+      ],
+      "where": "§10 Profils utilisateurs (p. 15) ; UC 01 (p. 20)",
+      "gaps": "",
+      "sessions": [
+        "J1.4",
+        "J2.1"
+      ]
+    },
+    {
+      "id": "R07",
+      "subject": "UC 01 · Création de compte touriste",
+      "says": [
+        "Choix parmi les 4 profils ; champs communs (nom, prénom, e-mail, mot de passe, mobile) et vérification de l'identité.",
+        "Spécificités : Local = numéro Mobile Money ; Corporate = entreprise et numéro de compte contribuable ; Diaspora et International = pays de résidence, devise de facturation.",
+        "Code de validation à 6 chiffres par SMS (numéro local) ou e-mail ; validité 10 minutes ; renvoi possible après 60 secondes, bascule vers l'e-mail.",
+        "Mot de passe : au moins 8 caractères, majuscule, caractère spécial.",
+        "Inscription via Google ou Apple ; corporate activé par domaine e-mail professionnel, avec avantages négociés et notes de frais.",
+        "À la création : code de parrainage, tutoriel par l'assistant IA, tableau de bord personnalisé."
+      ],
+      "where": "UC 01 (p. 20-21)",
+      "gaps": "La vérification d'identité (fournisseur, niveau, base légale) n'est pas précisée : à trancher en J2 et J5.",
+      "sessions": [
+        "J2.1"
+      ]
+    },
+    {
+      "id": "R08",
+      "subject": "UC 02 · Landing page",
+      "says": [
+        "L'opérateur saisit une fiche (description, visuels HD, tarifs, horaires, géolocalisation) et la soumet : statut « En attente de validation ».",
+        "L'administrateur central (Ministère ou structure projet) valide ou rejette avec motif obligatoire ; publication automatique dans les sections vedettes, carrousels ou catégories Nature, Culture, Détente.",
+        "Les flux PMS ou Channel Manager des grands hôtels mettent la page à jour sans modération, s'ils respectent des gabarits préapprouvés.",
+        "En cas de panne, bascule sur une version statique en cache.",
+        "Personnalisation par l'IA selon l'historique de navigation : Version 2."
+      ],
+      "where": "UC 02 (p. 21-23)",
+      "gaps": "",
+      "sessions": [
+        "J2.1",
+        "J5.2"
+      ]
+    },
+    {
+      "id": "R09",
+      "subject": "UC 03 · Planification de voyage et assistant IA",
+      "says": [
+        "L'assistant IA recueille les préférences, croise les données de la marketplace et propose un package (ex. Week-end Assinie).",
+        "L'utilisateur ajuste ; le devis est recalculé en temps réel ; le PMS national bloque les stocks à la validation du panier.",
+        "Paiement, puis ventilation automatique : part opérateur, TVA 18 %, TDT 2,5 %, taxe de nuitée ; e-billets QR ; données transmises au tableau de bord de l'État.",
+        "Rupture de dernière minute : l'IA propose une offre similaire avec avantage compensatoire (ex. réduction de 5 %).",
+        "Panne du module fiscal : commande bloquée et mise en file d'attente sécurisée."
+      ],
+      "where": "UC 03 (p. 23-26) ; §4 IA intégrée (p. 9)",
+      "gaps": "Le périmètre de l'IA au MVP et ses garde-fous ne sont pas fixés (J2). La remise compensatoire est à transformer en paramètre d'opérateur.",
+      "sessions": [
+        "J1.3",
+        "J2.2",
+        "J6.1",
+        "J6.2"
+      ]
+    },
+    {
+      "id": "R10",
+      "subject": "UC 04 · Réservation et paiement multi-services",
+      "says": [
+        "Panier combinant hébergement, restauration, véhicule et guide ; affichage des taxes par ligne et du total TTC.",
+        "Codes promotionnels et parrainage, avec recalcul proportionnel des taxes.",
+        "Acompte de 30 % pour les séjours MICE ou longs, solde planifié.",
+        "Après paiement : répartition des fonds entre opérateurs et émission des parts fiscales sans intervention humaine.",
+        "Échec de paiement : panier conservé, proposition d'un autre canal ; panne de passerelle : journalisation et identifiant unique de transaction (idempotence) contre les doubles débits."
+      ],
+      "where": "UC 04 (p. 26-28)",
+      "gaps": "",
+      "sessions": [
+        "J2.3"
+      ]
+    },
+    {
+      "id": "R11",
+      "subject": "UC 05 · Évaluation et avis",
+      "says": [
+        "Invitation 48 heures après la prestation ; formulaire réservé aux acheteurs réels (« Avis vérifié »).",
+        "Note globale de 1 à 5 étoiles et sous-critères (accueil, propreté, rapport qualité-prix, conformité) ; photos possibles.",
+        "Filtre automatique de modération, puis publication instantanée.",
+        "Avis spontané possible pour une prestation de moins de 30 jours ; délai limite de 6 mois.",
+        "Alerte à l'opérateur si la note est de 3 étoiles ou moins ; droit de réponse public ; avis anonyme possible.",
+        "Signalement par l'opérateur : avis masqué temporairement, arbitrage par un administrateur."
+      ],
+      "where": "UC 05 (p. 28-30)",
+      "gaps": "Incohérence à trancher en J2 : délai de 30 jours ou de 6 mois ; modération préalable ou publication instantanée.",
+      "sessions": [
+        "J2.4"
+      ]
+    },
+    {
+      "id": "R12",
+      "subject": "UC 06 · Publication d'une offre par un opérateur",
+      "says": [
+        "Champs : titre, catégorie, description, conditions d'annulation, prix, visuels, disponibilités et quotas.",
+        "Contrôles en temps réel (champs obligatoires, formats : images JPG ou PNG de moins de 5 Mo), prévisualisation, publication immédiate.",
+        "Modification de prix ou de disponibilités appliquée immédiatement et synchronisée avec le Channel Manager et le PMS.",
+        "Brouillon ; sauvegarde locale en cas de coupure réseau.",
+        "Validation préalable par un administrateur pour les offres sensibles et les nouveaux opérateurs.",
+        "Précondition : compte rattaché au registre de commerce et aux agréments."
+      ],
+      "where": "UC 06 (p. 30-32)",
+      "gaps": "Les offres « sensibles » et les règles de modération sont à définir dans la configuration de la plateforme (J3). Le seuil de taille d'image diffère de l'UC 11.",
+      "sessions": [
+        "J3.1",
+        "J5.2"
+      ]
+    },
+    {
+      "id": "R13",
+      "subject": "UC 07 · Pack thématique « Week-end à Assinie »",
+      "says": [
+        "Découverte par notification push ou publicité, landing page dédiée, personnalisation du pack.",
+        "Code de parrainage ; paiement Mobile Money ou carte ; QR Code de réservation.",
+        "Échec de paiement : autre canal proposé, panier conservé 15 minutes.",
+        "Surréservation : annulation, remboursement instantané sans frais et 3 alternatives avec remise (ex. 15 %).",
+        "Check-in par QR Code hors connexion (PMS Light), synchronisé ensuite."
+      ],
+      "where": "UC 07 (p. 32-34)",
+      "gaps": "Selon le planning : pack en V1, campagnes en V2 (J2).",
+      "sessions": [
+        "J2.5"
+      ]
+    },
+    {
+      "id": "R14",
+      "subject": "UC 08 · Fidélité à points et statuts",
+      "says": [
+        "Compte de fidélité automatique ; bonus de bienvenue (ex. 500 points).",
+        "Barème : 10 XOF dépensés = 1 point ; bonus pour un avis vérifié ou un parrainage.",
+        "Statuts progressifs (ex. Explorateur, puis Ambassadeur Ivoire) et privilèges.",
+        "Utilisation chez un partenaire, compensée par clearing ; multiplicateurs saisonniers (ex. x2).",
+        "Validité des points : 24 mois ; gel en cas de fraude ; solde négatif après une annulation."
+      ],
+      "where": "UC 08 (p. 34-35)",
+      "gaps": "Le financement des points n'est pas traité (J7, risque R26). Livré en V2, cadré en janvier 2027.",
+      "sessions": [
+        "C3"
+      ]
+    },
+    {
+      "id": "R15",
+      "subject": "UC 09 · Complexe multiservice, PMS et abonnement",
+      "says": [
+        "Abonnement mensuel ou annuel au PMS national par Mobile Money ; le profil paramètre la taxe de nuitée (ex. hôtel 3 étoiles : 2 000 F CFA par nuit et par client).",
+        "Note globale rattachée au QR Code du client ; facture unique au check-out ; répartition entre hôtel, restaurant, guide et artisan.",
+        "Guides et artisans : PMS Light ou QR Code SGAT à moins de 30 000 F CFA.",
+        "Rappels de renouvellement à J-7 et J-1 ; prélèvement automatique.",
+        "Échec de l'abonnement : période de grâce de 3 jours, puis suspension du Channel Manager seulement, l'encaissement restant actif.",
+        "Croisement avec le référentiel national des agréments pour corriger la catégorie (taxe de nuitée)."
+      ],
+      "where": "UC 09 (p. 36-38)",
+      "gaps": "Les tarifs d'abonnement et de commission ne figurent pas au cahier des charges (grille provisoire attendue en J3).",
+      "sessions": [
+        "J3.2",
+        "J3.3"
+      ]
+    },
+    {
+      "id": "R16",
+      "subject": "UC 10 · Gestion financière et états financiers",
+      "says": [
+        "Séquestre immédiat de la TVA, de la TDT et de la taxe de nuitée ; commission de la plateforme ; net versé à l'opérateur.",
+        "Écriture comptable en partie double à chaque transaction.",
+        "États financiers : balance, grand livre, compte de résultat, bilan, tableau des flux de trésorerie.",
+        "Reversement périodique (ex. fin de journée ou J+1) de l'opérateur et des taxes vers l'État et les collectivités.",
+        "Facturation B2B entre opérateurs ; virement rejeté : retour en compte d'attente."
+      ],
+      "where": "UC 10 (p. 38-40)",
+      "gaps": "Le plan comptable (SYSCOHADA) n'est pas cité dans la v2.1 : à confirmer en J5 et J4.",
+      "sessions": [
+        "J4.3"
+      ]
+    },
+    {
+      "id": "R17",
+      "subject": "UC 11 · Points d'intérêt",
+      "says": [
+        "Formulaire : nom et description multilingues, catégorie et sous-catégorie, GPS ou carte, médias (photos, vidéos, visite 360°), informations pratiques.",
+        "Statuts : en attente de modération, à corriger, publié, rejeté définitivement ; administrateur national ou régional.",
+        "« Selon la configuration de la plateforme », modifications mineures publiées immédiatement, majeures revalidées.",
+        "L'IA suggère des tags, optimise le référencement et traduit.",
+        "Détection des doublons par proximité géographique et nom.",
+        "Catégories : Nature et parc, Culture et histoire, Détente et loisirs, MICE."
+      ],
+      "where": "UC 11 (p. 40-42) ; §4 Points d'intérêt (p. 9)",
+      "gaps": "Contradiction sur la taille des images : refus au-delà de 10 Mo mais message « moins de 5 Mo ». À unifier.",
+      "sessions": [
+        "J6.3"
+      ]
+    },
+    {
+      "id": "R18",
+      "subject": "UC 12 · Paiement unifié et traçabilité fiscale",
+      "says": [
+        "Règle : montant brut = net prestataire + TVA 18 % + TDT 2,5 % + taxe de nuitée (selon la catégorie) + commission SIVIS.",
+        "Canaux : Mobile Money (MTN MoMo, Orange Money, Wave), carte Visa ou Mastercard en 3D Secure multidevises, TPE et NFC, QR Code SGAT.",
+        "Ventilation et séquestre atomiques dès la validation ; reversement automatique vers l'État et les collectivités.",
+        "Exemple : 100 000 F CFA TTC donnent 15 254 F CFA de TVA et 2 118 F CFA de TDT.",
+        "Reçu numérique certifié ; déclaration dans le tableau de bord national.",
+        "Coupure après débit : file d'attente sécurisée et réessai toutes les 60 secondes."
+      ],
+      "where": "UC 12 (p. 42-44)",
+      "gaps": "Le redevable légal et le mandat d'encaissement ne sont pas traités (J4, risque R05). La liste des opérateurs Mobile Money varie selon les sections.",
+      "sessions": [
+        "J4.1",
+        "J4.2"
+      ]
+    },
+    {
+      "id": "R19",
+      "subject": "UC 13 · Approvisionnements B2B",
+      "says": [
+        "Marketplace B2B, recherche de fournisseurs par géolocalisation, y compris hors tourisme.",
+        "Commande avec TVA calculée ; paiement Mobile Money B2B ou virement ; retenue fiscale automatique.",
+        "Contrats récurrents, devis B2B, paiement en acompte et solde.",
+        "Rupture : avoir et remboursement partiel ; commande annulée après 24 heures sans paiement.",
+        "Fournisseur fiscalement non conforme : transaction bloquée ; litige : fonds gelés en séquestre jusqu'à arbitrage."
+      ],
+      "where": "UC 13 (p. 44-46) ; §4 eCommerce B2C, B2B (p. 8)",
+      "gaps": "Le gel des fonds suppose une détention de fonds par la plateforme : à concilier avec le modèle financier (J4). Livré en V2, cadré en janvier 2027.",
+      "sessions": [
+        "J3.5",
+        "J4.3",
+        "C3"
+      ]
+    },
+    {
+      "id": "R20",
+      "subject": "UC 14 · Logistique des livraisons",
+      "says": [
+        "Bon de préparation et étiquette avec QR Code ; transporteur partenaire ou service intégré.",
+        "Suivi d'acheminement et notification au destinataire.",
+        "Remise par scan du QR Code ou signature ; déblocage des fonds séquestrés.",
+        "Livraison fractionnée multi-fournisseurs ; changement d'adresse ; point relais avec code SMS.",
+        "Preuve de livraison hors connexion ; contestation via le CRM, indemnisation par l'assurance adossée."
+      ],
+      "where": "UC 14 (p. 46-48) ; §13 livrable 7 (p. 17)",
+      "gaps": "Livré en V2, cadré en janvier 2027.",
+      "sessions": [
+        "C3"
+      ]
+    },
+    {
+      "id": "R21",
+      "subject": "UC 15 · Tableaux de bord (espaces)",
+      "says": [
+        "Espace touriste : réservations, vouchers, historique, avis, recommandations, parrainage, factures avec détail des taxes.",
+        "Espace opérateur : taux d'occupation, chiffre d'affaires du jour, check-in et check-out, réservations synchronisées, offres, conformité fiscale.",
+        "Espace administrateur État : recettes et recouvrement des taxes, statistiques OMT, tourisme domestique et MICE ; exports PDF et Excel.",
+        "Espace administrateur SIVIS : les mêmes vues, plus paramétrage, traitement des transactions, traitement des recours, gestion des opérateurs et de leurs offres.",
+        "Bascule automatique vers PMS Light en faible connectivité ; multidevises ; alerte de surréservation ; facture bloquée en cas d'anomalie fiscale."
+      ],
+      "where": "UC 15 (p. 48-51)",
+      "gaps": "",
+      "sessions": [
+        "J4.4"
+      ]
+    },
+    {
+      "id": "R22",
+      "subject": "Fiscalité : TVA, TDT, taxe de nuitée, Annexe Fiscale 2026",
+      "says": [
+        "TVA 18 % ; Taxe de Développement Touristique (TDT) 2,5 % ; taxe communale de nuitée de 200 à 2 000 F CFA selon la catégorie (ex. 2 000 F CFA pour un hôtel 3 étoiles, 1 500 F CFA pour un 2 étoiles).",
+        "Retenue à la source, sans intervention humaine, conforme à l'Annexe Fiscale 2026.",
+        "Destinations : TVA vers le compte séquestre de la DGI, TDT vers le fonds de développement touristique, taxe de nuitée vers la commune, commission vers SIVIS.",
+        "Journalisation immuable des transactions financières conservée 5 ans."
+      ],
+      "where": "§3 (p. 7) ; §4 Moyens de paiement (p. 8) ; §6 Sécurité (p. 13) ; UC 09 (p. 36-38) ; UC 12 (p. 42-44)",
+      "gaps": "Non traités dans la v2.1, à arbitrer avec la DGI en J4 : régimes de la TDT, non-assujettis, redevable légal, rythme de reversement. Le barème complet par catégorie et par commune n'est pas joint.",
+      "sessions": [
+        "J4.1"
+      ]
+    },
+    {
+      "id": "R23",
+      "subject": "Moyens de paiement et agrégateur agréé BCEAO",
+      "says": [
+        "Quatre canaux : TPE (carte, NFC, sans contact) pour les grands hôtels ; QR Code SGAT pour guides, artisans et petits hébergeurs ; Mobile Money natif ; paiement en ligne 3D Secure multidevises.",
+        "Mobile Money : plus de 50 % de la population adulte ; canal dominant de l'économie informelle.",
+        "Agrégateur de paiement agréé par la BCEAO, avec répartition automatique des recettes (Split Payment).",
+        "Modèle : l'opérateur facture le touriste, le SGAT encaisse pour l'opérateur en retirant sa commission."
+      ],
+      "where": "§4 Moyens de paiement et Marketing digital (p. 8) ; §11 (p. 15) ; §13 livrable 5 (p. 17) ; annexe (p. 52)",
+      "gaps": "Mobile Money cités : MTN et Orange (§4) ; MTN, Orange, Moov et Wave (livrable 5) ; MTN, Orange et Wave (UC 12). Liste à arrêter en J4.",
+      "sessions": [
+        "J2.3",
+        "J4.2"
+      ]
+    },
+    {
+      "id": "R24",
+      "subject": "QR Code SGAT et fonctionnement hors réseau",
+      "says": [
+        "QR Code SGAT : scan Mobile Money instantané pour guides, artisans et petits hébergeurs ; fonctionne hors réseau stable ; coût inférieur à 30 000 F CFA.",
+        "Hors connexion : transaction stockée localement et chiffrée, synchronisée dès la reconnexion, puis ventilation fiscale ; anomalie de taux isolée en compte d'attente.",
+        "Check-in par QR Code en mode dégradé (PMS Light)."
+      ],
+      "where": "§4 (p. 8) ; UC 07 (p. 33-34) ; UC 09 (p. 37) ; UC 10 (p. 40) ; UC 12 (p. 43)",
+      "gaps": "Fabrication, distribution et financement du QR Code SGAT non précisés. Autorisation du paiement hors réseau par l'agrégateur à obtenir (risque R03).",
+      "sessions": [
+        "J3.4",
+        "J4.2"
+      ]
+    },
+    {
+      "id": "R25",
+      "subject": "PMS national et PMS Light",
+      "says": [
+        "PMS national : service public numérique mutualisé dont les données alimentent l'État en temps réel, en quatre couches :",
+        "Opérateur : réservations, check-in et check-out, facturation, disponibilités, sur le web et en mobile (PMS Light pour micro-opérateurs).",
+        "Connectivité : Channel Manager vers les OTA.",
+        "Conformité : déclarations réglementaires automatiques, dont la taxe de nuitée (zéro papier).",
+        "État : tableau de bord national (occupation, recettes, flux régionaux, statistiques OMT).",
+        "PMS Light : application allégée pour micro-opérateurs et guides en faible connectivité (hors ligne, synchronisation par QR Code)."
+      ],
+      "where": "§4 Services aux opérateurs (p. 10-11) ; §13 livrable 4 (p. 16-17)",
+      "gaps": "Le planning place le PMS web au MVP et l'abonnement et PMS Light en V1 (onglet Couverture).",
+      "sessions": [
+        "J3.2",
+        "J3.4"
+      ]
+    },
+    {
+      "id": "R26",
+      "subject": "Interfaces avec les systèmes de l'État",
+      "says": [
+        "eAdministration : base unique des opérateurs et des établissements, consommée par API en temps réel pour l'enrôlement et la conformité.",
+        "FNE (DGI) : factures normalisées avec QR Code, transmises en temps réel (API sécurisée, ex. Dynamics 365 ou API DGI).",
+        "HORA (Police nationale) : transmission des fiches d'émargement hôtelier et des déclarations des voyageurs.",
+        "Data Management : centralise les données pour les indicateurs de pilotage.",
+        "SIG : géolocalisation des infrastructures et cartographie dynamique."
+      ],
+      "where": "§2 (p. 6) ; §9 (p. 14) ; annexe (p. 52-53)",
+      "gaps": "Les formats d'échange et les environnements de test ne sont pas fournis (J5, risques R06 à R08).",
+      "sessions": [
+        "J3.1",
+        "J5.3"
+      ]
+    },
+    {
+      "id": "R27",
+      "subject": "Interconnexions hors État",
+      "says": [
+        "Channel Manager et OTA (Booking.com, Expedia, Trip.com) : synchronisation bidirectionnelle des plannings, disponibilités et tarifs.",
+        "Fournisseurs d'identité : Google, Apple, passeports ou CNI.",
+        "e-réputation : agrégation des avis Google et TripAdvisor sur les fiches opérateurs.",
+        "Transport : vols, transferts aéroport, VTC.",
+        "Messagerie : SMS, push et e-mail pour les codes OTP, confirmations, e-billets et campagnes CRM."
+      ],
+      "where": "Annexe : écosystème d'interconnexion (p. 52-53)",
+      "gaps": "Fournisseurs, coûts à l'usage et accords commerciaux à arrêter (J5, risques R31 et R32).",
+      "sessions": [
+        "J5.4",
+        "C2"
+      ]
+    },
+    {
+      "id": "R28",
+      "subject": "Exigences non fonctionnelles (SLA, volumétrie, sécurité, accessibilité)",
+      "says": [
+        "Disponibilité : portail 99,5 % en heures ouvrées et 99,0 % 24/7 ; back-office opérateur 99,0 % ; dashboard État 99,5 %.",
+        "Performance : pages principales en moins de 3 s ; LCP inférieur à 2,5 s en 4G ; maintenance notifiée 72 h avant.",
+        "Reprise : RTO 4 h et RPO 1 h (transactions) ; RTO 8 h et RPO 4 h (contenus).",
+        "Volumétrie à 12-24 mois : 5 000 opérateurs, 100 000 touristes actifs, 5 000 transactions par jour (pics à 15 000), 200 utilisateurs simultanés en back-office, 2 000 sur le portail.",
+        "Sécurité : TLS 1.3, AES-256 au repos, MFA obligatoire pour administrateurs et opérateurs, journal immuable 5 ans.",
+        "WCAG 2.1 niveau AA ; français et anglais dès la Version 1.",
+        "Garantie de 6 mois après la mise en production (anomalies bloquantes et majeures)."
+      ],
+      "where": "§6 Spécifications non fonctionnelles (p. 13)",
+      "gaps": "",
+      "sessions": [
+        "J5.1",
+        "J5.4",
+        "J7.3"
+      ]
+    },
+    {
+      "id": "R29",
+      "subject": "Hébergement, exploitation et données personnelles",
+      "says": [
+        "Infrastructure sécurisée gérée par la maîtrise d'œuvre ; maintenance corrective et évolutive ; support ; formation et transfert de compétences, avec remise des codes sources.",
+        "Conformité à la réglementation sur les données personnelles selon les recommandations de l'ARTCI.",
+        "Transfert de compétences : code source, documentation technique, dossier d'exploitation, scripts d'infrastructure."
+      ],
+      "where": "§3 Souveraineté des données (p. 7) ; §6 (p. 13)",
+      "gaps": "Les options d'hébergement A, B et C du planning ne figurent pas au cahier des charges (offre du groupement).",
+      "sessions": [
+        "J5.3",
+        "J6.4"
+      ]
+    },
+    {
+      "id": "R30",
+      "subject": "Architecture et normes de référence",
+      "says": [
+        "Cadres : TOGAF pour l'architecture, ITIL v4 pour la gestion des services.",
+        "Architecture modulaire à composants découplés, interopérable par API.",
+        "Normes : ISO 9001, ISO 14001, ISO 45001 et réglementation locale sur les données personnelles.",
+        "Livrable : schéma d'architecture technique TOGAF."
+      ],
+      "where": "§1 (p. 6) ; §6 (p. 13) ; §11 (p. 15) ; §13 livrable 1 (p. 16)",
+      "gaps": "",
+      "sessions": [
+        "J5.3"
+      ]
+    },
+    {
+      "id": "R31",
+      "subject": "Livrables du projet",
+      "says": [
+        "Huit groupes de livrables :",
+        "1. Cadrage : schéma TOGAF, SFD pour les Versions 1 et 2, PAQ et PSSI.",
+        "2. Portail touriste : landing page, planification et booking, application mobile iOS et Android, assistant IA.",
+        "3. Marketplace : marketplace nationale, module B2B, Channel Manager, moteur prédictif (V2).",
+        "4. Services opérateurs : PMS national, PMS Light, conformité fiscale, CRM et marketing.",
+        "5. Paiement : passerelle unifiée, moteur de traçabilité financière et comptable.",
+        "6. Pilotage : dashboard national, back-office administrateur.",
+        "7. Logistique.",
+        "8. Conduite du changement : plan de déploiement et onboarding, manuels, rapports de recette V1 et V2."
+      ],
+      "where": "§13 Les livrables du projet (p. 16-17)",
+      "gaps": "",
+      "sessions": [
+        "J7.1",
+        "J7.3",
+        "J8.2"
+      ]
+    },
+    {
+      "id": "R32",
+      "subject": "Indicateurs du tableau de bord",
+      "says": [
+        "Le cahier des charges liste 29 indicateurs en huit familles :",
+        "Financiers : volume d'affaires (GMV), chiffre d'affaires, panier moyen, CAC et LTV.",
+        "B2C : trafic, conversion, annulations, satisfaction (NPS, CSAT).",
+        "B2B : comptes actifs, récurrence, délais de paiement, onboarding des prestataires.",
+        "Opérations : remplissage, échecs de paiement, temps de réponse du SAV.",
+        "Impact économique : recettes par nuitée, durée moyenne de séjour, taux d'occupation.",
+        "Flux : arrivées, marchés émetteurs, saisonnalité.",
+        "Durabilité : écolabels, dispersion géographique.",
+        "Comportement et technique : session, rebond, recherches sans résultat, filtres, conversion par appareil, vitesse (LCP)."
+      ],
+      "where": "§4 Tableau de bord (p. 9-10)",
+      "gaps": "Écart : le planning parle de 27 indicateurs (J4), le cahier des charges en liste 29. À réconcilier en J4.",
+      "sessions": [
+        "J4.4"
+      ]
+    },
+    {
+      "id": "R33",
+      "subject": "Conduite du changement et déploiement",
+      "says": [
+        "Plan de déploiement et campagne d'onboarding : calendrier et supports de formation pour l'enrôlement progressif des opérateurs sur tout le territoire à compter du 15 décembre 2026.",
+        "Manuels et guides par profil : tutoriels vidéo pour les touristes, manuels PMS pour les hôteliers, guides d'administration.",
+        "Formation des équipes du MOE et transfert de compétences."
+      ],
+      "where": "§13 livrable 8 (p. 17) ; §6 (p. 13)",
+      "gaps": "",
+      "sessions": [
+        "J3.6"
+      ]
+    },
+    {
+      "id": "R34",
+      "subject": "Jalons contractuels",
+      "says": [
+        "Du 1er au 2 octobre 2026 : lancement de la conception et du développement de la Version 1.",
+        "Du 15 au 30 janvier 2027 : livraison de la Version 1 au Ministère.",
+        "Du 15 au 30 juin 2027 : livraison de la Version 2.",
+        "À compter du 15 décembre 2026 : enrôlement progressif des opérateurs.",
+        "Rapports de recette : V1 le 30 janvier 2027, V2 le 30 juin 2027."
+      ],
+      "where": "§12 Planification et jalons (p. 15) ; §13 livrable 8 (p. 17)",
+      "gaps": "Le MVP du 15 décembre et la cible de 75 à 80 % de la V1 ne figurent pas au cahier des charges : ils relèvent de la trajectoire proposée au Kick-Off. Le lancement contractuel (1er-2 octobre) précède le Kick-Off du 8 octobre.",
+      "sessions": [
+        "J1.5",
+        "J7.1",
+        "J7.2",
+        "J8.3",
+        "J9.3",
+        "C1"
+      ]
+    },
+    {
+      "id": "R35",
+      "subject": "Gouvernance et parties prenantes",
+      "says": [
+        "Gouvernance stratégique : Ministère du Tourisme et des Loisirs.",
+        "Pilotage opérationnel : SIVIS (maîtrise d'ouvrage, AMOA) et Cybastion (maîtrise d'œuvre) pour les plannings, budgets et livrables.",
+        "Gestion documentaire : versioning, suivi des évolutions, validation formelle.",
+        "Parties prenantes : Ministère (tutelle, validateur des orientations) ; MOA SIVIS et BNETD (besoins métiers, validation des spécifications) ; MOE Cybastion (conception, développement, intégration, déploiement) ; Key Users (ateliers, recettes, tests d'acceptation) ; prestataires (ex. agrégateurs) ; utilisateurs et opérateurs.",
+        "Document approuvé par la DG de SIVIS, la DG Digital Solution de Cybastion et la Direction de la Digitalisation du Ministère."
+      ],
+      "where": "§7 Gouvernance (p. 13-14) ; §8 Parties prenantes (p. 14) ; p. 2 Approbation",
+      "gaps": "Le COPIL et sa composition ne sont pas décrits (question 9.7).",
+      "sessions": [
+        "J1.1",
+        "J1.7",
+        "J3.7",
+        "J4.5",
+        "J5.5",
+        "J6.5",
+        "J7.4",
+        "J7.5",
+        "J8.1",
+        "J8.4",
+        "J8.5",
+        "J9.1",
+        "J9.2",
+        "J9.4",
+        "J9.5"
+      ]
+    },
+    {
+      "id": "R36",
+      "subject": "Centre d'aide",
+      "says": [
+        "Assistant conversationnel IA : widget 24h/24 et 7j/7, français et anglais, orientation, formalités, aide contextuelle, transfert vers un humain.",
+        "Centre d'aide et FAQ : base de connaissances par profil (grand public, opérateurs, administrateurs), guides, tutoriels, recherche rapide.",
+        "Support et ticketing : soumission et suivi des réclamations, tableau de bord de routage.",
+        "Aide contextuelle : infobulles et visites guidées pour le portail et le PMS."
+      ],
+      "where": "§4 Le centre d'aide (p. 11)",
+      "gaps": "Selon le planning : assistant et FAQ en V1, ticketing et aide contextuelle cadrés en janvier 2027.",
+      "sessions": [
+        "J2.5",
+        "J6.2"
+      ]
+    },
+    {
+      "id": "R37",
+      "subject": "CRM, marketing et outils de gestion des opérateurs",
+      "says": [
+        "CRM proposé par abonnement à chaque opérateur ; objets : contact, compte, opportunité, campagne, segment, cycle de vie.",
+        "Chatbots multilingues 24h/24.",
+        "Tableaux de bord d'activité et de rentabilité ; gestion des stocks et des plannings du personnel ; gestion de caisse ; feedback et avis automatisés.",
+        "Campagnes ciblées par SMS et e-mail."
+      ],
+      "where": "§4 Relation client et Gestion et opérations (p. 11) ; §13 livrable 4 (p. 17)",
+      "gaps": "Selon le planning : caisse et stocks en V1, CRM et campagnes en V2 (C2).",
+      "sessions": [
+        "J3.3",
+        "J4.3"
+      ]
+    },
+    {
+      "id": "R38",
+      "subject": "Identité de la destination et exigences UX",
+      "says": [
+        "Stratégie nationale « Sublime Côte d'Ivoire ».",
+        "Immersion et storytelling : vidéos HD, diaporamas interactifs, visuels géolocalisés, design éditorial.",
+        "Mobile-first : priorité absolue au smartphone.",
+        "Parcours d'achat en 3 clics maximum ; interfaces épurées ; accessibilité ; cartes et QR codes consultables hors ligne."
+      ],
+      "where": "§1 (p. 6) ; §5 a. et c. (p. 12)",
+      "gaps": "« L'esprit de la Côte d'Ivoire » (nom du design system dans le planning) n'apparaît pas dans la v2.1.",
+      "sessions": [
+        "J1.3",
+        "J2.6",
+        "J5.1"
+      ]
+    },
+    {
+      "id": "R39",
+      "subject": "Propriété du code source",
+      "says": [
+        "Le code source du projet est la propriété de Cybastion et SIVIS. Le prestataire leur cède la propriété intellectuelle ; ils peuvent l'utiliser et le modifier.",
+        "Le transfert de compétences inclut la remise du code source complet."
+      ],
+      "where": "§16 Propriété du code source (p. 19) ; §6 (p. 13)",
+      "gaps": "La propriété du code de la Version 0 n'est pas traitée (J5, question 2.2).",
+      "sessions": []
+    },
+    {
+      "id": "R40",
+      "subject": "Version 0 existante",
+      "says": [
+        "Le cahier des charges v2.1 ne mentionne pas la Version 0. Seul élément lié : la base des opérateurs et des établissements provient d'eAdministration (§9)."
+      ],
+      "where": "Non traité dans la v2.1 ; §9 (p. 14)",
+      "gaps": "L'inventaire et la décision de reprise reposent entièrement sur J5 et sur les réponses aux questions 2.1 à 2.4.",
+      "sessions": []
+    }
+  ],
   "workshops": [
     {
       "id": "J1",
-      "title": "Vision cible et parcours prioritaires",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Cadrage : vision, hypothèses et périmètre",
+      "phase": "SEMAINE 1 · du mardi 13 au vendredi 16 octobre · avec le Ministère, en salle de réunion d'hôtel",
       "objectives": [
-        "Arrêter la formulation de la vision cible qui figurera en tête des spécifications.",
-        "Confirmer l'applicabilité des hypothèses de février 2025 (page d'accueil, assistant IA).",
-        "Valider les quatre parcours prioritaires et désigner un Key User par parcours.",
-        "Passer en revue les points d'attention du DT et faire acter le hors périmètre."
+        "Poser le cadre : ce n'est pas un recueil de besoins, la plateforme est mise en place dans le cadre du cahier des charges.",
+        "Présenter la vision cible et les parcours prioritaires, avec leur référence au cahier des charges.",
+        "Faire valider les hypothèses, dont celles de février 2025, et montrer clairement la place de l'IA.",
+        "Présenter la première version de la matrice des risques et acter le hors périmètre."
       ],
-      "questionnaire": "onglet « A1 Vision et parcours » · 15 questions · retour attendu lundi 12 octobre, 12 h",
+      "questionnaire": "",
       "raci": [
         "Vision cible et parcours prioritaires : approuve Ministère ; réalisent Lead Chef de projet, Sous-chef de projet",
         "Acter le hors périmètre et rattacher les points d'attention du DT : approuve Cybastion ; réalisent Lead Chef de projet, Sous-chef de projet"
@@ -21,8 +699,8 @@
         "R18 modéré (9)",
         "R30 élevé (12)"
       ],
-      "deliverable": "Note de vision et de parcours : formulation de la vision, hypothèses confirmées, quatre parcours prioritaires avec leurs cas d'usage, Key Users désignés.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion , SIVIS , Ministère (onglet Suivi des PV).",
+      "deliverable": "Parcours prioritaires et hypothèses validés ; matrice des risques v1 ; liste du hors périmètre ; PV signé par les parties.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J1.1",
@@ -30,32 +708,35 @@
           "start": "09:00",
           "end": "09:30",
           "allDay": false,
-          "title": "Ouverture du cadrage, règles de fonctionnement des ateliers, registre des décisions",
-          "content": "",
-          "owner": "Lead Chef de projet",
+          "title": "Ouverture des ateliers",
+          "content": "Message de M. Edgar Bouba, règles, PV quotidien avec engagements, registre",
+          "owner": "Cybastion et Lead Chef de projet",
           "outcome": "Cadre partagé",
           "questions": [
-            "Qui valide les PV côté Cybastion ?",
-            "Quel canal pour la diffusion des supports (mail, espace partagé) ?"
+            "Qui signe le PV pour chaque organisation ?"
           ],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
               "start": "09:00",
               "end": "09:10",
-              "title": "Accueil, tour de table, rappel des conclusions du Kick-Off du 8 octobre",
+              "title": "Ouverture par M. Edgar Bouba : mise en place de la plateforme, pas de recueil de besoins",
               "minutes": 10
             },
             {
               "start": "09:10",
               "end": "09:20",
-              "title": "Règles des ateliers : horaires, rôles, supports la veille à 17 h, PV sous 24 h",
+              "title": "Règles des ateliers, PV signé chaque soir par les parties",
               "minutes": 10
             },
             {
               "start": "09:20",
               "end": "09:30",
-              "title": "Présentation du registre des décisions et du circuit d'escalade 48 h",
+              "title": "Registre des décisions et matrice des risques enrichie chaque jour",
               "minutes": 10
             }
           ]
@@ -71,34 +752,33 @@
           "owner": "Direction de programme",
           "outcome": "Formulation de la vision arrêtée",
           "questions": [
-            "Quelle formulation de la vision figure en tête des spécifications ?",
-            "Quels objectifs chiffrés retenir pour la V1 ?"
+            "Quelle formulation de la vision figure en tête des spécifications ?"
           ],
           "added": false,
+          "cdc": "Parcours 7 temps",
+          "refs": [
+            "R02",
+            "R03",
+            "R04"
+          ],
           "steps": [
             {
               "start": "09:30",
-              "end": "09:50",
-              "title": "Restitution de la vision : parcours touriste en sept temps",
-              "minutes": 20
+              "end": "09:55",
+              "title": "Parcours touriste en sept temps, de « Rêver » à « Partager »",
+              "minutes": 25
             },
             {
-              "start": "09:50",
-              "end": "10:10",
-              "title": "Positionnement de la plateforme dans le programme SGAT",
-              "minutes": 20
+              "start": "09:55",
+              "end": "10:20",
+              "title": "Positionnement dans SGAT : eAdministration, Data Management",
+              "minutes": 25
             },
             {
-              "start": "10:10",
-              "end": "10:30",
-              "title": "Rappel des objectifs du cahier des charges v2.1",
-              "minutes": 20
-            },
-            {
-              "start": "10:30",
+              "start": "10:20",
               "end": "10:45",
-              "title": "Rédaction en séance de la formulation de la vision",
-              "minutes": 15
+              "title": "Objectifs du cahier des charges et formulation de la vision",
+              "minutes": 25
             }
           ]
         },
@@ -108,39 +788,39 @@
           "start": "11:00",
           "end": "12:30",
           "allDay": false,
-          "title": "Hypothèses de février 2025",
-          "content": "Page d'accueil « L'esprit de la Côte d'Ivoire », guide virtuel, périmètre de l'IA au démarrage",
-          "owner": "Expert fonctionnel tourisme et responsable UX",
-          "outcome": "Hypothèses confirmées ou amendées",
+          "title": "Hypothèses",
+          "content": "Hypothèses de février 2025 indexées, page d'accueil, guide virtuel, place de l'IA dans chaque parcours",
+          "owner": "Expert fonctionnel tourisme et responsable IA",
+          "outcome": "Hypothèses validées ou amendées par écrit",
           "questions": [
             "Les hypothèses de février 2025 restent-elles valables ?",
-            "Quelles fonctions IA sont au MVP du 15 décembre ?"
+            "Quelles fonctions IA au MVP ?"
           ],
           "added": false,
+          "cdc": "Hypothèses fév. 2025",
+          "refs": [
+            "R01",
+            "R09",
+            "R38"
+          ],
           "steps": [
             {
               "start": "11:00",
               "end": "11:30",
-              "title": "Page d'accueil « L'esprit de la Côte d'Ivoire » : hypothèses de février 2025",
+              "title": "Hypothèses de février 2025, indexées au cahier des charges",
               "minutes": 30
             },
             {
               "start": "11:30",
               "end": "12:00",
-              "title": "Guide virtuel : rôle, contenus, langues",
+              "title": "Page d'accueil et guide virtuel",
               "minutes": 30
             },
             {
               "start": "12:00",
-              "end": "12:20",
-              "title": "Périmètre de l'assistant IA au démarrage",
-              "minutes": 20
-            },
-            {
-              "start": "12:20",
               "end": "12:30",
-              "title": "Arbitrage : hypothèse confirmée, amendée ou abandonnée",
-              "minutes": 10
+              "title": "Place de l'IA dans chaque parcours, du MVP à la V2",
+              "minutes": 30
             }
           ]
         },
@@ -148,148 +828,124 @@
           "code": "J1.4",
           "atelier": "J1",
           "start": "14:00",
-          "end": "15:30",
+          "end": "15:00",
           "allDay": false,
-          "title": "Parcours prioritaires P1 à P4",
-          "content": "Périmètre, cas d'usage rattachés, populations",
+          "title": "Parcours prioritaires",
+          "content": "P1 à P4, cas d'usage rattachés, parcours différés en V1 ou V2",
           "owner": "Expert fonctionnel tourisme",
-          "outcome": "Parcours validés",
+          "outcome": "Parcours validés, répartition V1 et V2 actée",
           "questions": [
-            "Quel est le contenu exact de P3 et quel atelier le spécifie ?",
-            "Quels cas d'usage sont rattachés à chaque parcours ?"
+            "Quels parcours différés entrent en V1 ?"
           ],
           "added": false,
+          "cdc": "Périmètre",
+          "refs": [
+            "R05",
+            "R06"
+          ],
           "steps": [
             {
               "start": "14:00",
-              "end": "14:20",
-              "title": "P1 parcours touriste : périmètre et cas d'usage",
-              "minutes": 20
+              "end": "14:30",
+              "title": "P1 touriste, P2 opérateur, P3 paiement et déclaration, P4 pilotage : passer en revue tous les cas d'usage",
+              "minutes": 30
             },
             {
-              "start": "14:20",
-              "end": "14:40",
-              "title": "P2 parcours opérateur : périmètre et cas d'usage",
-              "minutes": 20
-            },
-            {
-              "start": "14:40",
+              "start": "14:30",
               "end": "15:00",
-              "title": "P3 : périmètre et cas d'usage (Passer sur tout les cas d'usages )",
-              "minutes": 20
-            },
-            {
-              "start": "15:00",
-              "end": "15:20",
-              "title": "P4 pilotage État et SIVIS : périmètre et cas d'usage",
-              "minutes": 20
-            },
-            {
-              "start": "15:20",
-              "end": "15:30",
-              "title": "Populations cibles et validation des quatre parcours",
-              "minutes": 10
+              "title": "Parcours différés : avis, fidélité, B2B, logistique",
+              "minutes": 30
             }
           ]
         },
         {
           "code": "J1.5",
           "atelier": "J1",
-          "start": "15:45",
-          "end": "16:15",
+          "start": "15:00",
+          "end": "15:30",
           "allDay": false,
-          "title": "Parcours différés (avis et fidélité, B2B, logistique)",
-          "content": "Positionnement V1 ou V2 et fenêtre de cadrage complémentaire",
+          "title": "Matrice des risques",
+          "content": "Première version présentée aux parties",
           "owner": "Lead Chef de projet",
-          "outcome": "Répartition actée",
+          "outcome": "Risques partagés, parades engagées",
           "questions": [
-            "Quels parcours différés entrent en V1 ?",
-            "La fenêtre C1 à C3 de janvier 2027 est-elle actée ?"
+            "Quelles parades relèvent de l'État ?"
           ],
           "added": false,
+          "cdc": "Jalons",
+          "refs": [
+            "R34"
+          ],
           "steps": [
             {
-              "start": "15:45",
-              "end": "15:55",
-              "title": "Avis et fidélité : V1 ou V2",
-              "minutes": 10
-            },
-            {
-              "start": "15:55",
-              "end": "16:05",
-              "title": "B2B et logistique : V1 ou V2",
-              "minutes": 10
-            },
-            {
-              "start": "16:05",
-              "end": "16:15",
-              "title": "Principe de la fenêtre de cadrage complémentaire de janvier 2027",
-              "minutes": 10
+              "start": "15:00",
+              "end": "15:30",
+              "title": "Risques critiques et parades attendues de chaque partie",
+              "minutes": 30
             }
           ]
         },
         {
           "code": "J1.6",
           "atelier": "J1",
-          "start": "16:15",
-          "end": "16:45",
+          "start": "15:45",
+          "end": "16:30",
           "allDay": false,
-          "title": "Revue des points d'attention issus des échanges avec le DT",
-          "content": "Hors périmètre à acter (e-visa, assurance, borne, contenu éditorial, réalité augmentée, avatar, casque)",
+          "title": "Périmètre",
+          "content": "Points d'attention du DT, hors périmètre à acter",
           "owner": "Lead Chef de projet",
-          "outcome": "Points rattachés à un atelier ; hors périmètre acté",
+          "outcome": "Hors périmètre acté par écrit",
           "questions": [
-            "Chaque point d'attention du DT est-il rattaché à un atelier ?",
-            "Le hors périmètre est-il acté par SIVIS et Cybastion ?"
+            "Le hors périmètre est-il signé par SIVIS et le Ministère ?"
           ],
-          "added": true,
+          "added": false,
+          "cdc": "Périmètre",
+          "refs": [
+            "R05"
+          ],
           "steps": [
             {
-              "start": "16:15",
-              "end": "16:30",
-              "title": "Revue des points d'attention issus des échanges avec le DT, rattachement de chacun à un atelier",
-              "minutes": 15
+              "start": "15:45",
+              "end": "16:05",
+              "title": "Points d'attention issus des échanges avec le DT",
+              "minutes": 20
             },
             {
-              "start": "16:30",
-              "end": "16:45",
-              "title": "Hors périmètre à acter : e-visa, assurance, borne, contenu éditorial, réalité augmentée, avatar, casque",
-              "minutes": 15
+              "start": "16:05",
+              "end": "16:30",
+              "title": "Hors périmètre : e-visa, assurance, transport intégré, borne, réalité augmentée, avatar, casque",
+              "minutes": 25
             }
           ]
         },
         {
           "code": "J1.7",
           "atelier": "J1",
-          "start": "16:45",
+          "start": "16:30",
           "end": "17:00",
           "allDay": false,
-          "title": "Relevé de décisions, désignation des Key Users, préparation de J2",
-          "content": "",
+          "title": "Relevé et engagement des parties",
+          "content": "Préparation de J2",
           "owner": "Sous-chef de projet",
-          "outcome": "Relevé signé",
-          "questions": [
-            "Les accès à la Version 0 seront-ils ouverts le 13 au soir ?"
-          ],
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, Ministère, groupement)",
+          "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "16:45",
+              "start": "16:30",
               "end": "16:50",
-              "title": "Lecture du relevé de décisions",
-              "minutes": 5
+              "title": "Lecture du relevé et signature des engagements",
+              "minutes": 20
             },
             {
               "start": "16:50",
-              "end": "16:55",
-              "title": "Désignation d'un Key User par parcours",
-              "minutes": 5
-            },
-            {
-              "start": "16:55",
               "end": "17:00",
-              "title": "Prérequis de J2 : accès à la Version 0",
-              "minutes": 5
+              "title": "Préparation de J2, parcours touriste",
+              "minutes": 10
             }
           ]
         }
@@ -324,14 +980,14 @@
           "code": "J1.4"
         },
         {
+          "kind": "session",
+          "code": "J1.5"
+        },
+        {
           "kind": "break",
           "start": "15:30",
           "end": "15:45",
           "title": "Pause"
-        },
-        {
-          "kind": "session",
-          "code": "J1.5"
         },
         {
           "kind": "session",
@@ -342,12 +998,14 @@
           "code": "J1.7"
         }
       ],
-      "prep": {
-        "tab": "A1 Vision et parcours",
-        "due": "2026-10-12",
-        "questions": 15,
-        "status": "Envoyé"
-      },
+      "prep": [
+        {
+          "tab": "A1 Vision et parcours",
+          "due": "2026-10-12",
+          "questions": 15,
+          "status": "Envoyé"
+        }
+      ],
       "date": "2026-10-13",
       "pvDue": "2026-10-14",
       "deliverableDue": "2026-10-15",
@@ -356,25 +1014,25 @@
     },
     {
       "id": "J2",
-      "title": "Données, référentiels et Version 0 existante",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Parcours touriste (P1)",
+      "phase": "SEMAINE 1 · du mardi 13 au vendredi 16 octobre · avec le Ministère, en salle de réunion d'hôtel",
       "objectives": [
-        "Inventorier la Version 0 : périmètre fonctionnel, technologie, données, hébergement, propriété.",
-        "Décider, composant par composant, de la reprise ou de la reconstruction.",
-        "Établir la liste des référentiels nécessaires, leur fournisseur et leur date de mise à disposition."
+        "Décrire le parcours touriste complet sous forme de parcours écrits : compte, découverte, planification, réservation et paiement, avis.",
+        "Définir l'expérience visée pour chaque profil : local, corporate, diaspora, international.",
+        "Écrire les critères d'acceptation de tous les cas d'usage du P1 et lister les écrans à maquetter.",
+        "Positionner les packs thématiques, les campagnes et le centre d'aide."
       ],
-      "questionnaire": "onglet « A2 Données et V0 » · 12 questions · retour attendu lundi 12 octobre, 12 h",
+      "questionnaire": "onglet « A4 Parcours touriste » · 14 questions · retour attendu lundi 12 octobre, 12 h",
       "raci": [
-        "Inventaire et décision de reprise de la Version 0 : approuve Cybastion ; réalisent Lead Chef de projet",
-        "Catalogue des référentiels : approuve SIVIS ; réalisent Ministère, Lead Chef de projet"
+        "Spécifications du parcours touriste (P1) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet",
+        "Positionner packs thématiques, campagnes et centre d'aide entre V1 et V2 : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
       ],
       "risks": [
-        "R06 élevé (12)",
-        "R09 modéré (9)",
-        "R10 élevé (12)"
+        "R03 modéré (6)",
+        "R17 élevé (12)"
       ],
-      "deliverable": "Inventaire de la Version 0 avec décision de reprise par composant ; liste des référentiels avec responsable et date de mise à disposition.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Parcours écrits du P1 validés ; critères d'acceptation ; liste des écrans à maquetter ; PV signé.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J2.1",
@@ -382,39 +1040,39 @@
           "start": "09:00",
           "end": "10:45",
           "allDay": false,
-          "title": "Présentation de la Version 0 par ses responsables",
-          "content": "Démonstration, accès au code et à la base",
-          "owner": "Responsables de la Version 0 (Cybastion)",
-          "outcome": "Inventaire fonctionnel et technique",
+          "title": "Compte et profils",
+          "content": "Création de compte (UC 01), quatre profils et expérience visée pour chacun, landing page et points d'intérêt (UC 02, UC 11)",
+          "owner": "Expert fonctionnel tourisme",
+          "outcome": "Parcours écrits et critères d'acceptation",
           "questions": [
-            "Qui est propriétaire du code et des données ?",
-            "La documentation est-elle exploitable ?"
+            "Quelles données obligatoires selon le profil ?",
+            "Quels contenus sur la landing page au lancement ?"
           ],
           "added": false,
+          "cdc": "UC 01 Compte",
+          "refs": [
+            "R06",
+            "R07",
+            "R08"
+          ],
           "steps": [
             {
               "start": "09:00",
-              "end": "09:30",
-              "title": "Présentation fonctionnelle de la Version 0",
-              "minutes": 30
+              "end": "09:35",
+              "title": "Création de compte et vérification d'identité",
+              "minutes": 35
             },
             {
-              "start": "09:30",
-              "end": "10:00",
-              "title": "Démonstration en direct",
-              "minutes": 30
+              "start": "09:35",
+              "end": "10:10",
+              "title": "Expérience visée : local, corporate, diaspora, international",
+              "minutes": 35
             },
             {
-              "start": "10:00",
-              "end": "10:30",
-              "title": "Revue technique : code, base, hébergement, documentation",
-              "minutes": 30
-            },
-            {
-              "start": "10:30",
+              "start": "10:10",
               "end": "10:45",
-              "title": "Propriété du code et des données, licences",
-              "minutes": 15
+              "title": "Landing page et points d'intérêt",
+              "minutes": 35
             }
           ]
         },
@@ -424,33 +1082,31 @@
           "start": "11:00",
           "end": "12:30",
           "allDay": false,
-          "title": "Analyse des données existantes",
-          "content": "Opérateurs, points d'intérêt, contenus, qualité et volumes",
-          "owner": "Architecte et responsable backend",
-          "outcome": "Données réutilisables identifiées",
+          "title": "Planification",
+          "content": "Planification de voyage et assistant IA (UC 03), périmètre au MVP, garde-fous",
+          "owner": "Expert fonctionnel tourisme et responsable IA",
+          "outcome": "Parcours écrit et critères d'acceptation",
           "questions": [
-            "Quelle part des données est reprise sans correction ?",
-            "Qui corrige les données de mauvaise qualité ?"
+            "Que fait l'assistant IA au MVP, et que ne fait-il pas ?"
           ],
           "added": false,
+          "cdc": "UC 03 Planif. et IA",
+          "refs": [
+            "R01",
+            "R09"
+          ],
           "steps": [
             {
               "start": "11:00",
-              "end": "11:30",
-              "title": "Données opérateurs : volumes, champs, qualité",
-              "minutes": 30
+              "end": "11:45",
+              "title": "Parcours de planification",
+              "minutes": 45
             },
             {
-              "start": "11:30",
-              "end": "12:00",
-              "title": "Points d'intérêt et contenus : volumes, qualité, droits",
-              "minutes": 30
-            },
-            {
-              "start": "12:00",
+              "start": "11:45",
               "end": "12:30",
-              "title": "Synthèse des données réutilisables et des corrections nécessaires",
-              "minutes": 30
+              "title": "Rôle de l'assistant IA et garde-fous",
+              "minutes": 45
             }
           ]
         },
@@ -460,39 +1116,43 @@
           "start": "14:00",
           "end": "15:30",
           "allDay": false,
-          "title": "Référentiels",
-          "content": "Catégories de points d'intérêt, régions et communes, agréments touristiques, plan comptable, barèmes",
-          "owner": "Expert fonctionnel",
-          "outcome": "Liste des référentiels, fournisseur et date",
+          "title": "Réservation et paiement",
+          "content": "Panier multi-services (UC 04), blocage de stock, canaux, cas d'erreur",
+          "owner": "Expert fonctionnel tourisme",
+          "outcome": "Parcours écrit et critères d'acceptation",
           "questions": [
-            "Qui fournit chaque référentiel et à quelle date ?",
-            "Qui maintient les référentiels après la mise en service ?"
+            "Durée du blocage de stock ?"
           ],
           "added": false,
+          "cdc": "UC 04 Réservation",
+          "refs": [
+            "R10",
+            "R23"
+          ],
           "steps": [
             {
               "start": "14:00",
-              "end": "14:20",
-              "title": "Catégories de points d'intérêt",
+              "end": "14:25",
+              "title": "Panier multi-services et taxes affichées",
+              "minutes": 25
+            },
+            {
+              "start": "14:25",
+              "end": "14:45",
+              "title": "Blocage de stock",
               "minutes": 20
             },
             {
-              "start": "14:20",
-              "end": "14:40",
-              "title": "Régions et communes",
-              "minutes": 20
+              "start": "14:45",
+              "end": "15:10",
+              "title": "Canaux de paiement",
+              "minutes": 25
             },
             {
-              "start": "14:40",
-              "end": "15:00",
-              "title": "Agréments touristiques",
-              "minutes": 20
-            },
-            {
-              "start": "15:00",
+              "start": "15:10",
               "end": "15:30",
-              "title": "Plan comptable et barèmes (taxe de nuitée par commune)",
-              "minutes": 30
+              "title": "Cas d'erreur et remboursements",
+              "minutes": 20
             }
           ]
         },
@@ -500,57 +1160,97 @@
           "code": "J2.4",
           "atelier": "J2",
           "start": "15:45",
-          "end": "16:30",
+          "end": "16:15",
           "allDay": false,
-          "title": "Décision de reprise par composant",
-          "content": "Plan de migration des données",
-          "owner": "Lead Chef de projet",
-          "outcome": "Décisions actées",
+          "title": "Avis et application touriste",
+          "content": "Avis (UC 05), délai unique, modération, alertes, cartes hors connexion",
+          "owner": "Expert fonctionnel tourisme",
+          "outcome": "Règles et version (V1 ou V2) actées",
           "questions": [
-            "Quels composants de la Version 0 sont repris ?"
+            "Délai d'évaluation : 30 jours ou 6 mois ?"
           ],
           "added": false,
+          "cdc": "UC 05 Avis",
+          "refs": [
+            "R11"
+          ],
           "steps": [
             {
               "start": "15:45",
-              "end": "16:10",
-              "title": "Décision par composant : reprise, adaptation ou reconstruction",
-              "minutes": 25
+              "end": "16:00",
+              "title": "Avis : délai, modération, droit de réponse",
+              "minutes": 15
             },
             {
-              "start": "16:10",
-              "end": "16:30",
-              "title": "Principes du plan de migration des données",
-              "minutes": 20
+              "start": "16:00",
+              "end": "16:15",
+              "title": "Application touriste : alertes, cartes hors connexion",
+              "minutes": 15
             }
           ]
         },
         {
           "code": "J2.5",
           "atelier": "J2",
-          "start": "16:30",
-          "end": "17:00",
+          "start": "16:15",
+          "end": "16:45",
           "allDay": false,
-          "title": "Relevé, actions, préparation de J3",
-          "content": "",
-          "owner": "Sous-chef de projet",
-          "outcome": "Relevé signé",
+          "title": "Packs et centre d'aide",
+          "content": "Packs thématiques et campagnes (UC 07), centre d'aide",
+          "owner": "Expert fonctionnel tourisme",
+          "outcome": "Répartition V1 et V2 actée",
           "questions": [
-            "Les représentants DGI et agrégateur sont-ils confirmés ?"
+            "Quelle part du centre d'aide en V1 ?"
           ],
           "added": false,
+          "cdc": "UC 07 Pack Assinie",
+          "refs": [
+            "R13",
+            "R36"
+          ],
           "steps": [
             {
-              "start": "16:30",
-              "end": "16:45",
-              "title": "Relevé et actions",
+              "start": "16:15",
+              "end": "16:30",
+              "title": "Pack « Week-end à Assinie » et campagnes",
               "minutes": 15
             },
             {
-              "start": "16:45",
-              "end": "17:00",
-              "title": "Prérequis de J3 : présence DGI et agrégateur confirmée",
+              "start": "16:30",
+              "end": "16:45",
+              "title": "Centre d'aide : assistant, FAQ, ticketing",
               "minutes": 15
+            }
+          ]
+        },
+        {
+          "code": "J2.6",
+          "atelier": "J2",
+          "start": "16:45",
+          "end": "17:00",
+          "allDay": false,
+          "title": "Écrans à maquetter",
+          "content": "Relevé et engagement des parties",
+          "owner": "Responsable UX",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, Ministère, groupement)",
+          "questions": [],
+          "added": false,
+          "cdc": "Identité et UX",
+          "refs": [
+            "R38"
+          ],
+          "steps": [
+            {
+              "start": "16:45",
+              "end": "16:55",
+              "title": "Liste des écrans à maquetter",
+              "minutes": 10
+            },
+            {
+              "start": "16:55",
+              "end": "17:00",
+              "title": "Signature des engagements",
+              "minutes": 5
             }
           ]
         }
@@ -593,14 +1293,20 @@
         {
           "kind": "session",
           "code": "J2.5"
+        },
+        {
+          "kind": "session",
+          "code": "J2.6"
         }
       ],
-      "prep": {
-        "tab": "A2 Données et V0",
-        "due": "2026-10-12",
-        "questions": 12,
-        "status": "Envoyé"
-      },
+      "prep": [
+        {
+          "tab": "A4 Parcours touriste",
+          "due": "2026-10-12",
+          "questions": 14,
+          "status": "Envoyé"
+        }
+      ],
       "date": "2026-10-14",
       "pvDue": "2026-10-15",
       "deliverableDue": "2026-10-16",
@@ -609,28 +1315,26 @@
     },
     {
       "id": "J3",
-      "title": "Fiscalité et paiement",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Parcours opérateur et gestion hôtelière (P2)",
+      "phase": "SEMAINE 1 · du mardi 13 au vendredi 16 octobre · avec le Ministère, en salle de réunion d'hôtel",
       "objectives": [
-        "Arbitrer les règles fiscales du moteur : TVA selon assujettissement, régimes de la TDT, barème de la taxe de nuitée, redevable légal et mandat d'encaissement.",
-        "Engager l'agrégateur de paiement agréé BCEAO et confirmer sa capacité de ventilation multi-bénéficiaires.",
-        "Fixer le calendrier des reversements et de la facturation normalisée."
+        "Décrire le parcours opérateur : enrôlement, publication d'offres, gestion hôtelière, abonnement.",
+        "Présenter le PMS Light et la marketplace simple.",
+        "Distinguer la relation client de base, gratuite, du CRM avancé par abonnement.",
+        "Préparer le déploiement et le panel pilote du 15 décembre."
       ],
-      "questionnaire": "onglet « A3 Fiscalité et paiement » · 13 questions · retour attendu mardi 13 octobre, 12 h",
+      "questionnaire": "onglet « A5 Parcours opérateur » · 14 questions · retour attendu mardi 13 octobre, 12 h",
       "raci": [
-        "Règles fiscales arbitrées : approuve DGI ; réalisent Cybastion, Lead Chef de projet",
-        "Engagement de l'agrégateur et environnement de test : approuve Cybastion ; réalisent Agrégateur de paiement",
-        "Spécifications du parcours paiement et déclaration (P3) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
+        "Spécifications du parcours opérateur (P2) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet",
+        "Cadrer la conduite du changement et le plan de déploiement : approuve SIVIS ; réalisent Lead Chef de projet, Sous-chef de projet"
       ],
       "risks": [
-        "R01 critique (20)",
-        "R02 critique (15)",
-        "R03 modéré (6)",
-        "R04 critique (20)",
-        "R05 critique (15)"
+        "R22 critique (16)",
+        "R23 modéré (9)",
+        "R33 élevé (12)"
       ],
-      "deliverable": "Règles fiscales arbitrées et documentées ; engagement écrit de l'agrégateur sur les canaux et la ventilation ; calendrier des reversements ; liste des confirmations attendues par écrit avec date.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Parcours écrits du P2 validés ; règles de modération et d'abonnement ; PV signé.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J3.1",
@@ -638,45 +1342,37 @@
           "start": "09:00",
           "end": "10:45",
           "allDay": false,
-          "title": "Avec la DGI",
-          "content": "Assujettissement, TDT, taxe de nuitée, redevable légal, facturation normalisée électronique",
-          "owner": "Expert fiscalité et comptabilité",
-          "outcome": "Règles arbitrées, points à confirmer par écrit",
+          "title": "Enrôlement et offres",
+          "content": "Enrôlement depuis eAdministration, publication d'offres (UC 06), règles de modération",
+          "owner": "Expert fonctionnel tourisme et PMS",
+          "outcome": "Parcours écrits et critères d'acceptation",
           "questions": [
-            "Qui est redevable légal de la TDT et de la taxe de nuitée ?",
-            "La plateforme peut-elle encaisser par mandat ?"
+            "Qui modère les offres et sous quel délai ?"
           ],
           "added": false,
+          "cdc": "UC 06 Offres",
+          "refs": [
+            "R12",
+            "R26"
+          ],
           "steps": [
             {
               "start": "09:00",
-              "end": "09:25",
-              "title": "TVA selon l'assujettissement de l'opérateur",
-              "minutes": 25
+              "end": "09:35",
+              "title": "Enrôlement de l'opérateur depuis eAdministration",
+              "minutes": 35
             },
             {
-              "start": "09:25",
-              "end": "09:50",
-              "title": "Régimes de la TDT",
-              "minutes": 25
-            },
-            {
-              "start": "09:50",
+              "start": "09:35",
               "end": "10:15",
-              "title": "Barème de la taxe de nuitée",
-              "minutes": 25
+              "title": "Publication et modification d'offres",
+              "minutes": 40
             },
             {
               "start": "10:15",
-              "end": "10:30",
-              "title": "Redevable légal et mandat d'encaissement",
-              "minutes": 15
-            },
-            {
-              "start": "10:30",
               "end": "10:45",
-              "title": "Facturation normalisée électronique",
-              "minutes": 15
+              "title": "Règles de modération",
+              "minutes": 30
             }
           ]
         },
@@ -686,33 +1382,43 @@
           "start": "11:00",
           "end": "12:30",
           "allDay": false,
-          "title": "Avec la DGI",
-          "content": "Échéances de déclaration et de reversement, conservation, contrôle, jeux de tests fiscaux",
-          "owner": "Expert fiscalité et comptabilité",
-          "outcome": "Calendrier des reversements, cas de test",
+          "title": "Gestion hôtelière",
+          "content": "Réservations, arrivées et départs, facture unique, planning (UC 09)",
+          "owner": "Expert fonctionnel tourisme et PMS",
+          "outcome": "Parcours écrit et critères d'acceptation",
           "questions": [
-            "Quel rythme de reversement (mensuel, trimestriel) ?",
-            "Quand la DGI fournit-elle les cas de test ?"
+            "La facture unique est-elle conforme à la FNE ?"
           ],
           "added": false,
+          "cdc": "PMS national",
+          "refs": [
+            "R15",
+            "R25"
+          ],
           "steps": [
             {
               "start": "11:00",
-              "end": "11:30",
-              "title": "Échéances de déclaration et de reversement",
-              "minutes": 30
+              "end": "11:25",
+              "title": "Réservations",
+              "minutes": 25
             },
             {
-              "start": "11:30",
-              "end": "12:00",
-              "title": "Conservation des pièces et modalités de contrôle",
-              "minutes": 30
+              "start": "11:25",
+              "end": "11:50",
+              "title": "Arrivées et départs",
+              "minutes": 25
             },
             {
-              "start": "12:00",
+              "start": "11:50",
+              "end": "12:10",
+              "title": "Facture unique",
+              "minutes": 20
+            },
+            {
+              "start": "12:10",
               "end": "12:30",
-              "title": "Jeux de tests fiscaux à fournir par la DGI",
-              "minutes": 30
+              "title": "Planning",
+              "minutes": 20
             }
           ]
         },
@@ -720,98 +1426,145 @@
           "code": "J3.3",
           "atelier": "J3",
           "start": "14:00",
-          "end": "15:30",
+          "end": "15:00",
           "allDay": false,
-          "title": "Avec l'agrégateur",
-          "content": "Canaux (Mobile Money, carte, TPE, QR), ventilation multi-bénéficiaires, notifications, environnement de test",
-          "owner": "Expert paiement",
-          "outcome": "Engagement de l'agrégateur, accès au bac à sable",
+          "title": "Abonnement",
+          "content": "Souscription, rappels, période de grâce, suspension différenciée, relation client de base",
+          "owner": "Lead Chef de projet",
+          "outcome": "Règles actées, tarifs provisoires",
           "questions": [
-            "L'agrégateur sait-il ventiler vers plusieurs bénéficiaires ?",
-            "Date d'ouverture du bac à sable ?"
+            "Tarifs des abonnements ?"
           ],
           "added": false,
+          "cdc": "UC 09 PMS, abonnement",
+          "refs": [
+            "R15",
+            "R37"
+          ],
           "steps": [
             {
               "start": "14:00",
-              "end": "14:25",
-              "title": "Canaux : Mobile Money, carte, TPE, QR",
-              "minutes": 25
+              "end": "14:30",
+              "title": "Souscription, rappels J-7 et J-1, grâce de 3 jours, suspension",
+              "minutes": 30
             },
             {
-              "start": "14:25",
-              "end": "14:50",
-              "title": "Ventilation multi-bénéficiaires",
-              "minutes": 25
-            },
-            {
-              "start": "14:50",
-              "end": "15:10",
-              "title": "Notifications et rapprochement",
-              "minutes": 20
-            },
-            {
-              "start": "15:10",
-              "end": "15:30",
-              "title": "Environnement de test et accès au bac à sable",
-              "minutes": 20
+              "start": "14:30",
+              "end": "15:00",
+              "title": "Relation client gratuite et CRM par abonnement",
+              "minutes": 30
             }
           ]
         },
         {
           "code": "J3.4",
           "atelier": "J3",
-          "start": "15:45",
-          "end": "16:30",
+          "start": "15:00",
+          "end": "15:30",
           "allDay": false,
-          "title": "Modèle financier",
-          "content": "La plateforme ordonne, L'agrégateur encaisse et ventile, cas du paiement QR hors réseau",
-          "owner": "Lead Chef de projet",
-          "outcome": "Modèle acté",
+          "title": "PMS Light",
+          "content": "Gestion mobile hors connexion, encaissement différé, synchronisation",
+          "owner": "Responsable mobile",
+          "outcome": "Règles de synchronisation actées",
           "questions": [
-            "Le modèle financier est-il acté par toutes les parties ?"
+            "Plafond d'encaissement hors connexion ?"
           ],
           "added": false,
+          "cdc": "PMS national",
+          "refs": [
+            "R24",
+            "R25"
+          ],
           "steps": [
             {
-              "start": "15:45",
-              "end": "16:10",
-              "title": "Modèle : la plateforme ordonne, l'agrégateur encaisse et ventile",
-              "minutes": 25
-            },
-            {
-              "start": "16:10",
-              "end": "16:30",
-              "title": "Cas du paiement QR hors réseau",
-              "minutes": 20
+              "start": "15:00",
+              "end": "15:30",
+              "title": "Hors connexion, plafonds, conflits",
+              "minutes": 30
             }
           ]
         },
         {
           "code": "J3.5",
           "atelier": "J3",
-          "start": "16:30",
-          "end": "17:00",
+          "start": "15:45",
+          "end": "16:15",
           "allDay": false,
-          "title": "Relevé, actions, confirmations écrites attendues",
-          "content": "",
-          "owner": "Sous-chef de projet",
-          "outcome": "Relevé signé",
+          "title": "Marketplace simple",
+          "content": "Vente des opérateurs, commande, paiement",
+          "owner": "Expert fonctionnel tourisme",
+          "outcome": "Périmètre de la marketplace simple acté",
           "questions": [
-            "Dates des confirmations écrites (conditionnent le sprint 2) ?"
+            "Approvisionnements B2B dans la version du 15/12 ?"
           ],
           "added": false,
+          "cdc": "UC 13 B2B",
+          "refs": [
+            "R19"
+          ],
           "steps": [
             {
-              "start": "16:30",
-              "end": "16:45",
-              "title": "Relevé et actions",
+              "start": "15:45",
+              "end": "16:15",
+              "title": "Vente directe sur la marketplace et paiement",
+              "minutes": 30
+            }
+          ]
+        },
+        {
+          "code": "J3.6",
+          "atelier": "J3",
+          "start": "16:15",
+          "end": "16:45",
+          "allDay": false,
+          "title": "Déploiement",
+          "content": "Enrôlement national du 15 décembre, panel pilote, formation",
+          "owner": "Sous-chef de projet",
+          "outcome": "Plan de déploiement cadré",
+          "questions": [
+            "Combien d'opérateurs dans le panel pilote ?"
+          ],
+          "added": false,
+          "cdc": "Conduite du changement",
+          "refs": [
+            "R33"
+          ],
+          "steps": [
+            {
+              "start": "16:15",
+              "end": "16:30",
+              "title": "Calendrier d'enrôlement et panel pilote",
               "minutes": 15
             },
             {
+              "start": "16:30",
+              "end": "16:45",
+              "title": "Formation des équipes",
+              "minutes": 15
+            }
+          ]
+        },
+        {
+          "code": "J3.7",
+          "atelier": "J3",
+          "start": "16:45",
+          "end": "17:00",
+          "allDay": false,
+          "title": "Relevé et engagement des parties",
+          "content": "",
+          "owner": "Sous-chef de projet",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, Ministère, groupement)",
+          "questions": [],
+          "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
+          "steps": [
+            {
               "start": "16:45",
               "end": "17:00",
-              "title": "Liste des confirmations écrites attendues de la DGI et de l'agrégateur, avec dates",
+              "title": "Signature des engagements",
               "minutes": 15
             }
           ]
@@ -843,6 +1596,10 @@
           "code": "J3.3"
         },
         {
+          "kind": "session",
+          "code": "J3.4"
+        },
+        {
           "kind": "break",
           "start": "15:30",
           "end": "15:45",
@@ -850,19 +1607,25 @@
         },
         {
           "kind": "session",
-          "code": "J3.4"
+          "code": "J3.5"
         },
         {
           "kind": "session",
-          "code": "J3.5"
+          "code": "J3.6"
+        },
+        {
+          "kind": "session",
+          "code": "J3.7"
         }
       ],
-      "prep": {
-        "tab": "A3 Fiscalité et paiement",
-        "due": "2026-10-13",
-        "questions": 13,
-        "status": "Envoyé"
-      },
+      "prep": [
+        {
+          "tab": "A5 Parcours opérateur",
+          "due": "2026-10-13",
+          "questions": 14,
+          "status": "Envoyé"
+        }
+      ],
       "date": "2026-10-15",
       "pvDue": "2026-10-16",
       "deliverableDue": "2026-10-19",
@@ -871,25 +1634,30 @@
     },
     {
       "id": "J4",
-      "title": "Parcours touriste",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "CRM, fiscalité, paiement et vue institution",
+      "phase": "SEMAINE 1 · du mardi 13 au vendredi 16 octobre · avec le Ministère, en salle de réunion d'hôtel",
       "objectives": [
-        "Spécifier le parcours P1 : création de compte, découverte, planification, réservation et paiement, avis.",
-        "Écrire les critères d'acceptation avec le Key User touriste.",
-        "Identifier les écrans à maquetter pour J7.",
-        "Positionner les packs thématiques, les campagnes et le centre d'aide entre V1 et V2."
+        "Arbitrer les règles fiscales avec la DGI ; prévoir un système prêt et activable selon les décisions du Ministère sur la collecte.",
+        "Engager l'agrégateur sur les canaux, la ventilation, les notifications et les annulations.",
+        "Présenter le CRM opérateur et le volet financier et comptable.",
+        "Montrer au Ministère la vue administrateur et institution : tableaux de bord et indicateurs."
       ],
-      "questionnaire": "onglet « A4 Parcours touriste » · 14 questions · retour attendu mercredi 14 octobre, 12 h",
+      "questionnaire": "onglet « A3 Fiscalité et paiement, A8 Pilotage » · 24 questions · retour attendu mercredi 14 octobre, 12 h",
       "raci": [
-        "Spécifications du parcours touriste (P1) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet",
-        "Positionner packs thématiques, campagnes et centre d'aide entre V1 et V2 : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
+        "Règles fiscales arbitrées : approuve DGI ; réalisent Cybastion, Lead Chef de projet",
+        "Engagement de l'agrégateur et environnement de test : approuve Cybastion ; réalisent Agrégateur de paiement",
+        "Spécifications du parcours paiement et déclaration (P3) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet",
+        "Indicateurs et spécifications du parcours pilotage (P4) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
       ],
       "risks": [
-        "R03 modéré (6)",
-        "R17 élevé (12)"
+        "R01 critique (20)",
+        "R02 critique (15)",
+        "R04 critique (20)",
+        "R05 critique (15)",
+        "R07 critique (16)"
       ],
-      "deliverable": "Spécifications fonctionnelles du parcours P1 : règles de gestion, critères d'acceptation, écrans à maquetter, périmètre MVP.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Règles fiscales et modèle de paiement actés ; périmètre du CRM ; indicateurs du MVP ; PV signé. Les points non traités passent au lundi 19/10.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J4.1",
@@ -897,32 +1665,37 @@
           "start": "09:00",
           "end": "10:45",
           "allDay": false,
-          "title": "Création de compte et quatre profils (UC 01)",
-          "content": "Landing page et points d'intérêt (UC 02, UC 11)",
-          "owner": "Expert fonctionnel tourisme",
-          "outcome": "Règles et critères d'acceptation",
+          "title": "Fiscalité avec la DGI",
+          "content": "TVA, TDT, taxe de nuitée, redevable légal, FNE, décisions attendues sur la collecte",
+          "owner": "Expert fiscalité et comptabilité",
+          "outcome": "Règles arbitrées ; système activable",
           "questions": [
-            "Quelles données obligatoires à la création de compte ?",
-            "Quels contenus sur la landing page au lancement ?"
+            "Qui est redevable légal ?",
+            "Quelles décisions du Ministère sur la collecte ?"
           ],
           "added": false,
+          "cdc": "Fiscalité",
+          "refs": [
+            "R18",
+            "R22"
+          ],
           "steps": [
             {
               "start": "09:00",
               "end": "09:35",
-              "title": "Création de compte et quatre profils (UC 01)",
+              "title": "TVA, TDT et taxe de nuitée",
               "minutes": 35
             },
             {
               "start": "09:35",
               "end": "10:10",
-              "title": "Landing page (UC 02)",
+              "title": "Redevable légal et collecte : décisions du Ministère attendues",
               "minutes": 35
             },
             {
               "start": "10:10",
               "end": "10:45",
-              "title": "Points d'intérêt (UC 11)",
+              "title": "Facturation normalisée (FNE)",
               "minutes": 35
             }
           ]
@@ -933,26 +1706,38 @@
           "start": "11:00",
           "end": "12:30",
           "allDay": false,
-          "title": "Planification de voyage et assistant IA (UC 03)",
-          "content": "Périmètre au MVP, garde-fous",
-          "owner": "Expert fonctionnel tourisme",
-          "outcome": "Règles et critères d'acceptation",
+          "title": "Paiement avec l'agrégateur",
+          "content": "Canaux, ventilation entre bénéficiaires, notifications, annulations, QR hors réseau",
+          "owner": "Expert paiement",
+          "outcome": "Engagement de l'agrégateur, modèle de paiement acté",
           "questions": [
-            "Que fait l'assistant IA au MVP, et que ne fait-il pas ?"
+            "La ventilation multi-bénéficiaires est-elle disponible ?"
           ],
           "added": false,
+          "cdc": "Moyens de paiement",
+          "refs": [
+            "R18",
+            "R23",
+            "R24"
+          ],
           "steps": [
             {
               "start": "11:00",
-              "end": "11:45",
-              "title": "Planification de voyage (UC 03)",
-              "minutes": 45
+              "end": "11:30",
+              "title": "Canaux et ventilation",
+              "minutes": 30
             },
             {
-              "start": "11:45",
+              "start": "11:30",
+              "end": "12:00",
+              "title": "Notifications, annulations, remboursements",
+              "minutes": 30
+            },
+            {
+              "start": "12:00",
               "end": "12:30",
-              "title": "Assistant IA : périmètre au MVP et garde-fous",
-              "minutes": 45
+              "title": "QR Code SGAT hors réseau",
+              "minutes": 30
             }
           ]
         },
@@ -962,39 +1747,32 @@
           "start": "14:00",
           "end": "15:30",
           "allDay": false,
-          "title": "Réservation et paiement multi-services (UC 04)",
-          "content": "Panier, blocage de stock, canaux, cas d'erreur",
-          "owner": "Expert fonctionnel tourisme et responsable backend",
-          "outcome": "Règles et critères d'acceptation",
+          "title": "CRM et finance",
+          "content": "Clients, fournisseurs, commandes, approvisionnements, volet financier et comptable",
+          "owner": "Expert fonctionnel et responsable backend",
+          "outcome": "Périmètre CRM et comptable acté",
           "questions": [
-            "Durée du blocage de stock ?",
-            "Quelle règle en cas de paiement échoué ?"
+            "Quelles fonctions CRM en V1 ?"
           ],
           "added": false,
+          "cdc": "CRM et gestion",
+          "refs": [
+            "R16",
+            "R19",
+            "R37"
+          ],
           "steps": [
             {
               "start": "14:00",
-              "end": "14:25",
-              "title": "Panier multi-services",
-              "minutes": 25
-            },
-            {
-              "start": "14:25",
               "end": "14:45",
-              "title": "Blocage de stock",
-              "minutes": 20
+              "title": "CRM opérateur : clients, fournisseurs, commandes",
+              "minutes": 45
             },
             {
               "start": "14:45",
-              "end": "15:10",
-              "title": "Canaux de paiement retenus en J3",
-              "minutes": 25
-            },
-            {
-              "start": "15:10",
               "end": "15:30",
-              "title": "Cas d'erreur et remboursements",
-              "minutes": 20
+              "title": "Comptabilité en partie double et états financiers",
+              "minutes": 45
             }
           ]
         },
@@ -1002,86 +1780,64 @@
           "code": "J4.4",
           "atelier": "J4",
           "start": "15:45",
-          "end": "16:15",
+          "end": "16:30",
           "allDay": false,
-          "title": "Avis et évaluation (UC 05)",
-          "content": "Vérification, délai unique, modération, droit de réponse, application touriste (alertes, cartes hors connexion)",
-          "owner": "Expert fonctionnel tourisme",
-          "outcome": "Règles et positionnement V1 ou V2",
+          "title": "Vue institution",
+          "content": "Tableau de bord national, indicateurs, espaces État et SIVIS",
+          "owner": "Expert fonctionnel",
+          "outcome": "Indicateurs du MVP retenus",
           "questions": [
-            "Délai d'évaluation : 30 jours ou 6 mois ?",
-            "Modération préalable ou publication instantanée ?"
+            "Quels indicateurs au MVP (29 au cahier des charges) ?"
           ],
           "added": false,
+          "cdc": "UC 15 Tableaux de bord",
+          "refs": [
+            "R21",
+            "R32"
+          ],
           "steps": [
             {
               "start": "15:45",
-              "end": "16:00",
-              "title": "Avis (UC 05) : vérification, délai unique, modération, droit de réponse",
-              "minutes": 15
+              "end": "16:10",
+              "title": "Tableau de bord national et indicateurs",
+              "minutes": 25
             },
             {
-              "start": "16:00",
-              "end": "16:15",
-              "title": "Application touriste : alertes, cartes hors connexion ; V1 ou V2",
-              "minutes": 15
+              "start": "16:10",
+              "end": "16:30",
+              "title": "Espaces État et SIVIS",
+              "minutes": 20
             }
           ]
         },
         {
           "code": "J4.5",
           "atelier": "J4",
-          "start": "16:15",
-          "end": "16:45",
-          "allDay": false,
-          "title": "Packs thématiques et campagnes (UC 07)",
-          "content": "Centre d'aide (assistant, FAQ, aide contextuelle, ticketing)",
-          "owner": "Expert fonctionnel tourisme",
-          "outcome": "Périmètre V1 et V2 acté",
-          "questions": [
-            "Pack thématique en V1 et campagnes en V2 : confirmé ?",
-            "Quelle part du centre d'aide en V1 ?"
-          ],
-          "added": true,
-          "steps": [
-            {
-              "start": "16:15",
-              "end": "16:30",
-              "title": "Packs thématiques et campagnes (UC 07)",
-              "minutes": 15
-            },
-            {
-              "start": "16:30",
-              "end": "16:45",
-              "title": "Centre d'aide : assistant, FAQ, aide contextuelle, ticketing",
-              "minutes": 15
-            }
-          ]
-        },
-        {
-          "code": "J4.6",
-          "atelier": "J4",
-          "start": "16:45",
+          "start": "16:30",
           "end": "17:00",
           "allDay": false,
-          "title": "Liste des écrans à maquetter, relevé",
+          "title": "Relevé, engagement des parties et reliquats reportés au lundi",
           "content": "",
-          "owner": "Responsable UX",
-          "outcome": "Relevé signé",
+          "owner": "Sous-chef de projet",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, Ministère, groupement)",
           "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "16:45",
-              "end": "16:55",
-              "title": "Liste des écrans à maquetter pour J7",
-              "minutes": 10
+              "start": "16:30",
+              "end": "16:50",
+              "title": "Signature des engagements",
+              "minutes": 20
             },
             {
-              "start": "16:55",
+              "start": "16:50",
               "end": "17:00",
-              "title": "Relevé",
-              "minutes": 5
+              "title": "Liste des reliquats pour le 19/10",
+              "minutes": 10
             }
           ]
         }
@@ -1124,18 +1880,22 @@
         {
           "kind": "session",
           "code": "J4.5"
-        },
-        {
-          "kind": "session",
-          "code": "J4.6"
         }
       ],
-      "prep": {
-        "tab": "A4 Parcours touriste",
-        "due": "2026-10-14",
-        "questions": 14,
-        "status": "Envoyé"
-      },
+      "prep": [
+        {
+          "tab": "A3 Fiscalité et paiement",
+          "due": "2026-10-14",
+          "questions": 13,
+          "status": "Envoyé"
+        },
+        {
+          "tab": "A8 Pilotage",
+          "due": "2026-10-14",
+          "questions": 11,
+          "status": "Envoyé"
+        }
+      ],
       "date": "2026-10-16",
       "pvDue": "2026-10-19",
       "deliverableDue": "2026-10-20",
@@ -1144,25 +1904,36 @@
     },
     {
       "id": "J5",
-      "title": "Parcours opérateur et gestion hôtelière",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Conception des interfaces et architecture",
+      "phase": "SEMAINE 2 · du lundi 19 au vendredi 23 octobre · comité restreint Cybastion, SIVIS, groupement · académie Cybastion (à confirmer)",
       "objectives": [
-        "Spécifier le parcours P2 : enrôlement de l'opérateur, publication d'offres, gestion hôtelière web, abonnement, gestion mobile hors connexion.",
-        "Fixer les règles de modération et la « configuration de la plateforme » du cahier des charges.",
-        "Cadrer la conduite du changement : déploiement, onboarding des opérateurs, formation, panel pilote du 15 décembre."
+        "Recenser les éléments graphiques déjà produits par SIVIS et arrêter le design system.",
+        "Fixer la méthode de production continue des maquettes et leur validation écrite.",
+        "Arrêter l'architecture, l'hébergement et la reprise de la Version 0.",
+        "Traiter les reliquats de J4."
       ],
-      "questionnaire": "onglet « A5 Parcours opérateur » · 14 questions · retour attendu jeudi 15 octobre, 12 h",
+      "questionnaire": "onglet « A2 Données et V0, A6 Architecture, A7 Conception » · 37 questions · retour attendu jeudi 15 octobre, 12 h",
       "raci": [
-        "Spécifications du parcours opérateur (P2) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet",
-        "Cadrer la conduite du changement et le plan de déploiement : approuve SIVIS ; réalisent Lead Chef de projet, Sous-chef de projet"
+        "Design system et maquettes : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet",
+        "Dossier d'architecture et contrats d'interface : approuve Cybastion ; réalisent Lead Chef de projet",
+        "Décision d'hébergement et convention d'exploitation : approuve Cybastion ; réalisent Cybastion",
+        "Cadrer le traitement des données personnelles : approuve Cybastion ; réalisent Lead Chef de projet",
+        "Choisir les interconnexions hors État et cadrer l'exploitation : approuve Cybastion ; réalisent Lead Chef de projet",
+        "Inventaire et décision de reprise de la Version 0 : approuve Cybastion ; réalisent Lead Chef de projet",
+        "Catalogue des référentiels : approuve SIVIS ; réalisent Ministère, Lead Chef de projet"
       ],
       "risks": [
-        "R22 critique (16)",
-        "R23 modéré (9)",
-        "R33 élevé (12)"
+        "R06 élevé (12)",
+        "R09 modéré (9)",
+        "R10 élevé (12)",
+        "R11 élevé (12)",
+        "R12 élevé (10)",
+        "R13 élevé (10)",
+        "R25 modéré (6)",
+        "R31 modéré (9)"
       ],
-      "deliverable": "Spécifications fonctionnelles du parcours P2 ; règles de modération ; règles de synchronisation hors connexion ; critères et calendrier du panel pilote.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Design system ; méthode de validation des maquettes ; dossier d'architecture ; décision d'hébergement ; PV signé.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J5.1",
@@ -1170,31 +1941,36 @@
           "start": "09:00",
           "end": "10:45",
           "allDay": false,
-          "title": "Enrôlement depuis eAdministration",
-          "content": "Publication et modification d'offres (UC 06), règles de modération",
-          "owner": "Expert fonctionnel tourisme et PMS",
-          "outcome": "Règles et critères d'acceptation",
+          "title": "Conception",
+          "content": "Éléments graphiques de SIVIS, identité, composants réutilisables, accessibilité, bilinguisme",
+          "owner": "Responsable UX",
+          "outcome": "Design system arrêté",
           "questions": [
-            "Qui modère les offres et sous quel délai ?"
+            "Quels éléments de SIVIS reprendre ?"
           ],
           "added": false,
+          "cdc": "Identité et UX",
+          "refs": [
+            "R28",
+            "R38"
+          ],
           "steps": [
             {
               "start": "09:00",
-              "end": "09:35",
-              "title": "Enrôlement de l'opérateur depuis eAdministration",
-              "minutes": 35
+              "end": "09:40",
+              "title": "Éléments graphiques existants chez SIVIS",
+              "minutes": 40
             },
             {
-              "start": "09:35",
+              "start": "09:40",
               "end": "10:15",
-              "title": "Publication et modification d'offres (UC 06)",
-              "minutes": 40
+              "title": "Composants réutilisables",
+              "minutes": 35
             },
             {
               "start": "10:15",
               "end": "10:45",
-              "title": "Règles de modération",
+              "title": "Accessibilité WCAG 2.1 AA et bilinguisme",
               "minutes": 30
             }
           ]
@@ -1205,38 +1981,31 @@
           "start": "11:00",
           "end": "12:30",
           "allDay": false,
-          "title": "Gestion hôtelière web",
-          "content": "Réservations, arrivées et départs, facture unique, planning (UC 09)",
-          "owner": "Expert fonctionnel tourisme et PMS",
-          "outcome": "Règles et critères d'acceptation",
+          "title": "Maquettes",
+          "content": "Production continue, envoi au fil de l'eau, validation écrite",
+          "owner": "Responsable UX",
+          "outcome": "Méthode de validation actée",
           "questions": [
-            "La facture unique est-elle conforme à la FNE ?"
+            "Faut-il des séances de présentation ?"
           ],
           "added": false,
+          "cdc": "UC 02 Landing page",
+          "refs": [
+            "R08",
+            "R12"
+          ],
           "steps": [
             {
               "start": "11:00",
-              "end": "11:25",
-              "title": "Réservations",
-              "minutes": 25
+              "end": "11:45",
+              "title": "Maquettes des parcours P1 et P2",
+              "minutes": 45
             },
             {
-              "start": "11:25",
-              "end": "11:50",
-              "title": "Arrivées et départs",
-              "minutes": 25
-            },
-            {
-              "start": "11:50",
-              "end": "12:10",
-              "title": "Facture unique",
-              "minutes": 20
-            },
-            {
-              "start": "12:10",
+              "start": "11:45",
               "end": "12:30",
-              "title": "Planning (UC 09)",
-              "minutes": 20
+              "title": "Circuit de validation écrite",
+              "minutes": 45
             }
           ]
         },
@@ -1246,39 +2015,39 @@
           "start": "14:00",
           "end": "15:30",
           "allDay": false,
-          "title": "Abonnement",
-          "content": "Souscription, rappels, période de grâce, suspension différenciée, relation client",
-          "owner": "Lead Chef de projet",
-          "outcome": "Règles actées, tarifs provisoires",
+          "title": "Architecture et hébergement",
+          "content": "Architecture cible, options d'hébergement, interfaces d'État, reprise de la Version 0",
+          "owner": "Architecte et M. Verbeck",
+          "outcome": "Choix techniques arrêtés",
           "questions": [
-            "Tarifs des abonnements et de la commission ?",
-            "Durée de la période de grâce ?"
+            "Quelle option d'hébergement ?",
+            "Quels composants de la Version 0 reprendre ?"
           ],
           "added": false,
+          "cdc": "Architecture, normes",
+          "refs": [
+            "R26",
+            "R29",
+            "R30"
+          ],
           "steps": [
             {
               "start": "14:00",
-              "end": "14:25",
-              "title": "Souscription et tarifs provisoires",
-              "minutes": 25
+              "end": "14:30",
+              "title": "Architecture cible",
+              "minutes": 30
             },
             {
-              "start": "14:25",
-              "end": "14:45",
-              "title": "Rappels et période de grâce",
-              "minutes": 20
+              "start": "14:30",
+              "end": "15:00",
+              "title": "Options d'hébergement",
+              "minutes": 30
             },
             {
-              "start": "14:45",
-              "end": "15:10",
-              "title": "Suspension différenciée",
-              "minutes": 25
-            },
-            {
-              "start": "15:10",
+              "start": "15:00",
               "end": "15:30",
-              "title": "Relation client",
-              "minutes": 20
+              "title": "Interfaces d'État et reprise de la Version 0",
+              "minutes": 30
             }
           ]
         },
@@ -1286,91 +2055,58 @@
           "code": "J5.4",
           "atelier": "J5",
           "start": "15:45",
-          "end": "16:15",
+          "end": "16:30",
           "allDay": false,
-          "title": "Gestion mobile hors connexion",
-          "content": "Encaissement différé, règles de conflit, plafonds",
-          "owner": "Responsable mobile",
-          "outcome": "Règles de synchronisation actées",
+          "title": "Sécurité et exploitation",
+          "content": "Sécurité, données personnelles, interconnexions hors État, niveaux de service",
+          "owner": "Expert cybersécurité",
+          "outcome": "Exigences actées",
           "questions": [
-            "Plafond d'encaissement hors connexion ?"
+            "Quels fournisseurs OTP et SIG ?"
           ],
           "added": false,
+          "cdc": "Exigences non fonct.",
+          "refs": [
+            "R27",
+            "R28"
+          ],
           "steps": [
             {
               "start": "15:45",
-              "end": "15:55",
-              "title": "Encaissement différé hors connexion",
-              "minutes": 10
+              "end": "16:10",
+              "title": "Sécurité et données personnelles",
+              "minutes": 25
             },
             {
-              "start": "15:55",
-              "end": "16:05",
-              "title": "Règles de conflit à la synchronisation",
-              "minutes": 10
-            },
-            {
-              "start": "16:05",
-              "end": "16:15",
-              "title": "Plafonds hors connexion",
-              "minutes": 10
+              "start": "16:10",
+              "end": "16:30",
+              "title": "Interconnexions hors État et exploitation",
+              "minutes": 20
             }
           ]
         },
         {
           "code": "J5.5",
           "atelier": "J5",
-          "start": "16:15",
-          "end": "16:45",
-          "allDay": false,
-          "title": "Conduite du changement",
-          "content": "Plan de déploiement pour l'enrôlement national du 15 décembre, supports, formation des équipes du MOE, panel pilote",
-          "owner": "Sous-chef de projet",
-          "outcome": "Plan de déploiement cadré, panel défini",
-          "questions": [
-            "Combien d'opérateurs dans le panel pilote ?",
-            "Qui forme les équipes du MOE, et quand ?"
-          ],
-          "added": true,
-          "steps": [
-            {
-              "start": "16:15",
-              "end": "16:25",
-              "title": "Plan de déploiement pour l'enrôlement national du 15 décembre",
-              "minutes": 10
-            },
-            {
-              "start": "16:25",
-              "end": "16:35",
-              "title": "Supports d'onboarding et formation des équipes du MOE",
-              "minutes": 10
-            },
-            {
-              "start": "16:35",
-              "end": "16:45",
-              "title": "Panel pilote : critères de sélection et calendrier",
-              "minutes": 10
-            }
-          ]
-        },
-        {
-          "code": "J5.6",
-          "atelier": "J5",
-          "start": "16:45",
+          "start": "16:30",
           "end": "17:00",
           "allDay": false,
-          "title": "Relevé",
-          "content": "",
+          "title": "Reliquats de J4",
+          "content": "Relevé et engagement",
           "owner": "Sous-chef de projet",
-          "outcome": "Relevé signé",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, groupement)",
           "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "16:45",
+              "start": "16:30",
               "end": "17:00",
-              "title": "Relevé et actions",
-              "minutes": 15
+              "title": "Reliquats de J4 et signature",
+              "minutes": 30
             }
           ]
         }
@@ -1413,18 +2149,28 @@
         {
           "kind": "session",
           "code": "J5.5"
-        },
-        {
-          "kind": "session",
-          "code": "J5.6"
         }
       ],
-      "prep": {
-        "tab": "A5 Parcours opérateur",
-        "due": "2026-10-15",
-        "questions": 14,
-        "status": "Envoyé"
-      },
+      "prep": [
+        {
+          "tab": "A2 Données et V0",
+          "due": "2026-10-15",
+          "questions": 12,
+          "status": "Envoyé"
+        },
+        {
+          "tab": "A6 Architecture",
+          "due": "2026-10-15",
+          "questions": 15,
+          "status": "Envoyé"
+        },
+        {
+          "tab": "A7 Conception",
+          "due": "2026-10-15",
+          "questions": 10,
+          "status": "Envoyé"
+        }
+      ],
       "date": "2026-10-19",
       "pvDue": "2026-10-20",
       "deliverableDue": "2026-10-21",
@@ -1433,31 +2179,20 @@
     },
     {
       "id": "J6",
-      "title": "Architecture, hébergement et interfaces d'État",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Intelligence artificielle",
+      "phase": "SEMAINE 2 · du lundi 19 au vendredi 23 octobre · comité restreint Cybastion, SIVIS, groupement · académie Cybastion (à confirmer)",
       "objectives": [
-        "Arrêter le dossier d'architecture : découpage en services, broker, passerelle, socle d'exécution, chaîne de livraison.",
-        "Décider de l'option d'hébergement : souverain, cloud complet ou hybride, et de la convention d'exploitation.",
-        "Établir les contrats d'interface avec eAdministration, FNE, HORA et Data Management.",
-        "Choisir les fournisseurs des interconnexions hors État, cadrer l'exploitation et le traitement des données personnelles."
+        "Expliquer le fonctionnement de l'IA et son intégration dans chaque parcours.",
+        "Distinguer ce qui relève du MVP, de la V1 et de la V2.",
+        "Fixer les garde-fous, les sources de données et le financement."
       ],
-      "questionnaire": "onglet « A6 Architecture » · 15 questions · retour attendu vendredi 16 octobre, 12 h",
-      "raci": [
-        "Dossier d'architecture et contrats d'interface : approuve Cybastion ; réalisent Lead Chef de projet",
-        "Décision d'hébergement et convention d'exploitation : approuve Cybastion ; réalisent Cybastion",
-        "Cadrer le traitement des données personnelles : approuve Cybastion ; réalisent Lead Chef de projet",
-        "Choisir les interconnexions hors État et cadrer l'exploitation : approuve Cybastion ; réalisent Lead Chef de projet"
-      ],
+      "questionnaire": "",
+      "raci": [],
       "risks": [
-        "R07 critique (16)",
-        "R08 modéré (9)",
-        "R11 élevé (12)",
-        "R12 élevé (10)",
-        "R13 élevé (10)",
-        "R31 modéré (9)"
+        "R26 modéré (9)"
       ],
-      "deliverable": "Dossier d'architecture technique (TOGAF) ; décision d'hébergement et principes de la convention d'exploitation ; contrats d'interface avec les systèmes d'État ; exigences de la PSSI.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Périmètre IA par version, garde-fous et modèle de financement ; PV signé.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J6.1",
@@ -1465,39 +2200,31 @@
           "start": "09:00",
           "end": "10:45",
           "allDay": false,
-          "title": "Architecture cible",
-          "content": "Domaines et services, transaction locale et événements, choix ouverts (broker, passerelle, forge, répartition Spring Boot, Quarkus, natif)",
-          "owner": "",
-          "outcome": "Choix techniques arrêtés",
+          "title": "Vision IA",
+          "content": "Assistant conversationnel, place dans les parcours, du MVP au moteur prédictif",
+          "owner": "Responsable IA (Hassan)",
+          "outcome": "Vision IA partagée",
           "questions": [
-            "Quel broker et quelle passerelle ?",
-            "Quelle répartition des technologies par service ?"
+            "Quel périmètre IA au MVP ?"
           ],
           "added": false,
+          "cdc": "UC 03 Planif. et IA",
+          "refs": [
+            "R01",
+            "R09"
+          ],
           "steps": [
             {
               "start": "09:00",
-              "end": "09:30",
-              "title": "Domaines et découpage en services",
-              "minutes": 30
+              "end": "09:50",
+              "title": "Assistant conversationnel : orientation et formalités",
+              "minutes": 50
             },
             {
-              "start": "09:30",
-              "end": "09:55",
-              "title": "Transaction locale et événements",
-              "minutes": 25
-            },
-            {
-              "start": "09:55",
-              "end": "10:25",
-              "title": "Choix ouverts : broker, passerelle, forge",
-              "minutes": 30
-            },
-            {
-              "start": "10:25",
+              "start": "09:50",
               "end": "10:45",
-              "title": "Répartition Spring Boot, Quarkus, natif",
-              "minutes": 20
+              "title": "Trajectoire vers le moteur prédictif",
+              "minutes": 55
             }
           ]
         },
@@ -1507,39 +2234,31 @@
           "start": "11:00",
           "end": "12:30",
           "allDay": false,
-          "title": "Hébergement",
-          "content": "Exigences du socle, dimensionnement, options A / B / C, offres possibles, formalités ARTCI",
-          "owner": "Ingénieur DevSecOps",
-          "outcome": "Option retenue, convention d'exploitation cadrée",
+          "title": "IA du parcours touriste",
+          "content": "Planification, recommandations, garde-fous",
+          "owner": "Responsable IA (Hassan)",
+          "outcome": "Règles d'usage actées",
           "questions": [
-            "Quelle option d'hébergement ?",
-            "Qui exploite la plateforme ?"
+            "Quelles limites pour l'assistant ?"
           ],
           "added": false,
+          "cdc": "UC 03 Planif. et IA",
+          "refs": [
+            "R09",
+            "R36"
+          ],
           "steps": [
             {
               "start": "11:00",
-              "end": "11:20",
-              "title": "Exigences du socle et dimensionnement",
-              "minutes": 20
+              "end": "11:45",
+              "title": "Planification et recommandations",
+              "minutes": 45
             },
             {
-              "start": "11:20",
-              "end": "11:50",
-              "title": "Options A, B, C : souverain, cloud complet, hybride",
-              "minutes": 30
-            },
-            {
-              "start": "11:50",
-              "end": "12:10",
-              "title": "Offres possibles et coûts",
-              "minutes": 20
-            },
-            {
-              "start": "12:10",
+              "start": "11:45",
               "end": "12:30",
-              "title": "Formalités ARTCI et convention d'exploitation",
-              "minutes": 20
+              "title": "Garde-fous et transfert vers un humain",
+              "minutes": 45
             }
           ]
         },
@@ -1549,39 +2268,30 @@
           "start": "14:00",
           "end": "15:30",
           "allDay": false,
-          "title": "Interfaces d'État",
-          "content": "eAdministration, FNE, HORA, data Management, contrats d'interface, environnements de test, modes dégradés",
-          "owner": "Responsable backend",
-          "outcome": "Contrats d'interface rédigés",
+          "title": "IA côté opérateur et administration",
+          "content": "Enrichissement des contenus, traduction, copilote, analytique",
+          "owner": "Responsable IA (Hassan)",
+          "outcome": "Cas d'usage IA retenus par version",
           "questions": [
-            "Dates d'accès aux environnements de test de chaque système ?",
-            "Mode dégradé si un système est indisponible ?"
+            "Quels usages en V2 ?"
           ],
           "added": false,
+          "cdc": "UC 11 Points d'intérêt",
+          "refs": [
+            "R17"
+          ],
           "steps": [
             {
               "start": "14:00",
-              "end": "14:25",
-              "title": "eAdministration",
-              "minutes": 25
+              "end": "14:45",
+              "title": "Enrichissement des points d'intérêt et traduction",
+              "minutes": 45
             },
             {
-              "start": "14:25",
-              "end": "14:50",
-              "title": "FNE (DGI)",
-              "minutes": 25
-            },
-            {
-              "start": "14:50",
-              "end": "15:10",
-              "title": "HORA (Police nationale)",
-              "minutes": 20
-            },
-            {
-              "start": "15:10",
+              "start": "14:45",
               "end": "15:30",
-              "title": "Data Management",
-              "minutes": 20
+              "title": "Copilote opérateur et analytique",
+              "minutes": 45
             }
           ]
         },
@@ -1589,92 +2299,57 @@
           "code": "J6.4",
           "atelier": "J6",
           "start": "15:45",
-          "end": "16:15",
+          "end": "16:30",
           "allDay": false,
-          "title": "Sécurité et données personnelles",
-          "content": "PSSI, MFA, chiffrement, journal immuable, test d'intrusion, consentement, registre des traitements, base légale de la vérification d'identité",
-          "owner": "Expert cybersécurité",
-          "outcome": "Exigences actées",
+          "title": "Données et financement",
+          "content": "Sources, conformité ARTCI, enveloppe et quotas",
+          "owner": "Responsable IA (Hassan)",
+          "outcome": "Modèle de financement cadré",
           "questions": [
-            "Qui réalise le test d'intrusion, et quand ?",
-            "Quelle base légale pour la vérification d'identité ?"
+            "Quelle enveloppe mensuelle ?"
           ],
           "added": false,
+          "cdc": "Hébergement, ARTCI",
+          "refs": [
+            "R29"
+          ],
           "steps": [
             {
               "start": "15:45",
-              "end": "15:55",
-              "title": "PSSI, MFA, chiffrement, journal immuable",
-              "minutes": 10
+              "end": "16:10",
+              "title": "Sources et conformité",
+              "minutes": 25
             },
             {
-              "start": "15:55",
-              "end": "16:00",
-              "title": "Test d'intrusion",
-              "minutes": 5
-            },
-            {
-              "start": "16:00",
-              "end": "16:15",
-              "title": "Données personnelles : consentement, registre des traitements, base légale de la vérification d'identité",
-              "minutes": 15
+              "start": "16:10",
+              "end": "16:30",
+              "title": "Enveloppe mensuelle et quotas",
+              "minutes": 20
             }
           ]
         },
         {
           "code": "J6.5",
           "atelier": "J6",
-          "start": "16:15",
-          "end": "16:45",
-          "allDay": false,
-          "title": "Interconnexions hors État (SIG, messagerie et OTP, identité tierce, avis externes, OTA, transport)",
-          "content": "Exploitation, niveaux de service, support, garantie",
-          "owner": "Architecte",
-          "outcome": "Fournisseurs pressentis, convention d'exploitation cadrée",
-          "questions": [
-            "Quels fournisseurs pour l'OTP, le SIG et l'identité tierce ?",
-            "Qui exploite la plateforme, avec quels niveaux de service ?"
-          ],
-          "added": true,
-          "steps": [
-            {
-              "start": "16:15",
-              "end": "16:30",
-              "title": "Interconnexions hors État : SIG, messagerie et OTP, identité tierce, avis externes, OTA, transport",
-              "minutes": 15
-            },
-            {
-              "start": "16:30",
-              "end": "16:45",
-              "title": "Exploitation : niveaux de service, support, garantie",
-              "minutes": 15
-            }
-          ]
-        },
-        {
-          "code": "J6.6",
-          "atelier": "J6",
-          "start": "16:45",
+          "start": "16:30",
           "end": "17:00",
           "allDay": false,
-          "title": "Relevé, actions",
+          "title": "Relevé et engagement",
           "content": "",
           "owner": "Sous-chef de projet",
-          "outcome": "Relevé signé",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, groupement)",
           "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "16:45",
-              "end": "16:55",
-              "title": "Relevé et actions",
-              "minutes": 10
-            },
-            {
-              "start": "16:55",
+              "start": "16:30",
               "end": "17:00",
-              "title": "Prérequis de J7 : éléments de marque du Ministère",
-              "minutes": 5
+              "title": "Signature des engagements",
+              "minutes": 30
             }
           ]
         }
@@ -1717,18 +2392,9 @@
         {
           "kind": "session",
           "code": "J6.5"
-        },
-        {
-          "kind": "session",
-          "code": "J6.6"
         }
       ],
-      "prep": {
-        "tab": "A6 Architecture",
-        "due": "2026-10-16",
-        "questions": 15,
-        "status": "Envoyé"
-      },
+      "prep": [],
       "date": "2026-10-20",
       "pvDue": "2026-10-21",
       "deliverableDue": "2026-10-22",
@@ -1737,23 +2403,31 @@
     },
     {
       "id": "J7",
-      "title": "Conception des interfaces",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Périmètre du MVP, sprints, qualité et sécurité",
+      "phase": "SEMAINE 2 · du lundi 19 au vendredi 23 octobre · comité restreint Cybastion, SIVIS, groupement · académie Cybastion (à confirmer)",
       "objectives": [
-        "Arrêter le design system « L'esprit de la Côte d'Ivoire » : charte, typographies, composants.",
-        "Valider les maquettes des écrans clés des parcours P1 et P2.",
-        "Fixer les exigences d'accessibilité et de bilinguisme."
+        "Choisir les cas d'usage du MVP : 70 à 80 % de la Version 1.",
+        "Valider la trajectoire des sprints et les dépendances.",
+        "Arrêter le plan d'assurance qualité, la sécurité et la composition des équipes."
       ],
-      "questionnaire": "onglet « A7 Conception » · 10 questions · retour attendu lundi 19 octobre, 12 h",
+      "questionnaire": "onglet « A9 MVP et plan » · 12 questions · retour attendu lundi 19 octobre, 12 h",
       "raci": [
-        "Design system et maquettes : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
+        "Périmètre du MVP et méthode de mesure : approuve Cybastion ; réalisent Lead Chef de projet",
+        "Plan de réalisation et calendrier des sprints : approuve Cybastion ; réalisent Lead Chef de projet, Sous-chef de projet",
+        "Plan d'assurance qualité : approuve Cybastion ; réalisent Lead Chef de projet, Sous-chef de projet",
+        "Politique de sécurité du projet : approuve Cybastion ; réalisent Lead Chef de projet",
+        "Arrêter la composition des équipes et le financement de l'assistant IA et des points : approuve Cybastion ; réalisent Direction du groupement, Lead Chef de projet"
       ],
       "risks": [
-        "R24 élevé (12)",
-        "R25 modéré (6)"
+        "R16 élevé (12)",
+        "R17 élevé (12)",
+        "R19 critique (15)",
+        "R20 élevé (12)",
+        "R27 élevé (12)",
+        "R32 élevé (12)"
       ],
-      "deliverable": "Design system et maquettes des écrans clés des parcours prioritaires ; exigences d'accessibilité et de bilinguisme ; plan de production des contenus de lancement.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Périmètre du MVP ; trajectoire des sprints ; plan d'assurance qualité ; organisation des équipes ; PV signé.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J7.1",
@@ -1761,38 +2435,31 @@
           "start": "09:00",
           "end": "10:45",
           "allDay": false,
-          "title": "Identité et design system",
-          "content": "Palette, typographies, motifs, composants, approche mobile d'abord",
-          "owner": "Responsable UX",
-          "outcome": "Design system validé",
+          "title": "Périmètre du MVP",
+          "content": "Cas d'usage retenus (70 à 80 % de la V1), pondération, mesure",
+          "owner": "Direction de programme",
+          "outcome": "Périmètre du MVP arrêté",
           "questions": [
-            "Le design system est-il cohérent avec la marque « Sublime Côte d'Ivoire » ?"
+            "Approvisionnements B2B au 15/12 ?"
           ],
           "added": false,
+          "cdc": "Jalons",
+          "refs": [
+            "R31",
+            "R34"
+          ],
           "steps": [
             {
               "start": "09:00",
-              "end": "09:30",
-              "title": "Palette et typographies",
-              "minutes": 30
+              "end": "10:00",
+              "title": "Choix des cas d'usage",
+              "minutes": 60
             },
             {
-              "start": "09:30",
-              "end": "09:55",
-              "title": "Motifs et identité « L'esprit de la Côte d'Ivoire »",
-              "minutes": 25
-            },
-            {
-              "start": "09:55",
-              "end": "10:25",
-              "title": "Bibliothèque de composants",
-              "minutes": 30
-            },
-            {
-              "start": "10:25",
+              "start": "10:00",
               "end": "10:45",
-              "title": "Approche mobile d'abord",
-              "minutes": 20
+              "title": "Pondération et mesure hebdomadaire",
+              "minutes": 45
             }
           ]
         },
@@ -1802,38 +2469,30 @@
           "start": "11:00",
           "end": "12:30",
           "allDay": false,
-          "title": "Maquettes parcours touriste",
-          "content": "Accueil, fiche de point d'intérêt, panier, paiement, voucher",
-          "owner": "Responsable UX",
-          "outcome": "Maquettes validées ou amendées",
+          "title": "Trajectoire",
+          "content": "Sprints 1 à 4, cibles cumulées, dates butoirs des dépendances",
+          "owner": "Lead Chef de projet",
+          "outcome": "Trajectoire validée",
           "questions": [
-            "Quelles maquettes sont validées, lesquelles amendées ?"
+            "Quelles dépendances menacent le MVP ?"
           ],
           "added": false,
+          "cdc": "Jalons",
+          "refs": [
+            "R34"
+          ],
           "steps": [
             {
               "start": "11:00",
-              "end": "11:20",
-              "title": "Accueil",
-              "minutes": 20
+              "end": "11:45",
+              "title": "Sprints 1 à 4",
+              "minutes": 45
             },
             {
-              "start": "11:20",
-              "end": "11:40",
-              "title": "Fiche de point d'intérêt",
-              "minutes": 20
-            },
-            {
-              "start": "11:40",
-              "end": "12:05",
-              "title": "Panier et paiement",
-              "minutes": 25
-            },
-            {
-              "start": "12:05",
+              "start": "11:45",
               "end": "12:30",
-              "title": "Voucher",
-              "minutes": 25
+              "title": "Dépendances : DGI, agrégateur, hébergement, interfaces",
+              "minutes": 45
             }
           ]
         },
@@ -1843,38 +2502,31 @@
           "start": "14:00",
           "end": "15:30",
           "allDay": false,
-          "title": "Maquettes parcours opérateur",
-          "content": "Tableau de bord, publication d'offre, gestion hôtelière, gestion mobile",
-          "owner": "Responsable UX et responsable mobile",
-          "outcome": "Maquettes validées ou amendées",
+          "title": "Qualité et sécurité",
+          "content": "Critères de prêt et de fini, recettes, tests de charge et de sécurité",
+          "owner": "Responsable qualité",
+          "outcome": "Plan d'assurance qualité validé",
           "questions": [
-            "Quelles maquettes sont validées, lesquelles amendées ?"
+            "Qui prononce la recette ?"
           ],
           "added": false,
+          "cdc": "Livrables",
+          "refs": [
+            "R28",
+            "R31"
+          ],
           "steps": [
             {
               "start": "14:00",
-              "end": "14:20",
-              "title": "Tableau de bord opérateur",
-              "minutes": 20
+              "end": "14:45",
+              "title": "Critères de prêt et de fini",
+              "minutes": 45
             },
             {
-              "start": "14:20",
-              "end": "14:40",
-              "title": "Publication d'offre",
-              "minutes": 20
-            },
-            {
-              "start": "14:40",
-              "end": "15:05",
-              "title": "Gestion hôtelière",
-              "minutes": 25
-            },
-            {
-              "start": "15:05",
+              "start": "14:45",
               "end": "15:30",
-              "title": "Gestion mobile",
-              "minutes": 25
+              "title": "Recettes, tests et sécurité",
+              "minutes": 45
             }
           ]
         },
@@ -1884,32 +2536,24 @@
           "start": "15:45",
           "end": "16:30",
           "allDay": false,
-          "title": "Accessibilité WCAG 2.1 AA, bilinguisme, contenus de lancement et référent éditorial",
-          "content": "",
-          "owner": "Responsable UX",
-          "outcome": "Exigences actées",
+          "title": "Équipes",
+          "content": "Équipes Scrum, product Owner, scrum Masters, ambassadeurs",
+          "owner": "Direction de programme",
+          "outcome": "Équipes arrêtées",
           "questions": [
-            "Qui produit les contenus de lancement et pour quelle date ?"
+            "Qui est Product Owner côté État ?"
           ],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
               "start": "15:45",
-              "end": "16:00",
-              "title": "Accessibilité WCAG 2.1 AA",
-              "minutes": 15
-            },
-            {
-              "start": "16:00",
-              "end": "16:15",
-              "title": "Bilinguisme français et anglais",
-              "minutes": 15
-            },
-            {
-              "start": "16:15",
               "end": "16:30",
-              "title": "Contenus de lancement et référent éditorial",
-              "minutes": 15
+              "title": "Composition et rôles",
+              "minutes": 45
             }
           ]
         },
@@ -1919,17 +2563,21 @@
           "start": "16:30",
           "end": "17:00",
           "allDay": false,
-          "title": "Relevé, actions",
+          "title": "Relevé et engagement",
           "content": "",
           "owner": "Sous-chef de projet",
-          "outcome": "Relevé signé",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, groupement)",
           "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
               "start": "16:30",
               "end": "17:00",
-              "title": "Relevé et actions",
+              "title": "Signature des engagements",
               "minutes": 30
             }
           ]
@@ -1975,12 +2623,14 @@
           "code": "J7.5"
         }
       ],
-      "prep": {
-        "tab": "A7 Conception",
-        "due": "2026-10-19",
-        "questions": 10,
-        "status": "Envoyé"
-      },
+      "prep": [
+        {
+          "tab": "A9 MVP et plan",
+          "due": "2026-10-19",
+          "questions": 12,
+          "status": "Envoyé"
+        }
+      ],
       "date": "2026-10-21",
       "pvDue": "2026-10-22",
       "deliverableDue": "2026-10-23",
@@ -1989,155 +2639,146 @@
     },
     {
       "id": "J8",
-      "title": "Pilotage : indicateurs, espaces État et SIVIS",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Synthèse et validation des plans de réalisation",
+      "phase": "SEMAINE 2 · du lundi 19 au vendredi 23 octobre · comité restreint Cybastion, SIVIS, groupement · académie Cybastion (à confirmer)",
       "objectives": [
-        "Spécifier le parcours P4 : tableau de bord national, espace SIVIS, exports.",
-        "Arrêter la définition des 27 indicateurs et leurs sources.",
-        "Définir le flux vers Data Management."
+        "Présenter la synthèse des ateliers et le Product Backlog.",
+        "Valider les plans de réalisation issus des ateliers.",
+        "Lever ou inscrire au registre les réserves."
       ],
-      "questionnaire": "onglet « A8 Pilotage » · 11 questions · retour attendu mardi 20 octobre, 12 h",
+      "questionnaire": "onglet « A9 MVP et plan » · 12 questions · retour attendu lundi 19 octobre, 12 h",
       "raci": [
-        "Indicateurs et spécifications du parcours pilotage (P4) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
+        "Valider le plan de réalisation et les livrables du cadrage : approuve SIVIS ; réalisent Cybastion, Lead Chef de projet, Sous-chef de projet"
       ],
       "risks": [
-        "R08 modéré (9)"
+        "R15 élevé (12)",
+        "R29 élevé (12)"
       ],
-      "deliverable": "Spécifications fonctionnelles du parcours P4 ; dictionnaire des indicateurs ; contrat de flux vers Data Management.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Plans de réalisation validés ; Product Backlog ; registre des décisions à jour ; PV signé.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J8.1",
           "atelier": "J8",
           "start": "09:00",
-          "end": "10:00",
+          "end": "10:45",
           "allDay": false,
-          "title": "Les 27 indicateurs",
-          "content": "Définition, source, fréquence, premiers indicateurs du MVP",
-          "owner": "Expert fonctionnel",
-          "outcome": "Dictionnaire des indicateurs",
-          "questions": [
-            "Quels indicateurs au MVP ?",
-            "Quelle source pour chaque indicateur ?"
-          ],
+          "title": "Synthèse des ateliers",
+          "content": "Décisions, hypothèses validées, réserves",
+          "owner": "Lead Chef de projet",
+          "outcome": "Synthèse partagée",
+          "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
               "start": "09:00",
-              "end": "09:25",
-              "title": "Revue des 27 indicateurs : définition et source",
-              "minutes": 25
-            },
-            {
-              "start": "09:25",
-              "end": "09:40",
-              "title": "Fréquence de calcul",
-              "minutes": 15
-            },
-            {
-              "start": "09:40",
-              "end": "10:00",
-              "title": "Indicateurs retenus pour le MVP",
-              "minutes": 20
+              "end": "10:45",
+              "title": "Décisions et hypothèses de J1 à J7",
+              "minutes": 105
             }
           ]
         },
         {
           "code": "J8.2",
           "atelier": "J8",
-          "start": "10:00",
-          "end": "10:45",
+          "start": "11:00",
+          "end": "12:30",
           "allDay": false,
-          "title": "Espace État",
-          "content": "Vues, filtres, exports PDF et Excel",
-          "owner": "Développeur référent web",
-          "outcome": "Règles et critères d'acceptation",
-          "questions": [
-            "Qui a accès à l'espace État ?"
-          ],
+          "title": "Product Backlog",
+          "content": "Cas d'usage détaillés et règles de gestion",
+          "owner": "Lead Chef de projet",
+          "outcome": "Backlog présenté",
+          "questions": [],
           "added": false,
+          "cdc": "Livrables",
+          "refs": [
+            "R31"
+          ],
           "steps": [
             {
-              "start": "10:00",
-              "end": "10:25",
-              "title": "Vues et filtres de l'espace État",
-              "minutes": 25
-            },
-            {
-              "start": "10:25",
-              "end": "10:45",
-              "title": "Exports PDF et Excel",
-              "minutes": 20
+              "start": "11:00",
+              "end": "12:30",
+              "title": "Cas d'usage et règles de gestion",
+              "minutes": 90
             }
           ]
         },
         {
           "code": "J8.3",
           "atelier": "J8",
-          "start": "11:00",
-          "end": "12:00",
+          "start": "14:00",
+          "end": "15:30",
           "allDay": false,
-          "title": "Espace SIVIS",
-          "content": "Paramétrage, traitement des transactions, recours, gestion des opérateurs",
-          "owner": "Expert fonctionnel",
-          "outcome": "Règles et critères d'acceptation",
-          "questions": [
-            "Quel délai de traitement d'un recours ?"
-          ],
+          "title": "Plans de réalisation",
+          "content": "Trajectoire, équipes, dépendances, risques",
+          "owner": "Direction de programme",
+          "outcome": "Plans présentés",
+          "questions": [],
           "added": false,
+          "cdc": "Jalons",
+          "refs": [
+            "R34"
+          ],
           "steps": [
             {
-              "start": "11:00",
-              "end": "11:15",
-              "title": "Paramétrage",
-              "minutes": 15
-            },
-            {
-              "start": "11:15",
-              "end": "11:30",
-              "title": "Traitement des transactions",
-              "minutes": 15
-            },
-            {
-              "start": "11:30",
-              "end": "11:45",
-              "title": "Recours",
-              "minutes": 15
-            },
-            {
-              "start": "11:45",
-              "end": "12:00",
-              "title": "Gestion des opérateurs",
-              "minutes": 15
+              "start": "14:00",
+              "end": "15:30",
+              "title": "Trajectoire, équipes, dépendances, risques",
+              "minutes": 90
             }
           ]
         },
         {
           "code": "J8.4",
           "atelier": "J8",
-          "start": "12:00",
-          "end": "12:30",
+          "start": "15:45",
+          "end": "16:30",
           "allDay": false,
-          "title": "Flux vers Data Management",
-          "content": "Relevé",
-          "owner": "Responsable backend",
-          "outcome": "Relevé signé",
-          "questions": [
-            "Quel format d'échange attend Data Management ?"
-          ],
+          "title": "Validation",
+          "content": "Revue des réserves, registre des décisions",
+          "owner": "Lead Chef de projet",
+          "outcome": "Plans validés",
+          "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "12:00",
-              "end": "12:20",
-              "title": "Flux vers Data Management : format et fréquence",
-              "minutes": 20
-            },
+              "start": "15:45",
+              "end": "16:30",
+              "title": "Réserves levées ou inscrites",
+              "minutes": 45
+            }
+          ]
+        },
+        {
+          "code": "J8.5",
+          "atelier": "J8",
+          "start": "16:30",
+          "end": "17:00",
+          "allDay": false,
+          "title": "Relevé et engagement",
+          "content": "",
+          "owner": "Sous-chef de projet",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, groupement)",
+          "questions": [],
+          "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
+          "steps": [
             {
-              "start": "12:20",
-              "end": "12:30",
-              "title": "Relevé",
-              "minutes": 10
+              "start": "16:30",
+              "end": "17:00",
+              "title": "Signature des engagements",
+              "minutes": 30
             }
           ]
         }
@@ -2148,10 +2789,6 @@
           "code": "J8.1"
         },
         {
-          "kind": "session",
-          "code": "J8.2"
-        },
-        {
           "kind": "break",
           "start": "10:45",
           "end": "11:00",
@@ -2159,19 +2796,41 @@
         },
         {
           "kind": "session",
+          "code": "J8.2"
+        },
+        {
+          "kind": "break",
+          "start": "12:30",
+          "end": "14:00",
+          "title": "Déjeuner"
+        },
+        {
+          "kind": "session",
           "code": "J8.3"
+        },
+        {
+          "kind": "break",
+          "start": "15:30",
+          "end": "15:45",
+          "title": "Pause"
         },
         {
           "kind": "session",
           "code": "J8.4"
+        },
+        {
+          "kind": "session",
+          "code": "J8.5"
         }
       ],
-      "prep": {
-        "tab": "A8 Pilotage",
-        "due": "2026-10-20",
-        "questions": 11,
-        "status": "Envoyé"
-      },
+      "prep": [
+        {
+          "tab": "A9 MVP et plan",
+          "due": "2026-10-19",
+          "questions": 12,
+          "status": "Envoyé"
+        }
+      ],
       "date": "2026-10-22",
       "pvDue": "2026-10-23",
       "deliverableDue": "2026-10-26",
@@ -2180,193 +2839,153 @@
     },
     {
       "id": "J9",
-      "title": "Périmètre du MVP, trajectoire des sprints, plan qualité et sécurité",
-      "phase": "Ateliers de cadrage d'Abidjan",
+      "title": "Points résiduels et organisation du travail",
+      "phase": "SEMAINE 2 · du lundi 19 au vendredi 23 octobre · comité restreint Cybastion, SIVIS, groupement · académie Cybastion (à confirmer)",
       "objectives": [
-        "Arrêter le périmètre détaillé du MVP du 15 décembre et sa pondération vers les 75 à 80 % de la Version 1.",
-        "Valider la trajectoire des sprints et les dates butoirs des dépendances.",
-        "Arrêter le plan d'assurance qualité et les critères de prêt et de fini.",
-        "Arrêter la composition des équipes et le financement de l'assistant IA et des points."
+        "Traiter les questions restées ouvertes.",
+        "Établir le plan de travail entre Cybastion et le groupement : rituels, comptes rendus, GED, outils.",
+        "Préparer le sprint 1 du 26 octobre."
       ],
-      "questionnaire": "onglet « A9 MVP et plan » · 12 questions · retour attendu mardi 20 octobre, 12 h",
-      "raci": [
-        "Périmètre du MVP et méthode de mesure : approuve Cybastion ; réalisent Lead Chef de projet",
-        "Plan de réalisation et calendrier des sprints : approuve Cybastion ; réalisent Lead Chef de projet, Sous-chef de projet",
-        "Plan d'assurance qualité : approuve Cybastion ; réalisent Lead Chef de projet, Sous-chef de projet",
-        "Politique de sécurité du projet : approuve Cybastion ; réalisent Lead Chef de projet",
-        "Arrêter la composition des équipes et le financement de l'assistant IA et des points : approuve Cybastion ; réalisent Direction du groupement, Lead Chef de projet"
-      ],
+      "questionnaire": "",
+      "raci": [],
       "risks": [
-        "R16 élevé (12)",
-        "R17 élevé (12)",
-        "R19 critique (15)",
-        "R20 élevé (12)",
-        "R26 modéré (9)",
-        "R27 élevé (12)",
-        "R32 élevé (12)"
+        "R15 élevé (12)"
       ],
-      "deliverable": "Périmètre détaillé du MVP avec pondération ; trajectoire des sprints et dates butoirs ; plan d'assurance qualité.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
+      "deliverable": "Plan de travail et outils ; sprint 1 préparé ; calendrier des instances ; PV signé.",
+      "pv": "PV de fin de journée avec engagement écrit et signé de Cybastion, SIVIS, du Ministère (semaine 1) et du groupement (onglet Suivi des PV).",
       "sessions": [
         {
           "code": "J9.1",
           "atelier": "J9",
-          "start": "14:00",
-          "end": "15:00",
+          "start": "09:00",
+          "end": "10:45",
           "allDay": false,
-          "title": "Périmètre du MVP",
-          "content": "Liste des livrables, pondération, méthode de mesure hebdomadaire",
-          "owner": "Direction de programme",
-          "outcome": "Périmètre et pondération actés",
-          "questions": [
-            "Quel périmètre exact au MVP ?"
-          ],
+          "title": "Points résiduels",
+          "content": "Questions ouvertes des ateliers",
+          "owner": "Lead Chef de projet",
+          "outcome": "Points tranchés ou inscrits au registre",
+          "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "14:00",
-              "end": "14:25",
-              "title": "Liste des livrables du MVP du 15 décembre",
-              "minutes": 25
-            },
-            {
-              "start": "14:25",
-              "end": "14:45",
-              "title": "Pondération vers les 75 à 80 % de la V1",
-              "minutes": 20
-            },
-            {
-              "start": "14:45",
-              "end": "15:00",
-              "title": "Méthode de mesure hebdomadaire",
-              "minutes": 15
+              "start": "09:00",
+              "end": "10:45",
+              "title": "Questions ouvertes",
+              "minutes": 105
             }
           ]
         },
         {
           "code": "J9.2",
           "atelier": "J9",
-          "start": "15:00",
-          "end": "15:30",
+          "start": "11:00",
+          "end": "12:30",
           "allDay": false,
-          "title": "Trajectoire des sprints",
-          "content": "Sprints 1 à 4, cibles cumulées, dates butoirs des dépendances",
+          "title": "Organisation du travail",
+          "content": "Rituels, comptes rendus, GED et versioning, outils (Jira à confirmer)",
           "owner": "Lead Chef de projet",
-          "outcome": "Trajectoire validée",
+          "outcome": "Plan de travail arrêté",
           "questions": [
-            "Quelles dépendances peuvent faire glisser le MVP ?"
+            "Jira ou autre outil ?"
           ],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "15:00",
-              "end": "15:15",
-              "title": "Sprints 1 à 4 et cibles cumulées",
-              "minutes": 15
+              "start": "11:00",
+              "end": "11:45",
+              "title": "Rituels et comptes rendus",
+              "minutes": 45
             },
             {
-              "start": "15:15",
-              "end": "15:30",
-              "title": "Dates butoirs des dépendances (DGI, agrégateur, hébergement, interfaces)",
-              "minutes": 15
+              "start": "11:45",
+              "end": "12:30",
+              "title": "GED et outils",
+              "minutes": 45
             }
           ]
         },
         {
           "code": "J9.3",
           "atelier": "J9",
-          "start": "15:45",
-          "end": "16:15",
+          "start": "14:00",
+          "end": "15:30",
           "allDay": false,
-          "title": "Plan d'assurance qualité",
-          "content": "Critères de prêt et de fini, recettes, tests de charge et de sécurité, documentation",
-          "owner": "Responsable qualité",
-          "outcome": "PAQ validé",
+          "title": "Sprint 1",
+          "content": "Planification, environnements, accès",
+          "owner": "Lead Chef de projet",
+          "outcome": "Sprint 1 préparé",
           "questions": [
-            "Qui prononce la recette ?"
+            "Accès et environnements prêts ?"
           ],
           "added": false,
+          "cdc": "Jalons",
+          "refs": [
+            "R34"
+          ],
           "steps": [
             {
-              "start": "15:45",
-              "end": "15:55",
-              "title": "Critères de prêt et de fini",
-              "minutes": 10
-            },
-            {
-              "start": "15:55",
-              "end": "16:05",
-              "title": "Recettes, tests de charge et de sécurité",
-              "minutes": 10
-            },
-            {
-              "start": "16:05",
-              "end": "16:15",
-              "title": "Documentation à livrer",
-              "minutes": 10
+              "start": "14:00",
+              "end": "15:30",
+              "title": "Préparation du sprint du 26/10",
+              "minutes": 90
             }
           ]
         },
         {
           "code": "J9.4",
           "atelier": "J9",
-          "start": "16:15",
-          "end": "16:45",
+          "start": "15:45",
+          "end": "16:30",
           "allDay": false,
-          "title": "Composition des équipes de réalisation (équipes Scrum, ambassadeurs, Product Owner, Scrum Master)",
-          "content": "Financement de l'assistant IA et des points de fidélité, périmètre du cadrage complémentaire V2",
-          "owner": "Direction de programme",
-          "outcome": "Équipes arrêtées, financement cadré",
-          "questions": [
-            "Qui sont le Product Owner et le Scrum Master ?",
-            "Quelle enveloppe mensuelle pour l'assistant IA ?"
+          "title": "Instances",
+          "content": "Démonstrations du vendredi, comités, COPIL",
+          "owner": "Lead Chef de projet",
+          "outcome": "Calendrier des instances",
+          "questions": [],
+          "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
           ],
-          "added": true,
           "steps": [
             {
-              "start": "16:15",
-              "end": "16:25",
-              "title": "Composition des équipes : équipes Scrum, ambassadeurs, Product Owner, Scrum Master",
-              "minutes": 10
-            },
-            {
-              "start": "16:25",
-              "end": "16:35",
-              "title": "Financement de l'assistant IA et des points de fidélité : enveloppe, quotas",
-              "minutes": 10
-            },
-            {
-              "start": "16:35",
-              "end": "16:45",
-              "title": "Périmètre du cadrage complémentaire V2 (C1 à C3)",
-              "minutes": 10
+              "start": "15:45",
+              "end": "16:30",
+              "title": "Calendrier des instances",
+              "minutes": 45
             }
           ]
         },
         {
           "code": "J9.5",
           "atelier": "J9",
-          "start": "16:45",
+          "start": "16:30",
           "end": "17:00",
           "allDay": false,
-          "title": "Relevé, préparation de la synthèse de J10",
+          "title": "Clôture des journées de cadrage",
           "content": "",
-          "owner": "Sous-chef de projet",
-          "outcome": "Relevé signé",
+          "owner": "Cybastion et Lead Chef de projet",
+          "outcome": "Relevé de décisions et engagement écrit des parties (Cybastion, SIVIS, groupement)",
           "questions": [],
           "added": false,
+          "cdc": "Gouvernance",
+          "refs": [
+            "R35"
+          ],
           "steps": [
             {
-              "start": "16:45",
-              "end": "16:55",
-              "title": "Relevé",
-              "minutes": 10
-            },
-            {
-              "start": "16:55",
+              "start": "16:30",
               "end": "17:00",
-              "title": "Préparation de la synthèse de J10",
-              "minutes": 5
+              "title": "Clôture et engagements",
+              "minutes": 30
             }
           ]
         }
@@ -2377,18 +2996,30 @@
           "code": "J9.1"
         },
         {
+          "kind": "break",
+          "start": "10:45",
+          "end": "11:00",
+          "title": "Pause"
+        },
+        {
           "kind": "session",
           "code": "J9.2"
+        },
+        {
+          "kind": "break",
+          "start": "12:30",
+          "end": "14:00",
+          "title": "Déjeuner"
+        },
+        {
+          "kind": "session",
+          "code": "J9.3"
         },
         {
           "kind": "break",
           "start": "15:30",
           "end": "15:45",
           "title": "Pause"
-        },
-        {
-          "kind": "session",
-          "code": "J9.3"
         },
         {
           "kind": "session",
@@ -2399,250 +3030,7 @@
           "code": "J9.5"
         }
       ],
-      "prep": {
-        "tab": "A9 MVP et plan",
-        "due": "2026-10-20",
-        "questions": 12,
-        "status": "Envoyé"
-      },
-      "date": "2026-10-22",
-      "pvDue": "2026-10-23",
-      "deliverableDue": "2026-10-26",
-      "validationDue": "2026-11-02",
-      "pvStatus": "À faire"
-    },
-    {
-      "id": "J10",
-      "title": "Synthèse et validation du plan de réalisation",
-      "phase": "Ateliers de cadrage d'Abidjan",
-      "objectives": [
-        "Présenter la synthèse des neuf ateliers et le plan de réalisation.",
-        "Obtenir la validation du plan par la maîtrise d'ouvrage et la maîtrise d'œuvre.",
-        "Initialiser le registre des décisions et lancer le sprint 1."
-      ],
-      "questionnaire": "onglet « A9 MVP et plan » · 12 questions · retour attendu mardi 20 octobre, 12 h",
-      "raci": [
-        "Valider le plan de réalisation et les livrables du cadrage : approuve SIVIS ; réalisent Cybastion, Lead Chef de projet, Sous-chef de projet"
-      ],
-      "risks": [
-        "R15 élevé (12)",
-        "R29 élevé (12)"
-      ],
-      "deliverable": "Plan de réalisation validé ; registre des décisions initialisé ; calendrier des instances ; ordre du jour du Sprint Planning du 26 octobre.",
-      "pv": "PV de l'atelier diffusé sous 24 h, validé par Cybastion (onglet Suivi des PV).",
-      "sessions": [
-        {
-          "code": "J10.1",
-          "atelier": "J10",
-          "start": "09:00",
-          "end": "10:45",
-          "allDay": false,
-          "title": "Synthèse des ateliers",
-          "content": "Décisions prises, points ouverts, livrables remis",
-          "owner": "Lead Chef de projet",
-          "outcome": "Synthèse partagée",
-          "questions": [
-            "Quels points restent bloquants ?"
-          ],
-          "added": false,
-          "steps": [
-            {
-              "start": "09:00",
-              "end": "09:45",
-              "title": "Décisions prises de J1 à J9",
-              "minutes": 45
-            },
-            {
-              "start": "09:45",
-              "end": "10:15",
-              "title": "Points ouverts et réserves en cours",
-              "minutes": 30
-            },
-            {
-              "start": "10:15",
-              "end": "10:45",
-              "title": "État des livrables remis et validés",
-              "minutes": 30
-            }
-          ]
-        },
-        {
-          "code": "J10.2",
-          "atelier": "J10",
-          "start": "11:00",
-          "end": "12:30",
-          "allDay": false,
-          "title": "Plan de réalisation",
-          "content": "Périmètre MVP, trajectoire, équipes, dépendances, risques",
-          "owner": "Direction de programme",
-          "outcome": "Plan présenté",
-          "questions": [],
-          "added": false,
-          "steps": [
-            {
-              "start": "11:00",
-              "end": "11:20",
-              "title": "Périmètre MVP",
-              "minutes": 20
-            },
-            {
-              "start": "11:20",
-              "end": "11:40",
-              "title": "Trajectoire des sprints",
-              "minutes": 20
-            },
-            {
-              "start": "11:40",
-              "end": "11:55",
-              "title": "Équipes",
-              "minutes": 15
-            },
-            {
-              "start": "11:55",
-              "end": "12:10",
-              "title": "Dépendances",
-              "minutes": 15
-            },
-            {
-              "start": "12:10",
-              "end": "12:30",
-              "title": "Risques et parades",
-              "minutes": 20
-            }
-          ]
-        },
-        {
-          "code": "J10.3",
-          "atelier": "J10",
-          "start": "14:00",
-          "end": "15:30",
-          "allDay": false,
-          "title": "Revue des réserves et arbitrages en séance",
-          "content": "Registre des décisions initialisé",
-          "owner": "Lead Chef de projet",
-          "outcome": "Réserves levées ou inscrites au registre",
-          "questions": [
-            "Quelles réserves sont levées, lesquelles restent au registre ?"
-          ],
-          "added": false,
-          "steps": [
-            {
-              "start": "14:00",
-              "end": "15:00",
-              "title": "Revue des réserves une à une et arbitrages",
-              "minutes": 60
-            },
-            {
-              "start": "15:00",
-              "end": "15:30",
-              "title": "Initialisation du registre des décisions",
-              "minutes": 30
-            }
-          ]
-        },
-        {
-          "code": "J10.4",
-          "atelier": "J10",
-          "start": "15:45",
-          "end": "16:30",
-          "allDay": false,
-          "title": "Validation du plan de réalisation et organisation du sprint 1 (26 octobre)",
-          "content": "Planification, environnements, accès",
-          "owner": "Direction de programme",
-          "outcome": "Plan validé, sprint 1 préparé",
-          "questions": [
-            "Les accès et environnements seront-ils prêts le 26 octobre ?"
-          ],
-          "added": false,
-          "steps": [
-            {
-              "start": "15:45",
-              "end": "16:05",
-              "title": "Validation formelle du plan par la maîtrise d'ouvrage et la maîtrise d'œuvre",
-              "minutes": 20
-            },
-            {
-              "start": "16:05",
-              "end": "16:30",
-              "title": "Sprint 1 du 26 octobre : planification, environnements, accès",
-              "minutes": 25
-            }
-          ]
-        },
-        {
-          "code": "J10.5",
-          "atelier": "J10",
-          "start": "16:30",
-          "end": "17:00",
-          "allDay": false,
-          "title": "Clôture, calendrier des démonstrations et des comités",
-          "content": "",
-          "owner": "Lead Chef de projet",
-          "outcome": "Relevé signé",
-          "questions": [],
-          "added": false,
-          "steps": [
-            {
-              "start": "16:30",
-              "end": "16:50",
-              "title": "Calendrier des démonstrations et des comités",
-              "minutes": 20
-            },
-            {
-              "start": "16:50",
-              "end": "17:00",
-              "title": "Clôture des journées de cadrage",
-              "minutes": 10
-            }
-          ]
-        }
-      ],
-      "agenda": [
-        {
-          "kind": "session",
-          "code": "J10.1"
-        },
-        {
-          "kind": "break",
-          "start": "10:45",
-          "end": "11:00",
-          "title": "Pause"
-        },
-        {
-          "kind": "session",
-          "code": "J10.2"
-        },
-        {
-          "kind": "break",
-          "start": "12:30",
-          "end": "14:00",
-          "title": "Déjeuner"
-        },
-        {
-          "kind": "session",
-          "code": "J10.3"
-        },
-        {
-          "kind": "break",
-          "start": "15:30",
-          "end": "15:45",
-          "title": "Pause"
-        },
-        {
-          "kind": "session",
-          "code": "J10.4"
-        },
-        {
-          "kind": "session",
-          "code": "J10.5"
-        }
-      ],
-      "prep": {
-        "tab": "A9 MVP et plan",
-        "due": "2026-10-20",
-        "questions": 12,
-        "status": "Envoyé"
-      },
+      "prep": [],
       "date": "2026-10-23",
       "pvDue": "2026-10-26",
       "deliverableDue": "2026-10-27",
@@ -2651,19 +3039,19 @@
     },
     {
       "id": "C1",
-      "title": "Cadrage complémentaire V2 : B2B et logistique",
-      "phase": "Cadrage complémentaire V2",
+      "title": "Bilan de la V1 et trajectoire de la V2",
+      "phase": "Après les sprints de la Version 1",
       "objectives": [
-        "Cadrer les parcours livrés en Version 2 et compléter le SFD exigé pour les Versions 1 et 2.",
-        "Lever les dépendances commerciales de la Version 2 : accords OTA, transporteurs, financement de la fidélité.",
-        "Préparer le Product Backlog des sprints de la Version 2, à partir de février 2027."
+        "Faire le bilan de la V1 par rapport à la trajectoire de base.",
+        "Ajuster la trajectoire de la V2.",
+        "Traiter les sujets longs : synchronisation avec les OTA, connecteurs, B2B et logistique, fidélité, IA avancée."
       ],
       "questionnaire": "",
       "raci": [
         "Cadrage complémentaire de la Version 2 (C1 à C3, janvier 2027) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
       ],
       "risks": [],
-      "deliverable": "Spécifications fonctionnelles des parcours de la Version 2 ; complément du SFD ; Product Backlog de la Version 2 priorisé.",
+      "deliverable": "Bilan de la V1 ; trajectoire et backlog de la V2.",
       "pv": "Un PV par journée, diffusé sous 24 h.",
       "sessions": [
         {
@@ -2672,15 +3060,18 @@
           "start": "09:00",
           "end": "17:00",
           "allDay": true,
-          "title": "Place de marché B2B (UC 13) et logistique (UC 14)",
-          "content": "Fournisseurs hors tourisme, devis, contrats récurrents, paiement fractionné, statut fiscal, litiges, transporteurs partenaires ou service intégré, points relais, preuve de remise, assurance",
-          "owner": "Expert fonctionnel",
-          "outcome": "Spécifications UC 13 et UC 14",
+          "title": "Bilan de la V1 et trajectoire de la V2",
+          "content": "Livré, écarts, rectifications",
+          "owner": "Lead Chef de projet",
+          "outcome": "Trajectoire V2 ajustée",
           "questions": [
-            "Le gel des fonds en cas de litige est-il compatible avec l'absence de détention de fonds ?",
-            "Transporteur partenaire ou service intégré ?"
+            "Qu'est-ce qui a été livré en plus ou en moins ?"
           ],
           "added": false,
+          "cdc": "Jalons",
+          "refs": [
+            "R34"
+          ],
           "steps": []
         }
       ],
@@ -2690,6 +3081,7 @@
           "code": "C1"
         }
       ],
+      "prep": [],
       "date": null,
       "pvDue": null,
       "deliverableDue": null,
@@ -2698,15 +3090,15 @@
     },
     {
       "id": "C2",
-      "title": "Cadrage complémentaire V2 : Fidélité, marketing, CRM, OTA",
-      "phase": "Cadrage complémentaire V2",
+      "title": "Synchronisation OTA et connecteurs",
+      "phase": "Après les sprints de la Version 1",
       "objectives": [],
       "questionnaire": "",
       "raci": [
         "Cadrage complémentaire de la Version 2 (C1 à C3, janvier 2027) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
       ],
       "risks": [],
-      "deliverable": "Spécifications fonctionnelles des parcours de la Version 2 ; complément du SFD ; Product Backlog de la Version 2 priorisé.",
+      "deliverable": "Bilan de la V1 ; trajectoire et backlog de la V2.",
       "pv": "Un PV par journée, diffusé sous 24 h.",
       "sessions": [
         {
@@ -2715,15 +3107,18 @@
           "start": "09:00",
           "end": "17:00",
           "allDay": true,
-          "title": "Fidélité et parrainage (UC 08), campagnes et packs (UC 07), CRM opérateur, connecteur OTA",
-          "content": "Barème des points, statuts, clearing, financement, objets du CRM, accord commercial OTA",
-          "owner": "Expert fonctionnel et responsable UX",
-          "outcome": "Spécifications UC 08 et marketing ; décision OTA",
+          "title": "Synchronisation OTA et connecteurs",
+          "content": "Plateformes, connecteurs, données synchronisées",
+          "owner": "Architecte",
+          "outcome": "Choix des plateformes et connecteurs",
           "questions": [
-            "Qui finance les points de fidélité ?",
-            "L'accord commercial OTA est-il obtenu ?"
+            "Quelles OTA, quels connecteurs ?"
           ],
           "added": false,
+          "cdc": "Interconnexions",
+          "refs": [
+            "R27"
+          ],
           "steps": []
         }
       ],
@@ -2733,6 +3128,7 @@
           "code": "C2"
         }
       ],
+      "prep": [],
       "date": null,
       "pvDue": null,
       "deliverableDue": null,
@@ -2741,15 +3137,15 @@
     },
     {
       "id": "C3",
-      "title": "Cadrage complémentaire V2 : Centre d'aide et IA",
-      "phase": "Cadrage complémentaire V2",
+      "title": "B2B, logistique, fidélité, CRM et IA avancés",
+      "phase": "Après les sprints de la Version 1",
       "objectives": [],
       "questionnaire": "",
       "raci": [
         "Cadrage complémentaire de la Version 2 (C1 à C3, janvier 2027) : approuve SIVIS ; réalisent Key Users, Lead Chef de projet, Sous-chef de projet"
       ],
       "risks": [],
-      "deliverable": "Spécifications fonctionnelles des parcours de la Version 2 ; complément du SFD ; Product Backlog de la Version 2 priorisé.",
+      "deliverable": "Bilan de la V1 ; trajectoire et backlog de la V2.",
       "pv": "Un PV par journée, diffusé sous 24 h.",
       "sessions": [
         {
@@ -2758,14 +3154,18 @@
           "start": "09:00",
           "end": "17:00",
           "allDay": true,
-          "title": "Centre d'aide complet (ticketing, aide contextuelle), concierge conversationnel, copilote opérateur, agent analytique, visites 360°, recommandation",
-          "content": "",
-          "owner": "Ingénieur IA",
-          "outcome": "Spécifications des services avancés ; périmètre IA V2",
-          "questions": [
-            "Quel périmètre IA en V2 ?"
-          ],
+          "title": "Autres sujets V2",
+          "content": "B2B et logistique, fidélité, CRM avancé, IA avancée",
+          "owner": "Expert fonctionnel",
+          "outcome": "Spécifications V2",
+          "questions": [],
           "added": false,
+          "cdc": "UC 13 B2B",
+          "refs": [
+            "R14",
+            "R19",
+            "R20"
+          ],
           "steps": []
         }
       ],
@@ -2775,6 +3175,7 @@
           "code": "C3"
         }
       ],
+      "prep": [],
       "date": null,
       "pvDue": null,
       "deliverableDue": null,

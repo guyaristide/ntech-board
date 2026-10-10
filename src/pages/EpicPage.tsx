@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { STATUSES } from '../model/options';
 import { useWorkspace } from '../model/store';
 import { BlockEditor } from '../ui/BlockEditor';
+import { ReferenceCard } from '../ui/ReferenceCard';
 import { Tag } from '../ui/Tag';
 import { StoryList } from './backlog/Backlog';
 import page from './Page.module.css';
@@ -23,6 +24,8 @@ export function EpicPage() {
   }
   const stories = ws.stories.filter(s => s.epic === epic.id);
   const validated = stories.filter(s => s.status === 'Validée').length;
+  // UC01 correspond à la fiche « UC 01 · … » de l'onglet Références CdC.
+  const reference = ws.references.find(r => r.subject.startsWith(`UC ${epic.id.slice(2)} `));
   return (
     <div className={`${page.page} ${page.wide}`}>
       <nav className={page.crumbs} aria-label="Fil d’Ariane">
@@ -59,6 +62,13 @@ export function EpicPage() {
           </span>
         </div>
       </div>
+
+      {reference ? (
+        <>
+          <h2 className={page.h2}>Ce que dit le cahier des charges</h2>
+          <ReferenceCard reference={reference} showSessions />
+        </>
+      ) : null}
 
       {epic.toFrame.length ? (
         <>

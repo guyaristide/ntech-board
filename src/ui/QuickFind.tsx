@@ -29,6 +29,13 @@ export function QuickFind({ onClose }: { onClose: () => void }) {
           `${s.id} ${s.title} ${s.asA} ${s.iWant} ${s.soThat} ${s.actor} ${s.acceptance.map(c => c.text).join(' ')} ${s.body.map(b => b.text).join(' ')}`,
         ),
       })),
+      ...ws.references.map(r => ({
+        to: `/references#${r.id}`,
+        code: r.id,
+        title: r.subject,
+        meta: 'Référence CdC',
+        text: norm(`${r.id} ${r.subject} ${r.says.join(' ')} ${r.gaps}`),
+      })),
       ...ws.epics.map(e => ({
         to: `/epic/${e.id}`,
         code: e.id,
@@ -55,7 +62,7 @@ export function QuickFind({ onClose }: { onClose: () => void }) {
         })),
       ]),
     ],
-    [ws.stories, ws.epics, ws.workshops],
+    [ws.stories, ws.epics, ws.workshops, ws.references],
   );
   const words = norm(query).split(/\s+/).filter(Boolean);
   const hits = (words.length ? index.filter(h => words.every(w => h.text.includes(w))) : index).slice(0, 40);

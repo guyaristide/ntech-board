@@ -64,6 +64,8 @@ export interface Question {
   text: string;
   answer: string;
   status: QuestionStatus;
+  /** Ajouté dans l'application, absent du planning. */
+  custom?: boolean;
 }
 
 export interface Step {
@@ -84,6 +86,10 @@ export interface Session {
   owner: string;
   outcome: string;
   added: boolean;
+  /** Renvoi au cahier des charges indiqué dans le planning (« UC 01 Compte »). */
+  cdc: string;
+  /** Fiches « Références CdC » qui concernent la séquence. */
+  refs: string[];
   steps: Step[];
   questions: Question[];
   notes: Block[];
@@ -109,15 +115,28 @@ export interface Workshop {
   deliverableDue: string | null;
   validationDue: string | null;
   pvStatus: PvStatus;
-  prep?: { tab: string; due: string; questions: number; status: string } | null;
+  prep: { tab: string; due: string | null; questions: number; status: string }[];
   sessions: Session[];
   agenda: AgendaItem[];
   notes: Block[];
   comments: Comment[];
 }
 
+/** Fiche de l'onglet « Références CdC » du planning : ce que dit le cahier des charges sur un sujet. */
+export interface Reference {
+  id: string;
+  subject: string;
+  says: string[];
+  where: string;
+  gaps: string;
+  sessions: string[];
+}
+
 export interface Workspace {
   version: 1;
+  /** Fichier de planning dont provient le programme. */
+  planning?: string;
+  references: Reference[];
   epics: Epic[];
   stories: Story[];
   workshops: Workshop[];

@@ -1,0 +1,73 @@
+.card {
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow: 0 0 0 1px var(--line);
+  font-size: 14px;
+  scroll-margin-top: 16px;
+}
+
+.card:target {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.code {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.says {
+  margin: 6px 0;
+  padding-left: 20px;
+}
+
+.says li + li {
+  margin-top: 2px;
+}
+
+.where,
+.gaps,
+.sessions {
+  margin: 6px 0 0;
+}
+
+.where span,
+.gaps span {
+  display: block;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.gaps {
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  background: var(--tag-orange);
+  color: var(--tag-orange-text);
+}
+
+.gaps span {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.sessions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.sessions a {
+  padding: 0 6px;
+  border-radius: 3px;
+  background: var(--bg-active);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-decoration: none;
+}
