@@ -68,6 +68,14 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         <NavLink to="/programme" className={link}>
           <span className={styles.icon}>▦</span> Programme des ateliers
         </NavLink>
+        <NavLink to="/raci" className={link}>
+          <span className={styles.icon}>⊞</span> Matrice RACI{' '}
+          <span className={styles.count}>{ws.phases.length}</span>
+        </NavLink>
+        <NavLink to="/risques" className={link}>
+          <span className={styles.icon}>⚠</span> Risques{' '}
+          <span className={styles.count}>{ws.risks.length}</span>
+        </NavLink>
         {ws.references.length ? (
           <NavLink to="/references" className={link}>
             <span className={styles.icon}>§</span> Références CdC{' '}

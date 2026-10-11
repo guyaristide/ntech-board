@@ -1,0 +1,196 @@
+.switch {
+  display: flex;
+  gap: 4px;
+}
+
+.select,
+.rating select,
+.reviewForm select,
+.reviewForm input {
+  padding: 2px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  font-size: 13px;
+}
+
+.late {
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.heatWrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+  margin: 12px 0;
+}
+
+.heat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 0 22px 22px;
+}
+
+.heatRow {
+  display: grid;
+  grid-template-columns: 22px repeat(5, minmax(64px, 110px));
+  gap: 3px;
+}
+
+.heatLabel {
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.heatCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 72px;
+  padding: 4px 6px;
+  border-radius: var(--radius);
+}
+
+.heatCell[data-level='Faible'] {
+  background: var(--tag-green);
+  color: var(--tag-green-text);
+}
+
+.heatCell[data-level='Modéré'] {
+  background: var(--tag-yellow);
+  color: var(--tag-yellow-text);
+}
+
+.heatCell[data-level='Élevé'] {
+  background: var(--tag-orange);
+  color: var(--tag-orange-text);
+}
+
+.heatCell[data-level='Critique'] {
+  background: var(--tag-red);
+  color: var(--tag-red-text);
+}
+
+.heatScore {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.heatIds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.heatIds a,
+.unrated a {
+  text-decoration: none;
+}
+
+.heatIds a:hover,
+.unrated a:hover {
+  text-decoration: underline;
+}
+
+.axisP {
+  position: absolute;
+  top: 50%;
+  left: -18px;
+  color: var(--text-faint);
+  font-size: 12px;
+  transform: rotate(-90deg) translateX(50%);
+  transform-origin: center;
+}
+
+.axisI {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.heatSide p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+}
+
+.unrated {
+  flex-wrap: wrap;
+  max-width: 260px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px;
+}
+
+.rating label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.reviews {
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reviews li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0 8px 14px;
+  border-left: 2px solid var(--line-strong);
+}
+
+.reviewHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.reviewForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.reviewForm input {
+  flex: 1;
+  min-width: 240px;
+  padding: 4px 8px;
+}
+
+@media (max-width: 720px) {
+  .heatRow {
+    grid-template-columns: 18px repeat(5, minmax(48px, 1fr));
+  }
+
+  .heat {
+    width: 100%;
+  }
+}

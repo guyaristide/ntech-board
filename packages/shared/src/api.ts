@@ -1,4 +1,4 @@
-import type { Epic, Reference, Story, Workshop } from './types';
+import type { Epic, Phase, Reference, Risk, Story, Workshop } from './types';
 
 /** Rôle d'un membre dans un projet. */
 export type Role = 'admin' | 'editor' | 'viewer';
@@ -46,10 +46,20 @@ export interface WorkspaceData {
   epics: Epic[];
   stories: Story[];
   workshops: Workshop[];
+  phases: Phase[];
+  risks: Risk[];
 }
 
-export type EntityKind = 'story' | 'epic' | 'workshop';
-export type EntityOf<K extends EntityKind> = K extends 'story' ? Story : K extends 'epic' ? Epic : Workshop;
+export type EntityKind = 'story' | 'epic' | 'workshop' | 'phase' | 'risk';
+export type EntityOf<K extends EntityKind> = K extends 'story'
+  ? Story
+  : K extends 'epic'
+    ? Epic
+    : K extends 'workshop'
+      ? Workshop
+      : K extends 'phase'
+        ? Phase
+        : Risk;
 
 export interface PresenceEntry {
   userId: string;
@@ -60,7 +70,13 @@ export interface PresenceEntry {
 
 /** Messages poussés par le serveur sur GET /api/events (Server-Sent Events). */
 export type ServerEvent =
-  | { type: 'entity'; kind: EntityKind; id: string; data: Story | Epic | Workshop | null; by: string | null }
+  | {
+      type: 'entity';
+      kind: EntityKind;
+      id: string;
+      data: Story | Epic | Workshop | Phase | Risk | null;
+      by: string | null;
+    }
   | { type: 'presence'; users: PresenceEntry[] }
   | { type: 'reload'; reason: string };
 

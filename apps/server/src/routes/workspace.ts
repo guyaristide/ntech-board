@@ -4,7 +4,7 @@ import { streamSSE } from 'hono/streaming';
 import type { z } from 'zod';
 import type { Comment, ServerEvent, Story, Workshop } from '@board/shared';
 import { requireRole, type AppEnv, type User } from '../auth';
-import { createStory, deleteStory, getEntity, getWorkspace, history, mutate, NotFound } from '../repo';
+import { createStory, deleteEntity, getEntity, getWorkspace, history, mutate, NotFound } from '../repo';
 import { setPresence, subscribe } from '../realtime';
 import { fail, log } from '../log';
 import { uid } from '../merge';
@@ -26,7 +26,7 @@ const read = requireRole('viewer');
 const write = requireRole('editor');
 
 /** Corps JSON validé, ou null (la route répond alors 400). */
-async function body<S extends z.ZodType>(
+export async function body<S extends z.ZodType>(
   req: { json: () => Promise<unknown> },
   schema: S,
 ): Promise<z.infer<S> | null> {
@@ -34,7 +34,7 @@ async function body<S extends z.ZodType>(
   return parsed.success ? parsed.data : null;
 }
 
-const comment = (user: User, text: string): Comment => ({
+export const comment = (user: User, text: string): Comment => ({
   id: uid(),
   author: user.name || user.email,
   at: new Date().toISOString(),
@@ -126,7 +126,7 @@ workspaceRoutes.post('/stories/:id/duplicate', write, async c => {
 });
 
 workspaceRoutes.delete('/stories/:id', write, async c => {
-  await deleteStory(c.get('project').id, c.get('user')!.id, c.req.param('id'));
+  await deleteEntity(c.get('project').id, c.get('user')!.id, 'story', c.req.param('id'));
   return c.json({ ok: true });
 });
 
@@ -150,7 +150,8 @@ workspaceRoutes.post('/stories/:id/comments', write, async c => {
 
 workspaceRoutes.get('/history/:kind/:id', read, async c => {
   const kind = c.req.param('kind');
-  if (!['story', 'epic', 'workshop'].includes(kind)) return c.json({ error: 'invalid' }, 400);
+  if (!['story', 'epic', 'workshop', 'phase', 'risk'].includes(kind))
+    return c.json({ error: 'invalid' }, 400);
   return c.json(await history(c.get('project').id, kind as 'story', c.req.param('id')));
 });
 

@@ -2,7 +2,8 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 import { ROLE_LABEL, ROLES } from '@board/shared';
 import { originOf, requireRole, type AppEnv } from '../auth';
-import { importPlanning, importStories } from '../imports';
+import { importPhases, importPlanning, importRisks, importStories } from '../imports';
+import { parseRaci, parseRisks, type RawRaci, type RawRisks } from '../importers/governance';
 import { parsePlanning } from '../importers/planning';
 import { sendInvitation } from '../mail';
 import type { RawStories } from '../merge';
@@ -118,6 +119,33 @@ adminRoutes.post('/import/stories', async c => {
   await saveUpload(p.slug, file.name, Buffer.from(text));
   try {
     return c.json(await importStories(p.id, JSON.parse(text) as RawStories, c.get('user')!.id));
+  } catch (e) {
+    return c.json({ error: 'parse_failed', message: (e as Error).message }, 422);
+  }
+});
+
+/** Import de la matrice RACI (phases) ou de la matrice des risques : classeur .xlsx ou JSON. */
+adminRoutes.post('/import/:what{raci|risks}', async c => {
+  const form = await c.req.parseBody();
+  const file = form.file;
+  if (!(file instanceof File)) return c.json({ error: 'file_required' }, 400);
+  if (file.size > MAX_UPLOAD) return c.json({ error: 'too_large' }, 413);
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const p = c.get('project');
+  const userId = c.get('user')!.id;
+  const json = file.name.toLowerCase().endsWith('.json');
+  await saveUpload(p.slug, file.name, buffer);
+  try {
+    if (c.req.param('what') === 'raci') {
+      const raw = json
+        ? (JSON.parse(buffer.toString('utf8')) as RawRaci)
+        : await parseRaci(buffer, file.name);
+      return c.json(await importPhases(p.id, raw, userId));
+    }
+    const raw = json
+      ? (JSON.parse(buffer.toString('utf8')) as RawRisks)
+      : await parseRisks(buffer, file.name);
+    return c.json(await importRisks(p.id, raw, userId));
   } catch (e) {
     return c.json({ error: 'parse_failed', message: (e as Error).message }, 422);
   }

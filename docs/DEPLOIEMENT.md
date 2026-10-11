@@ -164,6 +164,8 @@ node apps/server/dist/cli.js project:create etourisme \
 # Contenu de départ, livré dans l'image (dossier seeds/)
 node apps/server/dist/cli.js import:stories  etourisme seeds/etourisme/stories.json
 node apps/server/dist/cli.js import:planning etourisme seeds/etourisme/workshops.json
+node apps/server/dist/cli.js import:raci     etourisme seeds/etourisme/raci.json
+node apps/server/dist/cli.js import:risks    etourisme seeds/etourisme/risks.json
 ```
 
 Ouvrez ensuite <https://etourisme-board.neiba-technologies.com>, saisissez votre e-mail, puis cliquez sur le lien reçu. Les membres s'invitent ensuite depuis **Administration**. C'est aussi là que se font les imports suivants : nouveau planning `.xlsx`, nouveau backlog `.json`.
@@ -218,7 +220,7 @@ Un tenant est un projet, servi à l'adresse `<slug>-board.neiba-technologies.com
    - **Imports** : déposez le planning des ateliers (`.xlsx`) et le backlog des US (`.json` au format `{ epics, stories }`) ;
    - **Membres** : invitez les participants, avec leur e-mail et leur rôle.
 
-   Ces opérations existent aussi en ligne de commande : `import:planning`, `import:stories`, `member:add` (voir [EXPLOITATION.md](EXPLOITATION.md#ligne-de-commande)).
+   Ces opérations existent aussi en ligne de commande : `import:planning`, `import:stories`, `import:raci`, `import:risks`, `member:add` (voir [EXPLOITATION.md](EXPLOITATION.md#ligne-de-commande)).
 
 5. **Vérifier.** `node apps/server/dist/cli.js project:list` liste les projets avec leurs membres et leurs US. Si l'adresse affiche « Tableau introuvable », le slug ne correspond pas au sous-domaine, ou le domaine n'est pas encore pris en compte par Coolify.
 

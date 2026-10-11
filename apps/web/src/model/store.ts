@@ -3,8 +3,12 @@ import type {
   Comment,
   Epic,
   EntityKind,
+  Phase as ProjectPhase,
   PresenceEntry,
   Question,
+  RaciRow,
+  Risk,
+  RiskAction,
   ServerEvent,
   Session,
   SessionInfo,
@@ -37,13 +41,38 @@ interface State extends WorkspaceData {
   updateQuestion: (workshop: string, code: string, questionId: string, patch: Partial<Question>) => void;
   addQuestion: (workshop: string, code: string, text: string) => Promise<void>;
   commentWorkshop: (id: string, text: string) => Promise<void>;
+  createPhase: (title: string, copyFrom?: string) => Promise<string>;
+  updatePhase: (id: string, patch: Partial<Omit<ProjectPhase, 'id' | 'raci' | 'comments'>>) => void;
+  deletePhase: (id: string) => Promise<void>;
+  addRaciRow: (phase: string, after?: string) => Promise<void>;
+  updateRaciRow: (phase: string, row: string, patch: Partial<RaciRow>) => void;
+  deleteRaciRow: (phase: string, row: string) => Promise<void>;
+  commentPhase: (id: string, text: string) => Promise<void>;
+  createRisk: (prefix: 'R' | 'RG-') => Promise<string>;
+  updateRisk: (id: string, patch: Partial<Omit<Risk, 'id' | 'actions' | 'reviews' | 'comments'>>) => void;
+  deleteRisk: (id: string) => Promise<void>;
+  reviewRisk: (id: string, phase: string, comment: string) => Promise<void>;
+  addRiskAction: (id: string) => Promise<void>;
+  updateRiskAction: (id: string, action: string, patch: Partial<RiskAction>) => void;
+  deleteRiskAction: (id: string, action: string) => Promise<void>;
+  commentRisk: (id: string, text: string) => Promise<void>;
 }
 
-const EMPTY: WorkspaceData = { planning: null, references: [], epics: [], stories: [], workshops: [] };
-const KEY: Record<EntityKind, 'stories' | 'epics' | 'workshops'> = {
+const EMPTY: WorkspaceData = {
+  planning: null,
+  references: [],
+  epics: [],
+  stories: [],
+  workshops: [],
+  phases: [],
+  risks: [],
+};
+const KEY: Record<EntityKind, 'stories' | 'epics' | 'workshops' | 'phases' | 'risks'> = {
   story: 'stories',
   epic: 'epics',
   workshop: 'workshops',
+  phase: 'phases',
+  risk: 'risks',
 };
 
 /**
@@ -271,6 +300,93 @@ export const useWorkspace = create<State>((set, get) => {
     commentWorkshop: async (id, text) => {
       local('workshop', id, (w: Workshop) => ({ ...w, comments: [...w.comments, comment(me(), text)] }));
       await send('workshop', id, () => api.post<Workshop>(`/workshops/${id}/comments`, { text }));
+    },
+
+    createPhase: async (title, copyFrom) => {
+      const phase = await send('phase', 'new', () => api.post<ProjectPhase>('/phases', { title, copyFrom }));
+      replace('phase', phase.id, phase);
+      return phase.id;
+    },
+
+    updatePhase: (id, patch) => {
+      local('phase', id, (p: ProjectPhase) => ({ ...p, ...patch }));
+      defer(`phase:${id}`, 'phase', id, patch, p => api.patch(`/phases/${id}`, p));
+    },
+
+    deletePhase: async id => {
+      await send('phase', id, () => api.delete(`/phases/${id}`));
+      replace('phase', id, null);
+    },
+
+    addRaciRow: async (phase, after) => {
+      await send('phase', phase, () => api.post<ProjectPhase>(`/phases/${phase}/raci`, { after }));
+    },
+
+    updateRaciRow: (phase, row, patch) => {
+      local('phase', phase, (p: ProjectPhase) => ({
+        ...p,
+        raci: p.raci.map(r => (r.id === row ? { ...r, ...patch, cells: { ...r.cells, ...patch.cells } } : r)),
+      }));
+      // Les cellules d'une ligne sont regroupées : plusieurs clics partent en un seul envoi.
+      const prev = queue.get(`raci:${phase}:${row}`)?.payload.cells as RaciRow['cells'] | undefined;
+      const payload = patch.cells ? { ...patch, cells: { ...prev, ...patch.cells } } : patch;
+      defer(`raci:${phase}:${row}`, 'phase', phase, payload, p =>
+        api.patch(`/phases/${phase}/raci/${row}`, p),
+      );
+    },
+
+    deleteRaciRow: async (phase, row) => {
+      local('phase', phase, (p: ProjectPhase) => ({ ...p, raci: p.raci.filter(r => r.id !== row) }));
+      await send('phase', phase, () => api.delete<ProjectPhase>(`/phases/${phase}/raci/${row}`));
+    },
+
+    commentPhase: async (id, text) => {
+      local('phase', id, (p: ProjectPhase) => ({ ...p, comments: [...p.comments, comment(me(), text)] }));
+      await send('phase', id, () => api.post<ProjectPhase>(`/phases/${id}/comments`, { text }));
+    },
+
+    createRisk: async prefix => {
+      const risk = await send('risk', 'new', () => api.post<Risk>('/risks', { prefix }));
+      replace('risk', risk.id, risk);
+      return risk.id;
+    },
+
+    updateRisk: (id, patch) => {
+      local('risk', id, (r: Risk) => ({ ...r, ...patch }));
+      defer(`risk:${id}`, 'risk', id, patch, p => api.patch(`/risks/${id}`, p));
+    },
+
+    deleteRisk: async id => {
+      await send('risk', id, () => api.delete(`/risks/${id}`));
+      replace('risk', id, null);
+    },
+
+    reviewRisk: async (id, phase, text) => {
+      await send('risk', id, () => api.post<Risk>(`/risks/${id}/reviews`, { phase, comment: text }));
+    },
+
+    addRiskAction: async id => {
+      await send('risk', id, () => api.post<Risk>(`/risks/${id}/actions`, {}));
+    },
+
+    updateRiskAction: (id, action, patch) => {
+      local('risk', id, (r: Risk) => ({
+        ...r,
+        actions: r.actions.map(a => (a.id === action ? { ...a, ...patch } : a)),
+      }));
+      defer(`risk-action:${id}:${action}`, 'risk', id, patch, p =>
+        api.patch(`/risks/${id}/actions/${action}`, p),
+      );
+    },
+
+    deleteRiskAction: async (id, action) => {
+      local('risk', id, (r: Risk) => ({ ...r, actions: r.actions.filter(a => a.id !== action) }));
+      await send('risk', id, () => api.delete<Risk>(`/risks/${id}/actions/${action}`));
+    },
+
+    commentRisk: async (id, text) => {
+      local('risk', id, (r: Risk) => ({ ...r, comments: [...r.comments, comment(me(), text)] }));
+      await send('risk', id, () => api.post<Risk>(`/risks/${id}/comments`, { text }));
     },
   };
 });

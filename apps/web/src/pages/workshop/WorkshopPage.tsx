@@ -134,7 +134,22 @@ export function WorkshopPage() {
           ) : null}
           {w.risks.length ? (
             <p>
-              <strong>Risques à suivre</strong> : {w.risks.join(' · ')}
+              <strong>Risques à suivre</strong> :{' '}
+              {w.risks.map((r, i) => {
+                const risk = ws.risks.find(x => x.id === r.split(' ')[0]);
+                return (
+                  <span key={r}>
+                    {i ? ' · ' : ''}
+                    {risk ? (
+                      <Link to={`/risque/${risk.id}`} title={risk.title}>
+                        {r}
+                      </Link>
+                    ) : (
+                      r
+                    )}
+                  </span>
+                );
+              })}
             </p>
           ) : null}
         </div>

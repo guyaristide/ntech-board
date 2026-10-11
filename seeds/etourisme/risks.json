@@ -1,0 +1,2001 @@
+{
+  "source": "Matrice_De_Risques_NTECH_WEVIOO.xlsx",
+  "risks": [
+    {
+      "id": "R01",
+      "scope": "Projet / externe",
+      "category": "Paiement",
+      "title": "Agrégateur de paiement non confirmé ou contrat non signé avant le 9 novembre",
+      "cause": "Choix de l'agrégateur non arrêté ; négociation contractuelle en cours",
+      "consequence": "Sprint 2 bloqué sur le paiement ; MVP sans transaction réelle",
+      "initial": {
+        "p": 4,
+        "i": 5
+      },
+      "residual": {
+        "p": 2,
+        "i": 4
+      },
+      "mitigation": "Atelier du 15/10 avec l'agrégateur ; engagement écrit ; environnement de test daté ; simulateur de paiement développé dès le Sprint 1",
+      "contingency": "MVP présenté sur l'environnement de test de l'agrégateur auprès du panel pilote ; passage en paiement réel planifié avant la Version 1",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-11-09",
+      "indicator": "Aucun accès à l'environnement de test au 02/11",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R01",
+          "text": "Atelier du 15/10 avec l'agrégateur ; engagement écrit ; environnement de test daté ; simulateur de paiement développé dès le Sprint 1",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-11-09",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "77ade4dd",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 5
+          },
+          "residual": {
+            "p": 2,
+            "i": 4
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R02",
+      "scope": "Projet / externe",
+      "category": "Paiement",
+      "title": "Ventilation entre bénéficiaires (opérateur, Trésor, communes) indisponible chez l'agrégateur",
+      "cause": "Fonction non proposée, non autorisée ou non testée",
+      "consequence": "Reversements manuels ; recette fiscale non automatisée",
+      "initial": {
+        "p": 3,
+        "i": 5
+      },
+      "residual": {
+        "p": 2,
+        "i": 4
+      },
+      "mitigation": "Confirmation écrite de la ventilation ; tests de bout en bout dès le Sprint 2",
+      "contingency": "Solution de repli définie avec la DGI et l'agrégateur, tracée dans le grand livre",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-11-09",
+      "indicator": "Ventilation absente de la documentation de l'agrégateur au 15/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R02",
+          "text": "Confirmation écrite de la ventilation ; tests de bout en bout dès le Sprint 2",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-11-09",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "77d0d722",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 5
+          },
+          "residual": {
+            "p": 2,
+            "i": 4
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R03",
+      "scope": "Projet / externe",
+      "category": "Paiement",
+      "title": "Paiement hors réseau par QR Code non autorisé",
+      "cause": "Autorisation de l'agrégateur non obtenue",
+      "consequence": "Fonction indisponible dans les zones mal couvertes",
+      "initial": {
+        "p": 3,
+        "i": 2
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Mode d'encaissement différé prévu dès la conception",
+      "contingency": "Paiement en ligne uniquement, QR Code reporté en Version 1",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2027-01-30",
+      "indicator": "Pas de réponse de l'agrégateur au 23/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R03",
+          "text": "Mode d'encaissement différé prévu dès la conception",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2027-01-30",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "a0a5e668",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 2
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R04",
+      "scope": "Projet / externe",
+      "category": "Fiscalité",
+      "title": "Barèmes et règles fiscales non arbitrés avant le 9 novembre",
+      "cause": "Taxe de développement touristique, nuitée par catégorie et commune, non-assujettis non tranchés",
+      "consequence": "Moteur fiscal non finalisé ; montants déclarés contestables",
+      "initial": {
+        "p": 4,
+        "i": 5
+      },
+      "residual": {
+        "p": 2,
+        "i": 3
+      },
+      "mitigation": "Atelier fiscal du 15/10 avec la DGI ; barèmes versionnés et paramétrables sans modification du code ; cas de calcul chiffrés validés",
+      "contingency": "Barèmes provisoires validés par écrit, recalcul automatique à la publication des barèmes définitifs",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-11-09",
+      "indicator": "Note fiscale non signée au 30/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R04",
+          "text": "Atelier fiscal du 15/10 avec la DGI ; barèmes versionnés et paramétrables sans modification du code ; cas de calcul chiffrés validés",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-11-09",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "e5072894",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 5
+          },
+          "residual": {
+            "p": 2,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R05",
+      "scope": "Projet / externe",
+      "category": "Fiscalité",
+      "title": "Redevable légal et mandat d'encaissement non établis",
+      "cause": "Statut de la plateforme vis-à-vis de l'encaissement pour compte de tiers non défini",
+      "consequence": "Risque juridique sur l'encaissement ; blocage du paiement",
+      "initial": {
+        "p": 3,
+        "i": 5
+      },
+      "residual": {
+        "p": 2,
+        "i": 4
+      },
+      "mitigation": "Question posée à la DGI le 15/10 ; avis écrit demandé",
+      "contingency": "MVP sans encaissement pour compte de tiers, selon la solution validée par la DGI",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-11-09",
+      "indicator": "Pas d'avis écrit de la DGI au 30/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R05",
+          "text": "Question posée à la DGI le 15/10 ; avis écrit demandé",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-11-09",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "f32a21bf",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 5
+          },
+          "residual": {
+            "p": 2,
+            "i": 4
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R06",
+      "scope": "Projet / externe",
+      "category": "Interfaces d'État",
+      "title": "Base des opérateurs d'eAdministration non disponible avant le 9 novembre",
+      "cause": "Interface non prête ; accès non ouvert",
+      "consequence": "Inscription des opérateurs sans référence officielle",
+      "initial": {
+        "p": 3,
+        "i": 4
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Contrat d'interface établi le 20/10 ; accès de test demandé dès le 10/10",
+      "contingency": "Import ponctuel par fichier, synchronisation automatique ajoutée ensuite",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-11-09",
+      "indicator": "Contrat d'interface non signé au 23/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R06",
+          "text": "Contrat d'interface établi le 20/10 ; accès de test demandé dès le 10/10",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-11-09",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "06b4f26c",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 4
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R07",
+      "scope": "Projet / externe",
+      "category": "Interfaces d'État",
+      "title": "Spécification ou environnement de test de la FNE non disponible avant le 23 novembre",
+      "cause": "Calendrier de la DGI ; protocole technique non communiqué",
+      "consequence": "Factures non normalisées au MVP",
+      "initial": {
+        "p": 4,
+        "i": 4
+      },
+      "residual": {
+        "p": 2,
+        "i": 3
+      },
+      "mitigation": "Spécification demandée le 15/10 ; simulateur FNE ; connecteur isolé",
+      "contingency": "Factures émises et conservées, transmission à la FNE différée avec rattrapage automatique",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-11-23",
+      "indicator": "Spécification non reçue au 13/11",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R07",
+          "text": "Spécification demandée le 15/10 ; simulateur FNE ; connecteur isolé",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-11-23",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "ee99bacf",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 4
+          },
+          "residual": {
+            "p": 2,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R08",
+      "scope": "Projet / externe",
+      "category": "Interfaces d'État",
+      "title": "Interfaces Police et Data Management livrées tardivement",
+      "cause": "Priorités des équipes de l'État",
+      "consequence": "Déclaration des voyageurs et indicateurs non transmis automatiquement",
+      "initial": {
+        "p": 3,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Contrats d'interface le 20/10 ; formats figés en atelier",
+      "contingency": "Exports par fichier jusqu'à disponibilité des interfaces",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2027-01-30",
+      "indicator": "Pas d'environnement de test au 15/12",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R08",
+          "text": "Contrats d'interface le 20/10 ; formats figés en atelier",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2027-01-30",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "fced5365",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R09",
+      "scope": "Projet / externe",
+      "category": "Existant",
+      "title": "Version 0 non documentée ou inexploitable",
+      "cause": "Code, base ou documentation incomplets ; droits non établis",
+      "consequence": "Reprise impossible ; retard sur le portail",
+      "initial": {
+        "p": 3,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Accès au 10/10 ; audit et décision de reprise par composant le 14/10",
+      "contingency": "Remplacement des composants concernés, reprise des seules données",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-26",
+      "indicator": "Accès non ouverts au 13/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R09",
+          "text": "Accès au 10/10 ; audit et décision de reprise par composant le 14/10",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-10-26",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "8caf99d9",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R10",
+      "scope": "Projet / externe",
+      "category": "Données",
+      "title": "Référentiels livrés en retard ou incomplets (catégories, communes, agréments, classements)",
+      "cause": "Propriétaires non identifiés ; données dispersées",
+      "consequence": "Portail et inscription des opérateurs incomplets",
+      "initial": {
+        "p": 4,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Catalogue des référentiels le 14/10 avec un propriétaire et une date pour chacun",
+      "contingency": "Valeurs provisoires versionnées, remplacées sans modification du code",
+      "owner": "SIVIS",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-26",
+      "indicator": "Référentiel manquant au 23/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R10",
+          "text": "Catalogue des référentiels le 14/10 avec un propriétaire et une date pour chacun",
+          "nature": "Préventive",
+          "owner": "SIVIS",
+          "due": "2026-10-26",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "937bb184",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R11",
+      "scope": "Projet / externe",
+      "category": "Hébergement",
+      "title": "Décision d'hébergement et mise à disposition des environnements tardives",
+      "cause": "Arbitrage technique ou budgétaire non rendu",
+      "consequence": "Préproduction indisponible pour le MVP",
+      "initial": {
+        "p": 3,
+        "i": 4
+      },
+      "residual": {
+        "p": 2,
+        "i": 3
+      },
+      "mitigation": "Décision attendue le 20/10 ; besoins chiffrés transmis avant l'atelier",
+      "contingency": "Développement et recette hébergés par le groupement, bascule planifiée en préproduction",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-20",
+      "indicator": "Pas de décision au 23/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R11",
+          "text": "Décision attendue le 20/10 ; besoins chiffrés transmis avant l'atelier",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-10-20",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "6129079f",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 4
+          },
+          "residual": {
+            "p": 2,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R12",
+      "scope": "Projet / externe",
+      "category": "Sécurité et souveraineté",
+      "title": "Non-conformité aux exigences de l'ARTCI sur les données personnelles",
+      "cause": "Localisation, transfert ou déclarations non conformes",
+      "consequence": "Suspension possible de traitements ; atteinte à l'image",
+      "initial": {
+        "p": 2,
+        "i": 5
+      },
+      "residual": {
+        "p": 1,
+        "i": 5
+      },
+      "mitigation": "Analyse de conformité le 20/10 ; hébergement national ; déclarations préparées",
+      "contingency": "Suspension de la collecte concernée jusqu'à mise en conformité",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-12-15",
+      "indicator": "Déclarations non déposées au 30/11",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R12",
+          "text": "Analyse de conformité le 20/10 ; hébergement national ; déclarations préparées",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-12-15",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "092b256d",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 2,
+            "i": 5
+          },
+          "residual": {
+            "p": 1,
+            "i": 5
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R13",
+      "scope": "Projet / externe",
+      "category": "Sécurité et souveraineté",
+      "title": "Vulnérabilité ou incident de sécurité sur le paiement et la fiscalité",
+      "cause": "Défaut de conception ou de configuration",
+      "consequence": "Fraude, perte de données, interruption de service",
+      "initial": {
+        "p": 2,
+        "i": 5
+      },
+      "residual": {
+        "p": 1,
+        "i": 5
+      },
+      "mitigation": "Revue de sécurité par l'expertise WEVIOO ; tests automatisés ; test d'intrusion avant chaque mise en production",
+      "contingency": "Plan de réponse à incident ; gel des paiements ; correctif d'urgence",
+      "owner": "Lead Chef de projet",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-12-15",
+      "indicator": "Vulnérabilité critique ouverte en recette",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R13",
+          "text": "Revue de sécurité par l'expertise WEVIOO ; tests automatisés ; test d'intrusion avant chaque mise en production",
+          "nature": "Préventive",
+          "owner": "Lead Chef de projet",
+          "due": "2026-12-15",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "ffb4c047",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 2,
+            "i": 5
+          },
+          "residual": {
+            "p": 1,
+            "i": 5
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R14",
+      "scope": "Projet / externe",
+      "category": "Gouvernance",
+      "title": "Key Users indisponibles ou validations tardives",
+      "cause": "Charge de travail des agents ; absence de suppléant",
+      "consequence": "Stories non validées ; vélocité réduite",
+      "initial": {
+        "p": 3,
+        "i": 4
+      },
+      "residual": {
+        "p": 2,
+        "i": 3
+      },
+      "mitigation": "Un titulaire et un suppléant par parcours ; créneau fixe le vendredi ; validation le jour même",
+      "contingency": "Escalade à 48 h ; comité de pilotage exceptionnel",
+      "owner": "SIVIS",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-13",
+      "indicator": "Deux démonstrations consécutives sans Key User",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R14",
+          "text": "Un titulaire et un suppléant par parcours ; créneau fixe le vendredi ; validation le jour même",
+          "nature": "Préventive",
+          "owner": "SIVIS",
+          "due": "2026-10-13",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "40ef9ec7",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 4
+          },
+          "residual": {
+            "p": 2,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R15",
+      "scope": "Projet / externe",
+      "category": "Gouvernance",
+      "title": "Décisions non prises sous 48 heures",
+      "cause": "Circuit de décision long ; interlocuteur absent",
+      "consequence": "Blocages en chaîne ; retard des sprints",
+      "initial": {
+        "p": 3,
+        "i": 4
+      },
+      "residual": {
+        "p": 2,
+        "i": 3
+      },
+      "mitigation": "Registre unique ; relance à 48 h ; revue hebdomadaire par Cybastion",
+      "contingency": "Comité de pilotage exceptionnel",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "Continu",
+      "indicator": "Plus de trois décisions en retard au registre",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R15",
+          "text": "Registre unique ; relance à 48 h ; revue hebdomadaire par Cybastion",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "Continu",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "3ea33f76",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 4
+          },
+          "residual": {
+            "p": 2,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R16",
+      "scope": "Projet / externe",
+      "category": "Gouvernance",
+      "title": "Arbitrage de la priorisation du backlog non affecté",
+      "cause": "Rôle de Product Owner non attribué",
+      "consequence": "Priorités contradictoires ; travail perdu",
+      "initial": {
+        "p": 3,
+        "i": 4
+      },
+      "residual": {
+        "p": 1,
+        "i": 3
+      },
+      "mitigation": "Affectation du rôle au cadrage ; règle de priorisation actée : réservation payée et déclarée d'abord",
+      "contingency": "Arbitrage par le comité de pilotage",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-23",
+      "indicator": "Rôle non attribué au 23/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R16",
+          "text": "Affectation du rôle au cadrage ; règle de priorisation actée : réservation payée et déclarée d'abord",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-10-23",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "3e6ee1e5",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 4
+          },
+          "residual": {
+            "p": 1,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R17",
+      "scope": "Projet / externe",
+      "category": "Périmètre",
+      "title": "Demandes nouvelles en cours de sprint",
+      "cause": "Besoins émergents ; pression calendaire",
+      "consequence": "Dérive du périmètre ; MVP menacé",
+      "initial": {
+        "p": 4,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 3
+      },
+      "mitigation": "Procédure de demande de changement ; backlog unique ; critères d'entrée dans un sprint",
+      "contingency": "Arbitrage en comité ; report en Version 1 ou Version 2",
+      "owner": "Lead Chef de projet",
+      "actionOwner": "",
+      "authority": "",
+      "due": "Continu",
+      "indicator": "Plus de 10 % du sprint modifié en cours de route",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R17",
+          "text": "Procédure de demande de changement ; backlog unique ; critères d'entrée dans un sprint",
+          "nature": "Préventive",
+          "owner": "Lead Chef de projet",
+          "due": "Continu",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "d6f06095",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R18",
+      "scope": "Projet / externe",
+      "category": "Périmètre",
+      "title": "Ambiguïté sur les éléments hors périmètre",
+      "cause": "Hors périmètre non confirmé par écrit",
+      "consequence": "Contestation à la recette",
+      "initial": {
+        "p": 3,
+        "i": 3
+      },
+      "residual": {
+        "p": 1,
+        "i": 3
+      },
+      "mitigation": "Liste du hors périmètre confirmée par écrit au cadrage",
+      "contingency": "Arbitrage en comité de pilotage",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-23",
+      "indicator": "Liste non signée au 23/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R18",
+          "text": "Liste du hors périmètre confirmée par écrit au cadrage",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-10-23",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "ecd2b47f",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 3
+          },
+          "residual": {
+            "p": 1,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R19",
+      "scope": "Projet / externe",
+      "category": "Planning",
+      "title": "Cible de 75 à 80 % de la Version 1 non atteinte au 15 décembre",
+      "cause": "Dépendances externes ; vélocité inférieure au plan",
+      "consequence": "Jalon MVP manqué",
+      "initial": {
+        "p": 3,
+        "i": 5
+      },
+      "residual": {
+        "p": 2,
+        "i": 4
+      },
+      "mitigation": "Priorisation de la chaîne complète ; indicateur hebdomadaire ; sprint de stabilisation",
+      "contingency": "MVP sur périmètre réduit validé en comité ; rattrapage avant le 30/01",
+      "owner": "Lead Chef de projet",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-12-15",
+      "indicator": "Écart supérieur à 5 points sur la trajectoire",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R19",
+          "text": "Priorisation de la chaîne complète ; indicateur hebdomadaire ; sprint de stabilisation",
+          "nature": "Préventive",
+          "owner": "Lead Chef de projet",
+          "due": "2026-12-15",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "47552912",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 5
+          },
+          "residual": {
+            "p": 2,
+            "i": 4
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R20",
+      "scope": "Projet / externe",
+      "category": "Planning",
+      "title": "Disponibilité réduite en fin d'année",
+      "cause": "Congés de fin d'année des équipes et des validateurs",
+      "consequence": "Recette et validation du MVP retardées",
+      "initial": {
+        "p": 4,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Planning de présence établi en novembre ; recette du MVP avant le 18/12",
+      "contingency": "Renfort de l'équipe ; validation à distance",
+      "owner": "Lead Chef de projet",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-12-15",
+      "indicator": "Planning de présence incomplet au 30/11",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R20",
+          "text": "Planning de présence établi en novembre ; recette du MVP avant le 18/12",
+          "nature": "Préventive",
+          "owner": "Lead Chef de projet",
+          "due": "2026-12-15",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "32a0f169",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R21",
+      "scope": "Projet / externe",
+      "category": "Ressources",
+      "title": "Indisponibilité ou départ d'un membre clé de l'équipe",
+      "cause": "Maladie, mobilité",
+      "consequence": "Perte de connaissance ; ralentissement",
+      "initial": {
+        "p": 2,
+        "i": 4
+      },
+      "residual": {
+        "p": 1,
+        "i": 3
+      },
+      "mitigation": "Binômes sur les sujets critiques ; documentation à jour ; renfort WEVIOO mobilisable",
+      "contingency": "Remplacement sous cinq jours ouvrés",
+      "owner": "Direction du groupement",
+      "actionOwner": "",
+      "authority": "",
+      "due": "Continu",
+      "indicator": "Absence non planifiée de plus de trois jours",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R21",
+          "text": "Binômes sur les sujets critiques ; documentation à jour ; renfort WEVIOO mobilisable",
+          "nature": "Préventive",
+          "owner": "Direction du groupement",
+          "due": "Continu",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "17d0b418",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 2,
+            "i": 4
+          },
+          "residual": {
+            "p": 1,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R22",
+      "scope": "Projet / externe",
+      "category": "Adoption",
+      "title": "Faible adoption de la saisie quotidienne par les opérateurs",
+      "cause": "Habitudes, charge de travail, équipement",
+      "consequence": "Recette fiscale et statistiques incomplètes",
+      "initial": {
+        "p": 4,
+        "i": 4
+      },
+      "residual": {
+        "p": 3,
+        "i": 3
+      },
+      "mitigation": "Parcours mobile simple ; fonctionnement hors connexion ; accompagnement du panel pilote ; formation",
+      "contingency": "Assistance renforcée ; saisie assistée par les agents",
+      "owner": "SIVIS",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2027-01-30",
+      "indicator": "Taux de saisie du panel pilote inférieur à 70 %",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R22",
+          "text": "Parcours mobile simple ; fonctionnement hors connexion ; accompagnement du panel pilote ; formation",
+          "nature": "Préventive",
+          "owner": "SIVIS",
+          "due": "2027-01-30",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "61715882",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 4
+          },
+          "residual": {
+            "p": 3,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R23",
+      "scope": "Projet / externe",
+      "category": "Adoption",
+      "title": "Connectivité faible chez les opérateurs",
+      "cause": "Couverture réseau limitée hors des grandes villes",
+      "consequence": "Saisies perdues ou retardées",
+      "initial": {
+        "p": 3,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Application mobile hors connexion avec synchronisation",
+      "contingency": "Saisie différée tolérée et tracée",
+      "owner": "Lead Chef de projet",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-12-15",
+      "indicator": "Échecs de synchronisation répétés",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R23",
+          "text": "Application mobile hors connexion avec synchronisation",
+          "nature": "Préventive",
+          "owner": "Lead Chef de projet",
+          "due": "2026-12-15",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "eb7af72a",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R24",
+      "scope": "Projet / externe",
+      "category": "Contenus",
+      "title": "Contenus éditoriaux bilingues non disponibles au lancement",
+      "cause": "Production éditoriale non engagée",
+      "consequence": "Portail pauvre en contenus",
+      "initial": {
+        "p": 4,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Référent éditorial désigné ; jeu de contenus de lancement limité",
+      "contingency": "Lancement sur les destinations prioritaires",
+      "owner": "Ministère du Tourisme et des Loisirs",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-11-30",
+      "indicator": "Moins de 50 % des contenus de lancement au 30/11",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R24",
+          "text": "Référent éditorial désigné ; jeu de contenus de lancement limité",
+          "nature": "Préventive",
+          "owner": "Ministère du Tourisme et des Loisirs",
+          "due": "2026-11-30",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "5f836c62",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 4,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R25",
+      "scope": "Projet / externe",
+      "category": "Contenus",
+      "title": "Droits sur les images et vidéos non acquis",
+      "cause": "Droits non vérifiés",
+      "consequence": "Retrait de visuels ; risque juridique",
+      "initial": {
+        "p": 3,
+        "i": 2
+      },
+      "residual": {
+        "p": 1,
+        "i": 2
+      },
+      "mitigation": "Inventaire des droits le 21/10",
+      "contingency": "Banque libre de droits provisoire",
+      "owner": "Ministère du Tourisme et des Loisirs",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-21",
+      "indicator": "Droits non établis au 21/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R25",
+          "text": "Inventaire des droits le 21/10",
+          "nature": "Préventive",
+          "owner": "Ministère du Tourisme et des Loisirs",
+          "due": "2026-10-21",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "fd1c1f69",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 2
+          },
+          "residual": {
+            "p": 1,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R26",
+      "scope": "Projet / externe",
+      "category": "Financement",
+      "title": "Coûts récurrents de l'assistant IA et du programme de fidélité non financés",
+      "cause": "Modèle de financement non arbitré",
+      "consequence": "Fonctions limitées ou suspendues",
+      "initial": {
+        "p": 3,
+        "i": 3
+      },
+      "residual": {
+        "p": 2,
+        "i": 2
+      },
+      "mitigation": "Arbitrage au cadrage ; plafonds d'usage paramétrés",
+      "contingency": "Limitation de l'usage de l'assistant IA",
+      "owner": "Cybastion",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-10-23",
+      "indicator": "Pas d'arbitrage au 23/10",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R26",
+          "text": "Arbitrage au cadrage ; plafonds d'usage paramétrés",
+          "nature": "Préventive",
+          "owner": "Cybastion",
+          "due": "2026-10-23",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "8380ee72",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 3
+          },
+          "residual": {
+            "p": 2,
+            "i": 2
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R27",
+      "scope": "Projet / externe",
+      "category": "Qualité",
+      "title": "Anomalies bloquantes en recette du MVP",
+      "cause": "Intégrations tardives ; tests insuffisants",
+      "consequence": "Validation du MVP reportée",
+      "initial": {
+        "p": 3,
+        "i": 4
+      },
+      "residual": {
+        "p": 2,
+        "i": 3
+      },
+      "mitigation": "Critères de fin appliqués à chaque élément ; tests automatisés ; recette continue",
+      "contingency": "Sprint de stabilisation ; correctifs priorisés",
+      "owner": "Lead Chef de projet",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-12-15",
+      "indicator": "Plus de cinq anomalies bloquantes ouvertes",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R27",
+          "text": "Critères de fin appliqués à chaque élément ; tests automatisés ; recette continue",
+          "nature": "Préventive",
+          "owner": "Lead Chef de projet",
+          "due": "2026-12-15",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "7f0cf330",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 3,
+            "i": 4
+          },
+          "residual": {
+            "p": 2,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "R28",
+      "scope": "Projet / externe",
+      "category": "Exploitation",
+      "title": "Performances insuffisantes en charge",
+      "cause": "Volumétrie sous-estimée",
+      "consequence": "Lenteurs, indisponibilité",
+      "initial": {
+        "p": 2,
+        "i": 4
+      },
+      "residual": {
+        "p": 1,
+        "i": 3
+      },
+      "mitigation": "Tests de charge avant chaque mise en production",
+      "contingency": "Montée en capacité de l'hébergement",
+      "owner": "Lead Chef de projet",
+      "actionOwner": "",
+      "authority": "",
+      "due": "2026-12-15",
+      "indicator": "Temps de réponse supérieur à 3 secondes en test de charge",
+      "status": "Ouvert",
+      "validation": "À valider",
+      "source": "Matrice des risques eTourisme (1).xlsx - 08/10/2026",
+      "actions": [
+        {
+          "id": "ACT-R28",
+          "text": "Tests de charge avant chaque mise en production",
+          "nature": "Préventive",
+          "owner": "Lead Chef de projet",
+          "due": "2026-12-15",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [
+        {
+          "id": "81634378",
+          "at": "2026-10-08",
+          "phase": "P1",
+          "initial": {
+            "p": 2,
+            "i": 4
+          },
+          "residual": {
+            "p": 1,
+            "i": 3
+          },
+          "status": "Ouvert",
+          "comment": "Cotation initiale proposée (référentiel du 08/10/2026), à valider en atelier.",
+          "author": "Import"
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-01",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Gouvernance groupement",
+      "title": "Répartition ambiguë des responsabilités entre NTECH et WEVIOO",
+      "cause": "Périmètre et interfaces de responsabilité insuffisamment formalisés",
+      "consequence": "Retards, doublons ou omissions de livrables",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Formaliser RACI contractuel et responsabilités par produit",
+      "contingency": "Arbitrage mandataire et avenant de clarification",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-01",
+          "text": "Formaliser RACI contractuel et responsabilités par produit",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-02",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Planning groupement",
+      "title": "Retard d’un partenaire affectant les livraisons de l’autre",
+      "cause": "Dépendances interéquipes non maîtrisées",
+      "consequence": "Décalage des jalons et surcharge de reprise",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Planning intégré, engagements et alertes précoces",
+      "contingency": "Réaffectation des travaux et replanification approuvée",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-02",
+          "text": "Planning intégré, engagements et alertes précoces",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-03",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Ressources groupement",
+      "title": "Indisponibilité d’experts clés",
+      "cause": "Turnover, maladie ou affectation concurrente",
+      "consequence": "Perte de compétence et retard critique",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Plan de suppléance, binômage et documentation",
+      "contingency": "Mobiliser un remplaçant qualifié",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-03",
+          "text": "Plan de suppléance, binômage et documentation",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-04",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Intégration groupement",
+      "title": "Incompatibilité des composants développés séparément",
+      "cause": "Contrats API et standards hétérogènes",
+      "consequence": "Échec d’intégration ou défauts de bout en bout",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Contrats API, CI/CD et tests d’intégration précoces",
+      "contingency": "Sprint de correction et isolation des interfaces",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-04",
+          "text": "Contrats API, CI/CD et tests d’intégration précoces",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-05",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Architecture groupement",
+      "title": "Divergences de choix techniques",
+      "cause": "Arbitrages techniques insuffisants",
+      "consequence": "Dette technique et reprises de conception",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Comité d’architecture et décisions tracées",
+      "contingency": "Arbitrage par l’autorité technique compétente",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-05",
+          "text": "Comité d’architecture et décisions tracées",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-06",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Contractuel groupement",
+      "title": "Désaccord sur charges, coûts ou prestations supplémentaires",
+      "cause": "Interprétations différentes du périmètre",
+      "consequence": "Litiges et ralentissement de l’exécution",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Référentiel contractuel et gestion des changements",
+      "contingency": "Escalade contractuelle et arbitrage formalisé",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-06",
+          "text": "Référentiel contractuel et gestion des changements",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-07",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Continuité groupement",
+      "title": "Défaillance financière ou contractuelle d’un membre",
+      "cause": "Tension de trésorerie ou non-respect d’engagement",
+      "consequence": "Interruption des prestations",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Suivi des engagements et plan de continuité",
+      "contingency": "Plan de reprise soumis aux autorités habilitées",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-07",
+          "text": "Suivi des engagements et plan de continuité",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-08",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Qualité groupement",
+      "title": "Défauts qualité aux interfaces entre partenaires",
+      "cause": "Critères de recette et responsabilités non alignés",
+      "consequence": "Rejets et retards de validation",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "DoD commun, QA croisée et tests intégrés",
+      "contingency": "Correction conjointe et revue de non-conformité",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-08",
+          "text": "DoD commun, QA croisée et tests intégrés",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-09",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Communication groupement",
+      "title": "Remontée tardive des difficultés ou validations",
+      "cause": "Canaux de coordination insuffisants",
+      "consequence": "Blocages prolongés et arbitrages tardifs",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Reporting partagé et escalade sous 48 h",
+      "contingency": "Réunion d’urgence et décision tracée",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-09",
+          "text": "Reporting partagé et escalade sous 48 h",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "RG-10",
+      "scope": "Groupement NTECH-WEVIOO",
+      "category": "Réversibilité groupement",
+      "title": "Dépendance excessive à un partenaire pour maintenance et réversibilité",
+      "cause": "Documentation, accès ou savoir-faire concentrés",
+      "consequence": "Risque de rupture de service et surcoût",
+      "initial": {
+        "p": null,
+        "i": null
+      },
+      "residual": {
+        "p": null,
+        "i": null
+      },
+      "mitigation": "Documentation, accès maîtrisés et transfert de compétences",
+      "contingency": "Plan de transfert et assistance renforcée",
+      "owner": "À désigner",
+      "actionOwner": "À désigner",
+      "authority": "À confirmer",
+      "due": "",
+      "indicator": "",
+      "status": "Proposé",
+      "validation": "À évaluer",
+      "source": "Proposition complémentaire - risques internes groupement",
+      "actions": [
+        {
+          "id": "ACT-RG-10",
+          "text": "Documentation, accès maîtrisés et transfert de compétences",
+          "nature": "Préventive",
+          "owner": "À désigner",
+          "due": "",
+          "status": "À planifier",
+          "evidence": ""
+        }
+      ],
+      "reviews": [],
+      "notes": [],
+      "comments": []
+    }
+  ]
+}

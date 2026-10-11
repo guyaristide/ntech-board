@@ -1,4 +1,14 @@
-import type { Epic, EntityKind, EntityOf, Reference, Story, Workshop, WorkspaceData } from '@board/shared';
+import type {
+  Epic,
+  EntityKind,
+  EntityOf,
+  Phase,
+  Reference,
+  Risk,
+  Story,
+  Workshop,
+  WorkspaceData,
+} from '@board/shared';
 import { pool, tx, type Tx } from './db';
 
 type Kind = EntityKind | 'reference';
@@ -32,6 +42,8 @@ export async function getWorkspace(projectId: string, planning: string | null): 
     epics: of<Epic>('epic'),
     stories: of<Story>('story'),
     workshops: of<Workshop>('workshop'),
+    phases: of<Phase>('phase'),
+    risks: of<Risk>('risk'),
   };
 }
 
@@ -72,54 +84,64 @@ export async function mutate<K extends EntityKind>(
 }
 
 /** Prochain identifiant libre d'une épique : US-UC01-07. */
-const nextStoryId = (ids: string[], epic: string) => {
-  const prefix = `US-${epic}-`;
+const nextStoryId = (ids: string[], epic: string) => nextId(ids, `US-${epic}-`);
+
+/** Prochain identifiant libre pour un préfixe : P6, R29, RG-11, US-UC01-07. */
+export const nextId = (ids: string[], prefix: string, width = 2) => {
   const max = ids
     .filter(i => i.startsWith(prefix))
     .reduce((m, i) => Math.max(m, Number(i.slice(prefix.length)) || 0), 0);
-  return `${prefix}${String(max + 1).padStart(2, '0')}`;
+  return `${prefix}${String(max + 1).padStart(width, '0')}`;
 };
 
-export async function createStory(projectId: string, userId: string, build: (id: string) => Story) {
+/**
+ * Crée une entité en fin de liste. L'identifiant est choisi sous verrou par projet et par type :
+ * deux créations simultanées n'obtiennent pas le même.
+ */
+export async function createEntity<K extends EntityKind>(
+  projectId: string,
+  userId: string,
+  kind: K,
+  pickId: (ids: string[]) => string,
+  build: (id: string) => EntityOf<K>,
+) {
   return tx(async c => {
-    // Verrou par projet : deux créations simultanées n'obtiennent pas le même numéro.
-    await c.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`stories:${projectId}`]);
-    const probe = build('');
+    await c.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`${kind}:${projectId}`]);
     const { rows } = await c.query<{ id: string; position: number }>(
-      `SELECT id, position FROM entities WHERE project_id = $1 AND kind = 'story'`,
-      [projectId],
+      'SELECT id, position FROM entities WHERE project_id = $1 AND kind = $2',
+      [projectId, kind],
     );
-    const id = nextStoryId(
-      rows.map(r => r.id),
-      probe.epic,
-    );
-    const story = build(id);
+    const id = pickId(rows.map(r => r.id));
+    const data = build(id);
     const position = rows.reduce((m, r) => Math.max(m, r.position), 0) + 1;
     await c.query(
-      `INSERT INTO entities (project_id, kind, id, data, position, revision, updated_by) VALUES ($1, 'story', $2, $3, $4, 1, $5)`,
-      [projectId, id, story, position, userId],
+      `INSERT INTO entities (project_id, kind, id, data, position, revision, updated_by) VALUES ($1, $2, $3, $4, $5, 1, $6)`,
+      [projectId, kind, id, data, position, userId],
     );
     await c.query(
-      `INSERT INTO events (project_id, kind, entity_id, action, user_id) VALUES ($1, 'story', $2, 'create', $3)`,
-      [projectId, id, userId],
+      `INSERT INTO events (project_id, kind, entity_id, action, user_id) VALUES ($1, $2, $3, 'create', $4)`,
+      [projectId, kind, id, userId],
     );
-    await notify(c, projectId, 'story', id, userId);
-    return story;
+    await notify(c, projectId, kind, id, userId);
+    return data;
   });
 }
 
-export async function deleteStory(projectId: string, userId: string, id: string) {
+export const createStory = (projectId: string, userId: string, build: (id: string) => Story) =>
+  createEntity(projectId, userId, 'story', ids => nextStoryId(ids, build('').epic), build);
+
+export async function deleteEntity(projectId: string, userId: string, kind: EntityKind, id: string) {
   await tx(async c => {
     const { rowCount } = await c.query(
-      `DELETE FROM entities WHERE project_id = $1 AND kind = 'story' AND id = $2`,
-      [projectId, id],
+      `DELETE FROM entities WHERE project_id = $1 AND kind = $2 AND id = $3`,
+      [projectId, kind, id],
     );
-    if (!rowCount) throw new NotFound(`story ${id}`);
+    if (!rowCount) throw new NotFound(`${kind} ${id}`);
     await c.query(
-      `INSERT INTO events (project_id, kind, entity_id, action, user_id) VALUES ($1, 'story', $2, 'delete', $3)`,
-      [projectId, id, userId],
+      `INSERT INTO events (project_id, kind, entity_id, action, user_id) VALUES ($1, $2, $3, 'delete', $4)`,
+      [projectId, kind, id, userId],
     );
-    await notify(c, projectId, 'story', id, userId);
+    await notify(c, projectId, kind, id, userId);
   });
 }
 

@@ -56,7 +56,7 @@ export function Admin() {
       setInvite(i => ({ ...i, email: '', name: '' }));
     });
   };
-  const upload = (kind: 'planning' | 'stories', file: File | undefined) => {
+  const upload = (kind: 'planning' | 'stories' | 'raci' | 'risks', file: File | undefined) => {
     if (!file) return;
     const form = new FormData();
     form.append('file', file);
@@ -225,7 +225,8 @@ export function Admin() {
       <h2 className={page.h2}>Imports</h2>
       <p className={page.faint}>
         Un nouvel import ne supprime rien de ce qui a été saisi : réponses, notes, commentaires et US
-        modifiées sont conservées. Les fichiers importés sont archivés sur le serveur.
+        modifiées sont conservées, de même que les phases et les risques modifiés dans l’outil. Les fichiers
+        importés sont archivés sur le serveur.
       </p>
       <div className={styles.imports}>
         <label className={styles.drop}>
@@ -243,8 +244,29 @@ export function Admin() {
             onChange={e => upload('stories', e.target.files?.[0])}
           />
         </label>
+        <label className={styles.drop}>
+          <strong>Matrice RACI</strong>
+          <span>Classeur .xlsx (onglet RACI, une section numérotée par phase) ou JSON {'{ phases }'}</span>
+          <input
+            type="file"
+            accept=".xlsx,.json,application/json"
+            onChange={e => upload('raci', e.target.files?.[0])}
+          />
+        </label>
+        <label className={styles.drop}>
+          <strong>Matrice des risques</strong>
+          <span>
+            Classeur .xlsx (onglets REGISTRE CONSOLIDE et PLAN ACTIONS) ou JSON {'{ risks }'}. Les revues
+            importées sont rattachées à la phase en cours.
+          </span>
+          <input
+            type="file"
+            accept=".xlsx,.json,application/json"
+            onChange={e => upload('risks', e.target.files?.[0])}
+          />
+        </label>
       </div>
-      {busy === 'planning' || busy === 'stories' ? <p className={page.faint}>Import en cours…</p> : null}
+      {busy ? <p className={page.faint}>Import en cours…</p> : null}
       {report ? (
         <p className={report.ok ? styles.success : styles.error} role="status">
           {report.text}

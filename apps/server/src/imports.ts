@@ -1,5 +1,6 @@
-import type { Epic, ImportReport, Story, Workshop } from '@board/shared';
+import type { Epic, ImportReport, Phase, Story, Workshop } from '@board/shared';
 import { pool, tx } from './db';
+import type { RawRaci, RawRisks } from './importers/governance';
 import type { RawPlanning } from './importers/planning';
 import { mergePlanning, storyFromRaw, type RawStories } from './merge';
 import { notify } from './repo';
@@ -110,5 +111,80 @@ export async function importPlanning(
   });
   const { rows } = await pool.query<{ slug: string }>('SELECT slug FROM projects WHERE id = $1', [projectId]);
   if (rows[0]) forgetProject(rows[0].slug);
+  return report;
+}
+
+/**
+ * Import de contenus identifiés (phases, risques) : nouveaux ajoutés, jamais modifiés dans
+ * l'outil remplacés, modifiés conservés. Ceux qui ne figurent pas dans le fichier restent en place.
+ */
+async function importEntities<T extends { id: string }>(
+  projectId: string,
+  kind: 'phase' | 'risk',
+  items: T[],
+  userId: string | null,
+  prepare: (item: T, current: Phase | null) => T = item => item,
+): Promise<ImportReport> {
+  const report: ImportReport = { added: 0, updated: 0, kept: 0, removed: 0, details: [] };
+  await tx(async c => {
+    const existing = new Map(
+      (
+        await c.query<{ id: string; revision: number }>(
+          `SELECT id, revision FROM entities WHERE project_id = $1 AND kind = $2 FOR UPDATE`,
+          [projectId, kind],
+        )
+      ).rows.map(r => [r.id, r]),
+    );
+    const current =
+      (
+        await c.query<{ data: Phase }>(
+          `SELECT data FROM entities WHERE project_id = $1 AND kind = 'phase' AND data->>'status' = 'En cours'
+            ORDER BY position LIMIT 1`,
+          [projectId],
+        )
+      ).rows[0]?.data ?? null;
+    for (const [i, item] of items.entries()) {
+      const prev = existing.get(item.id);
+      if (prev && prev.revision > 0) {
+        report.kept++;
+        continue;
+      }
+      await c.query(
+        `INSERT INTO entities (project_id, kind, id, data, position) VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT (project_id, kind, id) DO UPDATE SET data = EXCLUDED.data, position = EXCLUDED.position, updated_at = now()`,
+        [projectId, kind, item.id, prepare(item, current), i],
+      );
+      if (prev) report.updated++;
+      else report.added++;
+    }
+    await c.query(
+      `INSERT INTO events (project_id, kind, entity_id, action, patch, user_id) VALUES ($1, 'project', '-', $2, $3, $4)`,
+      [projectId, `import-${kind}s`, JSON.stringify(report), userId],
+    );
+    await notify(c, projectId, 'reload', `import-${kind}s`, userId);
+  });
+  return report;
+}
+
+/** Import des phases et de leur matrice RACI. */
+export async function importPhases(projectId: string, raw: RawRaci, userId: string | null) {
+  if (!Array.isArray(raw.phases) || !raw.phases.length) throw new Error('Format attendu : { phases: [] }');
+  const report = await importEntities(projectId, 'phase', raw.phases, userId);
+  report.details.push(
+    `${raw.phases.length} phases, ${raw.phases.reduce((n, p) => n + p.raci.length, 0)} lignes RACI : ${report.added} ajoutées, ${report.updated} mises à jour, ${report.kept} conservées car modifiées dans l'outil.`,
+  );
+  return report;
+}
+
+/** Import du registre des risques ; une revue sans phase est rattachée à la phase en cours. */
+export async function importRisks(projectId: string, raw: RawRisks, userId: string | null) {
+  if (!Array.isArray(raw.risks) || !raw.risks.length) throw new Error('Format attendu : { risks: [] }');
+  const report = await importEntities(projectId, 'risk', raw.risks, userId, (r, current) => ({
+    ...r,
+    reviews: r.reviews.map(v => ({ ...v, phase: v.phase || current?.id || '' })),
+  }));
+  report.details.push(
+    `${raw.risks.length} risques, ${raw.risks.reduce((n, r) => n + r.actions.length, 0)} actions : ${report.added} ajoutés, ${report.updated} mis à jour, ${report.kept} conservés car modifiés dans l'outil.`,
+  );
   return report;
 }

@@ -22,6 +22,8 @@ export const exportJson = (ws: WorkspaceData & { session: { project: { slug: str
         epics: ws.epics,
         stories: ws.stories,
         workshops: ws.workshops,
+        phases: ws.phases,
+        risks: ws.risks,
       },
       null,
       2,

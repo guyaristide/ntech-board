@@ -52,7 +52,7 @@ Le schéma est dans `apps/server/migrations/001_init.sql`.
 | `memberships` | rôle d'un utilisateur dans un projet : `admin`, `editor` ou `viewer` |
 | `login_tokens` | liens de connexion. Seul le hash SHA-256 est stocké ; un lien expire au bout de 20 minutes et ne sert qu'une fois |
 | `sessions` | sessions ouvertes (hash du jeton), 30 jours glissants |
-| `entities` | contenus : `story`, `epic`, `workshop`, `reference`, en JSONB, avec `position` et `revision` |
+| `entities` | contenus : `story`, `epic`, `workshop`, `reference`, `phase` (avec sa matrice RACI), `risk` (avec ses actions et ses revues), en JSONB, avec `position` et `revision` |
 | `events` | journal de chaque modification (qui, quoi, quand), qui alimente l'historique des pages |
 
 `revision = 0` signifie qu'un contenu n'a jamais été modifié dans l'outil. Un nouvel import peut alors le remplacer ; sinon, ce qui a été saisi est conservé.
@@ -91,6 +91,7 @@ En cas de conflit sur **un même champ**, la dernière écriture l'emporte. Ce c
 
 - **Planning des ateliers (.xlsx) :** lu par `apps/server/src/importers/planning.ts` (onglets Planning, Suivi des PV et Références CdC). Le classeur n'est jamais modifié.
 - **Backlog (.json `{ epics, stories }`) :** les US jamais modifiées sont mises à jour, les autres sont conservées.
+- **Matrice RACI et matrice des risques (.xlsx ou .json) :** lues par `apps/server/src/importers/governance.ts`. Les phases et les risques jamais modifiés sont remplacés, les autres conservés.
 
 Dans les deux cas, les règles de fusion sont dans `apps/server/src/merge.ts` et testées dans `apps/server/test/merge.test.ts`. Un import ne perd rien de ce qui a été saisi :
 

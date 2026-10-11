@@ -3,7 +3,8 @@ import { basename } from 'node:path';
 import { parseArgs } from 'node:util';
 import { ROLES, type Role } from '@board/shared';
 import { migrate, pool } from './db';
-import { importPlanning, importStories } from './imports';
+import { importPhases, importPlanning, importRisks, importStories } from './imports';
+import { parseRaci, parseRisks, type RawRaci, type RawRisks } from './importers/governance';
 import { parsePlanning, type RawPlanning } from './importers/planning';
 import type { RawStories } from './merge';
 import { addMember, createProject, listMembers, listProjects, projectIdOf } from './projects';
@@ -20,6 +21,10 @@ const HELP = `Commandes :
   member:list <slug>
   import:stories <slug> <fichier.json>             Backlog { epics, stories }
   import:planning <slug> <fichier.xlsx|.json>      Planning des ateliers
+  import:raci <slug> <fichier.xlsx|.json>          Phases du projet et matrice RACI de chacune
+  import:risks <slug> <fichier.xlsx|.json>         Registre des risques et plan d'actions
+  export:raci <fichier.xlsx>                       Convertit une matrice RACI en JSON (sortie standard)
+  export:risks <fichier.xlsx>                      Convertit une matrice des risques en JSON (sortie standard)
 `;
 
 const { positionals, values } = parseArgs({
@@ -35,6 +40,13 @@ const { positionals, values } = parseArgs({
 const [command, ...args] = positionals;
 
 async function run() {
+  // Conversions de fichiers : sans base de données.
+  if (command === 'export:raci' || command === 'export:risks') {
+    const file = args[0];
+    const parse = command === 'export:raci' ? parseRaci : parseRisks;
+    console.log(JSON.stringify(await parse(readFileSync(file), basename(file)), null, 2));
+    return;
+  }
   await migrate();
   switch (command) {
     case 'migrate':
@@ -79,6 +91,22 @@ async function run() {
         : await parsePlanning(readFileSync(file), basename(file));
       const report = await importPlanning(await projectIdOf(slug), planning, null);
       console.log(report.details.join('\n'));
+      return;
+    }
+    case 'import:raci': {
+      const [slug, file] = args;
+      const raci: RawRaci = file.endsWith('.json')
+        ? (JSON.parse(readFileSync(file, 'utf8')) as RawRaci)
+        : await parseRaci(readFileSync(file), basename(file));
+      console.log((await importPhases(await projectIdOf(slug), raci, null)).details.join('\n'));
+      return;
+    }
+    case 'import:risks': {
+      const [slug, file] = args;
+      const risks: RawRisks = file.endsWith('.json')
+        ? (JSON.parse(readFileSync(file, 'utf8')) as RawRisks)
+        : await parseRisks(readFileSync(file), basename(file));
+      console.log((await importRisks(await projectIdOf(slug), risks, null)).details.join('\n'));
       return;
     }
     default:

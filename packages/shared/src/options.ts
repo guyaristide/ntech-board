@@ -1,4 +1,21 @@
-import type { PvStatus, Priority, QuestionStatus, Scenario, StoryStatus, Version } from './types';
+import type {
+  ActionNature,
+  ActionStatus,
+  Cotation,
+  PhaseStatus,
+  PvStatus,
+  Priority,
+  QuestionStatus,
+  RaciActor,
+  RaciRow,
+  RaciValue,
+  RiskLevel,
+  RiskStatus,
+  RiskValidation,
+  Scenario,
+  StoryStatus,
+  Version,
+} from './types';
 
 /** Couleurs des étiquettes, reprises de la palette Notion. */
 export type Tone = 'gray' | 'brown' | 'orange' | 'yellow' | 'green' | 'blue' | 'purple' | 'pink' | 'red';
@@ -37,6 +54,56 @@ export const normalizePvStatus = (value: string): PvStatus =>
     ? 'Validé'
     : (((PV_STATUSES as readonly string[]).includes(value) ? value : 'À faire') as PvStatus);
 
+export const PHASE_STATUSES = ['À venir', 'En cours', 'Terminée'] as const satisfies readonly PhaseStatus[];
+export const RACI_VALUES = ['R', 'A', 'A/R', 'C', 'I'] as const satisfies readonly RaciValue[];
+export const RACI_LABEL: Record<Exclude<RaciValue, ''>, string> = {
+  R: 'Réalise',
+  A: 'Approuve',
+  'A/R': 'Approuve et réalise',
+  C: 'Consulté',
+  I: 'Informé',
+};
+
+/** Contrôle d'une ligne RACI : un seul A (« A/R » compris) et au moins un R. */
+export const raciCheck = (row: RaciRow, actors: RaciActor[]) => {
+  const values = actors.map(a => row.cells[a.id] ?? '');
+  const a = values.filter(v => v === 'A' || v === 'A/R').length;
+  const r = values.filter(v => v === 'R' || v === 'A/R').length;
+  const problems = [...(a === 0 ? ['aucun A'] : a > 1 ? [`${a} A`] : []), ...(r === 0 ? ['aucun R'] : [])];
+  return { ok: !problems.length, problems };
+};
+
+export const RISK_LEVELS = ['Faible', 'Modéré', 'Élevé', 'Critique'] as const satisfies readonly RiskLevel[];
+export const RISK_STATUSES = [
+  'Proposé',
+  'Ouvert',
+  'En traitement',
+  'Survenu',
+  'Clos',
+] as const satisfies readonly RiskStatus[];
+export const RISK_VALIDATIONS = [
+  'À évaluer',
+  'À valider',
+  'Validée',
+] as const satisfies readonly RiskValidation[];
+export const ACTION_NATURES = [
+  'Préventive',
+  'Corrective',
+  'Contingence',
+] as const satisfies readonly ActionNature[];
+export const ACTION_STATUSES = [
+  'À planifier',
+  'En cours',
+  'Réalisée',
+  'Abandonnée',
+] as const satisfies readonly ActionStatus[];
+
+/** Score P × I, ou null si la cotation est incomplète. */
+export const riskScore = (c: Cotation) => (c.p && c.i ? c.p * c.i : null);
+/** Niveau d'un score sur l'échelle 5 × 5 : 1–4 faible, 5–9 modéré, 10–16 élevé, 17–25 critique. */
+export const riskLevel = (score: number | null): RiskLevel | '' =>
+  score === null ? '' : score <= 4 ? 'Faible' : score <= 9 ? 'Modéré' : score <= 16 ? 'Élevé' : 'Critique';
+
 export const TONE: Record<string, Tone> = {
   'À cadrer': 'gray',
   'En atelier': 'blue',
@@ -62,6 +129,24 @@ export const TONE: Record<string, Tone> = {
   Diffusé: 'purple',
   Validé: 'green',
   'En retard': 'red',
+  'À venir': 'gray',
+  Terminée: 'green',
+  Faible: 'green',
+  Modéré: 'yellow',
+  Élevé: 'orange',
+  Critique: 'red',
+  Proposé: 'gray',
+  'En traitement': 'blue',
+  Survenu: 'red',
+  Clos: 'green',
+  'À évaluer': 'gray',
+  'À valider': 'orange',
+  Préventive: 'blue',
+  Corrective: 'purple',
+  Contingence: 'brown',
+  'À planifier': 'gray',
+  Réalisée: 'green',
+  Abandonnée: 'gray',
 };
 
 export const SCENARIO_LABEL: Record<Scenario, string> = {

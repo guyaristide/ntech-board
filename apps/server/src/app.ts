@@ -10,6 +10,7 @@ import { env } from './env';
 import { accessLog, fail } from './log';
 import { adminRoutes } from './routes/admin';
 import { authRoutes } from './routes/auth';
+import { governanceRoutes } from './routes/governance';
 import { workspaceRoutes } from './routes/workspace';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -49,6 +50,7 @@ export function createApp() {
   });
   api.route('/', authRoutes);
   api.route('/', workspaceRoutes);
+  api.route('/', governanceRoutes);
   api.route('/admin', adminRoutes);
   api.notFound(c => c.json({ error: 'not_found' }, 404));
   app.route('/api', api);

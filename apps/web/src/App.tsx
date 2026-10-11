@@ -8,7 +8,10 @@ import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
 import { Programme } from './pages/Programme';
+import { RaciPage } from './pages/raci/RaciPage';
 import { References } from './pages/References';
+import { RiskPage } from './pages/risks/RiskPage';
+import { Risks } from './pages/risks/Risks';
 import { StoryPage } from './pages/StoryPage';
 import { WorkshopPage } from './pages/workshop/WorkshopPage';
 import { Layout } from './ui/Layout';
@@ -52,6 +55,9 @@ export function App() {
             <Route path="programme" element={<Programme />} />
             <Route path="atelier/:id" element={<WorkshopPage />} />
             <Route path="references" element={<References />} />
+            <Route path="raci" element={<RaciPage />} />
+            <Route path="risques" element={<Risks />} />
+            <Route path="risque/:id" element={<RiskPage />} />
             <Route path="admin" element={<Admin />} />
             <Route path="*" element={<Home />} />
           </Route>

@@ -1,0 +1,1123 @@
+{
+  "source": "Matrice RACI eTourisme.xlsx",
+  "phases": [
+    {
+      "id": "P1",
+      "title": "Lancement et gouvernance",
+      "summary": "Lancement du projet et gouvernance : interlocuteurs, comité de pilotage, registre des décisions, matrice des risques.",
+      "start": null,
+      "end": "2026-10-12",
+      "status": "En cours",
+      "actors": [
+        {
+          "id": "ministere-du-tourisme-et-des-loisirs",
+          "name": "Ministère du Tourisme et des Loisirs"
+        },
+        {
+          "id": "sivis",
+          "name": "SIVIS"
+        },
+        {
+          "id": "bnetd",
+          "name": "BNETD"
+        },
+        {
+          "id": "cybastion",
+          "name": "Cybastion"
+        },
+        {
+          "id": "key-users",
+          "name": "Key Users"
+        },
+        {
+          "id": "dgi",
+          "name": "DGI"
+        },
+        {
+          "id": "agregateur-de-paiement",
+          "name": "Agrégateur de paiement"
+        },
+        {
+          "id": "direction-du-groupement",
+          "name": "Direction du groupement"
+        },
+        {
+          "id": "lead-chef-de-projet",
+          "name": "Lead Chef de projet"
+        },
+        {
+          "id": "sous-chef-de-projet",
+          "name": "Sous-chef de projet"
+        }
+      ],
+      "raci": [
+        {
+          "id": "L01",
+          "activity": "Préparer et animer la réunion de lancement",
+          "deliverable": "Support et compte rendu de lancement",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "I",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L02",
+          "activity": "Désigner les interlocuteurs uniques",
+          "deliverable": "Point focal Cybastion, Lead Chef de projet",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "A",
+            "direction-du-groupement": "R",
+            "lead-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L03",
+          "activity": "Désigner les Key Users et leurs suppléants",
+          "deliverable": "Liste nominative par parcours",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A/R",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "I",
+            "lead-chef-de-projet": "I",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L04",
+          "activity": "Constituer le comité de pilotage",
+          "deliverable": "Composition, présidence, calendrier",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L05",
+          "activity": "Tenir le registre des décisions et blocages",
+          "deliverable": "Registre unique",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "A",
+            "key-users": "I",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L06",
+          "activity": "Répondre aux demandes du registre sous 48 heures",
+          "deliverable": "Décisions datées",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "R",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "C",
+            "dgi": "C",
+            "agregateur-de-paiement": "C",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "I",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L07",
+          "activity": "Escalader les blocages au comité de pilotage",
+          "deliverable": "Relevé d'escalade",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "A",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L08",
+          "activity": "Tenir le comité de pilotage mensuel",
+          "deliverable": "Compte rendu, arbitrages, suivi des risques",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "I",
+            "direction-du-groupement": "R",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L09",
+          "activity": "Rédiger les comptes rendus sous 24 heures",
+          "deliverable": "Comptes rendus",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "I",
+            "key-users": "I",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L10",
+          "activity": "Tenir la matrice des risques",
+          "deliverable": "Matrice des risques à jour",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "C",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "P2",
+      "title": "Cadrage",
+      "summary": "Ateliers de cadrage du 13 au 23 octobre 2026.",
+      "start": "2026-10-13",
+      "end": "2026-10-23",
+      "status": "À venir",
+      "actors": [
+        {
+          "id": "ministere-du-tourisme-et-des-loisirs",
+          "name": "Ministère du Tourisme et des Loisirs"
+        },
+        {
+          "id": "sivis",
+          "name": "SIVIS"
+        },
+        {
+          "id": "bnetd",
+          "name": "BNETD"
+        },
+        {
+          "id": "cybastion",
+          "name": "Cybastion"
+        },
+        {
+          "id": "key-users",
+          "name": "Key Users"
+        },
+        {
+          "id": "dgi",
+          "name": "DGI"
+        },
+        {
+          "id": "agregateur-de-paiement",
+          "name": "Agrégateur de paiement"
+        },
+        {
+          "id": "direction-du-groupement",
+          "name": "Direction du groupement"
+        },
+        {
+          "id": "lead-chef-de-projet",
+          "name": "Lead Chef de projet"
+        },
+        {
+          "id": "sous-chef-de-projet",
+          "name": "Sous-chef de projet"
+        }
+      ],
+      "raci": [
+        {
+          "id": "L11",
+          "activity": "Atelier 1 · Vision cible et parcours prioritaires",
+          "deliverable": "Note de vision, cartographie des parcours",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "A",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "C",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L12",
+          "activity": "Atelier 2 · Inventaire et décision de reprise de la Version 0",
+          "deliverable": "Inventaire et décision par composant",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L13",
+          "activity": "Atelier 2 · Catalogue des référentiels",
+          "deliverable": "Propriétaire et date par référentiel",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "R",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L14",
+          "activity": "Atelier 3 · Règles fiscales arbitrées",
+          "deliverable": "Note des règles fiscales",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "R",
+            "key-users": "I",
+            "dgi": "A",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L15",
+          "activity": "Atelier 3 · Engagement de l'agrégateur et environnement de test",
+          "deliverable": "Engagement écrit, date de l'environnement de test",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "A",
+            "dgi": "C",
+            "agregateur-de-paiement": "R",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L16",
+          "activity": "Atelier 3 · Spécifications du parcours paiement et déclaration (P3)",
+          "deliverable": "Spécifications P3",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "R",
+            "dgi": "C",
+            "agregateur-de-paiement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L17",
+          "activity": "Atelier 4 · Spécifications du parcours touriste (P1)",
+          "deliverable": "Spécifications P1, règles de réservation",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "R",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L18",
+          "activity": "Atelier 5 · Spécifications du parcours opérateur (P2)",
+          "deliverable": "Spécifications P2, règles d'inscription",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "R",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L19",
+          "activity": "Atelier 6 · Dossier d'architecture et contrats d'interface",
+          "deliverable": "Dossier d'architecture, contrats d'interface",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "dgi": "C",
+            "agregateur-de-paiement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L20",
+          "activity": "Atelier 6 · Décision d'hébergement et convention d'exploitation",
+          "deliverable": "Décision, projet de convention",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A/R",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L21",
+          "activity": "Atelier 7 · Design system et maquettes",
+          "deliverable": "Design system, maquettes des parcours",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "R",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L22",
+          "activity": "Atelier 8 · Indicateurs et spécifications du parcours pilotage (P4)",
+          "deliverable": "Fiches indicateurs, spécifications P4, habilitations",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "R",
+            "dgi": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L23",
+          "activity": "Atelier 9 · Périmètre du MVP et méthode de mesure",
+          "deliverable": "Liste des livrables pondérés",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "I",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L24",
+          "activity": "Atelier 9 · Plan de réalisation et calendrier des sprints",
+          "deliverable": "Plan de réalisation",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "I",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L25",
+          "activity": "Atelier 9 · Plan d'assurance qualité",
+          "deliverable": "Plan d'assurance qualité",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L26",
+          "activity": "Atelier 9 · Politique de sécurité du projet",
+          "deliverable": "Politique de sécurité",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "C",
+            "cybastion": "A",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L27",
+          "activity": "Valider les livrables du cadrage",
+          "deliverable": "Procès-verbal de clôture du cadrage",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "R",
+            "key-users": "I",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L28",
+          "activity": "Désigner le panel d'opérateurs pilotes",
+          "deliverable": "Liste du panel pilote",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A/R",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "I",
+            "lead-chef-de-projet": "I",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L29",
+          "activity": "Produire les contenus éditoriaux bilingues de lancement",
+          "deliverable": "Contenus de lancement",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "A/R",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "I",
+            "key-users": "I",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "I"
+          }
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "P3",
+      "title": "Réalisation",
+      "summary": "Réalisation en sprints de deux semaines, démonstration chaque vendredi.",
+      "start": "2026-10-26",
+      "end": null,
+      "status": "À venir",
+      "actors": [
+        {
+          "id": "ministere-du-tourisme-et-des-loisirs",
+          "name": "Ministère du Tourisme et des Loisirs"
+        },
+        {
+          "id": "sivis",
+          "name": "SIVIS"
+        },
+        {
+          "id": "bnetd",
+          "name": "BNETD"
+        },
+        {
+          "id": "cybastion",
+          "name": "Cybastion"
+        },
+        {
+          "id": "key-users",
+          "name": "Key Users"
+        },
+        {
+          "id": "dgi",
+          "name": "DGI"
+        },
+        {
+          "id": "agregateur-de-paiement",
+          "name": "Agrégateur de paiement"
+        },
+        {
+          "id": "direction-du-groupement",
+          "name": "Direction du groupement"
+        },
+        {
+          "id": "lead-chef-de-projet",
+          "name": "Lead Chef de projet"
+        },
+        {
+          "id": "sous-chef-de-projet",
+          "name": "Sous-chef de projet"
+        }
+      ],
+      "raci": [
+        {
+          "id": "L30",
+          "activity": "Ordonner et arbitrer les priorités du backlog",
+          "deliverable": "Backlog priorisé",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "A",
+            "key-users": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L31",
+          "activity": "Rédiger les fonctions et leurs critères d'acceptation",
+          "deliverable": "Fonctions prêtes pour le sprint",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "I",
+            "key-users": "R",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L32",
+          "activity": "Planifier le sprint",
+          "deliverable": "Objectif et contenu du sprint",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "C",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L33",
+          "activity": "Développer et tester",
+          "deliverable": "Code revu, tests automatisés",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "I",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L34",
+          "activity": "Animer la démonstration du vendredi",
+          "deliverable": "Relevé de validation par parcours",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "R",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L35",
+          "activity": "Valider ou refuser chaque fonction démontrée",
+          "deliverable": "Décision consignée le jour même",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "A",
+            "bnetd": "I",
+            "cybastion": "I",
+            "key-users": "R",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L36",
+          "activity": "Tenir la revue et la rétrospective de sprint",
+          "deliverable": "Incrément intégré, plan d'amélioration",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "C",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L37",
+          "activity": "Publier l'indicateur hebdomadaire d'avancement",
+          "deliverable": "Indicateur en livrables recettés et pondérés",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "I",
+            "key-users": "I",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L38",
+          "activity": "Tenir le comité d'architecture hebdomadaire",
+          "deliverable": "Décisions techniques",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "C",
+            "cybastion": "C",
+            "lead-chef-de-projet": "A/R",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L39",
+          "activity": "Ouvrir les accès à la Version 0 et aux environnements",
+          "deliverable": "Accès opérationnels",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A/R",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L40",
+          "activity": "Fournir la base des opérateurs d'eAdministration",
+          "deliverable": "Interface ou extraction",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A/R",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L41",
+          "activity": "Transmettre les référentiels, barèmes et l'Annexe fiscale 2026",
+          "deliverable": "Référentiels et barèmes",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "R",
+            "sivis": "A",
+            "bnetd": "I",
+            "cybastion": "C",
+            "dgi": "R",
+            "lead-chef-de-projet": "I",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L42",
+          "activity": "Fournir la spécification et l'environnement de test de la FNE",
+          "deliverable": "Spécification FNE, accès de test",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "A",
+            "dgi": "R",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L43",
+          "activity": "Fournir l'environnement de test de l'agrégateur",
+          "deliverable": "Accès de test",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "I",
+            "cybastion": "A",
+            "dgi": "I",
+            "agregateur-de-paiement": "R",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "I"
+          }
+        },
+        {
+          "id": "L44",
+          "activity": "Traiter une demande de changement de périmètre",
+          "deliverable": "Analyse d'impact, décision",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "C",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "P4",
+      "title": "Recette et mise en production",
+      "summary": "Recette mensuelle, préproduction, ouverture du MVP au panel pilote le 15 décembre 2026, mise en production.",
+      "start": null,
+      "end": null,
+      "status": "À venir",
+      "actors": [
+        {
+          "id": "ministere-du-tourisme-et-des-loisirs",
+          "name": "Ministère du Tourisme et des Loisirs"
+        },
+        {
+          "id": "sivis",
+          "name": "SIVIS"
+        },
+        {
+          "id": "bnetd",
+          "name": "BNETD"
+        },
+        {
+          "id": "cybastion",
+          "name": "Cybastion"
+        },
+        {
+          "id": "key-users",
+          "name": "Key Users"
+        },
+        {
+          "id": "dgi",
+          "name": "DGI"
+        },
+        {
+          "id": "agregateur-de-paiement",
+          "name": "Agrégateur de paiement"
+        },
+        {
+          "id": "direction-du-groupement",
+          "name": "Direction du groupement"
+        },
+        {
+          "id": "lead-chef-de-projet",
+          "name": "Lead Chef de projet"
+        },
+        {
+          "id": "sous-chef-de-projet",
+          "name": "Sous-chef de projet"
+        }
+      ],
+      "raci": [
+        {
+          "id": "L45",
+          "activity": "Établir le plan de recette",
+          "deliverable": "Plan de recette",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "C",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L46",
+          "activity": "Conduire la recette mensuelle",
+          "deliverable": "Procès-verbal de recette, anomalies qualifiées",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "R",
+            "lead-chef-de-projet": "C",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L47",
+          "activity": "Réaliser les tests de charge et de sécurité",
+          "deliverable": "Rapports de tests, test d'intrusion",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "C",
+            "cybastion": "C",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L48",
+          "activity": "Déployer en préproduction",
+          "deliverable": "Préproduction à jour",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "C",
+            "cybastion": "C",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L49",
+          "activity": "Ouvrir le MVP au panel pilote (15 décembre)",
+          "deliverable": "MVP en préproduction",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "R",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L50",
+          "activity": "Accompagner le panel pilote",
+          "deliverable": "Assistance, retours d'usage",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "A",
+            "bnetd": "I",
+            "cybastion": "C",
+            "key-users": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L51",
+          "activity": "Valider le MVP",
+          "deliverable": "Procès-verbal de validation du MVP",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "C",
+            "key-users": "R",
+            "dgi": "I",
+            "agregateur-de-paiement": "I",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L52",
+          "activity": "Mettre en production sur l'hébergement de Cybastion",
+          "deliverable": "Production opérationnelle",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "I",
+            "bnetd": "C",
+            "cybastion": "A",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L53",
+          "activity": "Publier les applications sur les magasins d'applications",
+          "deliverable": "Applications publiées",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "I",
+            "cybastion": "A",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        },
+        {
+          "id": "L54",
+          "activity": "Rédiger la documentation et les manuels",
+          "deliverable": "Documentation à jour",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "C",
+            "lead-chef-de-projet": "A",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L55",
+          "activity": "Former les équipes de la maîtrise d'œuvre et transférer les compétences",
+          "deliverable": "Supports, attestations de formation",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        }
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "P5",
+      "title": "Version 1 et Version 2",
+      "summary": "Réception de la Version 1 le 30 janvier 2027, réalisation et réception de la Version 2 le 30 juin 2027.",
+      "start": null,
+      "end": "2027-06-30",
+      "status": "À venir",
+      "actors": [
+        {
+          "id": "ministere-du-tourisme-et-des-loisirs",
+          "name": "Ministère du Tourisme et des Loisirs"
+        },
+        {
+          "id": "sivis",
+          "name": "SIVIS"
+        },
+        {
+          "id": "bnetd",
+          "name": "BNETD"
+        },
+        {
+          "id": "cybastion",
+          "name": "Cybastion"
+        },
+        {
+          "id": "key-users",
+          "name": "Key Users"
+        },
+        {
+          "id": "dgi",
+          "name": "DGI"
+        },
+        {
+          "id": "agregateur-de-paiement",
+          "name": "Agrégateur de paiement"
+        },
+        {
+          "id": "direction-du-groupement",
+          "name": "Direction du groupement"
+        },
+        {
+          "id": "lead-chef-de-projet",
+          "name": "Lead Chef de projet"
+        },
+        {
+          "id": "sous-chef-de-projet",
+          "name": "Sous-chef de projet"
+        }
+      ],
+      "raci": [
+        {
+          "id": "L56",
+          "activity": "Livrer et réceptionner la Version 1 (30 janvier 2027)",
+          "deliverable": "Procès-verbal de réception V1",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "R",
+            "key-users": "R",
+            "dgi": "I",
+            "agregateur-de-paiement": "I",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L57",
+          "activity": "Réaliser la Version 2 en sprints de deux semaines",
+          "deliverable": "Incréments V2",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "I",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "C",
+            "direction-du-groupement": "C",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L58",
+          "activity": "Livrer et réceptionner la Version 2 (30 juin 2027)",
+          "deliverable": "Procès-verbal de réception V2",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "A",
+            "bnetd": "C",
+            "cybastion": "R",
+            "key-users": "R",
+            "dgi": "I",
+            "agregateur-de-paiement": "I",
+            "direction-du-groupement": "I",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "R"
+          }
+        },
+        {
+          "id": "L59",
+          "activity": "Clore le projet et dresser le bilan",
+          "deliverable": "Rapport de clôture",
+          "cells": {
+            "ministere-du-tourisme-et-des-loisirs": "C",
+            "sivis": "C",
+            "bnetd": "C",
+            "cybastion": "A",
+            "key-users": "I",
+            "direction-du-groupement": "R",
+            "lead-chef-de-projet": "R",
+            "sous-chef-de-projet": "C"
+          }
+        }
+      ],
+      "notes": [],
+      "comments": []
+    }
+  ]
+}

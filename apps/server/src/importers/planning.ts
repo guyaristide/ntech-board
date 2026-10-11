@@ -89,10 +89,10 @@ const times = (s: string): [string | null, string | null] => {
   return m.length >= 2 ? [`${m[0][1]}:${m[0][2]}`, `${m[1][1]}:${m[1][2]}`] : [null, null];
 };
 
-const iso = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : null);
+export const iso = (v: unknown) => (v instanceof Date ? v.toISOString().slice(0, 10) : null);
 
 /** Lignes d'une feuille, sous forme de tableaux de valeurs (colonne A à l'indice 0). */
-function rowsOf(sheet: ExcelJS.Worksheet | undefined, width: number) {
+export function rowsOf(sheet: ExcelJS.Worksheet | undefined, width: number) {
   const out: (string | Date | number | null)[][] = [];
   sheet?.eachRow({ includeEmpty: false }, row => {
     const cells: (string | Date | number | null)[] = [];

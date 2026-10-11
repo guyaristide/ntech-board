@@ -139,4 +139,105 @@ export interface Workspace {
   epics: Epic[];
   stories: Story[];
   workshops: Workshop[];
+  phases?: Phase[];
+  risks?: Risk[];
+}
+
+/**
+ * RACI d'une activité : R réalise, A approuve (un seul par ligne), C consulté, I informé.
+ * « A/R » : approuve et réalise.
+ */
+export type RaciValue = '' | 'R' | 'A' | 'A/R' | 'C' | 'I';
+
+/** Partie prenante : une colonne de la matrice RACI. */
+export interface RaciActor {
+  id: string;
+  name: string;
+}
+
+export interface RaciRow {
+  /** Conservé quand une phase est créée par copie : sert à comparer deux phases. */
+  id: string;
+  activity: string;
+  deliverable: string;
+  /** Valeur par identifiant d'acteur. */
+  cells: Record<string, RaciValue>;
+}
+
+export type PhaseStatus = 'À venir' | 'En cours' | 'Terminée';
+
+/** Phase du projet, avec sa propre matrice RACI : la répartition des rôles évolue d'une phase à l'autre. */
+export interface Phase {
+  id: string;
+  title: string;
+  summary: string;
+  start: string | null;
+  end: string | null;
+  status: PhaseStatus;
+  actors: RaciActor[];
+  raci: RaciRow[];
+  notes: Block[];
+  comments: Comment[];
+}
+
+export type RiskLevel = 'Faible' | 'Modéré' | 'Élevé' | 'Critique';
+export type RiskStatus = 'Proposé' | 'Ouvert' | 'En traitement' | 'Survenu' | 'Clos';
+export type RiskValidation = 'À évaluer' | 'À valider' | 'Validée';
+
+/** Cotation probabilité × impact, chacune de 1 à 5 ; null tant que le risque n'est pas coté. */
+export interface Cotation {
+  p: number | null;
+  i: number | null;
+}
+
+export type ActionNature = 'Préventive' | 'Corrective' | 'Contingence';
+export type ActionStatus = 'À planifier' | 'En cours' | 'Réalisée' | 'Abandonnée';
+export interface RiskAction {
+  id: string;
+  text: string;
+  nature: ActionNature;
+  owner: string;
+  /** Date ISO, ou texte libre (« Continu »). */
+  due: string;
+  status: ActionStatus;
+  evidence: string;
+}
+
+/** Revue d'un risque : la cotation telle qu'elle était à une date, dans une phase. */
+export interface RiskReview {
+  id: string;
+  at: string;
+  phase: string;
+  initial: Cotation;
+  residual: Cotation;
+  status: RiskStatus;
+  comment: string;
+  author: string;
+}
+
+export interface Risk {
+  id: string;
+  scope: string;
+  category: string;
+  title: string;
+  cause: string;
+  consequence: string;
+  initial: Cotation;
+  residual: Cotation;
+  mitigation: string;
+  contingency: string;
+  /** Propriétaire du risque, responsable de l'action, autorité d'arbitrage (PRINCE2). */
+  owner: string;
+  actionOwner: string;
+  authority: string;
+  /** Date ISO, ou texte libre (« Continu »). */
+  due: string;
+  indicator: string;
+  status: RiskStatus;
+  validation: RiskValidation;
+  source: string;
+  actions: RiskAction[];
+  reviews: RiskReview[];
+  notes: Block[];
+  comments: Comment[];
 }

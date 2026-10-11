@@ -25,6 +25,8 @@ npm run dev:db                  # PostgreSQL 17 sur le port 55433
 npm run cli -- project:create etourisme --title "Cadrage eTourisme" --admin vous@exemple.com
 npm run cli -- import:stories etourisme seeds/etourisme/stories.json
 npm run cli -- import:planning etourisme seeds/etourisme/workshops.json
+npm run cli -- import:raci etourisme seeds/etourisme/raci.json
+npm run cli -- import:risks etourisme seeds/etourisme/risks.json
 npm run dev                     # API sur :3000, front sur :5190
 ```
 
@@ -50,7 +52,7 @@ apps/web/          Front React (Vite) : pages, éditeur de blocs, temps réel
 apps/server/       API Node (Hono) : authentification, données, temps réel, imports, CLI
   migrations/      Schéma PostgreSQL, appliqué au démarrage
 packages/shared/   Types et contrats partagés entre le front et l'API
-seeds/etourisme/   Contenu de départ du projet eTourisme (backlog, programme)
+seeds/etourisme/   Contenu de départ du projet eTourisme (backlog, programme, phases et RACI, risques)
 deploy/            Scripts serveur : préparation des volumes, sauvegarde
 docs/              Architecture, déploiement Coolify, exploitation
 Dockerfile         Image unique (API + front)

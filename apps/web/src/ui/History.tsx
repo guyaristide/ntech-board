@@ -11,18 +11,24 @@ interface Entry {
 }
 
 const ACTION: Record<string, string> = {
-  create: 'a créé l’US',
+  create: 'a créé',
   update: 'a modifié',
   comment: 'a commenté',
   delete: 'a supprimé',
 };
 const label = (a: string) =>
   ACTION[a] ??
-  (a.startsWith('question')
-    ? 'a traité un point à trancher'
-    : a.startsWith('session')
-      ? 'a pris des notes de séance'
-      : 'a modifié');
+  (a.startsWith('raci')
+    ? 'a modifié la matrice RACI'
+    : a === 'review'
+      ? 'a consigné une revue'
+      : a.startsWith('action')
+        ? 'a modifié le plan d’actions'
+        : a.startsWith('question')
+          ? 'a traité un point à trancher'
+          : a.startsWith('session')
+            ? 'a pris des notes de séance'
+            : 'a modifié');
 
 /** Historique des modifications (qui, quoi, quand), chargé à l'ouverture. */
 export function History({ kind, id, stamp }: { kind: EntityKind; id: string; stamp: string }) {

@@ -1,0 +1,167 @@
+.matrix td {
+  height: auto;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.row[data-new] td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.actor {
+  vertical-align: bottom !important;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text-muted);
+}
+
+.actor span {
+  display: -webkit-box;
+  padding: 6px 0;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.cellTd {
+  padding: 2px !important;
+  text-align: center !important;
+}
+
+.cell {
+  width: 100%;
+  height: 30px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cell:not(:disabled):hover {
+  background: var(--bg-hover);
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell[data-value='A'],
+.cell[data-value='A/R'],
+.counts [data-value='A'] {
+  background: var(--tag-red);
+  color: var(--tag-red-text);
+}
+
+.cell[data-value='R'],
+.counts [data-value='R'] {
+  background: var(--tag-blue);
+  color: var(--tag-blue-text);
+}
+
+.cell[data-value='C'],
+.counts [data-value='C'] {
+  background: var(--tag-yellow);
+  color: var(--tag-yellow-text);
+}
+
+.cell[data-value='I'],
+.counts [data-value='I'] {
+  background: var(--tag-gray);
+  color: var(--tag-gray-text);
+}
+
+.cell[data-changed] {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.ok {
+  color: var(--tag-green-text);
+  font-size: 12px;
+}
+
+.ko {
+  color: var(--danger);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.rowActions {
+  white-space: nowrap;
+}
+
+.create {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.create input,
+.create select,
+.select,
+.dates input {
+  padding: 4px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+
+.create input {
+  min-width: 240px;
+}
+
+.dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.actors {
+  margin: 18px 0;
+}
+
+.actors summary {
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.actors ul {
+  margin: 8px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.actors li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 480px;
+}
+
+.counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.counts span {
+  padding: 0 5px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.counts span[data-zero] {
+  opacity: 0.35;
+}
+
+.absent {
+  color: var(--text-faint);
+  font-size: 12px;
+}
