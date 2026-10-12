@@ -281,7 +281,30 @@
   font-size: 12px;
 }
 
+/* Tablette et téléphone : les onglets défilent horizontalement au lieu de déborder. */
+@media (max-width: 900px) {
+  .views {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .view {
+    flex: none;
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 720px) {
+  /* Tableaux larges : la première colonne (identifiant) reste visible pendant le défilement. */
+  .table th:first-child,
+  .table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--bg);
+  }
+
   .search {
     order: 5;
     width: 100%;

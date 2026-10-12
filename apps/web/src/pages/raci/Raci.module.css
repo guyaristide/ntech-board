@@ -112,7 +112,11 @@
 }
 
 .create input {
-  min-width: 240px;
+  min-width: min(240px, 100%);
+}
+
+.create select {
+  max-width: 100%;
 }
 
 .dates {

@@ -100,6 +100,35 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
+/* Aperçu sur téléphone : marges réduites, colonnes empilées. « screen » : la zone imprimable d'une
+   page A4 est elle-même plus étroite que 720 px. */
+@media screen and (max-width: 720px) {
+  .screen {
+    padding: 0 8px 24px;
+  }
+  .toolbar {
+    gap: 8px;
+  }
+  .primary {
+    width: 100%;
+    margin-left: 0;
+    padding: 8px 10px;
+  }
+  .section {
+    padding: 24px 16px;
+  }
+  .two,
+  .slot {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .meta {
+    grid-template-columns: 24mm minmax(0, 1fr);
+  }
+  .doc {
+    font-size: 8.5pt;
+  }
+}
+
 @media print {
   .toolbar {
     display: none;
