@@ -8,6 +8,7 @@ import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
 import { Programme } from './pages/Programme';
+import { WeekPrint } from './pages/print/WeekPrint';
 import { RaciPage } from './pages/raci/RaciPage';
 import { References } from './pages/References';
 import { RiskPage } from './pages/risks/RiskPage';
@@ -47,6 +48,7 @@ export function App() {
       ) : (
         <Routes>
           <Route path="connexion" element={<Navigate to="/" replace />} />
+          <Route path="impression/semaine" element={<WeekPrint />} />
           <Route element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="backlog" element={<Backlog />} />

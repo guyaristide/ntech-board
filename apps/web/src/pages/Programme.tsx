@@ -55,9 +55,27 @@ export function Programme() {
       </div>
 
       {tab === 'calendar' ? (
-        phases.map(phase => (
+        phases.map((phase, i) => (
           <section key={phase}>
-            <h2 className={page.h2}>{phase}</h2>
+            <div className={styles.weekHead}>
+              <h2 className={page.h2}>{phase}</h2>
+              <span className={page.actions}>
+                <Link
+                  className={page.ghost}
+                  to={`/impression/semaine?semaine=${i + 1}`}
+                  title="Planning de la semaine : vue d’ensemble et ordre du jour"
+                >
+                  ⎙ PDF synthèse
+                </Link>
+                <Link
+                  className={page.ghost}
+                  to={`/impression/semaine?semaine=${i + 1}&deroule=1`}
+                  title="Planning de la semaine avec le déroulé de chaque journée"
+                >
+                  ⎙ PDF avec déroulé
+                </Link>
+              </span>
+            </div>
             <div className={styles.cards}>
               {ws.workshops
                 .filter(w => w.phase === phase)

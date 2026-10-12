@@ -9,7 +9,7 @@ Espace collaboratif de cadrage, édité par **NTECH SARL** (Neiba Technologies).
 Un tableau réunit :
 
 - le **backlog des user stories**, en tableau ou en Kanban. Chaque US se modifie sur sa page : récit, critères d'acceptation, notes et commentaires ;
-- le **programme des ateliers**, importé d'un planning Excel. On y retrouve les séquences et leur déroulé, les points à trancher avec leur réponse, et les notes de séance ;
+- le **programme des ateliers**, importé d'un planning Excel. On y retrouve les séquences et leur déroulé, les points à trancher avec leur réponse, et les notes de séance. Le planning de chaque semaine s'exporte en PDF, en synthèse ou avec le déroulé de chaque journée ;
 - les **références au cahier des charges**, reliées aux séquences et aux épiques.
 
 L'édition est collaborative et en temps réel : on voit les modifications des autres sans recharger, et qui consulte la même page. La connexion se fait par un lien envoyé par e-mail, sur invitation, avec trois rôles : administrateur, éditeur, lecteur.

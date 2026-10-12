@@ -127,3 +127,14 @@ a.card:hover {
 .matrixWrap {
   overflow-x: auto;
 }
+
+.weekHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+.weekHead a {
+  text-decoration: none;
+}
