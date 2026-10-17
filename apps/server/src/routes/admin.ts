@@ -158,7 +158,7 @@ adminRoutes.post('/import/:what{raci|risks}', async c => {
   }
 });
 
-/** Import d'un fichier de cadrage (JSON { diligences, stories }) : diligences et compléments des US. */
+/** Import d'un fichier de cadrage (JSON { parties, diligences, stories }) : parties prenantes, diligences, compléments des US. */
 adminRoutes.post('/import/cadrage', async c => {
   const form = await c.req.parseBody();
   const file = form.file;

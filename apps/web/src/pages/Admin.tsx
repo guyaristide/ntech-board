@@ -268,8 +268,8 @@ export function Admin() {
         <label className={styles.drop}>
           <strong>Compléments de cadrage</strong>
           <span>
-            JSON {'{ diligences, stories }'} : diligences issues des ateliers ; description, plateformes et
-            liaisons des US, posées seulement là où rien n’a encore été saisi.
+            JSON {'{ parties, diligences, stories }'} : parties prenantes, diligences issues des ateliers ;
+            description, plateformes et liaisons des US, posées seulement là où rien n’a encore été saisi.
           </span>
           <input
             type="file"
