@@ -90,6 +90,8 @@ export interface DeliverySettings {
   estimation: Estimation;
   workflow: WorkflowStep[];
   ticketTypes: TicketType[];
+  /** Critères qu'un ticket doit remplir pour entrer dans un sprint (« prêt »). */
+  readiness: TicketType[];
   /**
    * Qui voit la partie : les rôles cités, les membres rattachés aux organisations citées, et les
    * membres autorisés un par un ; un membre exclu ne la voit pas. Les administrateurs la voient toujours.
@@ -122,6 +124,12 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
       { id: 'subtask', name: 'Sous-tâche' },
       { id: 'bug', name: 'Bug' },
       { id: 'spike', name: 'Étude' },
+    ],
+    readiness: [
+      { id: 'criteria', name: 'Critères d’acceptation rédigés' },
+      { id: 'design', name: 'Maquettes ou parcours disponibles' },
+      { id: 'dependencies', name: 'Dépendances levées' },
+      { id: 'questions', name: 'Questions tranchées' },
     ],
     visibility: { roles: ['admin', 'editor', 'viewer'], organizations: [], allow: [], deny: [] },
   },

@@ -14,7 +14,9 @@ Un tableau réunit :
 - les **références au cahier des charges**, reliées aux séquences et aux épiques ;
 - le **référentiel des parties prenantes** : organisations, personnes et rôles, que le RACI, les risques, les diligences et les séquences citent. Un onglet rapproche les noms déjà saisis en texte, sans les modifier.
 
-Les **réglages du projet** (administrateurs) préparent la partie Réalisation : activation, clé des tickets, durée des sprints, estimation, étapes et types de tickets, et qui la voit (par rôle, par organisation ou membre par membre).
+La **partie Réalisation**, activée projet par projet, suit la livraison : les US validées passent en tickets, classés par priorité dans un backlog de réalisation, estimés, marqués « prêts », planifiés dans des sprints (capacité, démarrage, clôture avec vélocité et report des tickets non terminés, revue et rétrospective) et rangés dans des versions (feuille de route et frise). Elle n'est envoyée qu'aux membres qui la voient.
+
+Les **réglages du projet** (administrateurs) la paramètrent : activation, clé des tickets, durée des sprints, estimation, étapes et types de tickets, critères « prêt », et qui la voit (par rôle, par organisation ou membre par membre).
 
 L'édition est collaborative et en temps réel : on voit les modifications des autres sans recharger, et qui consulte la même page. La connexion se fait par un lien envoyé par e-mail, sur invitation, avec trois rôles : administrateur, éditeur, lecteur.
 

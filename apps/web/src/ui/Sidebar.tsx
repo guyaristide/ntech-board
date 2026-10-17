@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { diligenceOpen, ROLE_LABEL } from '@board/shared';
 import { BRAND } from '../brand';
 import { exportCsv, exportJson } from '../model/exporters';
-import { useIsAdmin, useWorkspace, type SaveState } from '../model/store';
+import { useIsAdmin, useSeesDelivery, useWorkspace, type SaveState } from '../model/store';
 import { Avatar } from './Presence';
 import styles from './Sidebar.module.css';
 
@@ -27,6 +27,7 @@ const shortDate = (iso: string | null) =>
 export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavigate: () => void }) {
   const ws = useWorkspace();
   const admin = useIsAdmin();
+  const delivery = useSeesDelivery();
   const [open, setOpen] = useState({ epics: true, workshops: true });
   const [editingName, setEditingName] = useState(false);
   const link = ({ isActive }: { isActive: boolean }) =>
@@ -88,6 +89,22 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
             <span className={styles.icon}>§</span> Références CdC{' '}
             <span className={styles.count}>{ws.references.length}</span>
           </NavLink>
+        ) : null}
+        {delivery ? (
+          <>
+            <span className={styles.section}>Réalisation</span>
+            <NavLink to="/realisation" end className={link}>
+              <span className={styles.icon}>☷</span> Backlog de réalisation{' '}
+              <span className={styles.count}>{ws.tickets.filter(t => !t.sprint).length}</span>
+            </NavLink>
+            <NavLink to="/realisation/sprints" className={link}>
+              <span className={styles.icon}>↻</span> Sprints{' '}
+              <span className={styles.count}>{ws.sprints.find(s => s.status === 'active')?.name ?? ''}</span>
+            </NavLink>
+            <NavLink to="/realisation/versions" className={link}>
+              <span className={styles.icon}>⚑</span> Feuille de route
+            </NavLink>
+          </>
         ) : null}
         <span className={styles.section}>Projet</span>
         <NavLink to="/parties" className={link}>

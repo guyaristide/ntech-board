@@ -94,6 +94,20 @@ const inflight = new Map<string, number>();
 const busy = (entity: string) =>
   (inflight.get(entity) ?? 0) > 0 || [...queue.values()].some(q => q.entity === entity);
 
+/** Outils d'écriture du store, pour les actions définies à part (model/delivery.ts). */
+export let ops: {
+  send: <T>(kind: EntityKind, id: string, call: () => Promise<T>) => Promise<T>;
+  defer: (
+    key: string,
+    kind: EntityKind,
+    id: string,
+    payload: Record<string, unknown>,
+    call: (p: Record<string, unknown>) => Promise<unknown>,
+  ) => void;
+  replace: (kind: EntityKind, id: string, received: unknown | null) => void;
+  local: (kind: EntityKind, id: string, change: (x: never) => unknown) => void;
+};
+
 export const useWorkspace = create<State>((set, get) => {
   const replace = <K extends EntityKind>(kind: K, id: string, received: unknown | null) =>
     set(s => {
@@ -196,6 +210,8 @@ export const useWorkspace = create<State>((set, get) => {
     sessions: w.sessions.map(s => (s.code === code ? change(s) : s)),
   });
 
+  ops = { send, defer, replace, local };
+
   return {
     ...EMPTY,
     phase: 'loading',
@@ -225,6 +241,9 @@ export const useWorkspace = create<State>((set, get) => {
           stories: data.stories.map(withStoryDefaults),
           diligences: data.diligences ?? [],
           parties: data.parties ?? [],
+          releases: data.releases ?? [],
+          sprints: data.sprints ?? [],
+          tickets: data.tickets ?? [],
           settings: withSettingsDefaults(data.settings),
         });
       } catch (e) {

@@ -9,6 +9,10 @@ import { Diligences } from './pages/diligences/Diligences';
 import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
+import { DeliveryBacklog } from './pages/delivery/DeliveryBacklog';
+import { Roadmap } from './pages/delivery/Roadmap';
+import { SprintPage } from './pages/delivery/SprintPage';
+import { Sprints } from './pages/delivery/Sprints';
 import { Parties } from './pages/parties/Parties';
 import { Settings } from './pages/parties/Settings';
 import { Programme } from './pages/Programme';
@@ -64,6 +68,10 @@ export function App() {
             <Route path="risque/:id" element={<RiskPage />} />
             <Route path="diligences" element={<Diligences />} />
             <Route path="diligence/:id" element={<DiligencePage />} />
+            <Route path="realisation" element={<DeliveryBacklog />} />
+            <Route path="realisation/sprints" element={<Sprints />} />
+            <Route path="realisation/sprint/:id" element={<SprintPage />} />
+            <Route path="realisation/versions" element={<Roadmap />} />
             <Route path="parties" element={<Parties />} />
             <Route path="reglages" element={<Settings />} />
             <Route path="admin" element={<Admin />} />

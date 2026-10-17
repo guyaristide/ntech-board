@@ -13,6 +13,7 @@ import {
   type Story,
   type Workshop,
 } from '@board/shared';
+import { seesDelivery } from '../access';
 import { requireRole, type AppEnv, type User } from '../auth';
 import {
   createStory,
@@ -69,7 +70,11 @@ workspaceRoutes.onError((err, c) => {
 
 workspaceRoutes.get('/workspace', read, async c => {
   const p = c.get('project');
-  return c.json(await getWorkspace(p.id, p.planning));
+  const data = await getWorkspace(p.id, p.planning);
+  // La partie Réalisation n'est envoyée qu'à ceux qui la voient (réglages du projet).
+  if (!(await seesDelivery(p.id, c.get('role'), c.get('user')!.id)))
+    Object.assign(data, { releases: [], sprints: [], tickets: [] });
+  return c.json(data);
 });
 
 // --- US ---------------------------------------------------------------------------------
@@ -348,6 +353,7 @@ workspaceRoutes.get('/events', read, c => {
       key,
       projectId,
       user: { id: user.id, name: user.name, email: user.email },
+      role: c.get('role')!,
       send: event => {
         queue.push(event);
         wake?.();

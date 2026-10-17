@@ -12,6 +12,9 @@ import {
   type WorkspaceData,
   type Party,
   type ProjectSettings,
+  type Release,
+  type Sprint,
+  type Ticket,
 } from '@board/shared';
 import { pool, tx, type Tx } from './db';
 
@@ -51,6 +54,9 @@ export async function getWorkspace(projectId: string, planning: string | null): 
     phases: of<Phase>('phase'),
     risks: of<Risk>('risk'),
     diligences: of<Diligence>('diligence'),
+    releases: of<Release>('release'),
+    sprints: of<Sprint>('sprint'),
+    tickets: of<Ticket>('ticket'),
   };
 }
 
@@ -109,6 +115,44 @@ export async function mutate<K extends EntityKind>(
     );
     await notify(c, projectId, kind, id, userId);
     return data;
+  });
+}
+
+/**
+ * Modifie plusieurs entités du même type dans une seule transaction (clôture de sprint, tickets
+ * déplacés) ; les verrous sont pris dans l'ordre des identifiants. Les identifiants inconnus sont ignorés.
+ */
+export async function mutateMany<K extends EntityKind>(
+  projectId: string,
+  kind: K,
+  ids: string[],
+  userId: string,
+  action: string,
+  change: (data: EntityOf<K>) => EntityOf<K>,
+  patch?: unknown,
+): Promise<EntityOf<K>[]> {
+  if (!ids.length) return [];
+  return tx(async c => {
+    const { rows } = await c.query<{ id: string; data: EntityOf<K> }>(
+      'SELECT id, data FROM entities WHERE project_id = $1 AND kind = $2 AND id = ANY($3) ORDER BY id FOR UPDATE',
+      [projectId, kind, ids],
+    );
+    const out: EntityOf<K>[] = [];
+    for (const row of rows) {
+      const data = change(row.data);
+      await c.query(
+        `UPDATE entities SET data = $4, revision = revision + 1, updated_at = now(), updated_by = $5
+          WHERE project_id = $1 AND kind = $2 AND id = $3`,
+        [projectId, kind, row.id, data, userId],
+      );
+      await c.query(
+        'INSERT INTO events (project_id, kind, entity_id, action, patch, user_id) VALUES ($1, $2, $3, $4, $5, $6)',
+        [projectId, kind, row.id, action, patch === undefined ? null : JSON.stringify(patch), userId],
+      );
+      await notify(c, projectId, kind, row.id, userId);
+      out.push(data);
+    }
+    return out;
   });
 }
 
@@ -190,6 +234,43 @@ export async function createEntity<K extends EntityKind>(
     );
     await notify(c, projectId, kind, id, userId);
     return data;
+  });
+}
+
+/** Crée plusieurs entités du même type dans une seule transaction (US passées en réalisation). */
+export async function createMany<K extends EntityKind>(
+  projectId: string,
+  userId: string,
+  kind: K,
+  pickId: (ids: string[]) => string,
+  builds: ((id: string) => EntityOf<K>)[],
+) {
+  if (!builds.length) return [];
+  return tx(async c => {
+    await c.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`${kind}:${projectId}`]);
+    const { rows } = await c.query<{ id: string; position: number }>(
+      'SELECT id, position FROM entities WHERE project_id = $1 AND kind = $2',
+      [projectId, kind],
+    );
+    const ids = rows.map(r => r.id);
+    let position = rows.reduce((m, r) => Math.max(m, r.position), 0);
+    const out: EntityOf<K>[] = [];
+    for (const build of builds) {
+      const id = pickId(ids);
+      ids.push(id);
+      const data = build(id);
+      await c.query(
+        `INSERT INTO entities (project_id, kind, id, data, position, revision, updated_by) VALUES ($1, $2, $3, $4, $5, 1, $6)`,
+        [projectId, kind, id, data, ++position, userId],
+      );
+      await c.query(
+        `INSERT INTO events (project_id, kind, entity_id, action, user_id) VALUES ($1, $2, $3, 'create', $4)`,
+        [projectId, kind, id, userId],
+      );
+      await notify(c, projectId, kind, id, userId);
+      out.push(data);
+    }
+    return out;
   });
 }
 

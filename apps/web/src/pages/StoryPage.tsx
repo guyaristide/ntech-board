@@ -12,6 +12,7 @@ import { EditableText } from '../ui/EditableText';
 import { PropertySelect } from '../ui/PropertySelect';
 import { TargetsField } from '../ui/TargetsField';
 import { DiligenceRefs } from './diligences/Diligences';
+import { StoryDelivery } from './delivery/StoryDelivery';
 import { StoryLinks } from './StoryLinks';
 import page from './Page.module.css';
 
@@ -250,6 +251,7 @@ export function StoryPage() {
           </div>
         ))}
       </div>
+      <StoryDelivery story={story} />
 
       <h2 className={page.h2}>Description</h2>
       <EditableText

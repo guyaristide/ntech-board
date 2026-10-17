@@ -1,0 +1,162 @@
+import type { ProjectSettings } from './parties';
+import type { Block, Comment } from './types';
+
+/**
+ * Partie Réalisation : versions (jalons de livraison), sprints et tickets. Une US validée au cadrage
+ * passe en réalisation sous la forme d'un ticket de type « US » qui garde le lien vers elle.
+ */
+export type ReleaseStatus = 'Prévue' | 'En cours' | 'Livrée' | 'Abandonnée';
+export const RELEASE_STATUSES: ReleaseStatus[] = ['Prévue', 'En cours', 'Livrée', 'Abandonnée'];
+
+export interface Release {
+  id: string;
+  name: string;
+  goal: string;
+  start: string | null;
+  /** Date de livraison visée. */
+  end: string | null;
+  status: ReleaseStatus;
+  /** Versions du cadrage couvertes (« MVP ») : les US de ces versions y sont rangées par défaut. */
+  versions: string[];
+  notes: Block[];
+}
+
+export type SprintStatus = 'planned' | 'active' | 'closed';
+export const SPRINT_STATUS_LABEL: Record<SprintStatus, string> = {
+  planned: 'Prévu',
+  active: 'En cours',
+  closed: 'Clos',
+};
+
+export interface Sprint {
+  id: string;
+  name: string;
+  goal: string;
+  start: string | null;
+  end: string | null;
+  status: SprintStatus;
+  /** Capacité de l'équipe pour le sprint, dans l'unité d'estimation du projet. */
+  capacity: number | null;
+  release: string;
+  review: Block[];
+  retro: Block[];
+  closedAt: string | null;
+  /** À la clôture : estimation des tickets terminés, et tickets reportés. */
+  velocity: number | null;
+  carried: string[];
+}
+
+export interface Ticket {
+  /** Clé lisible : ETO-12. */
+  id: string;
+  /** Type de ticket, parmi ceux des réglages (« story » pour une US). */
+  type: string;
+  title: string;
+  /** US du cadrage dont le ticket assure la réalisation. */
+  story: string;
+  parent: string;
+  /** Étape du workflow (identifiant, réglages du projet). */
+  status: string;
+  estimate: number | null;
+  release: string;
+  /** Sprint, ou vide : le ticket est au backlog. */
+  sprint: string;
+  /** Ordre dans le backlog : plus petit = plus prioritaire. */
+  rank: number;
+  /** Critères « prêt » cochés (identifiants, réglages du projet). */
+  ready: string[];
+  /** Partie prenante responsable (identifiant). */
+  assignee: string;
+  description: Block[];
+  comments: Comment[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const DELIVERY_KINDS = ['release', 'sprint', 'ticket'] as const;
+export type DeliveryKind = (typeof DELIVERY_KINDS)[number];
+export const isDeliveryKind = (kind: string): kind is DeliveryKind =>
+  (DELIVERY_KINDS as readonly string[]).includes(kind);
+
+/** Unité courte d'estimation : « 5 pts », « 3 j », « 6 h ». */
+export const UNIT: Record<string, string> = { points: 'pts', days: 'j', hours: 'h', none: '' };
+export const amount = (n: number, settings: ProjectSettings) =>
+  `${Number.isInteger(n) ? n : n.toFixed(1)} ${UNIT[settings.delivery.estimation]}`.trim();
+
+/** Catégorie d'une étape : à faire, en cours, terminé (première étape si l'identifiant est inconnu). */
+export const stepOf = (settings: ProjectSettings, status: string) =>
+  settings.delivery.workflow.find(s => s.id === status) ?? settings.delivery.workflow[0];
+export const isDone = (settings: ProjectSettings, t: Ticket) => stepOf(settings, t.status)?.category === 'done';
+
+/** Ticket prêt : tous les critères cochés, et estimé si le projet estime. */
+export const isReady = (settings: ProjectSettings, t: Ticket) =>
+  settings.delivery.readiness.every(c => t.ready.includes(c.id)) &&
+  (settings.delivery.estimation === 'none' || t.estimate !== null);
+
+/** Somme des estimations ; les tickets non estimés comptent pour zéro et sont dénombrés à part. */
+export function load(tickets: Ticket[]) {
+  return {
+    total: tickets.reduce((n, t) => n + (t.estimate ?? 0), 0),
+    unestimated: tickets.filter(t => t.estimate === null).length,
+  };
+}
+
+/** Avancement : estimation terminée sur estimation totale, et nombre de tickets terminés. */
+export function progress(settings: ProjectSettings, tickets: Ticket[]) {
+  const done = tickets.filter(t => isDone(settings, t));
+  return {
+    done: load(done).total,
+    total: load(tickets).total,
+    count: tickets.length,
+    doneCount: done.length,
+  };
+}
+
+const day = 86_400_000;
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const at = (s: string) => new Date(`${s}T12:00:00Z`);
+
+/**
+ * Dates d'un nouveau sprint : du lundi qui suit la fin du dernier sprint (ou la semaine en cours)
+ * au vendredi de sa dernière semaine.
+ */
+export function nextSprintDates(sprints: Sprint[], weeks: number, today = iso(new Date())) {
+  const mondayFrom = (d: Date) => new Date(d.getTime() + ((8 - d.getUTCDay()) % 7) * day);
+  const last = sprints
+    .map(s => s.end)
+    .filter((e): e is string => !!e)
+    .sort()
+    .at(-1);
+  let start: Date;
+  if (last && last >= today) start = mondayFrom(new Date(at(last).getTime() + day));
+  else {
+    const t = at(today);
+    const dow = t.getUTCDay();
+    start = dow === 0 || dow === 6 ? mondayFrom(t) : new Date(t.getTime() - (dow - 1) * day);
+  }
+  return { start: iso(start), end: iso(new Date(start.getTime() + (weeks * 7 - 3) * day)) };
+}
+
+/** Jours ouvrés restants d'un sprint (lundi à vendredi), aujourd'hui compris, à partir de son début s'il est à venir. */
+export function workdaysLeft(end: string | null, today = iso(new Date()), start: string | null = null) {
+  const from = start && start > today ? start : today;
+  if (!end || end < from) return 0;
+  let n = 0;
+  for (let d = at(from); iso(d) <= end; d = new Date(d.getTime() + day)) if (d.getUTCDay() % 6) n++;
+  return n;
+}
+
+/** Tickets triés par priorité (rang). */
+export const byRank = (a: Ticket, b: Ticket) => a.rank - b.rank;
+
+/**
+ * Rang d'un ticket déposé avant `before` dans une liste (à la fin si `before` est vide) : le milieu
+ * entre ses voisins, sans renuméroter les autres.
+ */
+export function rankAt(list: Ticket[], before: string | null, moving: string) {
+  const others = list.filter(t => t.id !== moving).sort(byRank);
+  const i = before ? others.findIndex(t => t.id === before) : -1;
+  if (i < 0) return (others.at(-1)?.rank ?? 0) + 1;
+  const prev = i > 0 ? others[i - 1].rank : others[i].rank - 2;
+  return (prev + others[i].rank) / 2;
+}

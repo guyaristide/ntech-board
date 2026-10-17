@@ -223,6 +223,7 @@ export const SettingsPatch = z
           .max(15)
           .refine(w => w.some(s => s.category === 'done'), 'Une étape « Terminé » au moins.'),
         ticketTypes: z.array(ticketType).min(1).max(15),
+        readiness: z.array(ticketType).max(15),
         visibility: z.object({
           roles: z.array(z.enum(ROLES)),
           organizations: z.array(z.string().max(40)).max(100),

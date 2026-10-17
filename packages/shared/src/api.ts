@@ -1,3 +1,4 @@
+import type { Release, Sprint, Ticket } from './delivery';
 import type { Party, ProjectSettings } from './parties';
 import type { Diligence, Epic, Phase, Reference, Risk, Story, Workshop } from './types';
 
@@ -52,10 +53,35 @@ export interface WorkspaceData {
   diligences: Diligence[];
   parties: Party[];
   settings: ProjectSettings;
+  /** Partie Réalisation : vides pour qui ne la voit pas. */
+  releases: Release[];
+  sprints: Sprint[];
+  tickets: Ticket[];
 }
 
-export type EntityKind = 'story' | 'epic' | 'workshop' | 'phase' | 'risk' | 'diligence' | 'party';
-export const ENTITY_KINDS: EntityKind[] = ['story', 'epic', 'workshop', 'phase', 'risk', 'diligence', 'party'];
+export type EntityKind =
+  | 'story'
+  | 'epic'
+  | 'workshop'
+  | 'phase'
+  | 'risk'
+  | 'diligence'
+  | 'party'
+  | 'release'
+  | 'sprint'
+  | 'ticket';
+export const ENTITY_KINDS: EntityKind[] = [
+  'story',
+  'epic',
+  'workshop',
+  'phase',
+  'risk',
+  'diligence',
+  'party',
+  'release',
+  'sprint',
+  'ticket',
+];
 export type EntityOf<K extends EntityKind> = K extends 'story'
   ? Story
   : K extends 'epic'
@@ -68,7 +94,13 @@ export type EntityOf<K extends EntityKind> = K extends 'story'
           ? Risk
           : K extends 'diligence'
             ? Diligence
-            : Party;
+            : K extends 'party'
+              ? Party
+              : K extends 'release'
+                ? Release
+                : K extends 'sprint'
+                  ? Sprint
+                  : Ticket;
 
 export interface PresenceEntry {
   userId: string;
@@ -83,7 +115,7 @@ export type ServerEvent =
       type: 'entity';
       kind: EntityKind;
       id: string;
-      data: Story | Epic | Workshop | Phase | Risk | Diligence | Party | null;
+      data: Story | Epic | Workshop | Phase | Risk | Diligence | Party | Release | Sprint | Ticket | null;
       by: string | null;
     }
   | { type: 'presence'; users: PresenceEntry[] }

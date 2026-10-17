@@ -241,6 +241,18 @@ export function Settings() {
       </section>
 
       <section className={styles.section}>
+        <h2 className={page.h2}>Critères « prêt »</h2>
+        <EditableList
+          items={d.readiness}
+          onChange={readiness => setD({ readiness })}
+          add={name => ({ id: uniqueId(name, d.readiness.map(c => c.id)), name })}
+        />
+        <p className={styles.hint}>
+          Ce qu’un ticket doit remplir avant d’entrer dans un sprint ; il doit aussi être estimé si le projet estime.
+        </p>
+      </section>
+
+      <section className={styles.section}>
         <h2 className={page.h2}>Types d’organisations</h2>
         <EditableList
           items={draft.organizationTypes.map(name => ({ id: name, name }))}

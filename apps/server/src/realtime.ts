@@ -1,5 +1,6 @@
 import pg from 'pg';
-import type { EntityKind, PresenceEntry, ServerEvent } from '@board/shared';
+import { isDeliveryKind, type EntityKind, type PresenceEntry, type Role, type ServerEvent } from '@board/shared';
+import { seesDelivery } from './access';
 import { env } from './env';
 import { getEntity } from './repo';
 
@@ -17,6 +18,7 @@ interface Client {
   key: string;
   projectId: string;
   user: { id: string; name: string; email: string };
+  role: Role;
   send: (event: ServerEvent) => void;
 }
 
@@ -89,7 +91,15 @@ export async function listen(
       return;
     }
     const data = await getEntity(n.projectId, n.kind, n.id);
-    broadcast(n.projectId, { type: 'entity', kind: n.kind, id: n.id, data, by: n.by });
+    const event: ServerEvent = { type: 'entity', kind: n.kind, id: n.id, data, by: n.by };
+    if (!isDeliveryKind(n.kind)) return broadcast(n.projectId, event);
+    // Partie Réalisation : seulement aux membres qui la voient (évalué une fois par membre).
+    const allowed = new Map<string, boolean>();
+    for (const c of clients.values()) {
+      if (c.projectId !== n.projectId) continue;
+      if (!allowed.has(c.user.id)) allowed.set(c.user.id, await seesDelivery(c.projectId, c.role, c.user.id));
+      if (allowed.get(c.user.id)) c.send(event);
+    }
   });
   await client.connect();
   await client.query(`LISTEN ${CHANNEL}`);
