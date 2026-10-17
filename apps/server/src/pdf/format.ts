@@ -1,24 +1,24 @@
 import type { AgendaItem, Session, Workshop } from '@board/shared';
 
-/** Semaines du programme : les ateliers regroupés par libellé de période, dans l'ordre du planning. */
-export const weeksOf = (workshops: Workshop[]) => [...new Set(workshops.map(w => w.phase))];
+/** Outils communs aux documents PDF : dates en français, semaines du programme, ordre du jour. */
 
-const at = (iso: string) => new Date(`${iso}T12:00:00`);
+export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+const at = (iso: string) => new Date(`${iso}T12:00:00Z`);
+const fr = (iso: string, o: Intl.DateTimeFormatOptions) =>
+  at(iso).toLocaleDateString('fr-FR', { timeZone: 'UTC', ...o });
 
 /** « mardi 13 octobre » */
 export const dayLabel = (iso: string | null) =>
-  iso
-    ? at(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })
-    : 'Date à fixer';
+  iso ? fr(iso, { weekday: 'long', day: 'numeric', month: 'long' }) : 'Date à fixer';
 
 /** « mer. 14/10 » */
 export const shortDate = (iso: string | null) =>
-  iso
-    ? `${at(iso).toLocaleDateString('fr-FR', { weekday: 'short' })} ${at(iso).toLocaleDateString('fr-FR', {
-        day: '2-digit',
-        month: '2-digit',
-      })}`
-    : '—';
+  iso ? `${fr(iso, { weekday: 'short' })} ${fr(iso, { day: '2-digit', month: '2-digit' })}` : '—';
+
+/** « 12 octobre 2026 » */
+export const today = () =>
+  new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 
 /** « 09:30 » devient « 9 h 30 ». */
 export const hour = (t: string | null) => (t ? t.replace(/^0/, '').replace(':', ' h ') : '');
@@ -26,7 +26,8 @@ export const hour = (t: string | null) => (t ? t.replace(/^0/, '').replace(':', 
 export const slot = (x: { start: string | null; end: string | null; allDay?: boolean }) =>
   x.allDay ? 'Journée' : [hour(x.start), hour(x.end)].filter(Boolean).join(' – ');
 
-export const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+/** Semaines du programme : les ateliers regroupés par libellé de période, dans l'ordre du planning. */
+export const weeksOf = (workshops: Workshop[]) => [...new Set(workshops.map(w => w.phase))];
 
 /**
  * Libellé de période du planning (« SEMAINE 1 · du mardi 13 au vendredi 16 octobre · avec le
@@ -41,7 +42,7 @@ export function describeWeek(phase: string, workshops: Workshop[]) {
 }
 
 /** Ordre du jour d'une journée : séquences et pauses, dans l'ordre de l'agenda. */
-type Slot = { kind: 'session'; s: Session } | Extract<AgendaItem, { kind: 'break' }>;
+export type Slot = { kind: 'session'; s: Session } | Extract<AgendaItem, { kind: 'break' }>;
 export function agendaOf(w: Workshop): Slot[] {
   const by = new Map(w.sessions.map(s => [s.code, s]));
   const items: AgendaItem[] = w.agenda.length
@@ -68,6 +69,10 @@ export function hours(workshops: Workshop[]) {
   return starts.length && ends.length ? `${hour(starts[0])} à ${hour(ends.at(-1)!)}` : '';
 }
 
-/** Texte sûr pour une chaîne CSS `content: "…"`. */
-export const cssString = (s: string) =>
-  `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, ' ')}"`;
+/** Nom de fichier sans accents ni espaces : « Planning_ateliers_semaine-1.pdf ». */
+export const fileName = (...parts: string[]) =>
+  parts
+    .join('_')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Za-z0-9_-]+/g, '-') + '.pdf';

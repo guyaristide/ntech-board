@@ -4,6 +4,7 @@ import { useWorkspace } from '../model/store';
 import type { Question } from '@board/shared';
 import { EditableText } from '../ui/EditableText';
 import { PropertySelect } from '../ui/PropertySelect';
+import { PdfButton } from '../ui/PdfButton';
 import { Tag } from '../ui/Tag';
 import page from './Page.module.css';
 import styles from './Overview.module.css';
@@ -52,6 +53,14 @@ export function Programme() {
             ? Points à trancher
           </button>
         </div>
+        <span className={page.actions}>
+          <PdfButton
+            path="/pdf/couverture"
+            title="Couverture de tous les cas d’usage par les ateliers du programme"
+          >
+            ⤓ PDF couverture des UC
+          </PdfButton>
+        </span>
       </div>
 
       {tab === 'calendar' ? (
@@ -60,20 +69,24 @@ export function Programme() {
             <div className={styles.weekHead}>
               <h2 className={page.h2}>{phase}</h2>
               <span className={page.actions}>
-                <Link
-                  className={page.ghost}
-                  to={`/impression/semaine?semaine=${i + 1}`}
+                <PdfButton
+                  path={`/pdf/semaine/${i + 1}`}
                   title="Planning de la semaine : vue d’ensemble et ordre du jour"
                 >
-                  ⎙ PDF synthèse
-                </Link>
-                <Link
-                  className={page.ghost}
-                  to={`/impression/semaine?semaine=${i + 1}&deroule=1`}
+                  ⤓ PDF synthèse
+                </PdfButton>
+                <PdfButton
+                  path={`/pdf/semaine/${i + 1}?deroule=1`}
                   title="Planning de la semaine avec le déroulé de chaque journée"
                 >
-                  ⎙ PDF avec déroulé
-                </Link>
+                  ⤓ PDF avec déroulé
+                </PdfButton>
+                <PdfButton
+                  path={`/pdf/couverture?semaine=${i + 1}`}
+                  title="Cas d’usage traités cette semaine : journée, atelier et séquences"
+                >
+                  ⤓ PDF couverture des UC
+                </PdfButton>
               </span>
             </div>
             <div className={styles.cards}>
