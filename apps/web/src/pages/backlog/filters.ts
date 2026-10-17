@@ -1,7 +1,9 @@
-import type { Story } from '@board/shared';
+import { targetLabel, type Story } from '@board/shared';
 
 export const FILTER_KEYS = [
   'epic',
+  'platform',
+  'module',
   'actor',
   'version',
   'workshop',
@@ -12,6 +14,8 @@ export const FILTER_KEYS = [
 export type FilterKey = (typeof FILTER_KEYS)[number];
 export const FILTER_LABEL: Record<FilterKey, string> = {
   epic: 'Épique',
+  platform: 'Plateforme',
+  module: 'Module',
   actor: 'Acteur',
   version: 'Version',
   workshop: 'Atelier',
@@ -25,17 +29,30 @@ export type Filters = Record<FilterKey, string[]>;
 export const readFilters = (params: URLSearchParams): Filters =>
   Object.fromEntries(FILTER_KEYS.map(k => [k, params.getAll(k)])) as Filters;
 
+/**
+ * Valeurs d'une US pour un filtre : une seule le plus souvent, plusieurs pour les plateformes.
+ * Une US sans plateforme vaut « » (Vide), comme une propriété non renseignée.
+ */
+export const valuesOf = (s: Story, key: FilterKey): string[] => {
+  if (key !== 'platform' && key !== 'module') return [String(s[key] ?? '')];
+  const values =
+    key === 'platform'
+      ? [...new Set(s.targets.map(t => t.platform))]
+      : s.targets.filter(t => t.module).map(targetLabel);
+  return values.length ? values : [''];
+};
+
 const norm = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 export function applyFilters(stories: Story[], filters: Filters, query: string) {
   const words = norm(query).split(/\s+/).filter(Boolean);
   return stories.filter(
     s =>
-      FILTER_KEYS.every(k => !filters[k].length || filters[k].includes(String(s[k] ?? ''))) &&
+      FILTER_KEYS.every(k => !filters[k].length || valuesOf(s, k).some(v => filters[k].includes(v))) &&
       (!words.length ||
         words.every(w =>
           norm(
-            `${s.id} ${s.title} ${s.asA} ${s.iWant} ${s.soThat} ${s.source} ${s.acceptance.map(c => c.text).join(' ')}`,
+            `${s.id} ${s.title} ${s.description} ${s.asA} ${s.iWant} ${s.soThat} ${s.source} ${s.acceptance.map(c => c.text).join(' ')}`,
           ).includes(w),
         )),
   );

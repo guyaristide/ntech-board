@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PRIORITIES, STATUSES, VERSIONS } from '@board/shared';
+import { PRIORITIES, STATUSES, targetLabel, VERSIONS } from '@board/shared';
 import { useWorkspace } from '../../model/store';
 import type { Story } from '@board/shared';
 import { PropertySelect } from '../../ui/PropertySelect';
@@ -68,6 +68,14 @@ export function StoryTable({
                   <span className={styles.badge} title="Enrichie : notes ou commentaires">
                     ✎ {s.comments.length || ''}
                   </span>
+                ) : null}
+                {s.links.length ? (
+                  <span className={styles.badge} title={`Liée à ${s.links.map(l => l.story).join(', ')}`}>
+                    ⛓ {s.links.length}
+                  </span>
+                ) : null}
+                {s.targets.length ? (
+                  <span className={styles.targets}>{s.targets.map(targetLabel).join(' · ')}</span>
                 ) : null}
               </td>
               <td>

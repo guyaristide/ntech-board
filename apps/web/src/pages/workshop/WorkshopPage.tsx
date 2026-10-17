@@ -7,6 +7,7 @@ import { Comments } from '../../ui/Comments';
 import { PropertySelect } from '../../ui/PropertySelect';
 import { Tag } from '../../ui/Tag';
 import { StoryList } from '../backlog/Backlog';
+import { DiligenceRefs } from '../diligences/Diligences';
 import page from '../Page.module.css';
 import overview from '../Overview.module.css';
 import { SessionCard } from './SessionCard';
@@ -39,6 +40,7 @@ export function WorkshopPage() {
   const prev = ws.workshops[index - 1];
   const next = ws.workshops[index + 1];
   const stories = ws.stories.filter(s => s.workshop === w.id);
+  const diligences = ws.diligences.filter(d => d.workshops.includes(w.id));
   const epics = ws.epics.filter(e => e.workshops.includes(w.id));
   const questions = w.sessions.flatMap(s => s.questions);
   const settled = questions.filter(q => q.status !== 'Ouvert').length;
@@ -195,6 +197,13 @@ export function WorkshopPage() {
       ) : (
         <p className={page.faint}>Aucune US rattachée à cet atelier.</p>
       )}
+
+      {diligences.length ? (
+        <>
+          <h2 className={page.h2}>Diligences issues de l’atelier ({diligences.length})</h2>
+          <DiligenceRefs items={diligences} />
+        </>
+      ) : null}
 
       <h2 className={page.h2}>Notes de l’atelier</h2>
       <BlockEditor

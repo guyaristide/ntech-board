@@ -8,7 +8,8 @@ Espace collaboratif de cadrage, édité par **NTECH SARL** (Neiba Technologies).
 
 Un tableau réunit :
 
-- le **backlog des user stories**, en tableau ou en Kanban. Chaque US se modifie sur sa page : récit, critères d'acceptation, notes et commentaires ;
+- le **backlog des user stories**, en tableau ou en Kanban, filtrable par plateforme et par module. Chaque US se modifie sur sa page : description, plateformes visées (« PMS › Réservations »), récit, critères d'acceptation, liaisons avec les autres US, notes et commentaires ;
+- les **diligences** issues des ateliers : ce que chaque partie doit produire, étudier, trancher ou fournir, ce dont cela dépend, et les US, ateliers et risques concernés ;
 - le **programme des ateliers**, importé d'un planning Excel. On y retrouve les séquences et leur déroulé, les points à trancher avec leur réponse, et les notes de séance. Le planning de chaque semaine se télécharge en PDF, en synthèse ou avec le déroulé de chaque journée, de même que la couverture des cas d'usage par les ateliers (tout le programme ou une semaine). Les PDF sont construits par le serveur et téléchargés ;
 - les **références au cahier des charges**, reliées aux séquences et aux épiques.
 
@@ -27,6 +28,7 @@ npm run cli -- import:stories etourisme seeds/etourisme/stories.json
 npm run cli -- import:planning etourisme seeds/etourisme/workshops.json
 npm run cli -- import:raci etourisme seeds/etourisme/raci.json
 npm run cli -- import:risks etourisme seeds/etourisme/risks.json
+npm run cli -- import:cadrage etourisme "$PWD/seeds/etourisme/cadrage-2026-10-17.json"
 npm run dev                     # API sur :3000, front sur :5190
 ```
 
@@ -52,7 +54,7 @@ apps/web/          Front React (Vite) : pages, éditeur de blocs, temps réel
 apps/server/       API Node (Hono) : authentification, données, temps réel, imports, CLI
   migrations/      Schéma PostgreSQL, appliqué au démarrage
 packages/shared/   Types et contrats partagés entre le front et l'API
-seeds/etourisme/   Contenu de départ du projet eTourisme (backlog, programme, phases et RACI, risques)
+seeds/etourisme/   Contenu de départ du projet eTourisme (backlog, programme, phases et RACI, risques, cadrage du 17/10)
 deploy/            Scripts serveur : préparation des volumes, sauvegarde
 docs/              Architecture, déploiement Coolify, exploitation
 Dockerfile         Image unique (API + front)

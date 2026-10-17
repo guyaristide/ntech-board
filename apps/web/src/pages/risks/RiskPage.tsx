@@ -18,8 +18,10 @@ import { PropertySelect } from '../../ui/PropertySelect';
 import { Tag } from '../../ui/Tag';
 import backlog from '../backlog/Backlog.module.css';
 import page from '../Page.module.css';
+import { DiligenceRefs } from '../diligences/Diligences';
 import { currentPhase } from '../raci/RaciPage';
-import { dueLabel, levelOf, scoreOf } from './riskView';
+import { levelOf, scoreOf } from './riskView';
+import { dueLabel } from '../../model/due';
 import styles from './Risks.module.css';
 
 const SCALE = ['1', '2', '3', '4', '5'];
@@ -45,6 +47,7 @@ export function RiskPage() {
     );
   }
   const set = (patch: Partial<Risk>) => ws.updateRisk(risk.id, patch);
+  const diligences = ws.diligences.filter(d => d.risks.includes(risk.id));
   const index = ws.risks.indexOf(risk);
   const people = [
     ...new Set([
@@ -382,6 +385,13 @@ export function RiskPage() {
             Consigner la revue
           </button>
         </form>
+      ) : null}
+
+      {diligences.length ? (
+        <>
+          <h2 className={page.h2}>Diligences liées ({diligences.length})</h2>
+          <DiligenceRefs items={diligences} />
+        </>
       ) : null}
 
       <h2 className={page.h2}>Notes</h2>

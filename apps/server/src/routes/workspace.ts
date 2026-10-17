@@ -2,9 +2,28 @@ import { randomUUID } from 'node:crypto';
 import { Hono } from 'hono';
 import { streamSSE } from 'hono/streaming';
 import type { z } from 'zod';
-import type { Comment, ServerEvent, Story, Workshop } from '@board/shared';
+import {
+  ENTITY_KINDS,
+  LINK_INVERSE,
+  putLink,
+  withStoryDefaults,
+  type Comment,
+  type EntityKind,
+  type ServerEvent,
+  type Story,
+  type Workshop,
+} from '@board/shared';
 import { requireRole, type AppEnv, type User } from '../auth';
-import { createStory, deleteEntity, getEntity, getWorkspace, history, mutate, NotFound } from '../repo';
+import {
+  createStory,
+  deleteEntity,
+  getEntity,
+  getWorkspace,
+  history,
+  mutate,
+  mutatePair,
+  NotFound,
+} from '../repo';
 import { setPresence, subscribe } from '../realtime';
 import { fail, log } from '../log';
 import { uid } from '../merge';
@@ -16,6 +35,7 @@ import {
   QuestionCreate,
   QuestionPatch,
   SessionPatch,
+  StoryLinkBody,
   StoryPatch,
   WorkshopPatch,
 } from './schemas';
@@ -84,6 +104,9 @@ workspaceRoutes.post('/stories', write, async c => {
     id,
     epic: input.epic,
     title: '',
+    description: '',
+    targets: [],
+    links: [],
     actor: 'Touriste',
     asA: '',
     iWant: '',
@@ -111,9 +134,11 @@ workspaceRoutes.post('/stories/:id/duplicate', write, async c => {
   if (!src) return c.json({ error: 'not_found' }, 404);
   const at = new Date().toISOString();
   const story = await createStory(p.id, c.get('user')!.id, id => ({
-    ...src,
+    ...withStoryDefaults(src),
     id,
     title: `${src.title} (copie)`,
+    // La copie est une autre US : elle ne reprend pas les liaisons de l'originale.
+    links: [],
     acceptance: src.acceptance.map(a => ({ ...a, id: uid(), done: false })),
     body: src.body.map(b => ({ ...b, id: uid() })),
     comments: [],
@@ -126,8 +151,57 @@ workspaceRoutes.post('/stories/:id/duplicate', write, async c => {
 });
 
 workspaceRoutes.delete('/stories/:id', write, async c => {
-  await deleteEntity(c.get('project').id, c.get('user')!.id, 'story', c.req.param('id'));
+  const p = c.get('project').id;
+  const user = c.get('user')!.id;
+  const id = c.req.param('id');
+  const story = await getEntity(p, 'story', id);
+  await deleteEntity(p, user, 'story', id);
+  // Les US liées ne gardent pas de liaison vers une US qui n'existe plus.
+  for (const l of story?.links ?? [])
+    await mutate(p, 'story', l.story, user, 'unlink', s => ({
+      ...s,
+      links: (s.links ?? []).filter(x => x.story !== id),
+    })).catch(e => {
+      if (!(e instanceof NotFound)) throw e;
+    });
   return c.json({ ok: true });
+});
+
+/** Lie deux US ; la liaison inverse (« dépend de » / « nécessaire à ») est posée sur l'autre. */
+workspaceRoutes.post('/stories/:id/links', write, async c => {
+  const input = await body(c.req, StoryLinkBody);
+  const id = c.req.param('id');
+  if (!input || input.story === id) return c.json({ error: 'invalid' }, 400);
+  const [story] = await mutatePair(
+    c.get('project').id,
+    'story',
+    [id, input.story],
+    c.get('user')!.id,
+    'link',
+    (a, b) => [
+      { ...a, links: putLink(a.links ?? [], input) },
+      { ...b, links: putLink(b.links ?? [], { story: id, type: LINK_INVERSE[input.type] }) },
+    ],
+    input,
+  );
+  return c.json(story);
+});
+
+workspaceRoutes.delete('/stories/:id/links/:other', write, async c => {
+  const { id, other } = c.req.param();
+  const [story] = await mutatePair(
+    c.get('project').id,
+    'story',
+    [id, other],
+    c.get('user')!.id,
+    'unlink',
+    (a, b) => [
+      { ...a, links: (a.links ?? []).filter(l => l.story !== other) },
+      { ...b, links: (b.links ?? []).filter(l => l.story !== id) },
+    ],
+    { story: other },
+  );
+  return c.json(story);
 });
 
 workspaceRoutes.post('/stories/:id/comments', write, async c => {
@@ -150,9 +224,8 @@ workspaceRoutes.post('/stories/:id/comments', write, async c => {
 
 workspaceRoutes.get('/history/:kind/:id', read, async c => {
   const kind = c.req.param('kind');
-  if (!['story', 'epic', 'workshop', 'phase', 'risk'].includes(kind))
-    return c.json({ error: 'invalid' }, 400);
-  return c.json(await history(c.get('project').id, kind as 'story', c.req.param('id')));
+  if (!ENTITY_KINDS.includes(kind as EntityKind)) return c.json({ error: 'invalid' }, 400);
+  return c.json(await history(c.get('project').id, kind as EntityKind, c.req.param('id')));
 });
 
 // --- Épiques ----------------------------------------------------------------------------

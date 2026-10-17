@@ -15,6 +15,8 @@ const ACTION: Record<string, string> = {
   update: 'a modifié',
   comment: 'a commenté',
   delete: 'a supprimé',
+  link: 'a lié une autre US',
+  unlink: 'a retiré une liaison',
 };
 const label = (a: string) =>
   ACTION[a] ??

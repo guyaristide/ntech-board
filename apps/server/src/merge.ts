@@ -1,7 +1,13 @@
 import { randomUUID } from 'node:crypto';
 import {
+  LINK_INVERSE,
   normalizePvStatus,
+  putLink,
+  sameTarget,
+  withStoryDefaults,
   type Epic,
+  type StoryLink,
+  type Target,
   type Question,
   type Session,
   type Story,
@@ -15,10 +21,18 @@ import type { RawPlanning, RawWorkshop } from './importers/planning';
  */
 export type RawStory = Omit<
   Story,
-  'acceptance' | 'status' | 'body' | 'comments' | 'createdAt' | 'updatedAt'
+  | 'acceptance'
+  | 'status'
+  | 'body'
+  | 'comments'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'description'
+  | 'targets'
+  | 'links'
 > & {
   acceptance: string[];
-};
+} & Partial<Pick<Story, 'description' | 'targets' | 'links'>>;
 export type RawEpic = Omit<Epic, 'body'>;
 export interface RawStories {
   epics: RawEpic[];
@@ -28,6 +42,9 @@ export interface RawStories {
 export const uid = () => randomUUID().slice(0, 8);
 
 export const storyFromRaw = (s: RawStory, at: string): Story => ({
+  description: '',
+  targets: [],
+  links: [],
   ...s,
   derived: !!s.derived,
   acceptance: s.acceptance.map(text => ({ id: uid(), text, done: false })),
@@ -99,4 +116,47 @@ export function mergePlanning(previous: Workshop[], planning: RawPlanning) {
     .map(p => ({ ...p, id: `ancien-${p.id}`, phase: 'Ancienne version du planning' }));
   const archived = previous.filter(p => p.id.startsWith('ancien-') && !orphaned.some(o => o.id === p.id));
   return { workshops: [...workshops, ...orphaned, ...archived], orphaned: orphaned.length };
+}
+
+/** Complément d'une US apporté par un fichier de cadrage (description, plateformes, liaisons). */
+export interface StoryEnrichment {
+  id: string;
+  description?: string;
+  targets?: Target[];
+  links?: StoryLink[];
+}
+
+/**
+ * Applique un complément sans rien écraser : la description et les plateformes ne sont posées que
+ * si l'US n'en a pas encore ; les liaisons s'ajoutent à celles qui existent (celle déjà posée sur un
+ * couple d'US est gardée). Renvoie null si rien ne change.
+ */
+export function enrichStory(current: Story, e: StoryEnrichment): Story | null {
+  const s = withStoryDefaults(current);
+  const description = !s.description.trim() && e.description?.trim() ? e.description.trim() : s.description;
+  const targets = !s.targets.length && e.targets?.length ? dedupeTargets(e.targets) : s.targets;
+  const links = (e.links ?? [])
+    .filter(l => l.story !== s.id && !s.links.some(x => x.story === l.story))
+    .reduce(putLink, s.links);
+  const changed = description !== s.description || targets !== s.targets || links.length !== s.links.length;
+  return changed ? { ...s, description, targets, links } : null;
+}
+
+const dedupeTargets = (targets: Target[]) =>
+  targets.filter((t, i) => targets.findIndex(x => sameTarget(x, t)) === i);
+
+/**
+ * Liaisons d'un fichier de cadrage, rendues symétriques : chaque liaison A → B ajoute B → A avec
+ * le type inverse, sauf si le fichier en décrit déjà une pour ce couple.
+ */
+export function symmetricLinks(items: StoryEnrichment[]): Map<string, StoryLink[]> {
+  const out = new Map<string, StoryLink[]>();
+  const add = (from: string, link: StoryLink) => {
+    const list = out.get(from) ?? [];
+    if (!list.some(l => l.story === link.story)) out.set(from, [...list, link]);
+  };
+  for (const e of items) for (const l of e.links ?? []) add(e.id, l);
+  for (const e of items)
+    for (const l of e.links ?? []) add(l.story, { story: e.id, type: LINK_INVERSE[l.type] });
+  return out;
 }

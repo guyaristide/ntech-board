@@ -1,11 +1,13 @@
 import { Hono } from 'hono';
-import type { Phase, RaciRow, Risk, RiskAction } from '@board/shared';
+import type { Diligence, Phase, RaciRow, Risk, RiskAction } from '@board/shared';
 import { requireRole, type AppEnv, type User } from '../auth';
 import { fail } from '../log';
 import { uid } from '../merge';
 import { createEntity, deleteEntity, getEntity, mutate, nextId, NotFound } from '../repo';
 import {
   CommentBody,
+  DiligenceCreate,
+  DiligencePatch,
   PhaseCreate,
   PhasePatch,
   RaciRowCreate,
@@ -17,7 +19,7 @@ import {
 } from './schemas';
 import { body, comment } from './workspace';
 
-/** Gouvernance du projet : phases et leur matrice RACI, registre et matrice des risques. */
+/** Gouvernance du projet : phases et leur matrice RACI, risques, diligences issues des ateliers. */
 export const governanceRoutes = new Hono<AppEnv>();
 
 const write = requireRole('editor');
@@ -276,6 +278,71 @@ governanceRoutes.post('/risks/:id/comments', write, async c => {
     await onRisk(c, c.req.param('id'), 'comment', r => ({
       ...r,
       comments: [...r.comments, comment(user, input.text)],
+    })),
+  );
+});
+
+// --- Diligences -------------------------------------------------------------------------
+
+const onDiligence = (
+  c: Ctx,
+  id: string,
+  action: string,
+  change: (d: Diligence) => Diligence,
+  patch?: unknown,
+) => mutate(ids(c).project, 'diligence', id, ids(c).user.id, action, change, patch);
+
+governanceRoutes.post('/diligences', write, async c => {
+  const input = await body(c.req, DiligenceCreate);
+  if (!input) return c.json({ error: 'invalid' }, 400);
+  const { project, user } = ids(c);
+  const diligence = await createEntity(
+    project,
+    user.id,
+    'diligence',
+    list => nextId(list, 'D'),
+    id => ({
+      id,
+      title: '',
+      detail: '',
+      kind: 'Livrable',
+      owner: '',
+      partners: '',
+      dependency: '',
+      due: '',
+      status: 'À faire',
+      outcome: '',
+      source: `Saisie dans l’outil le ${today()}`,
+      workshops: [],
+      stories: [],
+      risks: [],
+      notes: [],
+      comments: [],
+      ...input.patch,
+    }),
+  );
+  return c.json(diligence, 201);
+});
+
+governanceRoutes.patch('/diligences/:id', write, async c => {
+  const patch = await body(c.req, DiligencePatch);
+  if (!patch) return c.json({ error: 'invalid' }, 400);
+  return c.json(await onDiligence(c, c.req.param('id'), 'update', d => ({ ...d, ...patch }), patch));
+});
+
+governanceRoutes.delete('/diligences/:id', write, async c => {
+  await deleteEntity(ids(c).project, ids(c).user.id, 'diligence', c.req.param('id'));
+  return c.json({ ok: true });
+});
+
+governanceRoutes.post('/diligences/:id/comments', write, async c => {
+  const input = await body(c.req, CommentBody);
+  if (!input) return c.json({ error: 'invalid' }, 400);
+  const user = ids(c).user;
+  return c.json(
+    await onDiligence(c, c.req.param('id'), 'comment', d => ({
+      ...d,
+      comments: [...d.comments, comment(user, input.text)],
     })),
   );
 });

@@ -180,6 +180,40 @@
   margin-top: 3px;
 }
 
+/* Liste de contenus liés (diligences d'une US, US d'une diligence) : une ligne par élément. */
+.refList {
+  margin: 4px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.refRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 2px 6px;
+  border-radius: var(--radius);
+}
+
+.refRow:hover {
+  background: var(--bg-hover);
+}
+
+.refRow > a {
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.kickerInline {
+  margin-right: 4px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
 @media (max-width: 720px) {
   .page,
   .wide {

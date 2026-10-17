@@ -52,8 +52,18 @@ Le schéma est dans `apps/server/migrations/001_init.sql`.
 | `memberships` | rôle d'un utilisateur dans un projet : `admin`, `editor` ou `viewer` |
 | `login_tokens` | liens de connexion. Seul le hash SHA-256 est stocké ; un lien expire au bout de 20 minutes et ne sert qu'une fois |
 | `sessions` | sessions ouvertes (hash du jeton), 30 jours glissants |
-| `entities` | contenus : `story`, `epic`, `workshop`, `reference`, `phase` (avec sa matrice RACI), `risk` (avec ses actions et ses revues), en JSONB, avec `position` et `revision` |
+| `entities` | contenus : `story`, `epic`, `workshop`, `reference`, `phase` (avec sa matrice RACI), `risk` (avec ses actions et ses revues), `diligence`, en JSONB, avec `position` et `revision` |
 | `events` | journal de chaque modification (qui, quoi, quand), qui alimente l'historique des pages |
+
+### Ce que porte une US
+
+- **Description** : texte libre qui complète le récit ; un commentaire peut y être repris d'un clic.
+- **Plateformes visées** (`targets`) : couples plateforme et module (« PMS › Réservations », « Back-office › Points d'intérêt »). Les valeurs ne sont pas figées dans le code : chaque projet a les siennes, proposées d'après celles déjà employées.
+- **Liaisons** (`links`) : même fonctionnalité, doublon, dépend de, nécessaire à, voir aussi. Une liaison est enregistrée **des deux côtés**, dans une seule transaction qui verrouille les deux US par ordre d'identifiant (`mutatePair`) : « A dépend de B » pose « B est nécessaire à A ». Les US reliées par « même fonctionnalité » ou « doublon » forment un groupe, de proche en proche (`featureGroup`). Supprimer une US retire les liaisons qui pointent vers elle.
+
+Les US enregistrées avant ces champs ne les portent pas : le front les complète à la lecture (`withStoryDefaults`).
+
+Une **diligence** a un responsable et des parties associées, une dépendance, une échéance (date ou texte), un statut, un résultat, et les identifiants des US, ateliers et risques concernés ; ces pages listent en retour les diligences qui les citent.
 
 `revision = 0` signifie qu'un contenu n'a jamais été modifié dans l'outil. Un nouvel import peut alors le remplacer ; sinon, ce qui a été saisi est conservé.
 
@@ -92,8 +102,10 @@ En cas de conflit sur **un même champ**, la dernière écriture l'emporte. Ce c
 - **Planning des ateliers (.xlsx) :** lu par `apps/server/src/importers/planning.ts` (onglets Planning, Suivi des PV et Références CdC). Le classeur n'est jamais modifié.
 - **Backlog (.json `{ epics, stories }`) :** les US jamais modifiées sont mises à jour, les autres sont conservées.
 - **Matrice RACI et matrice des risques (.xlsx ou .json) :** lues par `apps/server/src/importers/governance.ts`. Les phases et les risques jamais modifiés sont remplacés, les autres conservés.
+- **Compléments de cadrage (.json `{ diligences, stories }`) :** les diligences suivent la règle des risques. Pour les US, la description et les plateformes ne sont posées que si elles sont vides ; les liaisons s'ajoutent, rendues symétriques, sans remplacer celle déjà posée sur un couple d'US (`enrichStory`, `symmetricLinks`, testées dans `apps/server/test/links.test.ts`).
+- **Restauration d'un export (`import:snapshot`) :** recopie un export complet dans un projet sans US, pour reproduire un tableau de production en local.
 
-Dans les deux cas, les règles de fusion sont dans `apps/server/src/merge.ts` et testées dans `apps/server/test/merge.test.ts`. Un import ne perd rien de ce qui a été saisi :
+Dans tous les cas, les règles de fusion sont dans `apps/server/src/merge.ts` et testées dans `apps/server/test/merge.test.ts`. Un import ne perd rien de ce qui a été saisi :
 
 - les réponses et les points ajoutés à la main restent rattachés à leur séquence ;
 - un atelier enrichi qui disparaît du planning est gardé sous `ancien-Jx`.

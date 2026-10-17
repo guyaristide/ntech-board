@@ -25,10 +25,35 @@ export interface Criterion {
   done: boolean;
 }
 
+/**
+ * Plateforme visée par une US et, dans cette plateforme, le module concerné : « PMS › Réservations ».
+ * Les valeurs sont propres à chaque projet : elles se créent depuis l'US, rien n'est figé dans le code.
+ */
+export interface Target {
+  platform: string;
+  module: string;
+}
+
+/**
+ * Nature d'une liaison entre deux US. « same » : les deux US décrivent la même fonctionnalité
+ * (souvent une US de cas d'usage et une exigence EX) ; « duplicate » : l'une répète l'autre ;
+ * « dependsOn » et « requiredBy » se répondent ; « related » : à lire ensemble.
+ */
+export type LinkType = 'same' | 'duplicate' | 'dependsOn' | 'requiredBy' | 'related';
+export interface StoryLink {
+  story: string;
+  type: LinkType;
+}
+
 export interface Story {
   id: string;
   epic: string;
   title: string;
+  /** Ce que fait la fonctionnalité, en clair : complète le récit, souvent tirée des commentaires. */
+  description: string;
+  targets: Target[];
+  /** Liaisons vers d'autres US ; chaque liaison est enregistrée des deux côtés. */
+  links: StoryLink[];
   actor: string;
   asA: string;
   iWant: string;
@@ -132,6 +157,36 @@ export interface Reference {
   sessions: string[];
 }
 
+export type DiligenceKind = 'Livrable' | 'Étude' | 'Arbitrage' | 'Fourniture';
+export type DiligenceStatus = 'À faire' | 'En cours' | 'En attente' | 'Réalisée' | 'Abandonnée';
+
+/**
+ * Diligence issue des ateliers : ce qu'une partie s'est engagée à produire, étudier, trancher ou
+ * fournir, avec ce dont elle dépend. Reliée aux US, ateliers et risques concernés.
+ */
+export interface Diligence {
+  id: string;
+  title: string;
+  detail: string;
+  kind: DiligenceKind;
+  /** Partie responsable (« NTECH SARL », « SIVIS ») et parties associées. */
+  owner: string;
+  partners: string;
+  /** Ce qui conditionne la diligence : validation, accès, information d'un tiers. */
+  dependency: string;
+  /** Date ISO, ou texte libre (« Pendant les ateliers »). */
+  due: string;
+  status: DiligenceStatus;
+  /** Résultat obtenu : lien vers le livrable, décision prise. */
+  outcome: string;
+  source: string;
+  workshops: string[];
+  stories: string[];
+  risks: string[];
+  notes: Block[];
+  comments: Comment[];
+}
+
 export interface Workspace {
   /** Fichier de planning dont provient le programme. */
   planning?: string;
@@ -141,6 +196,7 @@ export interface Workspace {
   workshops: Workshop[];
   phases?: Phase[];
   risks?: Risk[];
+  diligences?: Diligence[];
 }
 
 /**

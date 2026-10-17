@@ -3,7 +3,15 @@ import { basename } from 'node:path';
 import { parseArgs } from 'node:util';
 import { ROLES, type Role } from '@board/shared';
 import { migrate, pool } from './db';
-import { importPhases, importPlanning, importRisks, importStories } from './imports';
+import {
+  importCadrage,
+  importPhases,
+  importPlanning,
+  importRisks,
+  importSnapshot,
+  importStories,
+  type RawCadrage,
+} from './imports';
 import { parseRaci, parseRisks, type RawRaci, type RawRisks } from './importers/governance';
 import { parsePlanning, type RawPlanning } from './importers/planning';
 import type { RawStories } from './merge';
@@ -23,6 +31,8 @@ const HELP = `Commandes :
   import:planning <slug> <fichier.xlsx|.json>      Planning des ateliers
   import:raci <slug> <fichier.xlsx|.json>          Phases du projet et matrice RACI de chacune
   import:risks <slug> <fichier.xlsx|.json>         Registre des risques et plan d'actions
+  import:cadrage <slug> <fichier.json>             Diligences et compléments des US { diligences, stories }
+  import:snapshot <slug> <fichier.json>            Restaure un export complet dans un projet sans US
   export:raci <fichier.xlsx>                       Convertit une matrice RACI en JSON (sortie standard)
   export:risks <fichier.xlsx>                      Convertit une matrice des risques en JSON (sortie standard)
 `;
@@ -107,6 +117,18 @@ async function run() {
         ? (JSON.parse(readFileSync(file, 'utf8')) as RawRisks)
         : await parseRisks(readFileSync(file), basename(file));
       console.log((await importRisks(await projectIdOf(slug), risks, null)).details.join('\n'));
+      return;
+    }
+    case 'import:cadrage':
+    case 'import:snapshot': {
+      const [slug, file] = args;
+      const raw = JSON.parse(readFileSync(file, 'utf8')) as RawCadrage;
+      const project = await projectIdOf(slug);
+      const report =
+        command === 'import:cadrage'
+          ? await importCadrage(project, raw, null)
+          : await importSnapshot(project, raw as Parameters<typeof importSnapshot>[1], null);
+      console.log(report.details.join('\n'));
       return;
     }
     default:

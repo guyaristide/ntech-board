@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { STATUSES, TONE, VERSIONS } from '@board/shared';
+import { diligenceOpen, STATUSES, TONE, VERSIONS } from '@board/shared';
+import { overdue } from '../model/due';
 import { useWorkspace } from '../model/store';
 import { Tag } from '../ui/Tag';
 import page from './Page.module.css';
@@ -8,7 +9,7 @@ import { longDate } from './workshop/WorkshopPage';
 
 const TODAY = () => new Date().toISOString().slice(0, 10);
 
-/** Accueil : où en est le cadrage, prochain atelier, couverture des épiques. */
+/** Accueil : où en est le cadrage, diligences, prochain atelier, couverture par plateforme et par épique. */
 export function Home() {
   const ws = useWorkspace();
   const today = TODAY();
@@ -18,6 +19,11 @@ export function Home() {
   const enriched = ws.stories.filter(
     s => s.body.length || s.comments.length || s.updatedAt !== s.createdAt,
   ).length;
+  const toDo = ws.diligences.filter(d => diligenceOpen(d.status));
+  const platforms = [...new Set(ws.stories.flatMap(s => s.targets.map(t => t.platform)))].sort((a, b) =>
+    a.localeCompare(b, 'fr'),
+  );
+  const onPlatform = (p: string) => ws.stories.filter(s => s.targets.some(t => t.platform === p));
   const byStatus = (list: typeof ws.stories) =>
     STATUSES.map(st => ({ st, n: list.filter(s => s.status === st).length }));
 
@@ -57,6 +63,16 @@ export function Home() {
           <span className={styles.stat}>{open}</span>
           <span className={page.faint}>ouverts sur {questions.length}</span>
         </Link>
+        {ws.diligences.length ? (
+          <Link to="/diligences?statut=ouvertes" className={styles.card}>
+            <span className={styles.cardCode}>Diligences</span>
+            <span className={styles.stat}>{toDo.length}</span>
+            <span className={page.faint}>
+              à mener sur {ws.diligences.length}
+              {toDo.some(d => overdue(d.due)) ? `, ${toDo.filter(d => overdue(d.due)).length} en retard` : ''}
+            </span>
+          </Link>
+        ) : null}
         {nextWorkshop ? (
           <Link to={`/atelier/${nextWorkshop.id}`} className={styles.card}>
             <span className={styles.cardCode}>Prochain atelier · {nextWorkshop.id}</span>
@@ -65,6 +81,55 @@ export function Home() {
           </Link>
         ) : null}
       </div>
+
+      {platforms.length ? (
+        <>
+          <h2 className={page.h2}>Couverture par plateforme</h2>
+          <div className={styles.matrixWrap}>
+            <table className={styles.matrix}>
+              <thead>
+                <tr>
+                  <th>Plateforme</th>
+                  {VERSIONS.map(v => (
+                    <th key={v}>{v}</th>
+                  ))}
+                  <th>Total</th>
+                  <th>Validées</th>
+                </tr>
+              </thead>
+              <tbody>
+                {platforms.map(p => {
+                  const list = onPlatform(p);
+                  const q = `platform=${encodeURIComponent(p)}`;
+                  return (
+                    <tr key={p}>
+                      <td>
+                        <Link to={`/backlog?${q}`}>{p}</Link>
+                      </td>
+                      {VERSIONS.map(v => {
+                        const n = list.filter(s => s.version === v).length;
+                        return (
+                          <td key={v}>
+                            {n ? <Link to={`/backlog?${q}&version=${encodeURIComponent(v)}`}>{n}</Link> : ''}
+                          </td>
+                        );
+                      })}
+                      <td>{list.length}</td>
+                      <td>{list.filter(s => s.status === 'Validée').length}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className={page.faint}>
+            Une US peut viser plusieurs plateformes : elle compte dans chacune.{' '}
+            {ws.stories.filter(s => !s.targets.length).length
+              ? `${ws.stories.filter(s => !s.targets.length).length} US sans plateforme.`
+              : ''}
+          </p>
+        </>
+      ) : null}
 
       <h2 className={page.h2}>Couverture par épique</h2>
       <div className={styles.matrixWrap}>

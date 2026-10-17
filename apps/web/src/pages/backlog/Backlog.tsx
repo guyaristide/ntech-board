@@ -12,6 +12,7 @@ import {
   FILTER_LABEL,
   readFilters,
   sortStories,
+  valuesOf,
   type FilterKey,
   type SortKey,
 } from './filters';
@@ -49,8 +50,7 @@ export function Backlog() {
     const counts = new Map<string, number>();
     // Les compteurs tiennent compte des autres filtres, comme dans Notion.
     applyFilters(ws.stories, { ...filters, [key]: [] }, query).forEach(s => {
-      const v = String(s[key] ?? '');
-      counts.set(v, (counts.get(v) ?? 0) + 1);
+      for (const v of valuesOf(s, key)) counts.set(v, (counts.get(v) ?? 0) + 1);
     });
     const order =
       key === 'epic' ? ws.epics.map(e => e.id) : key === 'workshop' ? ws.workshops.map(w => w.id) : [];

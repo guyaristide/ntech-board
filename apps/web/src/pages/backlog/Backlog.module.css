@@ -311,3 +311,14 @@
     margin-left: 0;
   }
 }
+
+/* Plateformes visées, sous le titre de l'US dans le tableau. */
+.targets {
+  display: block;
+  margin-top: 1px;
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

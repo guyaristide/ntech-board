@@ -1,4 +1,4 @@
-import type { Epic, Phase, Reference, Risk, Story, Workshop } from './types';
+import type { Diligence, Epic, Phase, Reference, Risk, Story, Workshop } from './types';
 
 /** Rôle d'un membre dans un projet. */
 export type Role = 'admin' | 'editor' | 'viewer';
@@ -48,9 +48,11 @@ export interface WorkspaceData {
   workshops: Workshop[];
   phases: Phase[];
   risks: Risk[];
+  diligences: Diligence[];
 }
 
-export type EntityKind = 'story' | 'epic' | 'workshop' | 'phase' | 'risk';
+export type EntityKind = 'story' | 'epic' | 'workshop' | 'phase' | 'risk' | 'diligence';
+export const ENTITY_KINDS: EntityKind[] = ['story', 'epic', 'workshop', 'phase', 'risk', 'diligence'];
 export type EntityOf<K extends EntityKind> = K extends 'story'
   ? Story
   : K extends 'epic'
@@ -59,7 +61,9 @@ export type EntityOf<K extends EntityKind> = K extends 'story'
       ? Workshop
       : K extends 'phase'
         ? Phase
-        : Risk;
+        : K extends 'risk'
+          ? Risk
+          : Diligence;
 
 export interface PresenceEntry {
   userId: string;
@@ -74,7 +78,7 @@ export type ServerEvent =
       type: 'entity';
       kind: EntityKind;
       id: string;
-      data: Story | Epic | Workshop | Phase | Risk | null;
+      data: Story | Epic | Workshop | Phase | Risk | Diligence | null;
       by: string | null;
     }
   | { type: 'presence'; users: PresenceEntry[] }
