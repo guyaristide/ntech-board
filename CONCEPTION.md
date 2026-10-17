@@ -13,7 +13,7 @@ Le point de départ est le cadrage du projet eTourisme SGAT (Côte d'Ivoire), po
 
 Un Notion ou un Jira auraient pu faire une partie du travail, mais aucun ne savait relire le planning Excel à chaque nouvelle version sans écraser ce qui avait été saisi en atelier. C'est ce point qui a justifié un outil maison.
 
-## Trois étapes
+## Quatre étapes
 
 ### 1. Un mini Notion local
 
@@ -44,6 +44,16 @@ packages/shared/   types communs au front et à l'API
 ```
 
 Le front et l'API partagent les mêmes types : une US a la même forme partout, du fichier d'import jusqu'à l'écran.
+
+### 4. Après les ateliers d'échange
+
+Les ateliers du 13 au 16 octobre ont produit trois besoins que le backlog seul ne couvrait pas :
+
+- **suivre les diligences** : chaque compte rendu se termine par une liste de qui doit produire, étudier, trancher ou fournir quoi, et de ce dont cela dépend. Elles sont devenues un contenu à part entière, relié aux US, aux ateliers et aux risques ;
+- **relier les US** : beaucoup d'US d'exigence (EX) répètent une US de cas d'usage (UC), ou décrivent la même fonctionnalité sous un autre angle. Une liaison typée, posée des deux côtés, les regroupe ; des US ressemblantes sont proposées pour accélérer le repérage ;
+- **savoir où vit chaque US** : portail, application mobile, PMS, PMS Light, back-office, socle et API, et surtout quel module de chacune. Les plateformes sont des données du projet, pas des listes du code, pour que l'outil serve aussi à d'autres clients.
+
+Une description en clair complète le récit de chaque US ; les commentaires d'atelier peuvent y être repris d'un clic.
 
 ## Les choix et leurs raisons
 

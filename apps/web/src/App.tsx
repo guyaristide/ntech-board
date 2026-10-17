@@ -4,6 +4,8 @@ import { BRAND } from './brand';
 import { useWorkspace } from './model/store';
 import { Admin } from './pages/Admin';
 import { Backlog } from './pages/backlog/Backlog';
+import { DiligencePage } from './pages/diligences/DiligencePage';
+import { Diligences } from './pages/diligences/Diligences';
 import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
@@ -60,6 +62,8 @@ export function App() {
             <Route path="raci" element={<RaciPage />} />
             <Route path="risques" element={<Risks />} />
             <Route path="risque/:id" element={<RiskPage />} />
+            <Route path="diligences" element={<Diligences />} />
+            <Route path="diligence/:id" element={<DiligencePage />} />
             <Route path="admin" element={<Admin />} />
             <Route path="*" element={<Home />} />
           </Route>

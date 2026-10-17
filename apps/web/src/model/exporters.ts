@@ -1,4 +1,4 @@
-import type { Story, WorkspaceData } from '@board/shared';
+import { LINK_LABEL, targetLabel, type Story, type WorkspaceData } from '@board/shared';
 
 const download = (name: string, type: string, content: string) => {
   const url = URL.createObjectURL(new Blob([content], { type }));
@@ -24,6 +24,7 @@ export const exportJson = (ws: WorkspaceData & { session: { project: { slug: str
         workshops: ws.workshops,
         phases: ws.phases,
         risks: ws.risks,
+        diligences: ws.diligences,
       },
       null,
       2,
@@ -38,6 +39,8 @@ export function exportCsv(stories: Story[]) {
     'ID',
     'Épique',
     'Titre',
+    'Description',
+    'Plateformes',
     'Acteur',
     'En tant que',
     'Je veux',
@@ -49,12 +52,15 @@ export function exportCsv(stories: Story[]) {
     'Priorité',
     'Statut',
     'Source',
+    'Liaisons',
     'Notes',
   ];
   const rows = stories.map(s => [
     s.id,
     s.epic,
     s.title,
+    s.description,
+    s.targets.map(targetLabel).join('\n'),
     s.actor,
     s.asA,
     s.iWant,
@@ -66,6 +72,7 @@ export function exportCsv(stories: Story[]) {
     s.priority,
     s.status,
     s.source,
+    s.links.map(l => `${LINK_LABEL[l.type]} ${l.story}`).join('\n'),
     s.body.map(b => b.text).join('\n'),
   ]);
   const csv = [head, ...rows].map(r => r.map(v => cell(String(v ?? ''))).join(';')).join('\r\n');
@@ -77,9 +84,14 @@ export const storyMarkdown = (s: Story) =>
   [
     `### ${s.id} · ${s.title}`,
     '',
+    ...(s.description ? [s.description, ''] : []),
     `En tant que ${s.asA}, je veux ${s.iWant}, afin de ${s.soThat}.`,
     '',
     `Version ${s.version} · atelier ${s.workshop || 'à définir'} · priorité ${s.priority} · statut ${s.status}`,
+    ...(s.targets.length ? [`Plateformes : ${s.targets.map(targetLabel).join(', ')}`] : []),
+    ...(s.links.length
+      ? [`Liaisons : ${s.links.map(l => `${LINK_LABEL[l.type].toLowerCase()} ${l.story}`).join(', ')}`]
+      : []),
     '',
     "**Critères d'acceptation**",
     ...s.acceptance.map(c => `- [${c.done ? 'x' : ' '}] ${c.text}`),

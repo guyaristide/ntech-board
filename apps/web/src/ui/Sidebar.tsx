@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ROLE_LABEL } from '@board/shared';
+import { diligenceOpen, ROLE_LABEL } from '@board/shared';
 import { BRAND } from '../brand';
 import { exportCsv, exportJson } from '../model/exporters';
 import { useIsAdmin, useWorkspace, type SaveState } from '../model/store';
@@ -75,6 +75,12 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         <NavLink to="/risques" className={link}>
           <span className={styles.icon}>⚠</span> Risques{' '}
           <span className={styles.count}>{ws.risks.length}</span>
+        </NavLink>
+        <NavLink to="/diligences" className={link}>
+          <span className={styles.icon}>☑</span> Diligences{' '}
+          <span className={styles.count} title="Diligences à mener">
+            {ws.diligences.filter(d => diligenceOpen(d.status)).length}
+          </span>
         </NavLink>
         {ws.references.length ? (
           <NavLink to="/references" className={link}>

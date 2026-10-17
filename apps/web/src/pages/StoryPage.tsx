@@ -10,6 +10,9 @@ import { Checklist } from '../ui/Checklist';
 import { Comments } from '../ui/Comments';
 import { EditableText } from '../ui/EditableText';
 import { PropertySelect } from '../ui/PropertySelect';
+import { TargetsField } from '../ui/TargetsField';
+import { DiligenceRefs } from './diligences/Diligences';
+import { StoryLinks } from './StoryLinks';
 import page from './Page.module.css';
 
 const BASE_ACTORS = [
@@ -68,6 +71,10 @@ export function StoryPage() {
   const actors = [...new Set([...BASE_ACTORS, ...ws.stories.map(s => s.actor)])].filter(Boolean);
   const siblings = ws.stories.filter(s => s.epic === story.epic);
   const pos = siblings.findIndex(s => s.id === story.id);
+  const diligences = ws.diligences.filter(d => d.stories.includes(story.id));
+  // Un commentaire repris s'ajoute à la suite de la description, sans remplacer ce qui y est.
+  const pick = (text: string) =>
+    set({ description: story.description.trim() ? `${story.description.trim()}\n\n${text}` : text });
   const copy = async () => {
     await navigator.clipboard.writeText(storyMarkdown(story));
     setCopied(true);
@@ -107,6 +114,7 @@ export function StoryPage() {
         onChange={v => v && set({ epic: v })}
       />,
     ],
+    ['▣', 'Plateformes', <TargetsField value={story.targets} onChange={targets => set({ targets })} />],
     [
       '⬢',
       'Version',
@@ -243,7 +251,20 @@ export function StoryPage() {
         ))}
       </div>
 
-      <Comments items={story.comments} onAdd={text => void ws.commentStory(story.id, text)} />
+      <h2 className={page.h2}>Description</h2>
+      <EditableText
+        value={story.description}
+        label="Description de l’US"
+        placeholder="Ce que fait la fonctionnalité, ses règles, ce qui a été décidé en atelier. Les commentaires peuvent y être repris."
+        onChange={description => set({ description })}
+      />
+
+      <Comments
+        items={story.comments}
+        onAdd={text => void ws.commentStory(story.id, text)}
+        onPick={c => pick(c.text)}
+        pickLabel="Reprendre dans la description"
+      />
 
       <h2 className={page.h2}>Récit</h2>
       <div className={page.story}>
@@ -261,6 +282,15 @@ export function StoryPage() {
 
       <h2 className={page.h2}>Critères d’acceptation</h2>
       <Checklist items={story.acceptance} onChange={acceptance => set({ acceptance })} />
+
+      <StoryLinks story={story} />
+
+      {diligences.length ? (
+        <>
+          <h2 className={page.h2}>Diligences liées ({diligences.length})</h2>
+          <DiligenceRefs items={diligences} />
+        </>
+      ) : null}
 
       <h2 className={page.h2}>Notes et enrichissements</h2>
       <BlockEditor

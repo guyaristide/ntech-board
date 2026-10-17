@@ -7,7 +7,8 @@ import { Tag } from '../../ui/Tag';
 import backlog from '../backlog/Backlog.module.css';
 import page from '../Page.module.css';
 import { RiskHeatmap } from './RiskHeatmap';
-import { BASIS_LABEL, cotationAt, dueLabel, levelOf, overdue, scoreOf, type Basis } from './riskView';
+import { BASIS_LABEL, cotationAt, levelOf, scoreOf, type Basis } from './riskView';
+import { dueLabel, overdue } from '../../model/due';
 import styles from './Risks.module.css';
 
 type View = 'registre' | 'matrice' | 'actions';

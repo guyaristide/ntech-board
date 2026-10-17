@@ -1,0 +1,6101 @@
+{
+  "source": "Compte rendu consolidé des ateliers du 13 au 16/10/2026 et export du tableau du 17/10/2026",
+  "diligences": [
+    {
+      "id": "D01",
+      "title": "Transmettre logo, charte graphique, polices et couleurs",
+      "detail": "Versions du logo, brand book, polices et codes couleurs, annoncés pour le 14/10.",
+      "kind": "Fourniture",
+      "owner": "Communication (structure porteuse)",
+      "partners": "",
+      "dependency": "",
+      "due": "2026-10-14",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J1",
+        "J2"
+      ],
+      "stories": [
+        "US-EX13-04"
+      ],
+      "risks": [
+        "R24"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D02",
+      "title": "Transmettre et classer les images et vidéos existantes",
+      "detail": "Fonds d'environ 40 images acquises et quelques vidéos, classé par usage, thématique, destination et région. Les nouveaux tournages demandent délais et budget. Un tableau de recensement des médias attendus est commencé ; suivi régulier demandé.",
+      "kind": "Fourniture",
+      "owner": "Communication (structure porteuse)",
+      "partners": "NTECH SARL",
+      "dependency": "",
+      "due": "Premier lot rapide, complément fin de semaine suivante",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J1",
+        "J2"
+      ],
+      "stories": [
+        "US-EX15-01",
+        "US-EX13-05",
+        "US-UC02-01"
+      ],
+      "risks": [
+        "R24",
+        "R25"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D03",
+      "title": "Centraliser les retours sur les structures Figma et produire les propositions graphiques",
+      "detail": "Partager le lien Figma, recueillir les commentaires, puis proposer une interface plus épurée centrée sur « où aller, que faire, comment réserver ». Les écrans présentés sont des structures, pas des maquettes validées.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "Équipe design",
+      "dependency": "Charte et médias (D01, D02)",
+      "due": "Pendant les ateliers",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J1",
+        "J2",
+        "J5"
+      ],
+      "stories": [
+        "US-EX15-04",
+        "US-UC02-06",
+        "US-EX13-01"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D04",
+      "title": "Fournir les CGU et la politique de confidentialité",
+      "detail": "Textes pour le compte personnel et pour le compte corporate ; valider aussi le périmètre des données collectées.",
+      "kind": "Fourniture",
+      "owner": "SIVIS",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-08",
+        "US-EX09-01"
+      ],
+      "risks": [
+        "R12"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D05",
+      "title": "Fournir le contenu du tutoriel et de l’aide à la première connexion",
+      "detail": "Page d'aide et tutoriel vidéo accessibles à tout moment ; la présentation à la première connexion n'est pas une étape obligatoire.",
+      "kind": "Fourniture",
+      "owner": "SIVIS",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-11",
+        "US-EX06-10"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D06",
+      "title": "Spécifier le compte corporate",
+      "detail": "Administrateurs et invitations, rattachement des collaborateurs, missions, notes de frais, identification et vérification de l'entreprise (nom, compte contribuable, pièces), facturation d'une réservation personnelle à une entreprise.",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "NTECH SARL",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-02",
+        "US-UC01-05",
+        "US-UC01-13",
+        "US-UC01-14",
+        "US-EX19-06"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D07",
+      "title": "Séparer les US de compte personnel et de compte corporate",
+      "detail": "",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Spécification du compte corporate (D06)",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-02",
+        "US-UC01-03",
+        "US-UC01-05"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D08",
+      "title": "Fournir l’accès au serveur SMS d’eAdministration",
+      "detail": "Serveur SMS déjà utilisé par eAdmin, pour l'envoi des codes OTP.",
+      "kind": "Fourniture",
+      "owner": "Cybastion",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-09",
+        "US-UC01-17",
+        "US-EX11-02"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D09",
+      "title": "Chiffrer l’envoi des codes OTP par SMS et WhatsApp",
+      "detail": "Coût par pays de destination, accès au fournisseur, comparaison des alternatives dont WhatsApp.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Accès fournisseurs",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-09",
+        "US-EX11-02"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D10",
+      "title": "Décider du caractère obligatoire de la vérification OTP et des canaux",
+      "detail": "Bloquante ou non, e-mail ou SMS, solutions de secours.",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "",
+      "dependency": "Estimation des coûts (D09)",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-09",
+        "US-UC01-17"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D11",
+      "title": "Étudier l’achat en mode invité",
+      "detail": "Trois choix au paiement : se connecter, créer un compte, continuer comme invité. Données minimales pour la commande, la délivrance et les réclamations ; preuve de consommation pour les avis.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "SIVIS",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-03",
+        "US-UC04-03"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D12",
+      "title": "Proposer une source de taux de change et ses règles de conversion",
+      "detail": "Devise de référence, conversion à l'affichage, solution de repli si la source est indisponible.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-06",
+        "US-UC15-21",
+        "US-EX13-03"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D13",
+      "title": "Spécifier les règles du parrainage, distinctes du code promotionnel",
+      "detail": "Mécanisme de gain (points, remise, avantage), éligibilité, usage du lien ou du code, moment de déclenchement.",
+      "kind": "Fourniture",
+      "owner": "SIVIS",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-10",
+        "US-UC04-11",
+        "US-UC07-04",
+        "US-EX18-02",
+        "US-EX18-03",
+        "US-UC08-04"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D14",
+      "title": "Clarifier la terminologie package opérateur / séjour composé par l’assistant",
+      "detail": "",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "SIVIS",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC03-03",
+        "US-UC07-02",
+        "US-UC07-11",
+        "US-UC09-03"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D15",
+      "title": "Définir la validité des devis et le recalcul des disponibilités",
+      "detail": "",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "NTECH SARL",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC03-04",
+        "US-UC03-05",
+        "US-UC03-15"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D16",
+      "title": "Formaliser les flux financiers et consulter les agrégateurs de paiement",
+      "detail": "Ventilation dynamique et statut de chaque sous-transaction, conservation puis libération des fonds, comptes marchands ou wallets des opérateurs, callbacks, remboursements, contestations, délais de reversement. Aucune architecture de paiement n'est approuvée.",
+      "kind": "Étude",
+      "owner": "Cybastion",
+      "partners": "NTECH SARL, agrégateur",
+      "dependency": "Accès aux agrégateurs, contrats",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2",
+        "J4"
+      ],
+      "stories": [
+        "US-UC12-05",
+        "US-UC09-07",
+        "US-UC04-07",
+        "US-UC03-06",
+        "US-UC10-01",
+        "US-EX19-01",
+        "US-UC12-16"
+      ],
+      "risks": [
+        "R01",
+        "R02"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D17",
+      "title": "Rédiger l’expression de besoin pour le choix de l’agrégateur",
+      "detail": "Paiements locaux et internationaux, devises, split payment, versements différés, frais, webhooks, remboursements, contestations, rapprochement.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "Cybastion",
+      "dependency": "Flux financiers formalisés (D16)",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J4"
+      ],
+      "stories": [
+        "US-UC12-16",
+        "US-UC12-03",
+        "US-UC12-04"
+      ],
+      "risks": [
+        "R01"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D18",
+      "title": "Arbitrer les règles de reversement, d’annulation, de taxes et de pénalités",
+      "detail": "Fait générateur du reversement, délais par prestation (12, 24 ou 72 heures évoqués), annulation tardive ou en cours de séjour, remboursements partiels, sort des taxes et frais, restitution après reversement.",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "Partenaires métiers",
+      "dependency": "Expertise fiscale, contrats opérateurs, capacités de l’agrégateur",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J4"
+      ],
+      "stories": [
+        "US-UC10-01",
+        "US-UC10-08",
+        "US-UC10-09",
+        "US-UC12-06"
+      ],
+      "risks": [
+        "R04",
+        "R05"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D19",
+      "title": "Fournir les règles de la taxe de nuitée et le référentiel des catégories",
+      "detail": "La taxe dépend de la catégorie de l'établissement : référentiel et acteur habilité à renseigner les paramètres fiscaux.",
+      "kind": "Fourniture",
+      "owner": "SIVIS",
+      "partners": "M. Gale",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3"
+      ],
+      "stories": [
+        "US-UC09-02",
+        "US-UC09-06",
+        "US-EX20-05",
+        "US-UC12-01"
+      ],
+      "risks": [
+        "R04",
+        "R10"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D20",
+      "title": "Préciser la gestion d’une panne fiscale (FNE)",
+      "detail": "Statuts internes, file d'attente, reprises automatiques, rapprochement, obligations de facturation ; cas où le montant final dépend du calcul externe.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "SIVIS",
+      "dependency": "Spécification FNE",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2",
+        "J4"
+      ],
+      "stories": [
+        "US-UC03-14",
+        "US-EX10-06",
+        "US-EX10-02",
+        "US-UC15-25",
+        "US-UC10-10"
+      ],
+      "risks": [
+        "R07"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D21",
+      "title": "Valider le récapitulatif TTC et les règles de taxes, remises et acomptes",
+      "detail": "Le compte rendu note l'acompte comme non validé alors que le backlog l'écarte : à acter.",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC04-02",
+        "US-UC04-12",
+        "US-UC04-13",
+        "US-UC04-11"
+      ],
+      "risks": [
+        "R04"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D22",
+      "title": "Formaliser les échecs de paiement et la protection contre les doubles débits",
+      "detail": "",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "Agrégateur",
+      "dependency": "Retours d’état de l’agrégateur",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC03-13",
+        "US-UC04-15",
+        "US-UC04-16",
+        "US-UC07-12",
+        "US-UC12-14",
+        "US-UC12-15"
+      ],
+      "risks": [
+        "R01"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D23",
+      "title": "Définir les critères d’avis, la preuve de consommation, la modération et les délais",
+      "detail": "Critères par catégorie, modification d'un avis, délais de dépôt, anonymat public, réponse de l'opérateur, masquage temporaire, import de réputations externes.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "SIVIS",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2",
+        "J3"
+      ],
+      "stories": [
+        "US-UC05-02",
+        "US-UC05-04",
+        "US-UC05-13",
+        "US-UC05-14",
+        "US-UC05-16",
+        "US-UC05-17"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D24",
+      "title": "Produire la matrice des notifications",
+      "detail": "Déclencheur, destinataire, canal, périodicité, contenu, responsable de la configuration, préférences ; transactionnel ou marketing, automatique ou manuel, particulier ou corporate.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC07-01",
+        "US-UC05-01",
+        "US-UC05-10",
+        "US-UC02-03",
+        "US-EX21-04",
+        "US-EX11-02"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D25",
+      "title": "Détailler le contenu et la vérification des e-billets et QR codes",
+      "detail": "Un justificatif par prestation, QR code sécurisé et vérifiable en ligne, contrôle par l'application de l'opérateur, capacités hors ligne et accès à l'assistant.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC03-07",
+        "US-UC04-08",
+        "US-UC07-07",
+        "US-UC07-08",
+        "US-UC07-16",
+        "US-EX02-05",
+        "US-EX02-06"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D26",
+      "title": "Reprendre le parcours de réservation et de paiement sur place par QR code",
+      "detail": "",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Support d’atelier (transcription interrompue)",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC03-10",
+        "US-UC12-09",
+        "US-UC12-12"
+      ],
+      "risks": [
+        "R03"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D27",
+      "title": "Évaluer la faisabilité du paiement hors ligne",
+      "detail": "USSD, portefeuille préalimenté, mécanismes différés ; prérequis, synchronisation, risques de solde obsolète et de double dépense.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "Agrégateur",
+      "dependency": "Capacités de l’agrégateur",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J4"
+      ],
+      "stories": [
+        "US-UC12-10",
+        "US-UC12-11",
+        "US-UC09-14",
+        "US-UC10-13"
+      ],
+      "risks": [
+        "R03",
+        "R23"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D28",
+      "title": "Étudier les API logistiques Yango Delivery, Paps et La Poste CI",
+      "detail": "Sandbox, API, suivi, événements, preuve de livraison ; lien de suivi externe en repli. Prioriser le périmètre MVP ; logistique interne non décidée.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Documentation, sandbox et conditions commerciales",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J4"
+      ],
+      "stories": [
+        "US-UC14-02",
+        "US-UC14-03",
+        "US-UC14-08",
+        "US-UC14-13"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D29",
+      "title": "Fournir les familles et sous-catégories de prestations et valider les champs des fiches",
+      "detail": "",
+      "kind": "Fourniture",
+      "owner": "SIVIS",
+      "partners": "Équipe fonctionnelle",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3"
+      ],
+      "stories": [
+        "US-UC06-02",
+        "US-UC06-03",
+        "US-UC11-03",
+        "US-UC11-12"
+      ],
+      "risks": [
+        "R10"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D30",
+      "title": "Proposer les modèles de fiches et les règles de validation des offres",
+      "detail": "Modèles inspirés des standards PMS (champs communs et propres à chaque famille), contrôles des formulaires, des médias et des disponibilités, versionnement d'une offre publiée.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Familles et sous-catégories (D29)",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3"
+      ],
+      "stories": [
+        "US-UC06-01",
+        "US-UC06-03",
+        "US-UC06-04",
+        "US-UC06-06",
+        "US-UC06-08",
+        "US-UC06-09",
+        "US-UC06-14",
+        "US-UC06-15",
+        "US-UC02-10"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D31",
+      "title": "Organiser l’atelier d’architecture sur le référentiel des opérateurs et les API",
+      "detail": "Le référentiel des opérateurs et établissements existe déjà dans un autre système institutionnel : identité partagée, identifiants, synchronisation et responsabilité de la donnée.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "Responsables des systèmes existants",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3",
+        "J5"
+      ],
+      "stories": [
+        "US-EX10-01",
+        "US-UC09-16",
+        "US-EX20-01",
+        "US-EX20-02"
+      ],
+      "risks": [
+        "R06"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D32",
+      "title": "Définir le modèle économique et les formules des modules PMS Light, CRM et comptabilité",
+      "detail": "Socle gratuit ou payant, modules à la carte, niveaux d'abonnement, droits, activation administrative, renouvellements et paiement récurrent.",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "Responsables métier",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3",
+        "J4"
+      ],
+      "stories": [
+        "US-UC09-01",
+        "US-UC09-10",
+        "US-UC09-11",
+        "US-UC09-12",
+        "US-UC09-15",
+        "US-EX07-05",
+        "US-EX08-07"
+      ],
+      "risks": [
+        "R26"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D33",
+      "title": "Préciser les rôles de modération des offres, avis et points d’intérêt",
+      "detail": "Délais cibles, traçabilité, rôles habilités, droit de proposition des POI par les opérateurs.",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3"
+      ],
+      "stories": [
+        "US-UC06-12",
+        "US-UC06-13",
+        "US-UC05-17",
+        "US-UC11-09",
+        "US-UC02-04",
+        "US-UC11-01"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D34",
+      "title": "Consolider les parcours fournisseurs et opérateurs",
+      "detail": "Catégories de produits, rôles, critères d'acceptation ; interface professionnelle unique pour opérateur, fournisseur et administrateur, avec des droits différents.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Validation SIVIS du parcours métier et des catégories autorisées",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3",
+        "J4"
+      ],
+      "stories": [
+        "US-UC13-03",
+        "US-UC14-01",
+        "US-EX19-04",
+        "US-EX20-01"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D35",
+      "title": "Préciser l’inscription, la vérification et la contractualisation des fournisseurs B2B",
+      "detail": "",
+      "kind": "Arbitrage",
+      "owner": "SIVIS",
+      "partners": "",
+      "dependency": "Référentiels institutionnels et règles d’admission",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J4"
+      ],
+      "stories": [
+        "US-UC13-03",
+        "US-EX19-02",
+        "US-EX20-01"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D36",
+      "title": "Dresser les KPI par catégorie d’opérateur",
+      "detail": "Hébergement, restaurant, guide, fournisseur ; accès au détail depuis chaque indicateur ; données fiscales affichées dans la limite des flux réellement disponibles.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Cahier des charges et validation SIVIS",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3",
+        "J4"
+      ],
+      "stories": [
+        "US-UC15-06",
+        "US-UC15-07",
+        "US-UC15-09",
+        "US-EX07-10"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D37",
+      "title": "Cadrer les synchronisations PMS et OTA et la gestion des conflits",
+      "detail": "Fréquence, données remontées, responsabilité des mises à jour, cas d'erreur ; distinguer le channel manager des API ouvertes aux logiciels métier.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "Partenaires",
+      "dependency": "API disponibles, webhooks, contrats et droits d’accès",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3",
+        "J4",
+        "C2"
+      ],
+      "stories": [
+        "US-EX05-01",
+        "US-EX05-03",
+        "US-UC03-11",
+        "US-UC06-10",
+        "US-UC15-10",
+        "US-UC15-24"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D38",
+      "title": "Choisir entre un module comptable et un logiciel tiers",
+      "detail": "Coût, complexité, licences, périmètre ; documenter interfaces, API et exports (Excel) pour les opérateurs déjà équipés.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "SIVIS",
+      "dependency": "Périmètre comptable et modèle économique",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J4"
+      ],
+      "stories": [
+        "US-UC10-02",
+        "US-UC10-03",
+        "US-UC10-04",
+        "US-UC10-05",
+        "US-UC10-06",
+        "US-UC10-07"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D39",
+      "title": "Définir le socle CRM et étudier l’externalisation des campagnes",
+      "detail": "Fiches clients et prospects, suivi des échanges et devis, fidélisation ; campagnes par un outil spécialisé pour protéger le domaine d'envoi.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "SIVIS",
+      "dependency": "Fournisseur marketing, consentements, coûts et abonnements",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J4"
+      ],
+      "stories": [
+        "US-EX07-01",
+        "US-EX07-02",
+        "US-EX07-03",
+        "US-EX07-04",
+        "US-EX07-05"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D40",
+      "title": "Étudier la liaison avec le dispositif d’identification des hébergements",
+      "detail": "Confirmation de passage ou rapprochement avec la réservation, sans transfert de pièces d'identité.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "Cybastion",
+      "dependency": "Spécifications du dispositif existant",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2"
+      ],
+      "stories": [
+        "US-UC01-07",
+        "US-EX10-03",
+        "US-EX11-03"
+      ],
+      "risks": [
+        "R08"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D41",
+      "title": "Distinguer les exigences MVP, les options ultérieures et les points ouverts",
+      "detail": "Sans présumer des dates de livraison ; les sujets insuffisamment spécifiés sont classés et planifiés.",
+      "kind": "Livrable",
+      "owner": "NTECH SARL",
+      "partners": "Équipe produit",
+      "dependency": "",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J3",
+        "J7"
+      ],
+      "stories": [],
+      "risks": [
+        "R16",
+        "R18",
+        "R19"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D42",
+      "title": "Confirmer les jalons et le périmètre MVP",
+      "detail": "",
+      "kind": "Arbitrage",
+      "owner": "Coordination / maîtrise d’ouvrage",
+      "partners": "",
+      "dependency": "Distinction MVP et versions ultérieures (D41)",
+      "due": "Décision attendue",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J1",
+        "J7"
+      ],
+      "stories": [],
+      "risks": [
+        "R15",
+        "R19"
+      ],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D43",
+      "title": "Rapprocher les fins de transcription du support d’atelier",
+      "detail": "Partenariats entre opérateurs (traçabilité, commissions, cohérence des prix) et paiement sur place par QR : à valider avant d'être présentés comme décisions.",
+      "kind": "Étude",
+      "owner": "NTECH SARL",
+      "partners": "",
+      "dependency": "Support d’atelier",
+      "due": "",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J2",
+        "J3"
+      ],
+      "stories": [
+        "US-UC03-10"
+      ],
+      "risks": [],
+      "notes": [],
+      "comments": []
+    },
+    {
+      "id": "D44",
+      "title": "Confirmer responsables nominatifs et échéances des diligences",
+      "detail": "Aucune date ferme ni attribution individuelle n'a été déduite des transcriptions.",
+      "kind": "Arbitrage",
+      "owner": "Comité de suivi",
+      "partners": "",
+      "dependency": "",
+      "due": "Prochain comité de suivi",
+      "status": "À faire",
+      "outcome": "",
+      "source": "Compte rendu consolidé des ateliers du 13 au 16 octobre 2026",
+      "workshops": [
+        "J9"
+      ],
+      "stories": [],
+      "risks": [
+        "R14",
+        "RG-01"
+      ],
+      "notes": [],
+      "comments": []
+    }
+  ],
+  "stories": [
+    {
+      "id": "US-UC01-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ],
+      "description": "Le bouton « Créer un compte » est présent sur le portail e-tourisme, en version responsive. Il ouvre le formulaire d'inscription à l'étape du type de compte. L'application mobile n'est plus citée dans cette US."
+    },
+    {
+      "id": "US-UC01-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ],
+      "description": "Deux types de compte, aux fonctions différentes : personnel et corporate. Le profil de voyageur (local, diaspora, international) est distinct du type de compte : il n'est pas demandé à l'inscription et se renseigne ensuite dans l'espace profil. Les champs ajoutés après le choix du type sont facultatifs. Les spécifications du compte corporate sont attendues."
+    },
+    {
+      "id": "US-UC01-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ],
+      "description": "Données communes réduites au minimum : nom, prénom, adresse e-mail, mot de passe et téléphone mobile, avec contrôle du format de chaque champ. À étudier : l'achat en mode invité, qui permet de valider un panier sans créer de compte (trois choix au paiement : se connecter, créer un compte, continuer comme invité)."
+    },
+    {
+      "id": "US-UC01-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ],
+      "description": "Écartée : aucun numéro Mobile Money ni coordonnée de paiement n'est demandé à l'inscription. Les données de paiement se saisissent sur le guichet de l'agrégateur, au moment du paiement."
+    },
+    {
+      "id": "US-UC01-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace corporate"
+        }
+      ],
+      "description": "À revoir, reportée en V2. Piste proposée : demander le mode de facturation au moment de la commande (à moi, à une entreprise) et ne recueillir qu'alors les informations de l'entreprise. Le compte entreprise serait validé par les administrateurs de la plateforme. Les règles d'identification de l'entreprise et de facturation d'une réservation personnelle à une entreprise restent à arbitrer.",
+      "links": [
+        {
+          "story": "US-UC01-13",
+          "type": "related"
+        },
+        {
+          "story": "US-UC01-14",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ],
+      "description": "Le pays de résidence se renseigne dans les préférences du profil, pas à l'inscription. Langue et devise sont d'abord déduites du navigateur ou de la localisation (adresse IP), puis modifiables par un menu déroulant ; le choix explicite de l'utilisateur l'emporte. Les prix sont conservés dans une devise de référence et convertis à l'affichage. NTECH propose la source des taux de change et une solution de repli, à valider en séance.",
+      "links": [
+        {
+          "story": "US-EX13-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-07",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Identité"
+        }
+      ],
+      "description": "Écartée et retirée du parcours d'inscription : la vérification d'une pièce d'identité relève du dispositif d'identification existant côté hébergement et autorités. Une liaison avec ce dispositif (ORA, HORA) reste à étudier, sans transfert de pièces d'identité.",
+      "links": [
+        {
+          "story": "US-EX11-03",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-08",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ],
+      "description": "Acceptation des CGU et de la politique de confidentialité à l'inscription. SIVIS fournit les textes, pour le compte personnel et pour le compte corporate.",
+      "links": [
+        {
+          "story": "US-EX09-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-09",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Messagerie et OTP"
+        }
+      ],
+      "description": "Vérification du canal de contact par code, par e-mail ou par SMS au choix de l'utilisateur. Cybastion fournit l'accès au serveur SMS utilisé par eAdministration ; NTECH chiffre les fournisseurs WhatsApp et SMS. Le caractère bloquant de la vérification et les solutions de secours restent à formaliser.",
+      "links": [
+        {
+          "story": "US-EX11-02",
+          "type": "dependsOn"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-10",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fidélité"
+        }
+      ],
+      "description": "Écartée de l'activation du compte et reportée : le parrainage est dissocié du code promotionnel et fera l'objet de règles propres (mécanisme de gain, éligibilité, déclenchement), que SIVIS doit fournir.",
+      "links": [
+        {
+          "story": "US-EX18-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-11",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ],
+      "description": "À revoir : distinguer le tableau de bord de l'espace profil (abus de langage relevé en atelier). La présentation à la première connexion n'est pas une étape obligatoire de l'inscription. SIVIS fournit le contenu du tutoriel.",
+      "links": [
+        {
+          "story": "US-EX06-10",
+          "type": "related"
+        },
+        {
+          "story": "US-EX16-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-12",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Authentification"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC01-19",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-13",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace corporate"
+        }
+      ],
+      "description": "Écartée : un utilisateur n'est pas rattaché à une entreprise sur le seul domaine de son adresse e-mail. Le rattachement passe par l'invitation d'un administrateur du compte entreprise."
+    },
+    {
+      "id": "US-UC01-14",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace corporate"
+        }
+      ],
+      "description": "Écartée en l'état : le module « entreprise partenaire » et les notes de frais sont trop peu décrits dans le cahier des charges. À reprendre dans les spécifications du compte corporate (collaborateurs, missions, notes de frais)."
+    },
+    {
+      "id": "US-UC01-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-16",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-17",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Messagerie et OTP"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC01-09",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-18",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-19",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Authentification"
+        }
+      ],
+      "description": "Connexion par e-mail ou téléphone et mot de passe, ou par Google ou Apple. Fournisseurs cités : Google Platform, Apple Connect ; gestion des identités envisagée avec Keycloak. Contrôle des doublons de compte.",
+      "links": [
+        {
+          "story": "US-EX12-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC01-20",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Authentification"
+        }
+      ],
+      "description": "Réinitialisation par le canal vérifié : lien envoyé par e-mail, ou code OTP par SMS si le compte a été créé avec un numéro de téléphone."
+    },
+    {
+      "id": "US-UC02-01",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "La fiche est remplie depuis l'espace de gestion de l'opérateur, pas depuis la landing page. Le contenu approuvé alimente ensuite les pages publiques et les carrousels. Référence de l'existant : https://staging.visitsublimeci.com"
+    },
+    {
+      "id": "US-UC02-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "La validation passe par un administrateur SIVIS. Le contenu n'apparaît sur le site qu'après cette validation.",
+      "links": [
+        {
+          "story": "US-UC06-12",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-03",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des contenus"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-04",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des contenus"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        },
+        {
+          "platform": "Back-office",
+          "module": "Modération des contenus"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-07",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Channel manager"
+        },
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC06-10",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-08",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des contenus"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-09",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX16-09",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "Validation en temps réel, côté front et côté back. Le champ en erreur est mis en surbrillance et le message s'affiche à proximité ; la soumission est impossible tant qu'un champ obligatoire manque ou qu'un média est invalide.",
+      "links": [
+        {
+          "story": "US-UC06-14",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-11",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des contenus"
+        }
+      ]
+    },
+    {
+      "id": "US-UC02-12",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Continuité de service"
+        },
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC15-23",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX15-19",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ],
+      "description": "L'assistant comprend une requête libre qui précise aussi le nombre de participants, par exemple « week-end à Assinie, budget moyen, détente et gastronomie, départ d'Abidjan avec 3 personnes », et la reformule. Il s'appuie sur les offres existantes.",
+      "links": [
+        {
+          "story": "US-EX16-06",
+          "type": "same"
+        },
+        {
+          "story": "US-EX16-10",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ],
+      "description": "Distinguer les packages commerciaux publiés par les opérateurs des séjours personnalisés assemblés par l'assistant ; une terminologie distincte est à définir. Une proposition n'est pas une réservation ferme.",
+      "links": [
+        {
+          "story": "US-EX16-07",
+          "type": "related"
+        },
+        {
+          "story": "US-EX15-12",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ],
+      "description": "Le touriste modifie les composantes et leurs paramètres (dont le nombre de participants d'une activité) avant l'ajout au panier ; le prix est recalculé à chaque ajustement. Durée de validité du devis et gestion des changements de prix à définir.",
+      "links": [
+        {
+          "story": "US-EX15-07",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-05",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Disponibilités"
+        }
+      ],
+      "description": "Disponibilités contrôlées à la proposition puis à la validation du panier. Après paiement, la transaction est enregistrée avec le statut « non ventilée » ; la ventilation suit (voir UC12).",
+      "links": [
+        {
+          "story": "US-UC04-09",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "description": "Le paiement est effectué et l'historique des transactions est enregistré avec le statut « non ventilée ». Hypothèse de travail pour la ventilation du montant encaissé : chaque opérateur dispose d'un compte chez l'agrégateur. Aucun schéma de ventilation n'est acté.",
+      "links": [
+        {
+          "story": "US-UC04-06",
+          "type": "same"
+        },
+        {
+          "story": "US-UC12-05",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        },
+        {
+          "platform": "App mobile",
+          "module": "E-billets"
+        }
+      ],
+      "description": "Après règlement : un reçu numérique et une notification de confirmation, et un e-billet par prestation pour un panier qui réunit plusieurs opérateurs. L'invitation au parrainage est retirée de cette US et traitée à part.",
+      "links": [
+        {
+          "story": "US-UC04-08",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-08",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC09-08",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-09",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ],
+      "description": "En cas de rupture, une offre équivalente est proposée et le touriste choisit : accepter, refuser, demander une autre option ou annuler. Pas de remise compensatoire automatique sans règle commerciale ni financeur identifié.",
+      "links": [
+        {
+          "story": "US-UC07-14",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-10",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Encaissement QR"
+        },
+        {
+          "platform": "PMS",
+          "module": "Encaissement"
+        }
+      ],
+      "description": "Reportée en V2, à reprendre (la transcription s'interrompt avant sa définition). Scénario envisagé : le touriste garde un reçu PDF consultable sans connexion ; l'opérateur scanne le QR code du reçu depuis son application, même hors ligne, et un lien donne le détail une fois la connexion rétablie. Les QR codes sont en fait les e-billets. Questions ouvertes : où naissent les QR codes, le fournisseur de TPE peut-il rappeler l'API eTourisme ?",
+      "links": [
+        {
+          "story": "US-UC12-12",
+          "type": "related"
+        },
+        {
+          "story": "US-UC12-09",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-11",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Channel manager"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC06-10",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-12",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "description": "Reportée en V2. Le touriste choisit une offre de remplacement parmi celles proposées.",
+      "links": [
+        {
+          "story": "US-UC04-14",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-13",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "description": "Le panier est conservé après un refus de paiement et le touriste choisit un autre moyen. Les transactions sont idempotentes pour éviter les doubles débits ; les retours d'état de l'agrégateur sont à cadrer.",
+      "links": [
+        {
+          "story": "US-UC04-15",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-14",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fiscalité"
+        }
+      ],
+      "description": "Orientation : ne pas bloquer une commande déjà chiffrée et payée parce qu'un service fiscal en aval (FNE) est indisponible : statuts internes, file d'attente, reprises automatiques et rapprochement ultérieur. Exception : si le calcul fiscal externe est nécessaire pour établir le montant final avant paiement, la finalisation est empêchée. Cas à cadrer.",
+      "links": [
+        {
+          "story": "US-EX10-06",
+          "type": "same"
+        },
+        {
+          "story": "US-EX10-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "description": "À revoir. Orientation : afficher le montant TTC de chaque ligne et le total à payer, sans détailler les taxes ligne par ligne (jugé trop lourd) ; le détail du prix et des taxes reste consultable, et figure dans les justificatifs selon les obligations applicables."
+    },
+    {
+      "id": "US-UC04-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Compte"
+        },
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC01-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC04-06",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-03",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-07",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-08",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        },
+        {
+          "platform": "App mobile",
+          "module": "E-billets"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Notifications"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC07-07",
+          "type": "same"
+        },
+        {
+          "story": "US-EX02-05",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-09",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Planning et disponibilités"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-10",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-11",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC07-04",
+          "type": "same"
+        },
+        {
+          "story": "US-EX18-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-12",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "description": "Écartée : le paiement porte sur 100 % du montant de la commande. Le compte rendu note l'acompte de 30 % comme mentionné mais non validé ; l'abandon est à confirmer.",
+      "links": [
+        {
+          "story": "US-UC04-13",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-13",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "description": "Écartée avec l'acompte : sans paiement en plusieurs fois, il n'y a pas de solde à prélever."
+    },
+    {
+      "id": "US-UC04-14",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC07-12",
+          "type": "same"
+        },
+        {
+          "story": "US-UC12-14",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-16",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-15",
+          "type": "related"
+        },
+        {
+          "story": "US-EX12-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC04-17",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "description": "Remplace l'exigence « trois clics maximum » : réduire au minimum les étapes jusqu'au paiement, sans limite universelle, en gardant un parcours clair et cohérent."
+    },
+    {
+      "id": "US-UC05-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Notifications"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC07-09",
+          "type": "same"
+        },
+        {
+          "story": "US-EX21-04",
+          "type": "related"
+        },
+        {
+          "story": "US-EX11-02",
+          "type": "dependsOn"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        }
+      ],
+      "description": "Le lien d'invitation (environ 48 heures après la fin présumée de la prestation) ouvre un formulaire prérempli. L'identification doit garantir que l'auteur a réservé ou consommé la prestation, y compris pour une réservation en mode invité.",
+      "links": [
+        {
+          "story": "US-UC05-13",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        }
+      ],
+      "description": "Note de 0 à 5 étoiles, obligatoire avant la saisie d'un commentaire : un commentaire sans note ne doit pas être lu comme zéro étoile."
+    },
+    {
+      "id": "US-UC05-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        }
+      ],
+      "description": "Critères d'évaluation propres à chaque type de service, affichés clairement au dépôt de l'avis. Liste des critères par catégorie à définir."
+    },
+    {
+      "id": "US-UC05-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        }
+      ],
+      "description": "Commentaire et photos facultatives, visibles publiquement. La géolocalisation des photos n'est pas obligatoire. Longueur maximale du commentaire contrôlée côté front et côté back."
+    },
+    {
+      "id": "US-UC05-06",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Moteur d'avis"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Moteur d'avis"
+        }
+      ],
+      "description": "Publication immédiate, sans validation préalable systématique. L'opérateur est notifié et peut signaler l'avis ; un avis négatif authentique reste publié."
+    },
+    {
+      "id": "US-UC05-08",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Moteur d'avis"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX04-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-09",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        },
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        }
+      ],
+      "description": "L'auteur peut modifier ou supprimer son avis ; un avis modifié porte la mention « modifié ».",
+      "links": [
+        {
+          "story": "US-EX21-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Avis clients"
+        }
+      ],
+      "description": "À chaque avis publié, l'opérateur reçoit une notification ; une alerte plus visible est envisagée pour les avis mal notés (seuil de trois étoiles évoqué).",
+      "links": [
+        {
+          "story": "US-EX21-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-11",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Avis clients"
+        }
+      ],
+      "description": "Un avis reçoit au plus une réponse officielle de l'opérateur ; le touriste est notifié mais ne peut pas répondre, et l'opérateur ne peut pas ajouter de réponse successive. Les échanges supplémentaires passent par un canal de réclamation distinct. Longueur maximale limitée côté front et côté back."
+    },
+    {
+      "id": "US-UC05-12",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-13",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Moteur d'avis"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-14",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Moteur d'avis"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        }
+      ]
+    },
+    {
+      "id": "US-UC05-16",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Avis clients"
+        }
+      ],
+      "description": "Signalement avec motif obligatoire, enregistré dans un historique (auteur, date, motif, décision). Le statut de l'avis et celui du signalement sont suivis séparément. Les règles de masquage temporaire doivent empêcher les signalements abusifs destinés à cacher des avis négatifs."
+    },
+    {
+      "id": "US-UC05-17",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des avis"
+        }
+      ],
+      "description": "L'avis signalé passe « En cours de modération » dans le back-office. Un administrateur SIVIS habilité décide : avis conforme, il reste publié ou est rétabli ; avis non conforme, il est retiré de l'affichage public. Le touriste et l'opérateur sont informés de la décision et de son motif.",
+      "links": [
+        {
+          "story": "US-UC05-16",
+          "type": "dependsOn"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-01",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "Création et modification depuis l'espace opérateur. Taille maximale des fichiers configurable, 15 Mo par défaut."
+    },
+    {
+      "id": "US-UC06-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "La catégorie est choisie dans le référentiel des thématiques. Les titres sont harmonisés à l'affichage sur la landing page."
+    },
+    {
+      "id": "US-UC06-03",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "Fiche établissement distincte de la fiche prestation réservable ; champs communs et champs propres à chaque famille selon les modèles de fiches à produire (descriptions, conditions d'annulation, prix, périodes, capacités, quotas)."
+    },
+    {
+      "id": "US-UC06-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "Photos avec règles de poids et de format configurables ; vidéos ajoutées par lien hébergé (YouTube évoqué), avec aperçu."
+    },
+    {
+      "id": "US-UC06-05",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX08-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-06",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC06-14",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-07",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-08",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "Aucune nouvelle offre n'est publiée sans validation SIVIS. Cycle : brouillon, en attente de validation, publiée, ou refusée avec motif obligatoire ; l'opérateur corrige et soumet à nouveau. Chaque soumission et décision est historisée, et l'opérateur suit le statut de ses offres. Cas à cadrer : garder la version en ligne visible pendant l'examen d'une nouvelle version. États à formaliser : brouillon, en attente, publiée, refusée, suspendue, archivée."
+    },
+    {
+      "id": "US-UC06-09",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "Correction du 16/10 : les changements de prix et de disponibilités d'une offre publiée ne repassent pas en modération. Seuls les changements éditoriaux et de médias sont revalidés par SIVIS.",
+      "links": [
+        {
+          "story": "US-UC15-10",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-10",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Channel manager"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX05-03",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-11",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-12",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des offres"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC06-13",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-13",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des offres"
+        }
+      ],
+      "description": "Validation par SIVIS avec motif en cas de refus ; délais cibles de modération, traçabilité des décisions et rôles habilités à définir."
+    },
+    {
+      "id": "US-UC06-14",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-15",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ]
+    },
+    {
+      "id": "US-UC06-16",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "description": "La saisie en cours est gardée en cache dans le navigateur et retrouvée après une coupure."
+    },
+    {
+      "id": "US-UC06-17",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Packs"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Notifications"
+        }
+      ],
+      "description": "Dépend de la cartographie des notifications : pour chacune, le déclencheur, le destinataire (administrateur SIVIS, opérateur, touriste individuel ou corporate, responsable d'entreprise), la configuration, le canal (application, push, e-mail, SMS), les préférences, les conditions d'envoi et l'action attendue. Distinguer les notifications transactionnelles des communications marketing."
+    },
+    {
+      "id": "US-UC07-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Packs"
+        }
+      ],
+      "description": "Il s'agit de la page de détail du pack : durée, nombre de participants, prix et programme par journée.",
+      "links": [
+        {
+          "story": "US-UC03-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Packs"
+        }
+      ],
+      "description": "Tous les packs ne sont pas modifiables : l'opérateur définit les dates fixes, le nombre de places et les composantes personnalisables ; le touriste ne modifie que ce qui est autorisé. Règles adultes et enfants, prix par personne ou par groupe, minimum de participants à définir."
+    },
+    {
+      "id": "US-UC07-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX18-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC04-06",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-06",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        },
+        {
+          "platform": "App mobile",
+          "module": "E-billets"
+        }
+      ],
+      "description": "À la fin de la réservation, le touriste reçoit un e-billet avec un QR code sécurisé ; scanné, il donne accès aux informations de la réservation et sert à la vérification chez l'opérateur. Le touriste accède aussi à l'assistant depuis la confirmation ou le détail du séjour.",
+      "links": [
+        {
+          "story": "US-EX16-16",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-08",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Arrivées et départs"
+        },
+        {
+          "platform": "PMS Light",
+          "module": "Contrôle des e-billets"
+        }
+      ],
+      "description": "L'opérateur vérifie l'e-billet en scannant son QR code depuis son application mobile.",
+      "links": [
+        {
+          "story": "US-EX02-06",
+          "type": "same"
+        },
+        {
+          "story": "US-UC09-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-09",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Notifications"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-11",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Packs"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC09-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-12",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-13",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC15-24",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-14",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "description": "Une alternative comparable est proposée et le touriste choisit. La remise compensatoire automatique n'est pas retenue sans règle commerciale ni partie qui la finance."
+    },
+    {
+      "id": "US-UC07-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC04-11",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC07-16",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Contrôle des e-billets"
+        },
+        {
+          "platform": "PMS Light",
+          "module": "Hors ligne"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC07-08",
+          "type": "related"
+        },
+        {
+          "story": "US-EX08-08",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-02",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-08",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Encaissement"
+        },
+        {
+          "platform": "PMS Light",
+          "module": "Encaissement QR"
+        }
+      ],
+      "description": "Chaque opérateur décide d'accepter ou non les points de fidélité.",
+      "links": [
+        {
+          "story": "US-EX08-07",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-09",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-10",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fidélité"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-11",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-11",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-12",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-13",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC08-14",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fidélité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-01",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Abonnement"
+        }
+      ],
+      "description": "À revoir : abonnement par modules, activés selon le besoin réel de l'opérateur. Formules, tarifs et combinaisons de modules restent à proposer par SIVIS ; aucune n'est validée.",
+      "links": [
+        {
+          "story": "US-EX07-05",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Établissement"
+        }
+      ],
+      "description": "À revoir : la taxe de nuitée dépend de la catégorie de l'établissement. Identifier le référentiel et l'acteur habilité à renseigner les paramètres fiscaux. Un compte opérateur peut gérer plusieurs établissements, chacun avec son profil.",
+      "links": [
+        {
+          "story": "US-EX20-05",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Packs"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Arrivées et départs"
+        },
+        {
+          "platform": "PMS Light",
+          "module": "Arrivées et départs"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX08-02",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-05",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Séjours et consommations"
+        }
+      ],
+      "description": "Les consommations sur place (restauration, activités, prolongation) sont rattachées au séjour pour une vue consolidée. Le récapitulatif des consommations reste distinct des factures fiscales : un paiement déjà facturé n'est pas refacturé."
+    },
+    {
+      "id": "US-UC09-06",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Facturation"
+        }
+      ],
+      "description": "Les règles de taxes, notamment la taxe de nuitée, doivent être fournies (M. Gale cité en atelier).",
+      "links": [
+        {
+          "story": "US-EX08-03",
+          "type": "same"
+        },
+        {
+          "story": "US-EX10-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-07",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "description": "À revoir avec l'agrégateur de paiement : la ventilation n'est pas un décaissement immédiat. Distinguer le calcul de la répartition, l'écriture dans les comptes ou wallets et le transfert effectif des fonds."
+    },
+    {
+      "id": "US-UC09-08",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fiscalité"
+        },
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX08-05",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-09",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Encaissement QR"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-09",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Abonnement"
+        }
+      ],
+      "description": "À revoir : les rappels de renouvellement relèvent de l'agrégateur."
+    },
+    {
+      "id": "US-UC09-11",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Abonnement"
+        }
+      ],
+      "description": "Le renouvellement automatique se fait au niveau de l'agrégateur."
+    },
+    {
+      "id": "US-UC09-12",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Abonnement"
+        }
+      ],
+      "description": "Option offerte par l'agrégateur."
+    },
+    {
+      "id": "US-UC09-13",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Encaissement"
+        }
+      ],
+      "description": "Option offerte par l'agrégateur.",
+      "links": [
+        {
+          "story": "US-UC04-15",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-14",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Hors ligne"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX08-08",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-15",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Abonnement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC09-11",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC09-16",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        },
+        {
+          "platform": "Back-office",
+          "module": "Opérateurs"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX10-01",
+          "type": "dependsOn"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "description": "À trancher. Exemple discuté : avec un délai de reversement de 72 heures, une annulation au-delà ne rembourse pas les taxes ; de même pour un séjour de 7 jours annulé après le deuxième jour. Fait générateur, délais par prestation et sort des taxes à arbitrer.",
+      "links": [
+        {
+          "story": "US-UC12-05",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-02",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Comptabilité"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC10-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-03",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Comptabilité"
+        }
+      ],
+      "description": "Reportée en V2. Question ouverte : développer un module comptable ou intégrer une solution spécialisée."
+    },
+    {
+      "id": "US-UC10-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Comptabilité"
+        }
+      ],
+      "description": "Reportée en V1."
+    },
+    {
+      "id": "US-UC10-05",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Comptabilité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-06",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Comptabilité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-07",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Comptabilité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-08",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Reversements"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC10-14",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-09",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Reversements"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Comptabilité"
+        }
+      ],
+      "description": "À valider : processus en cours d'analyse. Vérifier l'articulation avec la FNE : si l'opération est faite directement dans la FNE, comment eTourisme en est informé et quelles mises à jour déclencher.",
+      "links": [
+        {
+          "story": "US-EX10-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-11",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Comptabilité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-12",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Comptabilité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-13",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Comptabilité"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-11",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-14",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Reversements"
+        }
+      ]
+    },
+    {
+      "id": "US-UC10-15",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Établissement"
+        }
+      ],
+      "description": "Écartée de la plateforme : les coordonnées de reversement se modifient dans l'espace sécurisé de l'agrégateur, orientation à confirmer avec le prestataire de paiement."
+    },
+    {
+      "id": "US-UC11-01",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ],
+      "description": "Le point d'intérêt est une recommandation de lieu, pas une prestation commerciale : lieu, monument, infrastructure ou site remarquable, sans prix ni réservation obligatoires. Exemple : le Quartier France de Grand-Bassam. La création revient à l'administrateur (SIVIS et ses relais régionaux), pas à l'opérateur ; le droit de proposition des opérateurs reste à clarifier. Éviter les doublons de lieux proches."
+    },
+    {
+      "id": "US-UC11-02",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-03",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-04",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX11-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-05",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-06",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX15-10",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-07",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ],
+      "description": "Informations pratiques pour préparer la visite : accessibilité et aménagements, équipement conseillé (bottes en saison des pluies, anti-moustiques, eau, chapeau), accès en voiture ou véhicule particulier, adaptation aux enfants et aux personnes âgées, précautions. Les accès particuliers (pirogue, bac) sont signalés."
+    },
+    {
+      "id": "US-UC11-08",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-09",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-10",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        },
+        {
+          "platform": "Portail",
+          "module": "Points d'intérêt et carte"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-11",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-12",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-13",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-14",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Points d'intérêt et carte"
+        }
+      ],
+      "description": "Nouveau : le touriste peut demander la correction d'une fiche de point d'intérêt. Cette demande est distincte de la validation des offres commerciales."
+    },
+    {
+      "id": "US-UC11-16",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC02-10",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-17",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-18",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC06-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-19",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Points d'intérêt"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-20",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Points d'intérêt et carte"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX11-01",
+          "type": "dependsOn"
+        },
+        {
+          "story": "US-EX15-09",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC11-21",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Points d'intérêt et carte"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-01",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Paramétrage fiscal"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX20-05",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-02",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Paramétrage fiscal"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-06",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-04",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-05",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC04-07",
+          "type": "same"
+        },
+        {
+          "story": "US-UC07-06",
+          "type": "same"
+        },
+        {
+          "story": "US-UC09-07",
+          "type": "same"
+        },
+        {
+          "story": "US-EX19-01",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-06",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC10-09",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        },
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ],
+      "description": "Formulation retenue : « reçu numérique sécurisé », tant qu'aucun mécanisme de certification reconnu n'est défini."
+    },
+    {
+      "id": "US-UC12-08",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fiscalité"
+        },
+        {
+          "platform": "PMS",
+          "module": "Facturation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX08-06",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-09",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Encaissement QR"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX08-07",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-10",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Paiement QR"
+        }
+      ],
+      "description": "Écartée, reportée en V2 : la faisabilité d'un paiement réellement hors connexion n'est pas démontrée. Options à examiner avec l'agrégateur : USSD, portefeuille préalimenté, mécanismes différés, et leurs risques de solde obsolète et de double dépense.",
+      "links": [
+        {
+          "story": "US-UC12-11",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-11",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        },
+        {
+          "platform": "PMS Light",
+          "module": "Hors ligne"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-12",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Encaissement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-13",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fiscalité"
+        },
+        {
+          "platform": "PMS",
+          "module": "Facturation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-08",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-14",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-15",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ]
+    },
+    {
+      "id": "US-UC12-16",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-01",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX19-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-03",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace fournisseur"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-05",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-06",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fiscalité"
+        },
+        {
+          "platform": "PMS",
+          "module": "Tableau de bord"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-07",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace fournisseur"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-08",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-09",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace fournisseur"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-11",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC04-12",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-12",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace fournisseur"
+        }
+      ],
+      "description": "Le remboursement partiel immédiat est retiré. Le fournisseur crée son compte sur eTourisme comme un opérateur, sans hôtels ni chambres."
+    },
+    {
+      "id": "US-UC13-13",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-14",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fiscalité"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-15",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC14-15",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC13-16",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Recours et litiges"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC15-18",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-01",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace fournisseur"
+        }
+      ],
+      "description": "Le fournisseur B2B a un parcours d'inscription propre (demande, vérifications, validation, contractualisation) avant de publier ses produits."
+    },
+    {
+      "id": "US-UC14-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace fournisseur"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-03",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Logistique"
+        }
+      ],
+      "description": "Diligence NTECH : étudier les API de Paps, Yango Delivery et La Poste CI (international). Privilégier les outils des transporteurs plutôt que de reproduire leurs applications."
+    },
+    {
+      "id": "US-UC14-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Suivi de commande"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Suivi de commande"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-06",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Logistique"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-07",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Logistique"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-08",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC14-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-09",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Suivi de commande"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-10",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Suivi de commande"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-11",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Logistique"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-12",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace fournisseur"
+        }
+      ],
+      "description": "Écartée : le fournisseur signale le problème à l'administration, qui le gère."
+    },
+    {
+      "id": "US-UC14-13",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Logistique"
+        }
+      ],
+      "description": "Écartée : la preuve de livraison se fait dans l'application du transporteur (Yango ou autre). eTourisme exploite les statuts remontés par API, selon ce que les transporteurs fournissent."
+    },
+    {
+      "id": "US-UC14-14",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Support"
+        }
+      ]
+    },
+    {
+      "id": "US-UC14-15",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Support"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX07-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX21-02",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ],
+      "description": "Hors périmètre en l'état : pas de promesse d'IA prédictive sans données ni méthode validées (après la V2). Les recommandations se fondent sur les préférences et l'historique disponible.",
+      "links": [
+        {
+          "story": "US-EX16-17",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC09-06",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-06",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Tableau de bord"
+        }
+      ],
+      "description": "KPI proposés pour l'opérateur : réservations payées, ventes, revenu net après commissions et remboursements, panier moyen, montant en attente de reversement, réservations à venir, prestations réalisées, taux d'annulation et de non-présentation, taux d'occupation ou de remplissage selon le service, offres publiées, en attente ou refusées, vues des offres, taux de conversion, clients uniques et récurrents, note moyenne, nombre d'avis et réclamations ouvertes. Filtres par période, établissement et offre ; chaque indicateur ouvre son détail. Liste à valider avec SIVIS, et à décliner par type d'opérateur.",
+      "links": [
+        {
+          "story": "US-EX07-10",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-07",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Réservations"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX05-04",
+          "type": "related"
+        },
+        {
+          "story": "US-EX08-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-08",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-09",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Tableau de bord"
+        },
+        {
+          "platform": "PMS",
+          "module": "Facturation"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC12-08",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Planning et disponibilités"
+        }
+      ],
+      "description": "Un bouton force la synchronisation. La synchronisation avec les PMS et OTA externes dépend des API disponibles ; elle n'est pas présentée comme systématique, et les conflits ou surréservations sont signalés.",
+      "links": [
+        {
+          "story": "US-EX08-04",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-11",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-12",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-13",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-14",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-15",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord SIVIS"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-16",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Paramétrage"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-17",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Transactions"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-18",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Recours et litiges"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-19",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Opérateurs"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-20",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Hors ligne"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Continuité de service"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX08-07",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-21",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-22",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-23",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Continuité de service"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-24",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Planning et disponibilités"
+        }
+      ],
+      "description": "Alertes de conflit ou de surréservation, dans la limite des API externes ; délais, événements entrants (webhooks) et limites d'API à évaluer avant tout engagement de temps réel.",
+      "links": [
+        {
+          "story": "US-EX05-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-25",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Fiscalité"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX10-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-26",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Sécurité"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX12-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-27",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-28",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-29",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-30",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord SIVIS"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-31",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-32",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-33",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-34",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord SIVIS"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-35",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord SIVIS"
+        }
+      ]
+    },
+    {
+      "id": "US-UC15-36",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Tableau de bord national"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX15-06",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX01-08",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX01-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX02-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Agenda et billetterie"
+        }
+      ]
+    },
+    {
+      "id": "US-EX02-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Agenda et billetterie"
+        }
+      ]
+    },
+    {
+      "id": "US-EX02-03",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Contenus et offres"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC11-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX02-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Agenda et billetterie"
+        },
+        {
+          "platform": "Portail",
+          "module": "Panier et paiement"
+        }
+      ]
+    },
+    {
+      "id": "US-EX02-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace voyageur"
+        },
+        {
+          "platform": "App mobile",
+          "module": "E-billets"
+        }
+      ]
+    },
+    {
+      "id": "US-EX02-06",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Contrôle des e-billets"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-01",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Sécurité et alertes"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-02",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Sécurité et alertes"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-03",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Sécurité et alertes"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-04",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Support"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-05",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Alertes"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-06",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Hors connexion"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-07",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Hors connexion"
+        },
+        {
+          "platform": "App mobile",
+          "module": "E-billets"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX21-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX03-08",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Points d'intérêt et carte"
+        },
+        {
+          "platform": "App mobile",
+          "module": "Carte et itinéraires"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX16-08",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX04-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Contenus des voyageurs"
+        }
+      ]
+    },
+    {
+      "id": "US-EX04-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Contenus des voyageurs"
+        }
+      ]
+    },
+    {
+      "id": "US-EX04-03",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Modération des contenus"
+        }
+      ]
+    },
+    {
+      "id": "US-EX04-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Avis"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Moteur d'avis"
+        }
+      ]
+    },
+    {
+      "id": "US-EX04-05",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Affiliation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX04-06",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Affiliation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX05-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Channel manager"
+        }
+      ]
+    },
+    {
+      "id": "US-EX05-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Channel manager"
+        }
+      ]
+    },
+    {
+      "id": "US-EX05-03",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Channel manager"
+        }
+      ]
+    },
+    {
+      "id": "US-EX05-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Channel manager"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Centre d'aide"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX16-03",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Centre d'aide"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Centre d'aide"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Aide"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX17-02",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-05",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Centre d'aide"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Centre d'aide"
+        },
+        {
+          "platform": "Back-office",
+          "module": "Support"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC15-18",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-07",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Aide"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-08",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Support"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX03-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-09",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Aide"
+        }
+      ]
+    },
+    {
+      "id": "US-EX06-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Aide"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-01",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "CRM"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "CRM"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-03",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "CRM"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "CRM"
+        }
+      ],
+      "description": "Le SMS est retiré du périmètre de cette US en atelier. Orientation : passer par une solution spécialisée de campagnes pour protéger la réputation du domaine d'envoi d'eTourisme ; tarification et inclusion dans les abonnements non arbitrées.",
+      "links": [
+        {
+          "story": "US-UC07-01",
+          "type": "related"
+        },
+        {
+          "story": "US-UC08-09",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-05",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "CRM"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-06",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "CRM"
+        },
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-07",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Stocks"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-08",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Personnel"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-09",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Caisse"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC09-05",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX07-10",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Tableau de bord"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-01",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Réservations"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Arrivées et départs"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-03",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Facturation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Planning et disponibilités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-05",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX10-04",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-06",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-07",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Application"
+        }
+      ]
+    },
+    {
+      "id": "US-EX08-08",
+      "targets": [
+        {
+          "platform": "PMS Light",
+          "module": "Hors ligne"
+        }
+      ]
+    },
+    {
+      "id": "US-EX09-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Données personnelles"
+        }
+      ]
+    },
+    {
+      "id": "US-EX09-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Données personnelles"
+        }
+      ]
+    },
+    {
+      "id": "US-EX09-03",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Conformité ARTCI"
+        }
+      ]
+    },
+    {
+      "id": "US-EX09-04",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Données personnelles"
+        }
+      ]
+    },
+    {
+      "id": "US-EX09-05",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Conformité ARTCI"
+        }
+      ]
+    },
+    {
+      "id": "US-EX10-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        }
+      ]
+    },
+    {
+      "id": "US-EX10-02",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        }
+      ]
+    },
+    {
+      "id": "US-EX10-03",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC09-04",
+          "type": "related"
+        },
+        {
+          "story": "US-UC01-07",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX10-04",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC15-12",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX10-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Parcours eAdministration"
+        }
+      ]
+    },
+    {
+      "id": "US-EX10-06",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Interconnexions avec l'État"
+        }
+      ]
+    },
+    {
+      "id": "US-EX11-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Cartographie SIG"
+        }
+      ]
+    },
+    {
+      "id": "US-EX11-02",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Messagerie et OTP"
+        }
+      ]
+    },
+    {
+      "id": "US-EX11-03",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Identité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX12-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Sécurité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX12-02",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Sécurité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX12-03",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Habilitations"
+        },
+        {
+          "platform": "Socle et API",
+          "module": "Sécurité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX12-04",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Sécurité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX12-05",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Livrables"
+        }
+      ]
+    },
+    {
+      "id": "US-EX13-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Design et accessibilité"
+        },
+        {
+          "platform": "App mobile",
+          "module": "Application"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX21-01",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX13-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Design et accessibilité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX13-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Design et accessibilité"
+        },
+        {
+          "platform": "App mobile",
+          "module": "Application"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC15-21",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX13-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Design et accessibilité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX13-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Design et accessibilité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX13-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Design et accessibilité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX13-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Référencement"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Exploitation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Performance"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-03",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Exploitation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-04",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Exploitation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-05",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Exploitation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-06",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Exploitation et qualité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-07",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Exploitation et qualité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-08",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Exploitation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX14-09",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Exploitation et qualité"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX13-05",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC01-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Transport et formalités"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-08",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-09",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Points d'intérêt et carte"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-10",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-11",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX04-02",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-12",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-13",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-14",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC11-20",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-16",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-17",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-18",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Accueil"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX04-02",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-19",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ]
+    },
+    {
+      "id": "US-EX15-20",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Contenus éditoriaux"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC02-08",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-04",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-05",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX01-05",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-07",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-08",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        },
+        {
+          "platform": "App mobile",
+          "module": "Carte et itinéraires"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-09",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-10",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-11",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX15-13",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-12",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-13",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-14",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-16",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        },
+        {
+          "platform": "App mobile",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-17",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX16-18",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Assistant IA"
+        }
+      ]
+    },
+    {
+      "id": "US-EX17-01",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Conduite du changement"
+        }
+      ]
+    },
+    {
+      "id": "US-EX17-02",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Conduite du changement"
+        },
+        {
+          "platform": "Portail",
+          "module": "Centre d'aide"
+        }
+      ]
+    },
+    {
+      "id": "US-EX17-03",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Livrables"
+        }
+      ]
+    },
+    {
+      "id": "US-EX17-04",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Livrables"
+        }
+      ]
+    },
+    {
+      "id": "US-EX17-05",
+      "targets": [
+        {
+          "platform": "Projet",
+          "module": "Livrables"
+        }
+      ]
+    },
+    {
+      "id": "US-EX18-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Partage et parrainage"
+        }
+      ]
+    },
+    {
+      "id": "US-EX18-02",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Partage et parrainage"
+        }
+      ]
+    },
+    {
+      "id": "US-EX18-03",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Partage et parrainage"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC08-04",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX19-01",
+      "targets": [
+        {
+          "platform": "Socle et API",
+          "module": "Paiement et ventilation"
+        }
+      ]
+    },
+    {
+      "id": "US-EX19-02",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace agences B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-EX19-03",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace agences B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-EX19-04",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Approvisionnements B2B"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC13-03",
+          "type": "same"
+        }
+      ]
+    },
+    {
+      "id": "US-EX19-05",
+      "targets": [
+        {
+          "platform": "PMS",
+          "module": "Espace agences B2B"
+        }
+      ]
+    },
+    {
+      "id": "US-EX19-06",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "MICE"
+        }
+      ]
+    },
+    {
+      "id": "US-EX20-01",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Espace professionnel"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-EX10-01",
+          "type": "dependsOn"
+        }
+      ]
+    },
+    {
+      "id": "US-EX20-02",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Opérateurs"
+        }
+      ],
+      "links": [
+        {
+          "story": "US-UC15-19",
+          "type": "related"
+        }
+      ]
+    },
+    {
+      "id": "US-EX20-03",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Habilitations"
+        }
+      ]
+    },
+    {
+      "id": "US-EX20-04",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Supervision"
+        }
+      ]
+    },
+    {
+      "id": "US-EX20-05",
+      "targets": [
+        {
+          "platform": "Back-office",
+          "module": "Paramétrage fiscal"
+        }
+      ]
+    },
+    {
+      "id": "US-EX21-01",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Application"
+        }
+      ]
+    },
+    {
+      "id": "US-EX21-02",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "E-billets"
+        }
+      ]
+    },
+    {
+      "id": "US-EX21-03",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Avis"
+        }
+      ]
+    },
+    {
+      "id": "US-EX21-04",
+      "targets": [
+        {
+          "platform": "App mobile",
+          "module": "Notifications"
+        }
+      ]
+    },
+    {
+      "id": "US-UC03-15",
+      "targets": [
+        {
+          "platform": "Portail",
+          "module": "Planificateur de voyage"
+        }
+      ],
+      "description": "Nouvelle US, à rédiger : exporter le devis du séjour composé, notamment pour les validations internes des entreprises. Durée de validité et changements de prix à définir.",
+      "links": [
+        {
+          "story": "US-UC03-04",
+          "type": "dependsOn"
+        },
+        {
+          "story": "US-EX16-11",
+          "type": "related"
+        }
+      ]
+    }
+  ]
+}

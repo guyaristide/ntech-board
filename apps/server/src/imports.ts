@@ -1,8 +1,15 @@
-import type { Epic, ImportReport, Phase, Story, Workshop } from '@board/shared';
+import type { Diligence, Epic, ImportReport, Phase, Story, Workshop, WorkspaceData } from '@board/shared';
 import { pool, tx } from './db';
 import type { RawRaci, RawRisks } from './importers/governance';
 import type { RawPlanning } from './importers/planning';
-import { mergePlanning, storyFromRaw, type RawStories } from './merge';
+import {
+  enrichStory,
+  mergePlanning,
+  storyFromRaw,
+  symmetricLinks,
+  type RawStories,
+  type StoryEnrichment,
+} from './merge';
 import { notify } from './repo';
 import { forgetProject } from './tenancy';
 
@@ -120,7 +127,7 @@ export async function importPlanning(
  */
 async function importEntities<T extends { id: string }>(
   projectId: string,
-  kind: 'phase' | 'risk',
+  kind: 'phase' | 'risk' | 'diligence',
   items: T[],
   userId: string | null,
   prepare: (item: T, current: Phase | null) => T = item => item,
@@ -186,5 +193,111 @@ export async function importRisks(projectId: string, raw: RawRisks, userId: stri
   report.details.push(
     `${raw.risks.length} risques, ${raw.risks.reduce((n, r) => n + r.actions.length, 0)} actions : ${report.added} ajoutés, ${report.updated} mis à jour, ${report.kept} conservés car modifiés dans l'outil.`,
   );
+  return report;
+}
+
+/** Fichier de cadrage : diligences issues des ateliers et compléments des US. */
+export interface RawCadrage {
+  diligences?: Diligence[];
+  stories?: StoryEnrichment[];
+}
+
+/**
+ * Import d'un fichier de cadrage. Diligences : comme les risques (modifiées dans l'outil, conservées).
+ * US : description et plateformes posées seulement si elles sont vides, liaisons ajoutées des deux
+ * côtés ; rien de ce qui a été saisi n'est remplacé.
+ */
+export async function importCadrage(projectId: string, raw: RawCadrage, userId: string | null) {
+  if (!Array.isArray(raw.diligences) && !Array.isArray(raw.stories))
+    throw new Error('Format attendu : { diligences: [], stories: [] }');
+  const details: string[] = [];
+  const report: ImportReport = { added: 0, updated: 0, kept: 0, removed: 0, details };
+  if (raw.diligences?.length) {
+    const r = await importEntities(projectId, 'diligence', raw.diligences, userId);
+    Object.assign(report, { added: r.added, updated: r.updated, kept: r.kept });
+    details.push(
+      `${raw.diligences.length} diligences : ${r.added} ajoutées, ${r.updated} mises à jour, ${r.kept} conservées car modifiées dans l'outil.`,
+    );
+  }
+  if (raw.stories?.length) {
+    const links = symmetricLinks(raw.stories);
+    const byId = new Map(raw.stories.map(e => [e.id, e]));
+    for (const id of links.keys()) if (!byId.has(id)) byId.set(id, { id });
+    let enriched = 0;
+    const unknown: string[] = [];
+    await tx(async c => {
+      const { rows } = await c.query<{ id: string; data: Story }>(
+        `SELECT id, data FROM entities WHERE project_id = $1 AND kind = 'story' FOR UPDATE`,
+        [projectId],
+      );
+      const current = new Map(rows.map(r => [r.id, r.data]));
+      for (const e of byId.values()) {
+        const story = current.get(e.id);
+        if (!story) {
+          unknown.push(e.id);
+          continue;
+        }
+        const next = enrichStory(story, { ...e, links: links.get(e.id) ?? [] });
+        if (!next) continue;
+        enriched++;
+        // La révision augmente : un import de backlog ultérieur ne remplacera plus cette US.
+        await c.query(
+          `UPDATE entities SET data = $3, revision = revision + 1, updated_at = now(), updated_by = $4
+            WHERE project_id = $1 AND kind = 'story' AND id = $2`,
+          [projectId, e.id, next, userId],
+        );
+      }
+      await c.query(
+        `INSERT INTO events (project_id, kind, entity_id, action, patch, user_id) VALUES ($1, 'project', '-', 'import-cadrage', $2, $3)`,
+        [projectId, JSON.stringify({ enriched, unknown }), userId],
+      );
+      await notify(c, projectId, 'reload', 'import-cadrage', userId);
+    });
+    details.push(
+      `${enriched} US complétées (description, plateformes ou liaisons)${unknown.length ? ` ; inconnues, ignorées : ${unknown.join(', ')}` : ''}.`,
+    );
+  }
+  return report;
+}
+
+/**
+ * Restaure un export complet (Administration › Export) dans un projet vide : sert à reproduire
+ * un tableau de production en local. Refusé si le projet contient déjà des US.
+ */
+export async function importSnapshot(projectId: string, raw: Partial<WorkspaceData>, userId: string | null) {
+  const groups: [string, { id: string }[] | undefined][] = [
+    ['reference', raw.references],
+    ['epic', raw.epics],
+    ['story', raw.stories],
+    ['workshop', raw.workshops],
+    ['phase', raw.phases],
+    ['risk', raw.risks],
+    ['diligence', raw.diligences],
+  ];
+  const report: ImportReport = { added: 0, updated: 0, kept: 0, removed: 0, details: [] };
+  await tx(async c => {
+    const { rows } = await c.query<{ n: number }>(
+      `SELECT count(*)::int AS n FROM entities WHERE project_id = $1 AND kind = 'story'`,
+      [projectId],
+    );
+    if (rows[0].n) throw new Error('Le projet contient déjà des US : restauration refusée.');
+    for (const [kind, items] of groups)
+      for (const [i, item] of (items ?? []).entries()) {
+        await c.query(
+          `INSERT INTO entities (project_id, kind, id, data, position, revision) VALUES ($1, $2, $3, $4, $5, $6)
+           ON CONFLICT (project_id, kind, id) DO UPDATE SET data = EXCLUDED.data, position = EXCLUDED.position`,
+          [projectId, kind, item.id, item, i, kind === 'reference' ? 0 : 1],
+        );
+        report.added++;
+      }
+    if (raw.planning)
+      await c.query('UPDATE projects SET planning = $2 WHERE id = $1', [projectId, raw.planning]);
+    await c.query(
+      `INSERT INTO events (project_id, kind, entity_id, action, patch, user_id) VALUES ($1, 'project', '-', 'import-snapshot', $2, $3)`,
+      [projectId, JSON.stringify({ added: report.added }), userId],
+    );
+    await notify(c, projectId, 'reload', 'import-snapshot', userId);
+  });
+  report.details.push(`${report.added} contenus restaurés.`);
   return report;
 }

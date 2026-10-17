@@ -2,6 +2,9 @@ import type {
   ActionNature,
   ActionStatus,
   Cotation,
+  DiligenceKind,
+  DiligenceStatus,
+  LinkType,
   PhaseStatus,
   PvStatus,
   Priority,
@@ -104,6 +107,51 @@ export const riskScore = (c: Cotation) => (c.p && c.i ? c.p * c.i : null);
 export const riskLevel = (score: number | null): RiskLevel | '' =>
   score === null ? '' : score <= 4 ? 'Faible' : score <= 9 ? 'Modéré' : score <= 16 ? 'Élevé' : 'Critique';
 
+export const DILIGENCE_KINDS = [
+  'Livrable',
+  'Étude',
+  'Arbitrage',
+  'Fourniture',
+] as const satisfies readonly DiligenceKind[];
+export const DILIGENCE_KIND_HINT: Record<DiligenceKind, string> = {
+  Livrable: 'Document ou maquette à produire',
+  Étude: 'Analyse ou faisabilité à mener',
+  Arbitrage: 'Décision à prendre par l’autorité compétente',
+  Fourniture: 'Contenu, accès ou information à transmettre',
+};
+export const DILIGENCE_STATUSES = [
+  'À faire',
+  'En cours',
+  'En attente',
+  'Réalisée',
+  'Abandonnée',
+] as const satisfies readonly DiligenceStatus[];
+/** Diligence encore à mener : ni réalisée ni abandonnée. */
+export const diligenceOpen = (status: DiligenceStatus) => status !== 'Réalisée' && status !== 'Abandonnée';
+
+export const LINK_TYPES = [
+  'same',
+  'duplicate',
+  'dependsOn',
+  'requiredBy',
+  'related',
+] as const satisfies readonly LinkType[];
+export const LINK_LABEL: Record<LinkType, string> = {
+  same: 'Même fonctionnalité',
+  duplicate: 'Doublon',
+  dependsOn: 'Dépend de',
+  requiredBy: 'Nécessaire à',
+  related: 'Voir aussi',
+};
+/** Ce que la liaison devient vue depuis l'autre US. */
+export const LINK_INVERSE: Record<LinkType, LinkType> = {
+  same: 'same',
+  duplicate: 'duplicate',
+  dependsOn: 'requiredBy',
+  requiredBy: 'dependsOn',
+  related: 'related',
+};
+
 export const TONE: Record<string, Tone> = {
   'À cadrer': 'gray',
   'En atelier': 'blue',
@@ -145,6 +193,11 @@ export const TONE: Record<string, Tone> = {
   Corrective: 'purple',
   Contingence: 'brown',
   'À planifier': 'gray',
+  'En attente': 'yellow',
+  Livrable: 'blue',
+  Étude: 'purple',
+  Arbitrage: 'orange',
+  Fourniture: 'brown',
   Réalisée: 'green',
   Abandonnée: 'gray',
 };

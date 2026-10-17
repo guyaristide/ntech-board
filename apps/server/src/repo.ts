@@ -1,4 +1,5 @@
 import type {
+  Diligence,
   Epic,
   EntityKind,
   EntityOf,
@@ -44,6 +45,7 @@ export async function getWorkspace(projectId: string, planning: string | null): 
     workshops: of<Workshop>('workshop'),
     phases: of<Phase>('phase'),
     risks: of<Risk>('risk'),
+    diligences: of<Diligence>('diligence'),
   };
 }
 
@@ -80,6 +82,43 @@ export async function mutate<K extends EntityKind>(
     );
     await notify(c, projectId, kind, id, userId);
     return data;
+  });
+}
+
+/**
+ * Modifie deux entités du même type dans une seule transaction (liaison entre deux US) :
+ * les verrous sont pris dans l'ordre des identifiants, deux liaisons croisées ne s'interbloquent pas.
+ */
+export async function mutatePair<K extends EntityKind>(
+  projectId: string,
+  kind: K,
+  ids: [string, string],
+  userId: string,
+  action: string,
+  change: (a: EntityOf<K>, b: EntityOf<K>) => [EntityOf<K>, EntityOf<K>],
+  patch?: unknown,
+): Promise<[EntityOf<K>, EntityOf<K>]> {
+  return tx(async c => {
+    const { rows } = await c.query<{ id: string; data: EntityOf<K> }>(
+      'SELECT id, data FROM entities WHERE project_id = $1 AND kind = $2 AND id = ANY($3) ORDER BY id FOR UPDATE',
+      [projectId, kind, ids],
+    );
+    const [a, b] = ids.map(id => rows.find(r => r.id === id)?.data);
+    if (!a || !b) throw new NotFound(`${kind} ${ids.join(', ')}`);
+    const next = change(a, b);
+    for (const [i, id] of ids.entries()) {
+      await c.query(
+        `UPDATE entities SET data = $4, revision = revision + 1, updated_at = now(), updated_by = $5
+          WHERE project_id = $1 AND kind = $2 AND id = $3`,
+        [projectId, kind, id, next[i], userId],
+      );
+      await c.query(
+        'INSERT INTO events (project_id, kind, entity_id, action, patch, user_id) VALUES ($1, $2, $3, $4, $5, $6)',
+        [projectId, kind, id, action, patch === undefined ? null : JSON.stringify(patch), userId],
+      );
+      await notify(c, projectId, kind, id, userId);
+    }
+    return next;
   });
 }
 

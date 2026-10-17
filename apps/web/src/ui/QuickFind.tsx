@@ -12,7 +12,7 @@ interface Hit {
 
 const norm = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
-/** Recherche rapide (⌘K) dans les US, les épiques, les ateliers et leurs sessions. */
+/** Recherche rapide (⌘K) dans les US, les diligences, les épiques, les ateliers et leurs sessions. */
 export function QuickFind({ onClose }: { onClose: () => void }) {
   const ws = useWorkspace();
   const navigate = useNavigate();
@@ -26,8 +26,15 @@ export function QuickFind({ onClose }: { onClose: () => void }) {
         title: s.title || 'Sans titre',
         meta: `${s.actor} · ${s.status}`,
         text: norm(
-          `${s.id} ${s.title} ${s.asA} ${s.iWant} ${s.soThat} ${s.actor} ${s.acceptance.map(c => c.text).join(' ')} ${s.body.map(b => b.text).join(' ')}`,
+          `${s.id} ${s.title} ${s.description} ${s.asA} ${s.iWant} ${s.soThat} ${s.actor} ${s.targets.map(t => `${t.platform} ${t.module}`).join(' ')} ${s.acceptance.map(c => c.text).join(' ')} ${s.body.map(b => b.text).join(' ')}`,
         ),
+      })),
+      ...ws.diligences.map(d => ({
+        to: `/diligence/${d.id}`,
+        code: d.id,
+        title: d.title || 'Sans titre',
+        meta: `Diligence · ${d.owner || 'à désigner'} · ${d.status}`,
+        text: norm(`${d.id} ${d.title} ${d.detail} ${d.owner} ${d.partners} ${d.dependency}`),
       })),
       ...ws.references.map(r => ({
         to: `/references#${r.id}`,
@@ -62,7 +69,7 @@ export function QuickFind({ onClose }: { onClose: () => void }) {
         })),
       ]),
     ],
-    [ws.stories, ws.epics, ws.workshops, ws.references],
+    [ws.stories, ws.epics, ws.workshops, ws.references, ws.diligences],
   );
   const words = norm(query).split(/\s+/).filter(Boolean);
   const hits = (words.length ? index.filter(h => words.every(w => h.text.includes(w))) : index).slice(0, 40);

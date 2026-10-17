@@ -11,8 +11,21 @@ const when = (iso: string) =>
     minute: '2-digit',
   });
 
-/** Fil de commentaires d'une page ; l'auteur est retenu dans le navigateur. */
-export function Comments({ items, onAdd }: { items: Comment[]; onAdd: (text: string) => void }) {
+/**
+ * Fil de commentaires d'une page. Avec onPick, chaque commentaire propose de reprendre son texte
+ * ailleurs (dans la description d'une US).
+ */
+export function Comments({
+  items,
+  onAdd,
+  onPick,
+  pickLabel = 'Reprendre',
+}: {
+  items: Comment[];
+  onAdd: (text: string) => void;
+  onPick?: (comment: Comment) => void;
+  pickLabel?: string;
+}) {
   const [text, setText] = useState('');
   const author = useWorkspace(s => s.session?.user?.name || s.session?.user?.email || '');
   const canEdit = useCanEdit();
@@ -31,6 +44,11 @@ export function Comments({ items, onAdd }: { items: Comment[]; onAdd: (text: str
           <div>
             <p className={styles.meta}>
               <strong>{c.author}</strong> <time dateTime={c.at}>{when(c.at)}</time>
+              {onPick && canEdit ? (
+                <button type="button" className={styles.pick} onClick={() => onPick(c)}>
+                  {pickLabel}
+                </button>
+              ) : null}
             </p>
             <p className={styles.body}>{c.text}</p>
           </div>

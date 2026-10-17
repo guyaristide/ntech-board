@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import { withStoryDefaults } from '@board/shared';
 import type {
   Comment,
+  Diligence,
   Epic,
   EntityKind,
   Phase as ProjectPhase,
@@ -13,6 +15,7 @@ import type {
   Session,
   SessionInfo,
   Story,
+  LinkType,
   Workshop,
   WorkspaceData,
 } from '@board/shared';
@@ -56,6 +59,12 @@ interface State extends WorkspaceData {
   updateRiskAction: (id: string, action: string, patch: Partial<RiskAction>) => void;
   deleteRiskAction: (id: string, action: string) => Promise<void>;
   commentRisk: (id: string, text: string) => Promise<void>;
+  linkStories: (id: string, other: string, type: LinkType) => Promise<void>;
+  unlinkStories: (id: string, other: string) => Promise<void>;
+  createDiligence: (patch?: Partial<Diligence>) => Promise<string>;
+  updateDiligence: (id: string, patch: Partial<Omit<Diligence, 'id' | 'comments'>>) => void;
+  deleteDiligence: (id: string) => Promise<void>;
+  commentDiligence: (id: string, text: string) => Promise<void>;
 }
 
 const EMPTY: WorkspaceData = {
@@ -66,14 +75,20 @@ const EMPTY: WorkspaceData = {
   workshops: [],
   phases: [],
   risks: [],
+  diligences: [],
 };
-const KEY: Record<EntityKind, 'stories' | 'epics' | 'workshops' | 'phases' | 'risks'> = {
+const KEY: Record<EntityKind, 'stories' | 'epics' | 'workshops' | 'phases' | 'risks' | 'diligences'> = {
   story: 'stories',
   epic: 'epics',
   workshop: 'workshops',
   phase: 'phases',
   risk: 'risks',
+  diligence: 'diligences',
 };
+
+/** Contenu reçu du serveur, complété des champs apparus depuis (US enregistrées avant le 17/10/2026). */
+const normalize = (kind: EntityKind, data: unknown) =>
+  kind === 'story' && data ? withStoryDefaults(data as Story) : data;
 
 /**
  * Écritures différées : les frappes successives sur un même champ sont regroupées (400 ms)
@@ -95,8 +110,9 @@ const busy = (entity: string) =>
   (inflight.get(entity) ?? 0) > 0 || [...queue.values()].some(q => q.entity === entity);
 
 export const useWorkspace = create<State>((set, get) => {
-  const replace = <K extends EntityKind>(kind: K, id: string, data: unknown | null) =>
+  const replace = <K extends EntityKind>(kind: K, id: string, received: unknown | null) =>
     set(s => {
+      const data = normalize(kind, received);
       const list = s[KEY[kind]] as { id: string }[];
       if (data === null) return { [KEY[kind]]: list.filter(x => x.id !== id) } as Partial<State>;
       const exists = list.some(x => x.id === id);
@@ -218,7 +234,8 @@ export const useWorkspace = create<State>((set, get) => {
     load: async () => {
       try {
         const data = await api.get<WorkspaceData>('/workspace');
-        set({ ...data });
+        // Un serveur pas encore mis à jour ne renvoie pas les diligences.
+        set({ ...data, stories: data.stories.map(withStoryDefaults), diligences: data.diligences ?? [] });
       } catch (e) {
         failed(e);
       }
@@ -387,6 +404,37 @@ export const useWorkspace = create<State>((set, get) => {
     commentRisk: async (id, text) => {
       local('risk', id, (r: Risk) => ({ ...r, comments: [...r.comments, comment(me(), text)] }));
       await send('risk', id, () => api.post<Risk>(`/risks/${id}/comments`, { text }));
+    },
+
+    // L'autre US reçoit la liaison inverse par le flux temps réel, comme chez les autres membres.
+    linkStories: async (id, other, type) => {
+      await send('story', id, () => api.post<Story>(`/stories/${id}/links`, { story: other, type }));
+    },
+
+    unlinkStories: async (id, other) => {
+      local('story', id, (s: Story) => ({ ...s, links: s.links.filter(l => l.story !== other) }));
+      await send('story', id, () => api.delete<Story>(`/stories/${id}/links/${other}`));
+    },
+
+    createDiligence: async patch => {
+      const d = await send('diligence', 'new', () => api.post<Diligence>('/diligences', { patch }));
+      replace('diligence', d.id, d);
+      return d.id;
+    },
+
+    updateDiligence: (id, patch) => {
+      local('diligence', id, (d: Diligence) => ({ ...d, ...patch }));
+      defer(`diligence:${id}`, 'diligence', id, patch, p => api.patch(`/diligences/${id}`, p));
+    },
+
+    deleteDiligence: async id => {
+      await send('diligence', id, () => api.delete(`/diligences/${id}`));
+      replace('diligence', id, null);
+    },
+
+    commentDiligence: async (id, text) => {
+      local('diligence', id, (d: Diligence) => ({ ...d, comments: [...d.comments, comment(me(), text)] }));
+      await send('diligence', id, () => api.post<Diligence>(`/diligences/${id}/comments`, { text }));
     },
   };
 });

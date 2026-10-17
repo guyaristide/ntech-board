@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { STATUSES } from '@board/shared';
+import { STATUSES, targetLabel } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import type { Story, StoryStatus } from '@board/shared';
 import { Tag } from '../../ui/Tag';
@@ -51,6 +51,9 @@ export function StoryBoard({ stories }: { stories: Story[] }) {
                   <Tag value={s.priority} />
                 </span>
                 <span className={styles.cardActor}>{s.actor}</span>
+                {s.targets.length ? (
+                  <span className={styles.targets}>{s.targets.map(targetLabel).join(' · ')}</span>
+                ) : null}
               </Link>
             ))}
           </section>

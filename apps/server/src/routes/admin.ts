@@ -2,7 +2,14 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 import { ROLE_LABEL, ROLES } from '@board/shared';
 import { originOf, requireRole, type AppEnv } from '../auth';
-import { importPhases, importPlanning, importRisks, importStories } from '../imports';
+import {
+  importCadrage,
+  importPhases,
+  importPlanning,
+  importRisks,
+  importStories,
+  type RawCadrage,
+} from '../imports';
 import { parseRaci, parseRisks, type RawRaci, type RawRisks } from '../importers/governance';
 import { parsePlanning } from '../importers/planning';
 import { sendInvitation } from '../mail';
@@ -146,6 +153,22 @@ adminRoutes.post('/import/:what{raci|risks}', async c => {
       ? (JSON.parse(buffer.toString('utf8')) as RawRisks)
       : await parseRisks(buffer, file.name);
     return c.json(await importRisks(p.id, raw, userId));
+  } catch (e) {
+    return c.json({ error: 'parse_failed', message: (e as Error).message }, 422);
+  }
+});
+
+/** Import d'un fichier de cadrage (JSON { diligences, stories }) : diligences et compléments des US. */
+adminRoutes.post('/import/cadrage', async c => {
+  const form = await c.req.parseBody();
+  const file = form.file;
+  if (!(file instanceof File)) return c.json({ error: 'file_required' }, 400);
+  if (file.size > MAX_UPLOAD) return c.json({ error: 'too_large' }, 413);
+  const text = await file.text();
+  const p = c.get('project');
+  await saveUpload(p.slug, file.name, Buffer.from(text));
+  try {
+    return c.json(await importCadrage(p.id, JSON.parse(text) as RawCadrage, c.get('user')!.id));
   } catch (e) {
     return c.json({ error: 'parse_failed', message: (e as Error).message }, 422);
   }

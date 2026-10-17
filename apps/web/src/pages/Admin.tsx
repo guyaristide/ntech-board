@@ -56,7 +56,7 @@ export function Admin() {
       setInvite(i => ({ ...i, email: '', name: '' }));
     });
   };
-  const upload = (kind: 'planning' | 'stories' | 'raci' | 'risks', file: File | undefined) => {
+  const upload = (kind: 'planning' | 'stories' | 'raci' | 'risks' | 'cadrage', file: File | undefined) => {
     if (!file) return;
     const form = new FormData();
     form.append('file', file);
@@ -225,8 +225,8 @@ export function Admin() {
       <h2 className={page.h2}>Imports</h2>
       <p className={page.faint}>
         Un nouvel import ne supprime rien de ce qui a été saisi : réponses, notes, commentaires et US
-        modifiées sont conservées, de même que les phases et les risques modifiés dans l’outil. Les fichiers
-        importés sont archivés sur le serveur.
+        modifiées sont conservées, de même que les phases, les risques et les diligences modifiés dans
+        l’outil. Les fichiers importés sont archivés sur le serveur.
       </p>
       <div className={styles.imports}>
         <label className={styles.drop}>
@@ -263,6 +263,18 @@ export function Admin() {
             type="file"
             accept=".xlsx,.json,application/json"
             onChange={e => upload('risks', e.target.files?.[0])}
+          />
+        </label>
+        <label className={styles.drop}>
+          <strong>Compléments de cadrage</strong>
+          <span>
+            JSON {'{ diligences, stories }'} : diligences issues des ateliers ; description, plateformes et
+            liaisons des US, posées seulement là où rien n’a encore été saisi.
+          </span>
+          <input
+            type="file"
+            accept=".json,application/json"
+            onChange={e => upload('cadrage', e.target.files?.[0])}
           />
         </label>
       </div>

@@ -2,6 +2,9 @@ import { z } from 'zod';
 import {
   ACTION_NATURES,
   ACTION_STATUSES,
+  DILIGENCE_KINDS,
+  DILIGENCE_STATUSES,
+  LINK_TYPES,
   PHASE_STATUSES,
   PRIORITIES,
   QUESTION_STATUSES,
@@ -23,12 +26,15 @@ const block = z.object({
 });
 export const blocks = z.array(block).max(2000);
 const criterion = z.object({ id: z.string().max(40), text: text(4000), done: z.boolean() });
+const target = z.object({ platform: z.string().trim().min(1).max(80), module: z.string().trim().max(120) });
 
 /** Champs d'une US modifiables par un éditeur. */
 export const StoryPatch = z
   .object({
     epic: text(40),
     title: text(300),
+    description: text(20000),
+    targets: z.array(target).max(30),
     actor: text(80),
     asA: text(),
     iWant: text(),
@@ -44,6 +50,9 @@ export const StoryPatch = z
   })
   .partial()
   .strict();
+
+/** Liaison vers une autre US ; la liaison inverse est posée sur l'autre US. */
+export const StoryLinkBody = z.object({ story: z.string().min(1).max(40), type: z.enum(LINK_TYPES) });
 
 export const CreateStory = z.object({ epic: text(40).min(1), patch: StoryPatch.optional() });
 export const CommentBody = z.object({ text: z.string().trim().min(1).max(5000) });
@@ -143,3 +152,27 @@ export const RiskActionPatch = z
   .partial()
   .strict();
 export const RiskReviewCreate = z.object({ phase: text(40), comment: text(4000).default('') });
+
+// --- Diligences -------------------------------------------------------------------------
+
+const ids = z.array(z.string().max(40)).max(200);
+export const DiligencePatch = z
+  .object({
+    title: text(500),
+    detail: text(8000),
+    kind: z.enum(DILIGENCE_KINDS),
+    owner: text(120),
+    partners: text(300),
+    dependency: text(),
+    due: text(40),
+    status: z.enum(DILIGENCE_STATUSES),
+    outcome: text(8000),
+    source: text(300),
+    workshops: ids,
+    stories: ids,
+    risks: ids,
+    notes: blocks,
+  })
+  .partial()
+  .strict();
+export const DiligenceCreate = z.object({ patch: DiligencePatch.optional() });

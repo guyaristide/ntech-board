@@ -76,3 +76,30 @@
   opacity: 0.4;
   cursor: default;
 }
+
+.pick {
+  margin-left: 8px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-faint);
+  font-size: 12px;
+  opacity: 0;
+}
+
+.comment:hover .pick,
+.pick:focus-visible {
+  opacity: 1;
+}
+
+.pick:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+}
+
+@media (hover: none) {
+  .pick {
+    opacity: 1;
+  }
+}
