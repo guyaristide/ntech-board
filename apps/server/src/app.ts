@@ -11,6 +11,7 @@ import { accessLog, fail } from './log';
 import { adminRoutes } from './routes/admin';
 import { authRoutes } from './routes/auth';
 import { governanceRoutes } from './routes/governance';
+import { partyRoutes } from './routes/parties';
 import { pdfRoutes } from './routes/pdf';
 import { workspaceRoutes } from './routes/workspace';
 
@@ -53,6 +54,7 @@ export function createApp() {
   api.route('/', workspaceRoutes);
   api.route('/', governanceRoutes);
   api.route('/', pdfRoutes);
+  api.route('/', partyRoutes);
   api.route('/admin', adminRoutes);
   api.notFound(c => c.json({ error: 'not_found' }, 404));
   app.route('/api', api);

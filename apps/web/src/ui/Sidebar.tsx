@@ -61,6 +61,7 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         <NavLink to="/" end className={link}>
           <span className={styles.icon}>⌂</span> Accueil
         </NavLink>
+        <span className={styles.section}>Cadrage</span>
         <NavLink to="/backlog" className={link}>
           <span className={styles.icon}>☰</span> Backlog des US{' '}
           <span className={styles.count}>{ws.stories.length}</span>
@@ -88,10 +89,20 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
             <span className={styles.count}>{ws.references.length}</span>
           </NavLink>
         ) : null}
+        <span className={styles.section}>Projet</span>
+        <NavLink to="/parties" className={link}>
+          <span className={styles.icon}>👥</span> Parties prenantes{' '}
+          <span className={styles.count}>{ws.parties.length}</span>
+        </NavLink>
         {admin ? (
-          <NavLink to="/admin" className={link}>
-            <span className={styles.icon}>⚙</span> Administration
-          </NavLink>
+          <>
+            <NavLink to="/reglages" className={link}>
+              <span className={styles.icon}>⚒</span> Réglages
+            </NavLink>
+            <NavLink to="/admin" className={link}>
+              <span className={styles.icon}>⚙</span> Administration
+            </NavLink>
+          </>
         ) : null}
 
         <button

@@ -1,3 +1,4 @@
+import type { Party, ProjectSettings } from './parties';
 import type { Diligence, Epic, Phase, Reference, Risk, Story, Workshop } from './types';
 
 /** Rôle d'un membre dans un projet. */
@@ -49,10 +50,12 @@ export interface WorkspaceData {
   phases: Phase[];
   risks: Risk[];
   diligences: Diligence[];
+  parties: Party[];
+  settings: ProjectSettings;
 }
 
-export type EntityKind = 'story' | 'epic' | 'workshop' | 'phase' | 'risk' | 'diligence';
-export const ENTITY_KINDS: EntityKind[] = ['story', 'epic', 'workshop', 'phase', 'risk', 'diligence'];
+export type EntityKind = 'story' | 'epic' | 'workshop' | 'phase' | 'risk' | 'diligence' | 'party';
+export const ENTITY_KINDS: EntityKind[] = ['story', 'epic', 'workshop', 'phase', 'risk', 'diligence', 'party'];
 export type EntityOf<K extends EntityKind> = K extends 'story'
   ? Story
   : K extends 'epic'
@@ -63,7 +66,9 @@ export type EntityOf<K extends EntityKind> = K extends 'story'
         ? Phase
         : K extends 'risk'
           ? Risk
-          : Diligence;
+          : K extends 'diligence'
+            ? Diligence
+            : Party;
 
 export interface PresenceEntry {
   userId: string;
@@ -78,7 +83,7 @@ export type ServerEvent =
       type: 'entity';
       kind: EntityKind;
       id: string;
-      data: Story | Epic | Workshop | Phase | Risk | Diligence | null;
+      data: Story | Epic | Workshop | Phase | Risk | Diligence | Party | null;
       by: string | null;
     }
   | { type: 'presence'; users: PresenceEntry[] }

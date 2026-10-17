@@ -1,14 +1,17 @@
-import type {
-  Diligence,
-  Epic,
-  EntityKind,
-  EntityOf,
-  Phase,
-  Reference,
-  Risk,
-  Story,
-  Workshop,
-  WorkspaceData,
+import {
+  withSettingsDefaults,
+  type Diligence,
+  type Epic,
+  type EntityKind,
+  type EntityOf,
+  type Phase,
+  type Reference,
+  type Risk,
+  type Story,
+  type Workshop,
+  type WorkspaceData,
+  type Party,
+  type ProjectSettings,
 } from '@board/shared';
 import { pool, tx, type Tx } from './db';
 
@@ -38,6 +41,8 @@ export async function getWorkspace(projectId: string, planning: string | null): 
   );
   const of = <T>(k: Kind) => rows.filter(r => r.kind === k).map(r => r.data as T);
   return {
+    settings: await getSettings(projectId),
+    parties: of<Party>('party'),
     planning,
     references: of<Reference>('reference'),
     epics: of<Epic>('epic'),
@@ -50,6 +55,28 @@ export async function getWorkspace(projectId: string, planning: string | null): 
 }
 
 export class NotFound extends Error {}
+
+/** Réglages du projet, complétés des valeurs par défaut. */
+export async function getSettings(projectId: string): Promise<ProjectSettings> {
+  const { rows } = await pool.query<{ settings: Partial<ProjectSettings> }>(
+    'SELECT settings FROM projects WHERE id = $1',
+    [projectId],
+  );
+  return withSettingsDefaults(rows[0]?.settings);
+}
+
+/** Enregistre les réglages (journalisés) et fait recharger les navigateurs ouverts. */
+export async function saveSettings(projectId: string, userId: string, settings: ProjectSettings, patch: unknown) {
+  await tx(async c => {
+    await c.query('UPDATE projects SET settings = $2 WHERE id = $1', [projectId, settings]);
+    await c.query(
+      `INSERT INTO events (project_id, kind, entity_id, action, patch, user_id) VALUES ($1, 'project', '-', 'settings', $2, $3)`,
+      [projectId, JSON.stringify(patch), userId],
+    );
+    await notify(c, projectId, 'reload', 'settings', userId);
+  });
+  return settings;
+}
 
 /**
  * Modifie une entité sous verrou de ligne (SELECT … FOR UPDATE) : deux personnes qui changent

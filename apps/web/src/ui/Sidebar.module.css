@@ -152,6 +152,15 @@ kbd {
   padding: 4px 8px 8px;
 }
 
+.section {
+  display: block;
+  margin: 14px 0 2px;
+  padding: 2px 8px;
+  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .groupLabel {
   color: var(--text-faint);
   font-size: 12px;

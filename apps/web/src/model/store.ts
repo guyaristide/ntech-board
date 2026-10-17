@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { withStoryDefaults } from '@board/shared';
+import { canSeeDelivery, withSettingsDefaults, withStoryDefaults } from '@board/shared';
+import { EMPTY, KEY, normalize } from './entities';
 import type {
   Comment,
   Diligence,
@@ -16,6 +17,9 @@ import type {
   SessionInfo,
   Story,
   LinkType,
+  Party,
+  PartyType,
+  ProjectSettings,
   Workshop,
   WorkspaceData,
 } from '@board/shared';
@@ -65,30 +69,11 @@ interface State extends WorkspaceData {
   updateDiligence: (id: string, patch: Partial<Omit<Diligence, 'id' | 'comments'>>) => void;
   deleteDiligence: (id: string) => Promise<void>;
   commentDiligence: (id: string, text: string) => Promise<void>;
+  createParty: (type: PartyType, patch?: Partial<Party>) => Promise<string>;
+  updateParty: (id: string, patch: Partial<Omit<Party, 'id' | 'type'>>) => void;
+  deleteParty: (id: string) => Promise<void>;
+  updateSettings: (patch: Partial<ProjectSettings>) => Promise<void>;
 }
-
-const EMPTY: WorkspaceData = {
-  planning: null,
-  references: [],
-  epics: [],
-  stories: [],
-  workshops: [],
-  phases: [],
-  risks: [],
-  diligences: [],
-};
-const KEY: Record<EntityKind, 'stories' | 'epics' | 'workshops' | 'phases' | 'risks' | 'diligences'> = {
-  story: 'stories',
-  epic: 'epics',
-  workshop: 'workshops',
-  phase: 'phases',
-  risk: 'risks',
-  diligence: 'diligences',
-};
-
-/** Contenu reçu du serveur, complété des champs apparus depuis (US enregistrées avant le 17/10/2026). */
-const normalize = (kind: EntityKind, data: unknown) =>
-  kind === 'story' && data ? withStoryDefaults(data as Story) : data;
 
 /**
  * Écritures différées : les frappes successives sur un même champ sont regroupées (400 ms)
@@ -234,8 +219,14 @@ export const useWorkspace = create<State>((set, get) => {
     load: async () => {
       try {
         const data = await api.get<WorkspaceData>('/workspace');
-        // Un serveur pas encore mis à jour ne renvoie pas les diligences.
-        set({ ...data, stories: data.stories.map(withStoryDefaults), diligences: data.diligences ?? [] });
+        // Un serveur pas encore mis à jour ne renvoie pas les diligences ni les parties prenantes.
+        set({
+          ...data,
+          stories: data.stories.map(withStoryDefaults),
+          diligences: data.diligences ?? [],
+          parties: data.parties ?? [],
+          settings: withSettingsDefaults(data.settings),
+        });
       } catch (e) {
         failed(e);
       }
@@ -436,6 +427,33 @@ export const useWorkspace = create<State>((set, get) => {
       local('diligence', id, (d: Diligence) => ({ ...d, comments: [...d.comments, comment(me(), text)] }));
       await send('diligence', id, () => api.post<Diligence>(`/diligences/${id}/comments`, { text }));
     },
+
+    createParty: async (type, patch) => {
+      const p = await send('party', 'new', () => api.post<Party>('/parties', { type, patch }));
+      replace('party', p.id, p);
+      return p.id;
+    },
+
+    updateParty: (id, patch) => {
+      local('party', id, (p: Party) => ({ ...p, ...patch }));
+      defer(`party:${id}`, 'party', id, patch, p => api.patch(`/parties/${id}`, p));
+    },
+
+    deleteParty: async id => {
+      await send('party', id, () => api.delete(`/parties/${id}`));
+      replace('party', id, null);
+    },
+
+    // Les autres navigateurs rechargent le tableau à réception des nouveaux réglages.
+    updateSettings: async patch => {
+      set({ save: 'saving' });
+      try {
+        set({ settings: await api.patch<ProjectSettings>('/settings', patch), save: 'saved' });
+      } catch (e) {
+        failed(e);
+        throw e;
+      }
+    },
   };
 });
 
@@ -443,6 +461,11 @@ export const useWorkspace = create<State>((set, get) => {
 export const useCanEdit = () =>
   useWorkspace(s => s.session?.role === 'editor' || s.session?.role === 'admin');
 export const useIsAdmin = () => useWorkspace(s => s.session?.role === 'admin');
+/** Vrai si l'utilisateur voit la partie Réalisation, selon les réglages du projet. */
+export const useSeesDelivery = () =>
+  useWorkspace(s =>
+    canSeeDelivery(s.settings, { role: s.session?.role ?? null, userId: s.session?.user?.id ?? null }, s.parties),
+  );
 
 // Écritures en attente : envoyées immédiatement si l'onglet se ferme.
 window.addEventListener('pagehide', () => {

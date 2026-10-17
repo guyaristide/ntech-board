@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ACTION_NATURES,
   ACTION_STATUSES,
+  partyNames,
   RISK_STATUSES,
   RISK_VALIDATIONS,
   type Cotation,
@@ -49,14 +50,10 @@ export function RiskPage() {
   const set = (patch: Partial<Risk>) => ws.updateRisk(risk.id, patch);
   const diligences = ws.diligences.filter(d => d.risks.includes(risk.id));
   const index = ws.risks.indexOf(risk);
-  const people = [
-    ...new Set([
-      ...ws.phases.flatMap(p => p.actors.map(a => a.name)),
-      ...ws.risks.flatMap(r => [r.owner, r.actionOwner, r.authority]),
-    ]),
-  ]
-    .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b, 'fr'));
+  const people = partyNames(ws.parties, [
+    ...ws.phases.flatMap(p => p.actors.map(a => a.name)),
+    ...ws.risks.flatMap(r => [r.owner, r.actionOwner, r.authority]),
+  ]);
   const categories = [...new Set(ws.risks.map(r => r.category))].filter(Boolean);
   const reviewPhase = review.phase || currentPhase(ws.phases)?.id || '';
   const phaseLabel = (pid: string) => {

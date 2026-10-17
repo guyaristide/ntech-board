@@ -31,7 +31,7 @@ const HELP = `Commandes :
   import:planning <slug> <fichier.xlsx|.json>      Planning des ateliers
   import:raci <slug> <fichier.xlsx|.json>          Phases du projet et matrice RACI de chacune
   import:risks <slug> <fichier.xlsx|.json>         Registre des risques et plan d'actions
-  import:cadrage <slug> <fichier.json>             Diligences et compléments des US { diligences, stories }
+  import:cadrage <slug> <fichier.json>             Parties prenantes, diligences, compléments des US { parties, diligences, stories }
   import:snapshot <slug> <fichier.json>            Restaure un export complet dans un projet sans US
   export:raci <fichier.xlsx>                       Convertit une matrice RACI en JSON (sortie standard)
   export:risks <fichier.xlsx>                      Convertit une matrice des risques en JSON (sortie standard)

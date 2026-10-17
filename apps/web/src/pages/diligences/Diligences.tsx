@@ -4,7 +4,9 @@ import {
   DILIGENCE_KINDS,
   DILIGENCE_STATUSES,
   diligenceOpen,
+  partyNames,
   type Diligence,
+  type Party,
 } from '@board/shared';
 import { dueLabel, overdue } from '../../model/due';
 import { useCanEdit, useWorkspace } from '../../model/store';
@@ -22,17 +24,17 @@ const VIEWS: [View, string][] = [
 
 const norm = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
-/** Parties citées comme responsables ou associées, pour les listes de choix. */
-export const partiesOf = (diligences: Diligence[]) =>
-  [...new Set(diligences.flatMap(d => [d.owner, ...d.partners.split(/\s*[,+]\s*/)]))]
-    .map(p => p.trim())
-    .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b, 'fr'));
+/** Référentiel des parties prenantes, puis les autres parties citées, pour les listes de choix. */
+export const partiesOf = (diligences: Diligence[], parties: Party[]) =>
+  partyNames(
+    parties,
+    diligences.flatMap(d => [d.owner, ...d.partners.split(/\s*[,+]\s*/)]),
+  );
 
 /** Tableau des diligences : une ligne par diligence, statut et responsable modifiables sur place. */
 function DiligenceTable({ items }: { items: Diligence[] }) {
   const ws = useWorkspace();
-  const owners = partiesOf(ws.diligences);
+  const owners = partiesOf(ws.diligences, ws.parties);
   return (
     <div className={backlog.tableWrap}>
       <table className={backlog.table}>
@@ -232,7 +234,7 @@ export function Diligences() {
           onChange={e => update({ responsable: e.target.value })}
         >
           <option value="">Tous responsables</option>
-          {partiesOf(ws.diligences).map(p => (
+          {partiesOf(ws.diligences, ws.parties).map(p => (
             <option key={p}>{p}</option>
           ))}
         </select>

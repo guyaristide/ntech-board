@@ -132,7 +132,7 @@ export function DiligencePage() {
       <PropertySelect
         label="Responsable"
         value={d.owner}
-        options={partiesOf(ws.diligences)}
+        options={partiesOf(ws.diligences, ws.parties)}
         creatable
         onChange={owner => set({ owner })}
       />,

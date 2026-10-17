@@ -1,4 +1,14 @@
-import type { Diligence, Epic, ImportReport, Phase, Story, Workshop, WorkspaceData } from '@board/shared';
+import {
+  newParty,
+  type Diligence,
+  type Epic,
+  type ImportReport,
+  type Party,
+  type Phase,
+  type Story,
+  type Workshop,
+  type WorkspaceData,
+} from '@board/shared';
 import { pool, tx } from './db';
 import type { RawRaci, RawRisks } from './importers/governance';
 import type { RawPlanning } from './importers/planning';
@@ -127,7 +137,7 @@ export async function importPlanning(
  */
 async function importEntities<T extends { id: string }>(
   projectId: string,
-  kind: 'phase' | 'risk' | 'diligence',
+  kind: 'phase' | 'risk' | 'diligence' | 'party',
   items: T[],
   userId: string | null,
   prepare: (item: T, current: Phase | null) => T = item => item,
@@ -196,8 +206,9 @@ export async function importRisks(projectId: string, raw: RawRisks, userId: stri
   return report;
 }
 
-/** Fichier de cadrage : diligences issues des ateliers et compléments des US. */
+/** Fichier de cadrage : diligences issues des ateliers, compléments des US, parties prenantes. */
 export interface RawCadrage {
+  parties?: Party[];
   diligences?: Diligence[];
   stories?: StoryEnrichment[];
 }
@@ -208,13 +219,24 @@ export interface RawCadrage {
  * côtés ; rien de ce qui a été saisi n'est remplacé.
  */
 export async function importCadrage(projectId: string, raw: RawCadrage, userId: string | null) {
-  if (!Array.isArray(raw.diligences) && !Array.isArray(raw.stories))
-    throw new Error('Format attendu : { diligences: [], stories: [] }');
+  if (!Array.isArray(raw.diligences) && !Array.isArray(raw.stories) && !Array.isArray(raw.parties))
+    throw new Error('Format attendu : { parties: [], diligences: [], stories: [] }');
   const details: string[] = [];
   const report: ImportReport = { added: 0, updated: 0, kept: 0, removed: 0, details };
+  if (raw.parties?.length) {
+    const r = await importEntities(projectId, 'party', raw.parties, userId, p => newParty(p.id, p.type, p));
+    report.added += r.added;
+    report.updated += r.updated;
+    report.kept += r.kept;
+    details.push(
+      `${raw.parties.length} parties prenantes : ${r.added} ajoutées, ${r.updated} mises à jour, ${r.kept} conservées car modifiées dans l'outil.`,
+    );
+  }
   if (raw.diligences?.length) {
     const r = await importEntities(projectId, 'diligence', raw.diligences, userId);
-    Object.assign(report, { added: r.added, updated: r.updated, kept: r.kept });
+    report.added += r.added;
+    report.updated += r.updated;
+    report.kept += r.kept;
     details.push(
       `${raw.diligences.length} diligences : ${r.added} ajoutées, ${r.updated} mises à jour, ${r.kept} conservées car modifiées dans l'outil.`,
     );
@@ -273,6 +295,7 @@ export async function importSnapshot(projectId: string, raw: Partial<WorkspaceDa
     ['phase', raw.phases],
     ['risk', raw.risks],
     ['diligence', raw.diligences],
+    ['party', raw.parties],
   ];
   const report: ImportReport = { added: 0, updated: 0, kept: 0, removed: 0, details: [] };
   await tx(async c => {

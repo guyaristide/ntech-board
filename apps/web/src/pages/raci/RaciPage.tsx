@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { PHASE_STATUSES, raciCheck, type Phase } from '@board/shared';
+import { partyNames, PHASE_STATUSES, raciCheck, type Phase } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
 import { Comments } from '../../ui/Comments';
@@ -252,9 +252,17 @@ export function RaciPage() {
                 <input
                   placeholder="Nouvel acteur (ex. ARTCI)"
                   aria-label="Nouvel acteur"
+                  list="raci-parties"
                   value={newActor}
                   onChange={e => setNewActor(e.target.value)}
                 />
+                <datalist id="raci-parties">
+                  {partyNames(ws.parties)
+                    .filter(n => !phase.actors.some(a => a.name === n))
+                    .map(n => (
+                      <option key={n} value={n} />
+                    ))}
+                </datalist>
                 <button type="submit" className={page.ghost}>
                   Ajouter
                 </button>

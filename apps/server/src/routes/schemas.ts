@@ -5,7 +5,9 @@ import {
   DILIGENCE_KINDS,
   DILIGENCE_STATUSES,
   LINK_TYPES,
+  PARTY_TYPES,
   PHASE_STATUSES,
+  ROLES,
   PRIORITIES,
   QUESTION_STATUSES,
   PV_STATUSES,
@@ -176,3 +178,60 @@ export const DiligencePatch = z
   .partial()
   .strict();
 export const DiligenceCreate = z.object({ patch: DiligencePatch.optional() });
+
+// --- Parties prenantes et réglages -------------------------------------------------------
+
+export const PartyPatch = z
+  .object({
+    name: text(200),
+    short: text(40),
+    category: text(80),
+    organization: text(40),
+    holder: text(40),
+    function: text(200),
+    email: text(200),
+    phone: text(60),
+    userId: z.string().max(40).nullable(),
+    aliases: z.array(z.string().trim().min(1).max(200)).max(50),
+    notes: blocks,
+  })
+  .partial()
+  .strict();
+export const PartyCreate = z.object({ type: z.enum(PARTY_TYPES), patch: PartyPatch.optional() });
+
+const step = z.object({
+  id: z.string().trim().min(1).max(40),
+  name: z.string().trim().min(1).max(60),
+  category: z.enum(['todo', 'doing', 'done']),
+});
+const ticketType = z.object({ id: z.string().trim().min(1).max(40), name: z.string().trim().min(1).max(60) });
+const userIds = z.array(z.string().max(40)).max(500);
+
+/** Réglages modifiables par un administrateur ; chaque partie envoyée remplace la précédente. */
+export const SettingsPatch = z
+  .object({
+    organizationTypes: z.array(z.string().trim().min(1).max(80)).max(30),
+    delivery: z
+      .object({
+        enabled: z.boolean(),
+        key: z.string().trim().toUpperCase().regex(/^[A-Z][A-Z0-9]{0,9}$|^$/),
+        sprintWeeks: z.number().int().min(1).max(8),
+        estimation: z.enum(['points', 'days', 'hours', 'none']),
+        workflow: z
+          .array(step)
+          .min(2)
+          .max(15)
+          .refine(w => w.some(s => s.category === 'done'), 'Une étape « Terminé » au moins.'),
+        ticketTypes: z.array(ticketType).min(1).max(15),
+        visibility: z.object({
+          roles: z.array(z.enum(ROLES)),
+          organizations: z.array(z.string().max(40)).max(100),
+          allow: userIds,
+          deny: userIds,
+        }),
+      })
+      .partial()
+      .strict(),
+  })
+  .partial()
+  .strict();

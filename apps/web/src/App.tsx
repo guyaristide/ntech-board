@@ -9,6 +9,8 @@ import { Diligences } from './pages/diligences/Diligences';
 import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
+import { Parties } from './pages/parties/Parties';
+import { Settings } from './pages/parties/Settings';
 import { Programme } from './pages/Programme';
 import { RaciPage } from './pages/raci/RaciPage';
 import { References } from './pages/References';
@@ -62,6 +64,8 @@ export function App() {
             <Route path="risque/:id" element={<RiskPage />} />
             <Route path="diligences" element={<Diligences />} />
             <Route path="diligence/:id" element={<DiligencePage />} />
+            <Route path="parties" element={<Parties />} />
+            <Route path="reglages" element={<Settings />} />
             <Route path="admin" element={<Admin />} />
             <Route path="*" element={<Home />} />
           </Route>
