@@ -93,8 +93,10 @@ export function DeliveryBacklog() {
   const [release, setRelease] = useState('');
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
+  // Les sous-tâches vivent avec leur ticket parent (fiche ticket, tableau du sprint).
   const shown = tickets.filter(
     t =>
+      !(t.parent && tickets.some(p => p.id === t.parent)) &&
       (!release || t.release === release) &&
       (!q || `${t.id} ${t.title} ${t.story}`.toLowerCase().includes(q.toLowerCase())),
   );

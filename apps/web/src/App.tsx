@@ -9,10 +9,13 @@ import { Diligences } from './pages/diligences/Diligences';
 import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
+import { Board } from './pages/delivery/Board';
 import { DeliveryBacklog } from './pages/delivery/DeliveryBacklog';
+import { MyTickets } from './pages/delivery/MyTickets';
 import { Roadmap } from './pages/delivery/Roadmap';
 import { SprintPage } from './pages/delivery/SprintPage';
 import { Sprints } from './pages/delivery/Sprints';
+import { TicketPage } from './pages/delivery/TicketPage';
 import { Parties } from './pages/parties/Parties';
 import { Settings } from './pages/parties/Settings';
 import { Programme } from './pages/Programme';
@@ -72,6 +75,9 @@ export function App() {
             <Route path="realisation/sprints" element={<Sprints />} />
             <Route path="realisation/sprint/:id" element={<SprintPage />} />
             <Route path="realisation/versions" element={<Roadmap />} />
+            <Route path="realisation/tableau" element={<Board />} />
+            <Route path="realisation/mes-tickets" element={<MyTickets />} />
+            <Route path="realisation/ticket/:id" element={<TicketPage />} />
             <Route path="parties" element={<Parties />} />
             <Route path="reglages" element={<Settings />} />
             <Route path="admin" element={<Admin />} />

@@ -64,7 +64,7 @@ export function LoadBar({ value, max, label }: { value: number; max: number | nu
 }
 
 /** Critères « prêt » d'un ticket : pastille, et la liste à cocher au clic. */
-function Ready({ ticket }: { ticket: Ticket }) {
+export function Ready({ ticket }: { ticket: Ticket }) {
   const { settings } = useDelivery();
   const canEdit = useCanEdit();
   const [open, setOpen] = useState(false);
@@ -110,7 +110,7 @@ function Ready({ ticket }: { ticket: Ticket }) {
   );
 }
 
-function Estimate({ ticket }: { ticket: Ticket }) {
+export function Estimate({ ticket }: { ticket: Ticket }) {
   const canEdit = useCanEdit();
   const { settings } = useDelivery();
   if (settings.delivery.estimation === 'none') return null;
@@ -140,9 +140,13 @@ export function TicketRow({
   onDrop?: (e: DragEvent) => void;
 }) {
   const ws = useWorkspace();
-  const { settings, releases, sprints } = useDelivery();
+  const { settings, releases, sprints, tickets } = useDelivery();
   const canEdit = useCanEdit();
   const [over, setOver] = useState(false);
+  const children = tickets.filter(t => t.parent === ticket.id);
+  const subtasks = children.length
+    ? `${children.filter(t => stepOf(settings, t.status)?.category === 'done').length}/${children.length}`
+    : '';
   const story = ticket.story ? ws.stories.find(s => s.id === ticket.story) : undefined;
   const type = settings.delivery.ticketTypes.find(t => t.id === ticket.type);
   const step = stepOf(settings, ticket.status);
@@ -167,7 +171,9 @@ export function TicketRow({
       <span className={styles.handle} aria-hidden="true">
         {canEdit ? '⋮⋮' : ''}
       </span>
-      <span className={styles.key}>{ticket.id}</span>
+      <Link to={`/realisation/ticket/${ticket.id}`} className={styles.key}>
+        {ticket.id}
+      </Link>
       <span className={styles.type}>{type?.name ?? ticket.type}</span>
       <span className={styles.title}>
         <EditableText
@@ -178,6 +184,11 @@ export function TicketRow({
           placeholder="Sans titre"
           onChange={title => delivery.updateTicket(ticket.id, { title })}
         />
+        {subtasks ? (
+          <span className={styles.storyLink} title="Sous-tâches terminées">
+            ↳ {subtasks}
+          </span>
+        ) : null}
         {story ? (
           <Link to={`/us/${story.id}`} className={styles.storyLink} title={story.title}>
             {story.id}

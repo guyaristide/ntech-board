@@ -3,6 +3,8 @@ import {
   isDone,
   load,
   nextSprintDates,
+  TICKET_LINK_INVERSE,
+  withTicketDefaults,
   type ProjectSettings,
   type Release,
   type Sprint,
@@ -21,10 +23,20 @@ import {
   getSettings,
   mutate,
   mutateMany,
+  mutatePair,
   nextId,
   NotFound,
 } from '../repo';
-import { ReleaseCreate, ReleasePatch, SprintClose, SprintCreate, SprintPatch, TicketCreate, TicketPatch } from './deliverySchemas';
+import {
+  ReleaseCreate,
+  ReleasePatch,
+  SprintClose,
+  SprintCreate,
+  SprintPatch,
+  TicketCreate,
+  TicketLinkBody,
+  TicketPatch,
+} from './deliverySchemas';
 import { CommentBody } from './schemas';
 import { body, comment } from './workspace';
 
@@ -218,6 +230,7 @@ deliveryRoutes.post('/tickets', ...write, async c => {
     rank: ++rank,
     ready: [],
     assignee: '',
+    links: [],
     description: [],
     comments: [],
     createdAt: now(),
@@ -225,7 +238,15 @@ deliveryRoutes.post('/tickets', ...write, async c => {
   });
   const pick = (ids: string[]) => nextId(ids, `${keyOf(settings, slug)}-`, 1);
   if (!('stories' in input)) {
-    const ticket = await createEntity(project, user.id, 'ticket', pick, id => ({ ...base(id), ...input.patch }));
+    // Sous-tâche : même sprint et même version que son ticket parent, sauf indication contraire.
+    const parent = input.patch.parent ? existing.find(t => t.id === input.patch.parent) : undefined;
+    if (input.patch.parent && !parent) return c.json({ error: 'not_found' }, 404);
+    const inherited = parent ? { sprint: parent.sprint, release: parent.release } : {};
+    const ticket = await createEntity(project, user.id, 'ticket', pick, id => ({
+      ...base(id),
+      ...inherited,
+      ...input.patch,
+    }));
     return c.json([ticket], 201);
   }
   // Une US déjà en réalisation n'est pas reprise une seconde fois.
@@ -258,15 +279,59 @@ deliveryRoutes.patch('/tickets/:id', ...write, async c => {
   if (patch.status && !settings.delivery.workflow.some(s => s.id === patch.status))
     return c.json({ error: 'invalid', message: 'Étape inconnue.' }, 400);
   if (patch.sprint && !(await getEntity(project, 'sprint', patch.sprint))) return c.json({ error: 'not_found' }, 404);
+  if (patch.parent === c.req.param('id')) return c.json({ error: 'invalid' }, 400);
+  if (patch.parent && !(await getEntity(project, 'ticket', patch.parent))) return c.json({ error: 'not_found' }, 404);
   return c.json(
     await mutate(project, 'ticket', c.req.param('id'), user.id, 'update', t => ({ ...t, ...patch, updatedAt: now() }), patch),
   );
 });
 
+/** Supprime un ticket ; ses liaisons disparaissent des autres tickets, ses sous-tâches n'ont plus de parent. */
 deliveryRoutes.delete('/tickets/:id', ...write, async c => {
   const { project, user } = who(c);
-  await deleteEntity(project, user.id, 'ticket', c.req.param('id'));
+  const id = c.req.param('id');
+  await deleteEntity(project, user.id, 'ticket', id);
+  const others = (await all<Ticket>(project, 'ticket')).map(withTicketDefaults);
+  const linked = others.filter(t => t.links.some(l => l.ticket === id)).map(t => t.id);
+  const children = others.filter(t => t.parent === id).map(t => t.id);
+  await mutateMany(project, 'ticket', linked, user.id, 'unlink', t => ({
+    ...t,
+    links: (t.links ?? []).filter(l => l.ticket !== id),
+  }));
+  await mutateMany(project, 'ticket', children, user.id, 'update', t => ({ ...t, parent: '' }), { parent: '' });
   return c.json({ ok: true });
+});
+
+/** Liaison entre deux tickets, posée des deux côtés dans une transaction (une seule par couple). */
+deliveryRoutes.post('/tickets/:id/links', ...write, async c => {
+  const input = await body(c.req, TicketLinkBody);
+  const id = c.req.param('id');
+  if (!input || input.ticket === id) return c.json({ error: 'invalid' }, 400);
+  const { project, user } = who(c);
+  const put = (t: Ticket, link: Ticket['links'][number]) => ({
+    ...t,
+    links: [...(t.links ?? []).filter(l => l.ticket !== link.ticket), link],
+  });
+  const [ticket] = await mutatePair(
+    project,
+    'ticket',
+    [id, input.ticket],
+    user.id,
+    'link',
+    (a, b) => [put(a, input), put(b, { ticket: id, type: TICKET_LINK_INVERSE[input.type] })],
+    input,
+  );
+  return c.json(ticket);
+});
+
+deliveryRoutes.delete('/tickets/:id/links/:other', ...write, async c => {
+  const { project, user } = who(c);
+  const [id, other] = [c.req.param('id'), c.req.param('other')];
+  const drop = (t: Ticket, x: string) => ({ ...t, links: (t.links ?? []).filter(l => l.ticket !== x) });
+  const [ticket] = await mutatePair(project, 'ticket', [id, other], user.id, 'unlink', (a, b) => [drop(a, other), drop(b, id)], {
+    ticket: other,
+  });
+  return c.json(ticket);
 });
 
 deliveryRoutes.post('/tickets/:id/comments', ...write, async c => {

@@ -4,6 +4,7 @@ import { streamSSE } from 'hono/streaming';
 import type { z } from 'zod';
 import {
   ENTITY_KINDS,
+  isDeliveryKind,
   LINK_INVERSE,
   putLink,
   withStoryDefaults,
@@ -230,6 +231,8 @@ workspaceRoutes.post('/stories/:id/comments', write, async c => {
 workspaceRoutes.get('/history/:kind/:id', read, async c => {
   const kind = c.req.param('kind');
   if (!ENTITY_KINDS.includes(kind as EntityKind)) return c.json({ error: 'invalid' }, 400);
+  if (isDeliveryKind(kind) && !(await seesDelivery(c.get('project').id, c.get('role'), c.get('user')!.id)))
+    return c.json({ error: 'delivery_hidden' }, 403);
   return c.json(await history(c.get('project').id, kind as EntityKind, c.req.param('id')));
 });
 

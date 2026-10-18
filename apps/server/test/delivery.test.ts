@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   DEFAULT_SETTINGS,
+  isBlocked,
   isReady,
+  newParty,
+  partiesOfUser,
   nextSprintDates,
   progress,
   rankAt,
@@ -25,6 +28,7 @@ const ticket = (id: string, patch: Partial<Ticket> = {}): Ticket => ({
   rank: 1,
   ready: [],
   assignee: '',
+  links: [],
   description: [],
   comments: [],
   createdAt: '',
@@ -75,4 +79,23 @@ test('avancement : estimation terminée sur estimation totale', () => {
     ticket('C', { status: 'done' }),
   ]);
   assert.deepEqual(p, { done: 3, total: 8, count: 3, doneCount: 2 });
+});
+
+test('un ticket est bloqué tant qu’un ticket qui le bloque n’est pas terminé', () => {
+  const blocker = ticket('A', { status: 'doing' });
+  const blocked = ticket('B', { links: [{ ticket: 'A', type: 'blockedBy' }] });
+  assert.equal(isBlocked(DEFAULT_SETTINGS, [blocker, blocked], blocked), true);
+  assert.equal(isBlocked(DEFAULT_SETTINGS, [{ ...blocker, status: 'done' }, blocked], blocked), false);
+  assert.equal(isBlocked(DEFAULT_SETTINGS, [blocked], blocked), false);
+});
+
+test('« Mes tickets » : la fiche de personne du membre et les rôles qu’elle tient', () => {
+  const parties = [
+    newParty('PER-01', 'person', { userId: 'u1' }),
+    newParty('ROL-01', 'role', { holder: 'PER-01' }),
+    newParty('ROL-02', 'role', { holder: 'PER-02' }),
+  ];
+  assert.deepEqual(partiesOfUser(parties, 'u1'), ['PER-01', 'ROL-01']);
+  assert.deepEqual(partiesOfUser(parties, 'u2'), []);
+  assert.deepEqual(partiesOfUser(parties, null), []);
 });

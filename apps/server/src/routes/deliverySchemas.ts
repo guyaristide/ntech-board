@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RELEASE_STATUSES } from '@board/shared';
+import { RELEASE_STATUSES, TICKET_LINK_TYPES } from '@board/shared';
 import { blocks } from './schemas';
 
 /** Saisies de la partie Réalisation : versions, sprints, tickets. */
@@ -50,6 +50,7 @@ export const TicketPatch = z
     rank: z.number().finite(),
     ready: z.array(id).max(30),
     assignee: id,
+    parent: id,
     description: blocks,
   })
   .partial()
@@ -59,3 +60,5 @@ export const TicketCreate = z.union([
   z.object({ stories: z.array(id).min(1).max(1000), patch: TicketPatch.optional() }),
   z.object({ patch: TicketPatch.extend({ title: z.string().trim().min(1).max(500) }) }),
 ]);
+
+export const TicketLinkBody = z.object({ ticket: z.string().min(1).max(40), type: z.enum(TICKET_LINK_TYPES) });

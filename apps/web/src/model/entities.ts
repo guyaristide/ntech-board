@@ -1,4 +1,12 @@
-import { withSettingsDefaults, withStoryDefaults, type EntityKind, type Story, type WorkspaceData } from '@board/shared';
+import {
+  withSettingsDefaults,
+  withStoryDefaults,
+  withTicketDefaults,
+  type EntityKind,
+  type Story,
+  type Ticket,
+  type WorkspaceData,
+} from '@board/shared';
 
 /** Contenu d'un tableau vide, et liste du store qui accueille chaque type d'entité. */
 export const EMPTY: WorkspaceData = {
@@ -34,5 +42,11 @@ export const KEY: Record<
 
 /** Contenu reçu du serveur, complété des champs apparus depuis (US enregistrées avant le 17/10/2026). */
 export const normalize = (kind: EntityKind, data: unknown) =>
-  kind === 'story' && data ? withStoryDefaults(data as Story) : data;
+  !data
+    ? data
+    : kind === 'story'
+      ? withStoryDefaults(data as Story)
+      : kind === 'ticket'
+        ? withTicketDefaults(data as Ticket)
+        : data;
 

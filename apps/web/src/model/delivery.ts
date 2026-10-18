@@ -1,5 +1,5 @@
 import { useShallow } from 'zustand/react/shallow';
-import type { Release, Sprint, Ticket } from '@board/shared';
+import type { Release, Sprint, Ticket, TicketLinkType } from '@board/shared';
 export { byRank, rankAt } from '@board/shared';
 import { api } from './api';
 import { ops, useWorkspace } from './store';
@@ -58,6 +58,20 @@ export const delivery = {
   deleteTicket: async (id: string) => {
     await ops.send('ticket', id, () => api.delete(`/tickets/${id}`));
     ops.replace('ticket', id, null);
+  },
+  // L'autre ticket reçoit la liaison inverse par le flux temps réel.
+  linkTickets: (id: string, ticket: string, type: TicketLinkType) =>
+    ops.send('ticket', id, () => api.post<Ticket>(`/tickets/${id}/links`, { ticket, type })),
+  unlinkTickets: async (id: string, other: string) => {
+    ops.local('ticket', id, (t: Ticket) => ({ ...t, links: t.links.filter(l => l.ticket !== other) }));
+    await ops.send('ticket', id, () => api.delete<Ticket>(`/tickets/${id}/links/${other}`));
+  },
+  commentTicket: async (id: string, text: string, author: string) => {
+    ops.local('ticket', id, (t: Ticket) => ({
+      ...t,
+      comments: [...t.comments, { id: 'local', author, at: new Date().toISOString(), text }],
+    }));
+    await ops.send('ticket', id, () => api.post<Ticket>(`/tickets/${id}/comments`, { text }));
   },
 };
 

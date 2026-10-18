@@ -1,4 +1,4 @@
-import type { ProjectSettings } from './parties';
+import type { Party, ProjectSettings } from './parties';
 import type { Block, Comment } from './types';
 
 /**
@@ -46,6 +46,26 @@ export interface Sprint {
   carried: string[];
 }
 
+/** Liaison entre tickets ; chaque liaison est enregistrée des deux côtés. */
+export type TicketLinkType = 'blocks' | 'blockedBy' | 'relates' | 'duplicates';
+export const TICKET_LINK_TYPES: TicketLinkType[] = ['blockedBy', 'blocks', 'relates', 'duplicates'];
+export const TICKET_LINK_LABEL: Record<TicketLinkType, string> = {
+  blockedBy: 'Bloqué par',
+  blocks: 'Bloque',
+  relates: 'Voir aussi',
+  duplicates: 'Doublon de',
+};
+export const TICKET_LINK_INVERSE: Record<TicketLinkType, TicketLinkType> = {
+  blockedBy: 'blocks',
+  blocks: 'blockedBy',
+  relates: 'relates',
+  duplicates: 'duplicates',
+};
+export interface TicketLink {
+  ticket: string;
+  type: TicketLinkType;
+}
+
 export interface Ticket {
   /** Clé lisible : ETO-12. */
   id: string;
@@ -65,12 +85,35 @@ export interface Ticket {
   rank: number;
   /** Critères « prêt » cochés (identifiants, réglages du projet). */
   ready: string[];
-  /** Partie prenante responsable (identifiant). */
+  /** Partie prenante responsable (identifiant d'une personne ou d'un rôle). */
   assignee: string;
+  links: TicketLink[];
   description: Block[];
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
+}
+
+/** Ticket complété des champs apparus depuis sa création (liaisons, lot 3). */
+export const withTicketDefaults = (t: Ticket): Ticket => ({ ...t, links: t.links ?? [] });
+
+/** Bloqué : lié par « Bloqué par » à un ticket qui n'est pas terminé. */
+export const isBlocked = (settings: ProjectSettings, tickets: Ticket[], t: Ticket) =>
+  t.links.some(l => {
+    if (l.type !== 'blockedBy') return false;
+    const other = tickets.find(x => x.id === l.ticket);
+    return !!other && !isDone(settings, other);
+  });
+
+/**
+ * Parties qui désignent le membre : sa fiche de personne (reliée à son compte) et les rôles qu'elle
+ * tient. Sert à « Mes tickets ».
+ */
+export function partiesOfUser(parties: Party[], userId: string | null) {
+  if (!userId) return [];
+  const persons = parties.filter(p => p.type === 'person' && p.userId === userId).map(p => p.id);
+  const roles = parties.filter(p => p.type === 'role' && persons.includes(p.holder)).map(p => p.id);
+  return [...persons, ...roles];
 }
 
 export const DELIVERY_KINDS = ['release', 'sprint', 'ticket'] as const;

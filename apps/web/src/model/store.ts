@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { canSeeDelivery, withSettingsDefaults, withStoryDefaults } from '@board/shared';
+import { canSeeDelivery, withSettingsDefaults, withStoryDefaults, withTicketDefaults } from '@board/shared';
 import { EMPTY, KEY, normalize } from './entities';
 import type {
   Comment,
@@ -243,7 +243,7 @@ export const useWorkspace = create<State>((set, get) => {
           parties: data.parties ?? [],
           releases: data.releases ?? [],
           sprints: data.sprints ?? [],
-          tickets: data.tickets ?? [],
+          tickets: (data.tickets ?? []).map(withTicketDefaults),
           settings: withSettingsDefaults(data.settings),
         });
       } catch (e) {

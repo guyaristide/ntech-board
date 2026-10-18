@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { diligenceOpen, ROLE_LABEL } from '@board/shared';
+import { diligenceOpen, partiesOfUser, ROLE_LABEL, stepOf } from '@board/shared';
 import { BRAND } from '../brand';
 import { exportCsv, exportJson } from '../model/exporters';
 import { useIsAdmin, useSeesDelivery, useWorkspace, type SaveState } from '../model/store';
@@ -28,6 +28,10 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
   const ws = useWorkspace();
   const admin = useIsAdmin();
   const delivery = useSeesDelivery();
+  const myParties = partiesOfUser(ws.parties, ws.session?.user?.id ?? null);
+  const mine = ws.tickets.filter(
+    t => myParties.includes(t.assignee) && stepOf(ws.settings, t.status)?.category !== 'done',
+  ).length;
   const [open, setOpen] = useState({ epics: true, workshops: true });
   const [editingName, setEditingName] = useState(false);
   const link = ({ isActive }: { isActive: boolean }) =>
@@ -96,6 +100,13 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
             <NavLink to="/realisation" end className={link}>
               <span className={styles.icon}>☷</span> Backlog de réalisation{' '}
               <span className={styles.count}>{ws.tickets.filter(t => !t.sprint).length}</span>
+            </NavLink>
+            <NavLink to="/realisation/tableau" className={link}>
+              <span className={styles.icon}>▥</span> Tableau du sprint
+            </NavLink>
+            <NavLink to="/realisation/mes-tickets" className={link}>
+              <span className={styles.icon}>☺</span> Mes tickets{' '}
+              <span className={styles.count}>{mine || ''}</span>
             </NavLink>
             <NavLink to="/realisation/sprints" className={link}>
               <span className={styles.icon}>↻</span> Sprints{' '}

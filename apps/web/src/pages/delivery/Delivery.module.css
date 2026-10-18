@@ -175,6 +175,10 @@ a.laneTitle:hover {
 .readyRoot {
   position: relative;
 }
+.narrow {
+  display: inline-block;
+  width: 110px;
+}
 .ready {
   width: 100%;
   padding: 2px 6px;

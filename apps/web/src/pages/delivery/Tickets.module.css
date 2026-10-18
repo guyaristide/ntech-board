@@ -1,0 +1,130 @@
+/* Fiche ticket (sous-tâches, liaisons) et tableau du sprint. */
+
+.miniList {
+  margin: 4px 0 8px;
+  padding: 0;
+  list-style: none;
+}
+.mini {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  min-height: 36px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--line);
+}
+.miniTitle {
+  flex: 1;
+  min-width: 160px;
+}
+.linkKind {
+  margin: 10px 0 2px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.linkForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 8px 0;
+}
+.linkForm input {
+  flex: 1;
+  min-width: 200px;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+
+/* Tableau */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 12px 0;
+}
+.board {
+  display: grid;
+  grid-auto-columns: minmax(168px, 1fr);
+  grid-auto-flow: column;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 240px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--bg-subtle);
+}
+.column[data-over] {
+  outline: 2px solid var(--accent);
+  background: var(--accent-soft);
+}
+.column[data-category='done'] .card {
+  opacity: 0.8;
+}
+.head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 2px 4px 4px;
+  font-size: 14px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow: 0 1px 2px rgba(15, 15, 15, 0.04);
+}
+.card[draggable='true'] {
+  cursor: grab;
+}
+.card[data-over] {
+  box-shadow: inset 0 2px 0 var(--accent);
+}
+.title {
+  color: var(--text);
+  font-size: 14px;
+  text-decoration: none;
+}
+.title:hover {
+  text-decoration: underline;
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.assignee {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+@media (max-width: 720px) {
+  .board {
+    grid-auto-columns: minmax(78vw, 1fr);
+    scroll-snap-type: x mandatory;
+  }
+  .column {
+    scroll-snap-align: start;
+  }
+}
