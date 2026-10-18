@@ -120,6 +120,7 @@ export function SessionCard({ workshop, session }: { workshop: string; session: 
                 value={q.answer}
                 placeholder="Réponse ou décision prise en séance…"
                 label="Réponse"
+                markdown
                 onChange={answer =>
                   setQ(q, { answer, status: answer && q.status === 'Ouvert' ? 'Tranché' : q.status })
                 }

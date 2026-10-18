@@ -160,6 +160,7 @@ export function Programme() {
                         value={q.answer}
                         placeholder="Réponse…"
                         label="Réponse"
+                markdown
                         onChange={answer =>
                           ws.updateQuestion(w.id, s.code, q.id, {
                             answer,

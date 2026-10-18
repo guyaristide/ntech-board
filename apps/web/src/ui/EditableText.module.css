@@ -45,6 +45,15 @@
   color: var(--text-faint);
 }
 
+.preview {
+  min-height: 1.6em;
+  cursor: text;
+}
+.preview[role='button']:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
 @media (max-width: 720px) {
   .title {
     font-size: 30px;
