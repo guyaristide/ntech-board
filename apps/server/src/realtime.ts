@@ -2,6 +2,7 @@ import pg from 'pg';
 import { isDeliveryKind, type EntityKind, type PresenceEntry, type Role, type ServerEvent } from '@board/shared';
 import { seesDelivery } from './access';
 import { env } from './env';
+import { scheduleDay } from './pilotage';
 import { getEntity } from './repo';
 
 /**
@@ -90,6 +91,7 @@ export async function listen(
       broadcast(n.projectId, { type: 'reload', reason: n.id });
       return;
     }
+    if (n.kind === 'ticket' || n.kind === 'sprint') scheduleDay(n.projectId, log);
     const data = await getEntity(n.projectId, n.kind, n.id);
     const event: ServerEvent = { type: 'entity', kind: n.kind, id: n.id, data, by: n.by };
     if (!isDeliveryKind(n.kind)) return broadcast(n.projectId, event);

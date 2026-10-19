@@ -13,6 +13,7 @@ import { Board } from './pages/delivery/Board';
 import { CampaignPage } from './pages/delivery/CampaignPage';
 import { DeliveryBacklog } from './pages/delivery/DeliveryBacklog';
 import { MyTickets } from './pages/delivery/MyTickets';
+import { Pilotage } from './pages/delivery/Pilotage';
 import { Recette } from './pages/delivery/Recette';
 import { Roadmap } from './pages/delivery/Roadmap';
 import { SprintPage } from './pages/delivery/SprintPage';
@@ -81,6 +82,7 @@ export function App() {
             <Route path="realisation/mes-tickets" element={<MyTickets />} />
             <Route path="realisation/ticket/:id" element={<TicketPage />} />
             <Route path="realisation/recette" element={<Recette />} />
+            <Route path="realisation/pilotage" element={<Pilotage />} />
             <Route path="realisation/recette/:id" element={<CampaignPage />} />
             <Route path="parties" element={<Parties />} />
             <Route path="reglages" element={<Settings />} />

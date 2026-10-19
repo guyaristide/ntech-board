@@ -15,6 +15,7 @@ import { requireDelivery } from '../access';
 import { requireRole, type AppEnv } from '../auth';
 import { pool } from '../db';
 import { fail } from '../log';
+import { closeDay, sprintDays } from '../pilotage';
 import {
   createEntity,
   createMany,
@@ -163,8 +164,14 @@ deliveryRoutes.delete('/sprints/:id', ...write, async c => {
   const tickets = (await all<Ticket>(project, 'ticket')).filter(t => t.sprint === id).map(t => t.id);
   await mutateMany(project, 'ticket', tickets, user.id, 'update', t => ({ ...t, sprint: '' }), { sprint: '' });
   await deleteEntity(project, user.id, 'sprint', id);
+  await pool.query('DELETE FROM sprint_days WHERE project_id = $1 AND sprint = $2', [project, id]);
   return c.json({ ok: true });
 });
+
+/** Relevés quotidiens du sprint, pour son burndown. */
+deliveryRoutes.get('/sprints/:id/days', requireRole('viewer'), requireDelivery, async c =>
+  c.json(await sprintDays(who(c).project, c.req.param('id'))),
+);
 
 /** Démarre un sprint : un seul sprint en cours à la fois. */
 deliveryRoutes.post('/sprints/:id/start', ...write, async c => {
@@ -192,13 +199,17 @@ deliveryRoutes.post('/sprints/:id/close', ...write, async c => {
   await mutateMany(project, 'ticket', open, user.id, 'carry', t => ({ ...t, sprint: input.moveTo, updatedAt: now() }), {
     sprint: input.moveTo,
   });
-  const velocity = load(tickets.filter(t => isDone(settings, t))).total;
+  const finished = tickets.filter(t => isDone(settings, t));
+  const velocity = load(finished).total;
+  // Dernier relevé du burndown, avant que les tickets non terminés quittent le sprint.
+  await closeDay(project, id, settings, tickets);
   return c.json(
     await mutate(project, 'sprint', id, user.id, 'close', s => ({
       ...s,
       status: 'closed',
       closedAt: now(),
       velocity,
+      delivered: finished.length,
       carried: open,
     })),
   );

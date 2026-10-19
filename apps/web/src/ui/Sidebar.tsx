@@ -97,6 +97,9 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         {delivery ? (
           <>
             <span className={styles.section}>Réalisation</span>
+            <NavLink to="/realisation/pilotage" className={link}>
+              <span className={styles.icon}>◔</span> Pilotage
+            </NavLink>
             <NavLink to="/realisation" end className={link}>
               <span className={styles.icon}>☷</span> Backlog de réalisation{' '}
               <span className={styles.count}>{ws.tickets.filter(t => !t.sprint).length}</span>

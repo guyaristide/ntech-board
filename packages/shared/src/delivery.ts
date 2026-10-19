@@ -43,6 +43,8 @@ export interface Sprint {
   closedAt: string | null;
   /** À la clôture : estimation des tickets terminés, et tickets reportés. */
   velocity: number | null;
+  /** À la clôture : nombre de tickets terminés (absent des sprints clos avant le lot 5). */
+  delivered?: number | null;
   carried: string[];
 }
 

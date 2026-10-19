@@ -2,7 +2,9 @@ import { Hono } from 'hono';
 import { requireRole, type AppEnv } from '../auth';
 import { fail } from '../log';
 import { requireDelivery } from '../access';
+import { copilPdf } from '../pdf/copil';
 import { coveragePdf } from '../pdf/coverage';
+import { sprintDays } from '../pilotage';
 import { recettePdf } from '../pdf/recette';
 import { weekPdf } from '../pdf/week';
 import { getWorkspace } from '../repo';
@@ -49,4 +51,13 @@ pdfRoutes.get('/pdf/recette/:id', read, requireDelivery, async c => {
   const ws = await getWorkspace(p.id, p.planning);
   const campaign = ws.campaigns.find(x => x.id === c.req.param('id'));
   return campaign ? send(await recettePdf(p.title, campaign, ws)) : c.json({ error: 'not_found' }, 404);
+});
+
+/** Rapport de pilotage (COPIL) : tout le projet, ou `?organisation=ORG-01` pour la vue d'une organisation. */
+pdfRoutes.get('/pdf/copil', read, requireDelivery, async c => {
+  const p = c.get('project');
+  const ws = await getWorkspace(p.id, p.planning);
+  const active = ws.sprints.find(s => s.status === 'active');
+  const days = active ? await sprintDays(p.id, active.id) : [];
+  return send(await copilPdf(p.title, ws, days, c.req.query('organisation') ?? ''));
 });

@@ -3,6 +3,7 @@ import { diligenceOpen, STATUSES, TONE, VERSIONS } from '@board/shared';
 import { overdue } from '../model/due';
 import { useWorkspace } from '../model/store';
 import { Tag } from '../ui/Tag';
+import { HomeDelivery } from './delivery/HomeDelivery';
 import page from './Page.module.css';
 import styles from './Overview.module.css';
 import { longDate } from './workshop/WorkshopPage';
@@ -81,6 +82,8 @@ export function Home() {
           </Link>
         ) : null}
       </div>
+
+      <HomeDelivery />
 
       {platforms.length ? (
         <>
