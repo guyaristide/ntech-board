@@ -21,6 +21,8 @@ export type AppEnv = {
     role: Role | null;
     superadmin: boolean;
     sessionHash: string | null;
+    /** Requête authentifiée par un jeton personnel (serveur MCP, scripts) plutôt que par cookie. */
+    apiToken: string | null;
   };
 };
 
@@ -74,6 +76,12 @@ export const context: MiddlewareHandler<AppEnv> = async (c, next) => {
   c.set('role', null);
   c.set('superadmin', false);
   c.set('sessionHash', null);
+  c.set('apiToken', null);
+  const bearer = c.req.header('authorization')?.match(/^Bearer\s+(brd_[A-Za-z0-9_-]{20,})$/)?.[1];
+  if (bearer) {
+    await fromToken(c, project.id, bearer);
+    return next();
+  }
   const token = getCookie(c, COOKIE);
   if (token) {
     const h = hash(token);
@@ -105,6 +113,30 @@ export const context: MiddlewareHandler<AppEnv> = async (c, next) => {
   }
   await next();
 };
+
+/**
+ * Jeton personnel : le membre et son rôle sur le projet du jeton. Un super-administrateur sans
+ * adhésion agit en administrateur du projet, jamais en super-administrateur. Jeton inconnu,
+ * expiré ou d'un autre projet : la requête reste anonyme (401 sur les routes protégées).
+ */
+async function fromToken(c: Context<AppEnv>, projectId: string, token: string) {
+  const { rows } = await pool.query<User & { role: Role | null; tid: string; touch: boolean }>(
+    `SELECT u.id, u.email, u.name, m.role, t.id AS tid,
+            (t.last_used_at IS NULL OR t.last_used_at < now() - interval '5 minutes') AS touch
+       FROM api_tokens t
+       JOIN users u ON u.id = t.user_id
+       LEFT JOIN memberships m ON m.user_id = u.id AND m.project_id = t.project_id
+      WHERE t.token_hash = $1 AND t.project_id = $2 AND (t.expires_at IS NULL OR t.expires_at > now())`,
+    [hash(token), projectId],
+  );
+  const row = rows[0];
+  const role: Role | null = row ? (row.role ?? (isSuperadmin(row.email) ? 'admin' : null)) : null;
+  if (!row || !role) return;
+  c.set('user', { id: row.id, email: row.email, name: row.name });
+  c.set('role', role);
+  c.set('apiToken', row.tid);
+  if (row.touch) await pool.query('UPDATE api_tokens SET last_used_at = now() WHERE id = $1', [row.tid]);
+}
 
 const RANK: Record<Role, number> = { viewer: 0, editor: 1, admin: 2 };
 

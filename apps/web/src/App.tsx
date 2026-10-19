@@ -9,6 +9,7 @@ import { Diligences } from './pages/diligences/Diligences';
 import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
+import { McpAccess } from './pages/McpAccess';
 import { Board } from './pages/delivery/Board';
 import { CampaignPage } from './pages/delivery/CampaignPage';
 import { DeliveryBacklog } from './pages/delivery/DeliveryBacklog';
@@ -85,6 +86,7 @@ export function App() {
             <Route path="realisation/pilotage" element={<Pilotage />} />
             <Route path="realisation/recette/:id" element={<CampaignPage />} />
             <Route path="parties" element={<Parties />} />
+            <Route path="acces-mcp" element={<McpAccess />} />
             <Route path="reglages" element={<Settings />} />
             <Route path="admin" element={<Admin />} />
             <Route path="*" element={<Home />} />

@@ -1,0 +1,102 @@
+/* Accès MCP : jetons personnels et configurations des clients. */
+
+.create {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 20px;
+}
+.create input,
+.create select {
+  padding: 4px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.create input {
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+}
+.secret {
+  margin: 0 0 20px;
+  padding: 12px 14px;
+  border: 1px solid rgba(47, 158, 110, 0.5);
+  border-radius: 8px;
+  background: rgba(47, 158, 110, 0.08);
+}
+.secret p {
+  margin: 0 0 8px;
+}
+.code {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 6px 0 14px;
+}
+.code pre {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  border-radius: 6px;
+  background: var(--bg-subtle);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+  white-space: pre;
+}
+.code button {
+  align-self: flex-end;
+  order: -1;
+}
+.tokens {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.tokens th {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line-strong);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+}
+.tokens td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.mono {
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.wrap {
+  overflow-x: auto;
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0 4px;
+}
+.tab {
+  padding: 2px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: none;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.tab[data-on] {
+  border-color: rgba(35, 131, 226, 0.5);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.error {
+  color: var(--danger);
+  font-size: 13px;
+}

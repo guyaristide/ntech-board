@@ -13,6 +13,7 @@
   "dependencies": {
     "@board/shared": "*",
     "@hono/node-server": "^1.19.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "exceljs": "^4.4.0",
     "hono": "^4.10.0",
     "nodemailer": "^7.0.0",

@@ -129,6 +129,9 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
           <span className={styles.icon}>👥</span> Parties prenantes{' '}
           <span className={styles.count}>{ws.parties.length}</span>
         </NavLink>
+        <NavLink to="/acces-mcp" className={link}>
+          <span className={styles.icon}>⌁</span> Accès MCP
+        </NavLink>
         {admin ? (
           <>
             <NavLink to="/reglages" className={link}>
