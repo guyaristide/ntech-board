@@ -10,8 +10,10 @@ import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
 import { Board } from './pages/delivery/Board';
+import { CampaignPage } from './pages/delivery/CampaignPage';
 import { DeliveryBacklog } from './pages/delivery/DeliveryBacklog';
 import { MyTickets } from './pages/delivery/MyTickets';
+import { Recette } from './pages/delivery/Recette';
 import { Roadmap } from './pages/delivery/Roadmap';
 import { SprintPage } from './pages/delivery/SprintPage';
 import { Sprints } from './pages/delivery/Sprints';
@@ -78,6 +80,8 @@ export function App() {
             <Route path="realisation/tableau" element={<Board />} />
             <Route path="realisation/mes-tickets" element={<MyTickets />} />
             <Route path="realisation/ticket/:id" element={<TicketPage />} />
+            <Route path="realisation/recette" element={<Recette />} />
+            <Route path="realisation/recette/:id" element={<CampaignPage />} />
             <Route path="parties" element={<Parties />} />
             <Route path="reglages" element={<Settings />} />
             <Route path="admin" element={<Admin />} />

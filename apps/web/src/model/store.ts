@@ -244,6 +244,7 @@ export const useWorkspace = create<State>((set, get) => {
           releases: data.releases ?? [],
           sprints: data.sprints ?? [],
           tickets: (data.tickets ?? []).map(withTicketDefaults),
+          campaigns: data.campaigns ?? [],
           settings: withSettingsDefaults(data.settings),
         });
       } catch (e) {

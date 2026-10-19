@@ -23,10 +23,11 @@ export const EMPTY: WorkspaceData = {
   releases: [],
   sprints: [],
   tickets: [],
+  campaigns: [],
 };
 export const KEY: Record<
   EntityKind,
-  'stories' | 'epics' | 'workshops' | 'phases' | 'risks' | 'diligences' | 'parties' | 'releases' | 'sprints' | 'tickets'
+  'stories' | 'epics' | 'workshops' | 'phases' | 'risks' | 'diligences' | 'parties' | 'releases' | 'sprints' | 'tickets' | 'campaigns'
 > = {
   story: 'stories',
   epic: 'epics',
@@ -38,6 +39,7 @@ export const KEY: Record<
   release: 'releases',
   sprint: 'sprints',
   ticket: 'tickets',
+  campaign: 'campaigns',
 };
 
 /** Contenu reçu du serveur, complété des champs apparus depuis (US enregistrées avant le 17/10/2026). */

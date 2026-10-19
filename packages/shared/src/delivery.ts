@@ -116,7 +116,7 @@ export function partiesOfUser(parties: Party[], userId: string | null) {
   return [...persons, ...roles];
 }
 
-export const DELIVERY_KINDS = ['release', 'sprint', 'ticket'] as const;
+export const DELIVERY_KINDS = ['release', 'sprint', 'ticket', 'campaign'] as const;
 export type DeliveryKind = (typeof DELIVERY_KINDS)[number];
 export const isDeliveryKind = (kind: string): kind is DeliveryKind =>
   (DELIVERY_KINDS as readonly string[]).includes(kind);
@@ -202,4 +202,93 @@ export function rankAt(list: Ticket[], before: string | null, moving: string) {
   if (i < 0) return (others.at(-1)?.rank ?? 0) + 1;
   const prev = i > 0 ? others[i - 1].rank : others[i].rank - 2;
   return (prev + others[i].rank) / 2;
+}
+
+// --- Recette -----------------------------------------------------------------------------
+
+/**
+ * Mode de recette, choisi par campagne : interne (l'équipe teste), client (le client teste dans
+ * l'outil et donne son verdict par US), PV seul (l'équipe teste, le PV est signé hors outil), mixte
+ * (l'équipe teste, puis le client valide chaque US).
+ */
+export type CampaignMode = 'internal' | 'client' | 'pv' | 'mixed';
+export const CAMPAIGN_MODE_LABEL: Record<CampaignMode, string> = {
+  internal: 'Recette interne',
+  client: 'Recette par le client dans l’outil',
+  pv: 'PV seul, signé hors outil',
+  mixed: 'Recette interne, puis validation du client',
+};
+export type CampaignStatus = 'En préparation' | 'En cours' | 'Terminée';
+export const CAMPAIGN_STATUSES: CampaignStatus[] = ['En préparation', 'En cours', 'Terminée'];
+
+export type TestStatus = '' | 'ok' | 'ko' | 'reserve' | 'na';
+export const TEST_STATUS_LABEL: Record<Exclude<TestStatus, ''>, string> = {
+  ok: 'OK',
+  ko: 'KO',
+  reserve: 'Réserve',
+  na: 'Non applicable',
+};
+export interface TestResult {
+  status: TestStatus;
+  comment: string;
+  by: string;
+  at: string;
+  /** Bug ouvert à partir de ce résultat (clé de ticket). */
+  bug: string;
+}
+export type VerdictStatus = '' | 'accepted' | 'refused';
+export const VERDICT_LABEL: Record<Exclude<VerdictStatus, ''>, string> = {
+  accepted: 'Acceptée',
+  refused: 'Refusée',
+};
+export interface Verdict {
+  status: VerdictStatus;
+  comment: string;
+  by: string;
+  at: string;
+}
+
+export interface Campaign {
+  id: string;
+  name: string;
+  release: string;
+  mode: CampaignMode;
+  status: CampaignStatus;
+  start: string | null;
+  end: string | null;
+  /** US recettées (identifiants du cadrage). */
+  scope: string[];
+  /** Résultat par cas de test : clé « US:critère ». */
+  results: Record<string, TestResult>;
+  /** Verdict du client par US (modes client et mixte). */
+  verdicts: Record<string, Verdict>;
+  /** Signataires du PV : parties prenantes (personnes ou rôles). */
+  signatories: string[];
+  notes: Block[];
+}
+
+export const caseKey = (story: string, criterion: string) => `${story}:${criterion}`;
+/** Le client donne son verdict par US. */
+export const hasVerdicts = (mode: CampaignMode) => mode === 'client' || mode === 'mixed';
+
+/** Bilan d'une liste de résultats : nombre de cas par résultat, et cas non encore passés. */
+export function testSummary(results: TestStatus[]) {
+  const count = (s: TestStatus) => results.filter(r => r === s).length;
+  return { total: results.length, ok: count('ok'), ko: count('ko'), reserve: count('reserve'), na: count('na'), todo: count('') };
+}
+
+/**
+ * Cas de test d'une campagne : les critères d'acceptation des US du périmètre, avec leur résultat.
+ * Un critère ajouté après le lancement apparaît comme non passé ; un critère supprimé disparaît.
+ */
+export function casesOf(campaign: Campaign, stories: { id: string; acceptance: { id: string; text: string }[] }[]) {
+  const byId = new Map(stories.map(s => [s.id, s]));
+  return campaign.scope.flatMap(id =>
+    (byId.get(id)?.acceptance ?? []).map(c => ({
+      story: id,
+      criterion: c,
+      key: caseKey(id, c.id),
+      result: campaign.results[caseKey(id, c.id)],
+    })),
+  );
 }

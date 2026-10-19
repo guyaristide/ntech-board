@@ -115,6 +115,10 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
             <NavLink to="/realisation/versions" className={link}>
               <span className={styles.icon}>⚑</span> Feuille de route
             </NavLink>
+            <NavLink to="/realisation/recette" className={link}>
+              <span className={styles.icon}>✓</span> Recette{' '}
+              <span className={styles.count}>{ws.campaigns.filter(c => c.status === 'En cours').length || ''}</span>
+            </NavLink>
           </>
         ) : null}
         <span className={styles.section}>Projet</span>

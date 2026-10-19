@@ -1,5 +1,5 @@
 import { useShallow } from 'zustand/react/shallow';
-import type { Release, Sprint, Ticket, TicketLinkType } from '@board/shared';
+import type { Campaign, Release, Sprint, TestStatus, Ticket, TicketLinkType, VerdictStatus } from '@board/shared';
 export { byRank, rankAt } from '@board/shared';
 import { api } from './api';
 import { ops, useWorkspace } from './store';
@@ -10,7 +10,7 @@ import { ops, useWorkspace } from './store';
  */
 type Editable<T> = Partial<Omit<T, 'id'>>;
 
-const created = <T extends { id: string }>(kind: 'release' | 'sprint' | 'ticket', items: T[]) => {
+const created = <T extends { id: string }>(kind: 'release' | 'sprint' | 'ticket' | 'campaign', items: T[]) => {
   for (const item of items) ops.replace(kind, item.id, item);
   return items;
 };
@@ -73,10 +73,59 @@ export const delivery = {
     }));
     await ops.send('ticket', id, () => api.post<Ticket>(`/tickets/${id}/comments`, { text }));
   },
+
+  createCampaign: async (patch?: Editable<Campaign>) => {
+    const x = await ops.send('campaign', 'new', () => api.post<Campaign>('/campaigns', { patch }));
+    return created('campaign', [x])[0].id;
+  },
+  updateCampaign: (id: string, patch: Editable<Campaign>) => {
+    ops.local('campaign', id, (x: Campaign) => ({ ...x, ...patch }));
+    ops.defer(`campaign:${id}`, 'campaign', id, patch, p => api.patch(`/campaigns/${id}`, p));
+  },
+  deleteCampaign: async (id: string) => {
+    await ops.send('campaign', id, () => api.delete(`/campaigns/${id}`));
+    ops.replace('campaign', id, null);
+  },
+  /** Ajoute au périmètre les US de la version de la campagne. */
+  refreshScope: (id: string) => ops.send('campaign', id, () => api.post<Campaign>(`/campaigns/${id}/scope`)),
+  /** Résultat d'un cas : affiché tout de suite, commentaire regroupé pendant la frappe. */
+  setResult: (id: string, key: string, status: TestStatus, comment: string, by: string) => {
+    ops.local('campaign', id, (x: Campaign) => ({
+      ...x,
+      results: { ...x.results, [key]: { bug: x.results[key]?.bug ?? '', status, comment, by, at: new Date().toISOString() } },
+    }));
+    ops.defer(`result:${id}:${key}`, 'campaign', id, { status, comment }, p =>
+      api.put(`/campaigns/${id}/results/${encodeURIComponent(key)}`, p),
+    );
+  },
+  setVerdict: (id: string, story: string, status: VerdictStatus, comment: string, by: string) => {
+    ops.local('campaign', id, (x: Campaign) => ({
+      ...x,
+      verdicts: { ...x.verdicts, [story]: { status, comment, by, at: new Date().toISOString() } },
+    }));
+    ops.defer(`verdict:${id}:${story}`, 'campaign', id, { status, comment }, p =>
+      api.put(`/campaigns/${id}/verdicts/${encodeURIComponent(story)}`, p),
+    );
+  },
+  /** Ouvre un bug depuis un cas KO ou en réserve. */
+  openBug: async (id: string, key: string) => {
+    const r = await ops.send('campaign', id, () =>
+      api.post<{ campaign: Campaign; bug: Ticket }>(`/campaigns/${id}/results/${encodeURIComponent(key)}/bug`),
+    );
+    ops.replace('campaign', id, r.campaign);
+    ops.replace('ticket', r.bug.id, r.bug);
+    return r.bug.id;
+  },
 };
 
 /** Données de la partie Réalisation. */
 export const useDelivery = () =>
   useWorkspace(
-    useShallow(s => ({ settings: s.settings, releases: s.releases, sprints: s.sprints, tickets: s.tickets })),
+    useShallow(s => ({
+      settings: s.settings,
+      releases: s.releases,
+      sprints: s.sprints,
+      tickets: s.tickets,
+      campaigns: s.campaigns,
+    })),
   );

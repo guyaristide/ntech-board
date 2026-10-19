@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   DEFAULT_SETTINGS,
+  casesOf,
   isBlocked,
   isReady,
   newParty,
@@ -9,6 +10,7 @@ import {
   nextSprintDates,
   progress,
   rankAt,
+  testSummary,
   withSettingsDefaults,
   workdaysLeft,
   type Sprint,
@@ -98,4 +100,19 @@ test('« Mes tickets » : la fiche de personne du membre et les rôles qu’elle
   assert.deepEqual(partiesOfUser(parties, 'u1'), ['PER-01', 'ROL-01']);
   assert.deepEqual(partiesOfUser(parties, 'u2'), []);
   assert.deepEqual(partiesOfUser(parties, null), []);
+});
+
+test('cas de test d’une campagne : les critères des US du périmètre, avec leur résultat', () => {
+  const stories = [
+    { id: 'US-1', acceptance: [{ id: 'a', text: 'A' }, { id: 'b', text: 'B' }] },
+    { id: 'US-2', acceptance: [{ id: 'c', text: 'C' }] },
+  ];
+  const campaign = {
+    scope: ['US-1', 'US-3'],
+    results: { 'US-1:a': { status: 'ok', comment: '', by: '', at: '', bug: '' } },
+  } as never;
+  const cases = casesOf(campaign, stories);
+  assert.deepEqual(cases.map(x => x.key), ['US-1:a', 'US-1:b']);
+  assert.equal(cases[0].result?.status, 'ok');
+  assert.deepEqual(testSummary(cases.map(x => x.result?.status ?? '')), { total: 2, ok: 1, ko: 0, reserve: 0, na: 0, todo: 1 });
 });

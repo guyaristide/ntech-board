@@ -58,7 +58,7 @@ const who = (c: Ctx) => ({
   user: (c.get('user') as { id: string; name: string; email: string }),
 });
 
-async function all<T>(projectId: string, kind: string): Promise<T[]> {
+export async function all<T>(projectId: string, kind: string): Promise<T[]> {
   const { rows } = await pool.query<{ data: T }>(
     'SELECT data FROM entities WHERE project_id = $1 AND kind = $2 ORDER BY position',
     [projectId, kind],
@@ -67,7 +67,7 @@ async function all<T>(projectId: string, kind: string): Promise<T[]> {
 }
 
 /** Préfixe des clés de tickets : celui des réglages, sinon tiré de l'identifiant du projet. */
-const keyOf = (settings: ProjectSettings, slug: string) =>
+export const keyOf = (settings: ProjectSettings, slug: string) =>
   settings.delivery.key || slug.replace(/[^a-z]/gi, '').slice(0, 4).toUpperCase() || 'T';
 
 const now = () => new Date().toISOString();
@@ -206,6 +206,27 @@ deliveryRoutes.post('/sprints/:id/close', ...write, async c => {
 
 // --- Tickets ----------------------------------------------------------------------------
 
+/** Ticket vierge : premier type et première étape des réglages, au backlog. */
+export const blankTicket = (settings: ProjectSettings, id: string, rank: number): Ticket => ({
+  id,
+  type: settings.delivery.ticketTypes[0].id,
+  title: '',
+  story: '',
+  parent: '',
+  status: settings.delivery.workflow[0].id,
+  estimate: null,
+  release: '',
+  sprint: '',
+  rank,
+  ready: [],
+  assignee: '',
+  links: [],
+  description: [],
+  comments: [],
+  createdAt: now(),
+  updatedAt: now(),
+});
+
 /** Ticket « US » : type story s'il existe, sinon le premier type des réglages. */
 const storyType = (settings: ProjectSettings) =>
   settings.delivery.ticketTypes.find(t => t.id === 'story')?.id ?? settings.delivery.ticketTypes[0].id;
@@ -217,25 +238,7 @@ deliveryRoutes.post('/tickets', ...write, async c => {
   const settings = await getSettings(project);
   const existing = await all<Ticket>(project, 'ticket');
   let rank = existing.reduce((m, t) => Math.max(m, t.rank), 0);
-  const base = (id: string): Ticket => ({
-    id,
-    type: settings.delivery.ticketTypes[0].id,
-    title: '',
-    story: '',
-    parent: '',
-    status: settings.delivery.workflow[0].id,
-    estimate: null,
-    release: '',
-    sprint: '',
-    rank: ++rank,
-    ready: [],
-    assignee: '',
-    links: [],
-    description: [],
-    comments: [],
-    createdAt: now(),
-    updatedAt: now(),
-  });
+  const base = (id: string) => blankTicket(settings, id, ++rank);
   const pick = (ids: string[]) => nextId(ids, `${keyOf(settings, slug)}-`, 1);
   if (!('stories' in input)) {
     // Sous-tâche : même sprint et même version que son ticket parent, sauf indication contraire.

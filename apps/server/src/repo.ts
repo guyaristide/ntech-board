@@ -15,6 +15,7 @@ import {
   type Release,
   type Sprint,
   type Ticket,
+  type Campaign,
 } from '@board/shared';
 import { pool, tx, type Tx } from './db';
 
@@ -57,6 +58,7 @@ export async function getWorkspace(projectId: string, planning: string | null): 
     releases: of<Release>('release'),
     sprints: of<Sprint>('sprint'),
     tickets: of<Ticket>('ticket'),
+    campaigns: of<Campaign>('campaign'),
   };
 }
 

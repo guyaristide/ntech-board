@@ -299,6 +299,7 @@ export async function importSnapshot(projectId: string, raw: Partial<WorkspaceDa
     ['release', raw.releases],
     ['sprint', raw.sprints],
     ['ticket', raw.tickets],
+    ['campaign', raw.campaigns],
   ];
   const report: ImportReport = { added: 0, updated: 0, kept: 0, removed: 0, details: [] };
   await tx(async c => {

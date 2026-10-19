@@ -13,6 +13,7 @@ import { authRoutes } from './routes/auth';
 import { governanceRoutes } from './routes/governance';
 import { deliveryRoutes } from './routes/delivery';
 import { partyRoutes } from './routes/parties';
+import { recetteRoutes } from './routes/recette';
 import { pdfRoutes } from './routes/pdf';
 import { workspaceRoutes } from './routes/workspace';
 
@@ -57,6 +58,7 @@ export function createApp() {
   api.route('/', pdfRoutes);
   api.route('/', partyRoutes);
   api.route('/', deliveryRoutes);
+  api.route('/', recetteRoutes);
   api.route('/admin', adminRoutes);
   api.notFound(c => c.json({ error: 'not_found' }, 404));
   app.route('/api', api);
