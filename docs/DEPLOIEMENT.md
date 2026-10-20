@@ -215,14 +215,14 @@ Un tenant est un projet, servi à l'adresse `<slug>-board.neiba-technologies.com
      --from etourisme
    ```
 
-   `--from` (facultatif) reprend les réglages et référentiels d'un projet existant : versions, acteurs, document de référence, périmètres de risque, types d'organisations, étapes et types de tickets. Le contenu n'est pas copié. Sans `--from`, le projet part des réglages par défaut. Les réglages se reprennent aussi plus tard, dans **Administration** › **Réglages d'un autre projet**.
+   `--from` (facultatif) reprend les réglages et référentiels d'un projet existant : versions, acteurs, document de référence, périmètres de risque, types d'organisations, étapes et types de tickets. Le contenu n'est pas copié. Sans `--from`, le projet part des réglages par défaut. Les réglages se reprennent aussi plus tard, dans **Administration** › **Membres et imports** › **Réglages d'un autre projet**.
 
    Le slug (`pfo`) doit être **exactement** le début du sous-domaine (`pfo-board…`) : 2 à 41 caractères, minuscules, chiffres et tirets. `--admin` désigne le premier administrateur du projet. Les adresses de `SUPERADMIN_EMAILS` sont de toute façon administratrices de tous les projets.
 
 4. **Remplir et inviter.** Ouvrez `https://pfo-board.neiba-technologies.com` et connectez-vous par le lien reçu. Puis :
-   - **Projet** › **Réglages** : versions ou lots, acteurs, document de référence, périmètres de risque ;
-   - construisez le cadrage dans l'outil (**Programme des ateliers** › **+ Atelier**, **Backlog** › **Nouvelle US** › **+ Nouvelle épique**, **Références** › **+ Référence**), ou importez-le dans **Administration** › **Imports** : planning des ateliers (`.xlsx`), backlog des US (`.json` au format `{ epics, stories }`) ;
-   - **Administration** › **Membres** : invitez les participants, avec leur e-mail et leur rôle.
+   - **Administration** › **Réglages du projet** : versions ou lots, acteurs, document de référence, périmètres de risque ;
+   - construisez le cadrage dans l'outil (**Programme des ateliers** › **+ Atelier**, **Backlog** › **Nouvelle US** › **+ Nouvelle épique**, **Références** › **+ Référence**), ou importez-le dans **Administration** › **Membres et imports** : planning des ateliers (`.xlsx`), backlog des US (`.json` au format `{ epics, stories }`) ;
+   - **Administration** › **Membres et imports** : invitez les participants, avec leur e-mail et leur rôle.
 
    Ces opérations existent aussi en ligne de commande : `import:planning`, `import:stories`, `import:raci`, `import:risks`, `member:add` (voir [EXPLOITATION.md](EXPLOITATION.md#ligne-de-commande)).
 

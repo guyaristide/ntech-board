@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, ApiError } from '../model/api';
+import { canUseMcp } from '@board/shared';
 import { useCanEdit, useSeesDelivery, useWorkspace } from '../model/store';
 import page from './Page.module.css';
 import styles from './McpAccess.module.css';
@@ -77,6 +78,7 @@ export function McpAccess() {
   const project = useWorkspace(s => s.session?.project);
   const canEdit = useCanEdit();
   const delivery = useSeesDelivery();
+  const allowed = useWorkspace(s => canUseMcp(s.settings, s.session?.role ?? null));
   const [tokens, setTokens] = useState<Token[]>([]);
   const [name, setName] = useState('');
   const [days, setDays] = useState('90');
@@ -109,6 +111,29 @@ export function McpAccess() {
   };
   const shown = configs(url, server, fresh ?? PLACEHOLDER);
 
+  if (!allowed)
+    return (
+      <div className={page.page}>
+        <h1 className={page.h1}>Accès MCP</h1>
+        <div className={page.emptyState}>
+          <strong>L’accès MCP n’est pas ouvert à votre rôle</strong>
+          <p>Un administrateur du projet peut l’ouvrir dans Réglages du projet, section Accès MCP.</p>
+        </div>
+        {tokens.length ? (
+          <p className={page.faint}>
+            Vos {tokens.length} jeton(s) existant(s) sont inactifs ; vous pouvez les révoquer ci-dessous.
+          </p>
+        ) : null}
+        {tokens.map(t => (
+          <p key={t.id} className={page.faint}>
+            {t.name} ({t.prefix}…){' '}
+            <button type="button" className={`${page.ghost} ${page.danger}`} onClick={() => void revoke(t)}>
+              Révoquer
+            </button>
+          </p>
+        ))}
+      </div>
+    );
   return (
     <div className={page.page}>
       <span className={page.icon} aria-hidden="true">

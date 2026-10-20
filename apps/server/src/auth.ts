@@ -1,9 +1,10 @@
 import { createHash, randomBytes } from 'node:crypto';
 import type { Context, MiddlewareHandler } from 'hono';
 import { deleteCookie, getCookie, setCookie } from 'hono/cookie';
-import type { Role } from '@board/shared';
+import { canUseMcp, type Role } from '@board/shared';
 import { pool } from './db';
 import { env } from './env';
+import { getSettings } from './repo';
 import { findProject, projectSlug, type Project } from './tenancy';
 
 export const COOKIE = 'board_session';
@@ -117,7 +118,8 @@ export const context: MiddlewareHandler<AppEnv> = async (c, next) => {
 /**
  * Jeton personnel : le membre et son rôle sur le projet du jeton. Un super-administrateur sans
  * adhésion agit en administrateur du projet, jamais en super-administrateur. Jeton inconnu,
- * expiré ou d'un autre projet : la requête reste anonyme (401 sur les routes protégées).
+ * expiré, d'un autre projet, ou d'un rôle sans accès MCP (réglages) : la requête reste anonyme
+ * (401 sur les routes protégées).
  */
 async function fromToken(c: Context<AppEnv>, projectId: string, token: string) {
   const { rows } = await pool.query<User & { role: Role | null; tid: string; touch: boolean }>(
@@ -132,6 +134,8 @@ async function fromToken(c: Context<AppEnv>, projectId: string, token: string) {
   const row = rows[0];
   const role: Role | null = row ? (row.role ?? (isSuperadmin(row.email) ? 'admin' : null)) : null;
   if (!row || !role) return;
+  // Accès MCP réservé aux rôles autorisés dans les réglages : sinon le jeton est inactif.
+  if (!canUseMcp(await getSettings(projectId), role)) return;
   c.set('user', { id: row.id, email: row.email, name: row.name });
   c.set('role', role);
   c.set('apiToken', row.tid);

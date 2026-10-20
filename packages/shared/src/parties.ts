@@ -114,6 +114,8 @@ export interface ProjectSettings {
   /** Nom du document de référence : « Cahier des charges », « Expression de besoin »… */
   referenceDocument: string;
   riskScopes: RiskScope[];
+  /** Accès MCP (jetons personnels) : rôles autorisés ; les administrateurs le sont toujours. */
+  mcp: { roles: Role[] };
   delivery: DeliverySettings;
 }
 
@@ -123,6 +125,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   actors: [],
   referenceDocument: 'Cahier des charges',
   riskScopes: [{ name: 'Projet', prefix: 'R' }],
+  mcp: { roles: ['admin'] },
   delivery: {
     enabled: false,
     key: '',
@@ -178,6 +181,10 @@ export const settingsTemplate = (from: ProjectSettings): ProjectSettings => {
     },
   };
 };
+
+/** Le membre peut-il utiliser le MCP (créer des jetons, s'en servir) ? Toujours vrai pour un administrateur. */
+export const canUseMcp = (settings: ProjectSettings, role: Role | null) =>
+  !!role && (role === 'admin' || settings.mcp.roles.includes(role));
 
 /** Version des US écartées du périmètre : toujours proposée, en dernier. */
 export const OUT_OF_SCOPE = 'Hors périmètre';

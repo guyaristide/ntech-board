@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react';
-import { OUT_OF_SCOPE, riskScopesOf, type ProjectSettings } from '@board/shared';
+import { OUT_OF_SCOPE, riskScopesOf, ROLE_LABEL, ROLES, type ProjectSettings } from '@board/shared';
 import { useWorkspace } from '../../model/store';
 import page from '../Page.module.css';
 import { EditableList } from './EditableList';
@@ -95,6 +95,41 @@ export function SettingsCadrage({ draft, setDraft }: Props) {
             ? ` Déjà présents dans le registre : ${derived.map(s => `${s.name} (${s.prefix})`).join(', ')}.`
             : ''}
         </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={page.h2}>Accès MCP</h2>
+        <div className={styles.fields}>
+          <label>Rôles autorisés</label>
+          <span>
+            <span className={styles.checks}>
+              {ROLES.map(r => (
+                <label key={r}>
+                  <input
+                    type="checkbox"
+                    checked={r === 'admin' || draft.mcp.roles.includes(r)}
+                    disabled={r === 'admin'}
+                    onChange={e =>
+                      set({
+                        mcp: {
+                          roles: e.target.checked
+                            ? [...new Set([...draft.mcp.roles, r])]
+                            : draft.mcp.roles.filter(x => x !== r),
+                        },
+                      })
+                    }
+                  />
+                  {ROLE_LABEL[r]}
+                  {r === 'admin' ? ' (toujours)' : ''}
+                </label>
+              ))}
+            </span>
+            <p className={styles.hint}>
+              Qui peut créer des jetons et connecter un assistant au tableau, avec ses propres droits. Les
+              jetons d’un rôle retiré cessent aussitôt de fonctionner.
+            </p>
+          </span>
+        </div>
       </section>
 
       <section className={styles.section}>

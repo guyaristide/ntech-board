@@ -7,6 +7,7 @@ import {
   nextSessionCode,
   programmeOrder,
   settingsTemplate,
+  canUseMcp,
   withSettingsDefaults,
   burndown,
   forecast,
@@ -194,4 +195,12 @@ test('réglages repris d’un autre projet : sans clé de tickets ni accès nomi
   assert.equal(t.delivery.enabled, true);
   assert.equal(t.delivery.key, '');
   assert.deepEqual(t.delivery.visibility, { roles: ['admin'], organizations: [], allow: [], deny: [] });
+});
+
+test('accès MCP : administrateurs toujours, autres rôles selon les réglages', () => {
+  const s = withSettingsDefaults(null);
+  assert.equal(canUseMcp(s, 'admin'), true);
+  assert.equal(canUseMcp(s, 'editor'), false);
+  assert.equal(canUseMcp({ ...s, mcp: { roles: ['editor'] } }, 'editor'), true);
+  assert.equal(canUseMcp(s, null), false);
 });

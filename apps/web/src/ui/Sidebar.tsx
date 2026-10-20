@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { programmeOrder, diligenceOpen, partiesOfUser, ROLE_LABEL, stepOf } from '@board/shared';
+import { canUseMcp, programmeOrder, diligenceOpen, partiesOfUser, ROLE_LABEL, stepOf } from '@board/shared';
 import { BRAND } from '../brand';
 import { exportCsv, exportJson } from '../model/exporters';
 import { useIsAdmin, useSeesDelivery, useWorkspace, type SaveState } from '../model/store';
@@ -27,6 +27,7 @@ const shortDate = (iso: string | null) =>
 export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavigate: () => void }) {
   const ws = useWorkspace();
   const admin = useIsAdmin();
+  const mcp = canUseMcp(ws.settings, ws.session?.role ?? null);
   const delivery = useSeesDelivery();
   const myParties = partiesOfUser(ws.parties, ws.session?.user?.id ?? null);
   const mine = ws.tickets.filter(
@@ -131,19 +132,6 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
           <span className={styles.icon}>⚇</span> Parties prenantes{' '}
           <span className={styles.count}>{ws.parties.length}</span>
         </NavLink>
-        <NavLink to="/acces-mcp" className={link}>
-          <span className={styles.icon}>⌁</span> Accès MCP
-        </NavLink>
-        {admin ? (
-          <>
-            <NavLink to="/reglages" className={link}>
-              <span className={styles.icon}>⚒︎</span> Réglages
-            </NavLink>
-            <NavLink to="/admin" className={link}>
-              <span className={styles.icon}>⚙︎</span> Administration
-            </NavLink>
-          </>
-        ) : null}
 
         <button
           type="button"
@@ -193,12 +181,28 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
             </span>
           </div>
         ) : null}
+        {admin ? (
+          <>
+            <span className={styles.section}>Administration</span>
+            <NavLink to="/reglages" className={link}>
+              <span className={styles.icon}>⚒︎</span> Réglages du projet
+            </NavLink>
+            <NavLink to="/admin" className={link}>
+              <span className={styles.icon}>⚙︎</span> Membres et imports
+            </NavLink>
+          </>
+        ) : null}
         <button type="button" className={styles.link} onClick={() => exportCsv(ws.stories)}>
           <span className={styles.icon}>↧︎</span> Exporter le backlog (CSV)
         </button>
         <button type="button" className={styles.link} onClick={() => exportJson(ws)}>
           <span className={styles.icon}>↧︎</span> Exporter le tableau (JSON)
         </button>
+        {mcp ? (
+          <NavLink to="/acces-mcp" className={link}>
+            <span className={styles.icon}>⌁</span> Accès MCP
+          </NavLink>
+        ) : null}
         {user ? (
           <div className={styles.account}>
             <Avatar name={user.name || user.email} />

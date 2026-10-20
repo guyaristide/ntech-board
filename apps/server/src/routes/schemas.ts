@@ -209,6 +209,7 @@ export const SettingsPatch = z
     versions: z.array(z.string().trim().min(1).max(40)).min(1).max(20),
     actors: z.array(z.string().trim().min(1).max(80)).max(100),
     referenceDocument: z.string().trim().min(1).max(80),
+    mcp: z.object({ roles: z.array(z.enum(ROLES)).max(3) }),
     riskScopes: z
       .array(
         z.object({

@@ -1,7 +1,9 @@
 import { randomBytes } from 'node:crypto';
 import { Hono, type MiddlewareHandler } from 'hono';
 import { z } from 'zod';
+import { canUseMcp } from '@board/shared';
 import { hash, requireRole, type AppEnv } from '../auth';
+import { getSettings } from '../repo';
 import { pool } from '../db';
 import { body } from './workspace';
 
@@ -24,6 +26,16 @@ const noToken: MiddlewareHandler<AppEnv> = async (c, next) => {
   await next();
 };
 
+/** Création et liste : réservées aux rôles qui ont l'accès MCP (réglages). Révoquer reste toujours possible. */
+const allowed: MiddlewareHandler<AppEnv> = async (c, next) => {
+  if (!canUseMcp(await getSettings(c.get('project').id), c.get('role')))
+    return c.json(
+      { error: 'mcp_disabled', message: 'L’accès MCP n’est pas ouvert à votre rôle sur ce projet.' },
+      403,
+    );
+  await next();
+};
+
 tokenRoutes.get('/tokens', browser, noToken, async c => {
   const { rows } = await pool.query(
     `SELECT id, name, prefix, created_at AS "createdAt", last_used_at AS "lastUsedAt", expires_at AS "expiresAt"
@@ -33,7 +45,7 @@ tokenRoutes.get('/tokens', browser, noToken, async c => {
   return c.json(rows);
 });
 
-tokenRoutes.post('/tokens', browser, noToken, async c => {
+tokenRoutes.post('/tokens', browser, noToken, allowed, async c => {
   const input = await body(c.req, TokenCreate);
   if (!input) return c.json({ error: 'invalid' }, 400);
   const token = `brd_${randomBytes(24).toString('base64url')}`;
