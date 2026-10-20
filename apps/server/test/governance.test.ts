@@ -27,8 +27,14 @@ test('RACI : un seul A et au moins un R par ligne', () => {
 test('Risques : score P × I et seuils de la matrice 5 × 5', () => {
   assert.equal(riskScore({ p: 4, i: 5 }), 20);
   assert.equal(riskScore({ p: null, i: 5 }), null);
-  assert.deepEqual(
-    [null, 4, 5, 9, 10, 16, 17, 25].map(riskLevel),
-    ['', 'Faible', 'Modéré', 'Modéré', 'Élevé', 'Élevé', 'Critique', 'Critique'],
-  );
+  assert.deepEqual([null, 4, 5, 9, 10, 16, 17, 25].map(riskLevel), [
+    '',
+    'Faible',
+    'Modéré',
+    'Modéré',
+    'Élevé',
+    'Élevé',
+    'Critique',
+    'Critique',
+  ]);
 });

@@ -245,3 +245,113 @@
   gap: 8px;
   margin: 6px 0 10px;
 }
+
+/* Programme construit dans l'outil : échéances, ordre du jour, formulaire de séquence. */
+.deadlines {
+  gap: 6px 14px;
+}
+.deadlines label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.movable {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 4px;
+}
+.moveButtons {
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+  opacity: 0.35;
+}
+.movable:hover .moveButtons,
+.movable:focus-within .moveButtons {
+  opacity: 1;
+}
+.moveButtons button {
+  padding: 0 4px;
+}
+.movableBody {
+  min-width: 0;
+}
+.breakEdit {
+  align-items: center;
+}
+.timeInputs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.timeInputs input {
+  width: 108px;
+}
+.breakTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.breakTitle input {
+  flex: 1;
+  min-width: 0;
+  max-width: 320px;
+}
+.agendaActions {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0 0 32px;
+}
+.sessionForm {
+  display: grid;
+  gap: 10px;
+  margin: 8px 0 12px;
+  padding: 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--bg-subtle);
+}
+.sessionForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.sessionForm .check {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.sessionForm .timeInputs label {
+  flex-direction: row;
+  align-items: center;
+}
+.sessionForm textarea {
+  resize: vertical;
+}
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 4px 0 0;
+}
+.editButton {
+  margin-left: auto;
+}
+@media (max-width: 720px) {
+  .movable {
+    grid-template-columns: 24px minmax(0, 1fr);
+  }
+  .agendaActions {
+    margin-left: 0;
+  }
+}
+
+.phaseInput {
+  width: 100%;
+  max-width: 520px;
+}

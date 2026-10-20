@@ -172,3 +172,21 @@ a.card:hover {
   align-items: baseline;
   gap: 2px 8px;
 }
+
+.chip a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.chipRemove {
+  margin-left: 4px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.chipRemove:hover {
+  color: var(--danger);
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { diligenceOpen, partiesOfUser, ROLE_LABEL, stepOf } from '@board/shared';
+import { programmeOrder, diligenceOpen, partiesOfUser, ROLE_LABEL, stepOf } from '@board/shared';
 import { BRAND } from '../brand';
 import { exportCsv, exportJson } from '../model/exporters';
 import { useIsAdmin, useSeesDelivery, useWorkspace, type SaveState } from '../model/store';
@@ -174,7 +174,7 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
           {open.workshops ? '▾' : '▸'} Ateliers
         </button>
         {open.workshops
-          ? ws.workshops.map(w => (
+          ? programmeOrder(ws.workshops).map(w => (
               <NavLink key={w.id} to={`/atelier/${w.id}`} className={link} title={w.title}>
                 <span className={styles.code}>{w.id}</span>
                 <span className={styles.label}>{w.title}</span>

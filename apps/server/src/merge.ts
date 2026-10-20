@@ -93,11 +93,14 @@ const enriched = (w: Workshop) =>
 /**
  * Nouveau programme à partir du planning importé et de l'existant : structure reprise du classeur,
  * enrichissements conservés quand l'atelier (ou la séquence) garde son intitulé ; un atelier enrichi
- * qui disparaît est gardé sous « ancien-Jx ».
+ * qui disparaît est gardé sous « ancien-Jx ». Un atelier géré dans l'outil (créé ou restructuré ici)
+ * est conservé tel quel, et l'atelier du classeur qui porte le même identifiant est ignoré.
  */
 export function mergePlanning(previous: Workshop[], planning: RawPlanning) {
+  const custom = previous.filter(p => p.custom && !p.id.startsWith('ancien-'));
+  const owned = new Set(custom.map(p => p.id));
   const prevSessions = new Map(previous.flatMap(w => w.sessions.map(s => [norm(s.title), s] as const)));
-  const workshops = planning.workshops.map(workshopFromRaw).map(w => {
+  const workshops = planning.workshops.filter(w => !owned.has(w.id)).map(workshopFromRaw).map(w => {
     const prev = previous.find(p => p.id === w.id && norm(p.title) === norm(w.title));
     return {
       ...w,
@@ -110,12 +113,16 @@ export function mergePlanning(previous: Workshop[], planning: RawPlanning) {
     };
   });
   const orphaned = previous
-    .filter(p => !p.id.startsWith('ancien-'))
+    .filter(p => !p.id.startsWith('ancien-') && !owned.has(p.id))
     .filter(p => !workshops.some(w => w.id === p.id && norm(w.title) === norm(p.title)))
     .filter(enriched)
     .map(p => ({ ...p, id: `ancien-${p.id}`, phase: 'Ancienne version du planning' }));
   const archived = previous.filter(p => p.id.startsWith('ancien-') && !orphaned.some(o => o.id === p.id));
-  return { workshops: [...workshops, ...orphaned, ...archived], orphaned: orphaned.length };
+  return {
+    workshops: [...workshops, ...custom, ...orphaned, ...archived],
+    orphaned: orphaned.length,
+    custom: custom.length,
+  };
 }
 
 /** Complément d'une US apporté par un fichier de cadrage (description, plateformes, liaisons). */

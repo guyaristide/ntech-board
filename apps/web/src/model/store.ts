@@ -42,9 +42,9 @@ interface State extends WorkspaceData {
   deleteStory: (id: string) => Promise<void>;
   duplicateStory: (id: string) => Promise<string>;
   commentStory: (id: string, text: string) => Promise<void>;
-  updateEpic: (id: string, patch: Pick<Epic, 'body'>) => void;
-  updateWorkshop: (id: string, patch: Partial<Pick<Workshop, 'notes' | 'pvStatus'>>) => void;
-  updateSession: (workshop: string, code: string, patch: Pick<Session, 'notes'>) => void;
+  updateEpic: (id: string, patch: Partial<Omit<Epic, 'id'>>) => void;
+  updateWorkshop: (id: string, patch: Partial<Omit<Workshop, 'id' | 'sessions' | 'agenda' | 'comments'>>) => void;
+  updateSession: (workshop: string, code: string, patch: Partial<Omit<Session, 'code' | 'questions'>>) => void;
   updateQuestion: (workshop: string, code: string, questionId: string, patch: Partial<Question>) => void;
   addQuestion: (workshop: string, code: string, text: string) => Promise<void>;
   commentWorkshop: (id: string, text: string) => Promise<void>;

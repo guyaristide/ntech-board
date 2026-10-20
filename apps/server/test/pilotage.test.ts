@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   DEFAULT_SETTINGS,
+  epicPrefix,
+  nextCode,
+  nextSessionCode,
+  programmeOrder,
   burndown,
   forecast,
   mentionsOrganization,
@@ -149,4 +153,26 @@ test('organisation : ses personnes, ses rôles, et les mentions en texte libre',
   assert.equal(mentionsOrganization(parties, 'ORG-01', 'NTECH, Chef de projet'), true);
   assert.equal(mentionsOrganization(parties, 'ORG-01', 'MTL'), false);
   assert.equal(mentionsOrganization(parties, 'ORG-02', 'Directeur du tourisme'), true);
+});
+
+test('programme : ordre par semaine puis par date, identifiants suivants', () => {
+  const w = (id: string, phase: string, date: string | null) => ({ id, phase, date });
+  const order = programmeOrder([
+    w('C1', 'V2', null),
+    w('J2', 'S1', '2026-10-14'),
+    w('J1', 'S1', '2026-10-13'),
+    w('J5', 'S2', '2026-10-19'),
+  ]);
+  assert.deepEqual(
+    order.map(x => x.id),
+    ['J1', 'J2', 'J5', 'C1'],
+  );
+  assert.equal(nextCode(['J1', 'J9', 'C3', 'ancien-J4'], 'J'), 'J10');
+  assert.equal(nextCode(['UC01', 'UC15', 'EX-21'], 'UC', 2), 'UC16');
+  assert.equal(epicPrefix([{ id: 'UC01' }, { id: 'EX-01' }, { id: 'EX-02' }]), 'EX-');
+  assert.equal(nextCode(['EX-01', 'EX-21'], 'EX-', 2), 'EX-22');
+  assert.equal(
+    nextSessionCode({ id: 'J5', sessions: [{ code: 'J5.1' }, { code: 'J5.3' }] as never }),
+    'J5.4',
+  );
 });

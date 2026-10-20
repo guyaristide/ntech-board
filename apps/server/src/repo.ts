@@ -196,7 +196,8 @@ export async function mutatePair<K extends EntityKind>(
 }
 
 /** Prochain identifiant libre d'une épique : US-UC01-07. */
-const nextStoryId = (ids: string[], epic: string) => nextId(ids, `US-${epic}-`);
+// Comme à l'import : le tiret de l'épique disparaît (épique EX-01 → US-EX01-03).
+const nextStoryId = (ids: string[], epic: string) => nextId(ids, `US-${epic.replace(/-/g, '')}-`);
 
 /** Prochain identifiant libre pour un préfixe : P6, R29, RG-11, US-UC01-07. */
 export const nextId = (ids: string[], prefix: string, width = 2) => {

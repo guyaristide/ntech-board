@@ -49,6 +49,8 @@ export async function importStories(
     );
     for (const [i, e] of raw.epics.entries()) {
       const prev = existing.get(`epic:${e.id}`);
+      // Une épique modifiée ou créée dans l'outil est conservée telle quelle.
+      if (prev && prev.revision > 0) continue;
       const data: Epic = { ...e, body: (prev?.data as Epic | undefined)?.body ?? [] };
       await c.query(
         `INSERT INTO entities (project_id, kind, id, data, position) VALUES ($1, 'epic', $2, $3, $4)
@@ -97,7 +99,7 @@ export async function importPlanning(
         [projectId],
       )
     ).rows.map(r => r.data);
-    const { workshops, orphaned } = mergePlanning(previous, planning);
+    const { workshops, orphaned, custom } = mergePlanning(previous, planning);
     await c.query(`DELETE FROM entities WHERE project_id = $1 AND kind IN ('workshop', 'reference')`, [
       projectId,
     ]);
@@ -112,13 +114,14 @@ export async function importPlanning(
         [projectId, r.id, r, i],
       );
     await c.query('UPDATE projects SET planning = $2 WHERE id = $1', [projectId, planning.source]);
-    report.added = workshops.length - orphaned;
-    report.kept = orphaned;
+    report.added = workshops.length - orphaned - custom;
+    report.kept = orphaned + custom;
     report.details.push(
       `${planning.workshops.length} ateliers, ${planning.workshops.reduce((n, w) => n + w.sessions.length, 0)} séquences, ${planning.references.length} fiches du cahier des charges.`,
       ...(orphaned
         ? [`${orphaned} atelier(s) enrichi(s) absent(s) du nouveau planning, conservé(s) sous « ancien-… ».`]
         : []),
+      ...(custom ? [`${custom} atelier(s) géré(s) dans l’outil, conservé(s) tel(s) quel(s).`] : []),
     );
     await c.query(
       `INSERT INTO events (project_id, kind, entity_id, action, patch, user_id) VALUES ($1, 'project', '-', 'import-planning', $2, $3)`,

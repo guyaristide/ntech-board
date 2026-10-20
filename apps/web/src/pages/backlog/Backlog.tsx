@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SCENARIO_LABEL } from '@board/shared';
+import { programme } from '../../model/programme';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import type { Scenario } from '@board/shared';
 import { Popover } from '../../ui/Popover';
@@ -75,8 +76,8 @@ export function Backlog() {
       </span>
       <h1 className={page.h1}>Backlog des user stories</h1>
       <p className={page.lead}>
-        {ws.stories.length} US issues du cahier des charges v2.1, réparties en {ws.epics.length} épiques.
-        Ouvrez une US pour l’enrichir : critères, notes d’atelier, commentaires.
+        {ws.stories.length} US réparties en {ws.epics.length} épique{ws.epics.length > 1 ? 's' : ''}. Ouvrez
+        une US pour l’enrichir : critères, notes d’atelier, commentaires.
       </p>
 
       <div className={styles.toolbar}>
@@ -122,6 +123,19 @@ export function Backlog() {
                 </li>
               ))}
             </ul>
+            {!ws.epics.length ? (
+              <p className={page.faint}>Une US appartient à une épique : créez d’abord la première.</p>
+            ) : null}
+            <button
+              type="button"
+              className={styles.pick}
+              onClick={async () => {
+                setPicking(false);
+                navigate(`/epic/${await programme.createEpic()}`);
+              }}
+            >
+              + Nouvelle épique
+            </button>
           </Popover>
         </div>
       </div>

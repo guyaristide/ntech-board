@@ -1,6 +1,8 @@
-import { Link, useParams } from 'react-router-dom';
-import { PV_STATUSES } from '@board/shared';
-import { useWorkspace } from '../../model/store';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { programmeOrder, programmeWeeks, PV_STATUSES } from '@board/shared';
+import { programme } from '../../model/programme';
+import { useCanEdit, useWorkspace } from '../../model/store';
+import { EditableText } from '../../ui/EditableText';
 import type { Workshop } from '@board/shared';
 import { BlockEditor } from '../../ui/BlockEditor';
 import { Comments } from '../../ui/Comments';
@@ -10,7 +12,7 @@ import { StoryList } from '../backlog/Backlog';
 import { DiligenceRefs } from '../diligences/Diligences';
 import page from '../Page.module.css';
 import overview from '../Overview.module.css';
-import { SessionCard } from './SessionCard';
+import { Agenda, Deadlines } from './WorkshopEdit';
 import styles from './Workshop.module.css';
 
 export const longDate = (iso: string | null) =>
@@ -27,6 +29,8 @@ export const longDate = (iso: string | null) =>
 export function WorkshopPage() {
   const { id = '' } = useParams();
   const ws = useWorkspace();
+  const canEdit = useCanEdit();
+  const navigate = useNavigate();
   const w = ws.workshops.find(x => x.id === id);
   if (!w) {
     return (
@@ -36,15 +40,30 @@ export function WorkshopPage() {
       </div>
     );
   }
-  const index = ws.workshops.indexOf(w);
-  const prev = ws.workshops[index - 1];
-  const next = ws.workshops[index + 1];
+  const ordered = programmeOrder(ws.workshops);
+  const index = ordered.indexOf(w);
+  const prev = ordered[index - 1];
+  const next = ordered[index + 1];
+  const set = (patch: Parameters<typeof ws.updateWorkshop>[1]) => ws.updateWorkshop(w.id, patch);
   const stories = ws.stories.filter(s => s.workshop === w.id);
   const diligences = ws.diligences.filter(d => d.workshops.includes(w.id));
   const epics = ws.epics.filter(e => e.workshops.includes(w.id));
   const questions = w.sessions.flatMap(s => s.questions);
   const settled = questions.filter(q => q.status !== 'Ouvert').length;
-  const sessionOf = (code: string) => w.sessions.find(s => s.code === code);
+  const remove = async () => {
+    const linked = stories.length + diligences.length + epics.length;
+    const detail = linked
+      ? ` Les ${linked} US, épiques et diligences qui y renvoient n’y renverront plus.`
+      : '';
+    if (
+      !confirm(
+        `Supprimer l’atelier ${w.id}, ses ${w.sessions.length} séquence(s) et ses points à trancher ?${detail}`,
+      )
+    )
+      return;
+    await programme.deleteWorkshop(w.id);
+    navigate('/programme');
+  };
 
   return (
     <div className={page.page}>
@@ -61,13 +80,61 @@ export function WorkshopPage() {
               {next.id} →
             </Link>
           ) : null}
+          {canEdit ? (
+            <button type="button" className={`${page.ghost} ${page.danger}`} onClick={() => void remove()}>
+              Supprimer
+            </button>
+          ) : null}
         </span>
       </nav>
       <p className={page.kicker}>
-        {w.id} · {w.phase}
+        {w.id}
+        {w.phase && !canEdit ? ` · ${w.phase}` : ''}
       </p>
-      <h1 className={page.h1}>{w.title}</h1>
-      <p className={page.lead}>{longDate(w.date)}</p>
+      <EditableText
+        variant="title"
+        multiline={false}
+        value={w.title}
+        label="Intitulé de l’atelier"
+        placeholder="Intitulé de l’atelier"
+        onChange={title => set({ title })}
+      />
+      {canEdit ? (
+        <div className={page.props}>
+          <span className={page.propLabel}>
+            <span aria-hidden="true">▦</span> Date
+          </span>
+          <div className={page.propValue}>
+            <input
+              type="date"
+              value={w.date ?? ''}
+              aria-label="Date de l’atelier"
+              onChange={e => set({ date: e.target.value || null })}
+            />
+            <span className={page.faint}>{w.date ? longDate(w.date) : 'Date à fixer'}</span>
+          </div>
+          <span className={page.propLabel}>
+            <span aria-hidden="true">≡</span> Semaine ou période
+          </span>
+          <div className={page.propValue}>
+            <input
+              list="programme-weeks"
+              className={styles.phaseInput}
+              value={w.phase}
+              placeholder="Par exemple « Semaine 1 · du 13 au 16 octobre »"
+              aria-label="Semaine ou période"
+              onChange={e => set({ phase: e.target.value })}
+            />
+            <datalist id="programme-weeks">
+              {programmeWeeks(ws.workshops).map(p => (
+                <option key={p} value={p} />
+              ))}
+            </datalist>
+          </div>
+        </div>
+      ) : (
+        <p className={page.lead}>{longDate(w.date)}</p>
+      )}
 
       <div className={page.props}>
         <span className={page.propLabel}>
@@ -81,15 +148,12 @@ export function WorkshopPage() {
             onChange={v => v && ws.updateWorkshop(w.id, { pvStatus: v as Workshop['pvStatus'] })}
           />
         </div>
-        {w.pvDue ? (
+        {w.pvDue || w.deliverableDue || w.validationDue || canEdit ? (
           <>
             <span className={page.propLabel}>
               <span aria-hidden="true">✉︎</span> Échéances
             </span>
-            <div className={page.propText}>
-              PV le {longDate(w.pvDue)} · livrable à SIVIS le {longDate(w.deliverableDue)} · validation
-              attendue le {longDate(w.validationDue)}
-            </div>
+            <Deadlines w={w} label={longDate} />
           </>
         ) : null}
         {w.prep.length ? (
@@ -121,14 +185,30 @@ export function WorkshopPage() {
         </div>
       </div>
 
-      {w.objectives.length ? (
+      {w.objectives.length || canEdit ? (
         <>
           <h2 className={page.h2}>Objectifs</h2>
-          <ul className={page.list}>
-            {w.objectives.map(o => (
-              <li key={o}>{o}</li>
-            ))}
-          </ul>
+          {canEdit ? (
+            <EditableText
+              value={w.objectives.map(o => `- ${o}`).join('\n')}
+              label="Objectifs"
+              placeholder="Un objectif par ligne"
+              onChange={v =>
+                set({
+                  objectives: v
+                    .split('\n')
+                    .map(l => l.replace(/^\s*[-*•]\s*/, '').trim())
+                    .filter(Boolean),
+                })
+              }
+            />
+          ) : (
+            <ul className={page.list}>
+              {w.objectives.map(o => (
+                <li key={o}>{o}</li>
+              ))}
+            </ul>
+          )}
         </>
       ) : null}
 
@@ -168,25 +248,17 @@ export function WorkshopPage() {
       ) : null}
 
       <h2 className={page.h2}>Déroulé</h2>
-      <div className={styles.agenda}>
-        {w.agenda.map((item, i) => {
-          if (item.kind === 'break') {
-            return (
-              <div key={`b-${i}`} className={styles.break}>
-                <span className={styles.time}>{item.start ? `${item.start} à ${item.end}` : ''}</span>
-                <span>{item.title}</span>
-              </div>
-            );
-          }
-          const s = sessionOf(item.code);
-          return s ? <SessionCard key={s.code} workshop={w.id} session={s} /> : null;
-        })}
-      </div>
+      <Agenda w={w} />
 
-      {w.deliverable ? (
+      {w.deliverable || canEdit ? (
         <div className={styles.callout}>
           <strong>Livrable</strong>
-          <p>{w.deliverable}</p>
+          <EditableText
+            value={w.deliverable}
+            label="Livrable"
+            placeholder="Ce que l’atelier doit produire"
+            onChange={deliverable => set({ deliverable })}
+          />
           {w.pv ? <p className={page.faint}>{w.pv}</p> : null}
         </div>
       ) : null}

@@ -7,6 +7,7 @@ import { coveragePdf } from '../pdf/coverage';
 import { sprintDays } from '../pilotage';
 import { recettePdf } from '../pdf/recette';
 import { weekPdf } from '../pdf/week';
+import { programmeOrder } from '@board/shared';
 import { getWorkspace } from '../repo';
 
 /** Exports PDF construits par le serveur et livrés en téléchargement. */
@@ -32,7 +33,7 @@ pdfRoutes.onError((err, c) => {
 pdfRoutes.get('/pdf/semaine/:n', read, async c => {
   const p = c.get('project');
   const ws = await getWorkspace(p.id, p.planning);
-  const doc = await weekPdf(p.title, ws.workshops, Number(c.req.param('n')), c.req.query('deroule') === '1');
+  const doc = await weekPdf(p.title, programmeOrder(ws.workshops), Number(c.req.param('n')), c.req.query('deroule') === '1');
   return doc ? send(doc) : c.json({ error: 'not_found' }, 404);
 });
 
@@ -41,7 +42,7 @@ pdfRoutes.get('/pdf/couverture', read, async c => {
   const p = c.get('project');
   const ws = await getWorkspace(p.id, p.planning);
   const n = Number(c.req.query('semaine')) || undefined;
-  const doc = await coveragePdf(p.title, ws, n);
+  const doc = await coveragePdf(p.title, { ...ws, workshops: programmeOrder(ws.workshops) }, n);
   return doc ? send(doc) : c.json({ error: 'not_found' }, 404);
 });
 

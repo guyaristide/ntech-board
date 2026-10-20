@@ -23,20 +23,31 @@ const parties = [
 
 test('une mention composée est découpée, sauf quand la suite prolonge le nom', () => {
   assert.deepEqual(splitMention('Cybastion et Lead Chef de projet'), ['Cybastion', 'Lead Chef de projet']);
-  assert.deepEqual(splitMention('Ministère du Tourisme et des Loisirs'), ['Ministère du Tourisme et des Loisirs']);
+  assert.deepEqual(splitMention('Ministère du Tourisme et des Loisirs'), [
+    'Ministère du Tourisme et des Loisirs',
+  ]);
   assert.deepEqual(splitMention('NTECH SARL, agrégateur'), ['NTECH SARL', 'agrégateur']);
   assert.deepEqual(splitMention('Responsable IA (Hassan)'), ['Responsable IA (Hassan)']);
 });
 
 test('les mentions sont rapprochées par nom, sigle et alias ; les valeurs d’attente sont ignorées', () => {
   const phase = { id: 'P2', actors: [{ id: 'mtl', name: 'MTL' }] } as Phase;
-  const risk = { id: 'R04', owner: 'lead cp', actionOwner: 'À désigner', authority: '', actions: [] } as unknown as Risk;
+  const risk = {
+    id: 'R04',
+    owner: 'lead cp',
+    actionOwner: 'À désigner',
+    authority: '',
+    actions: [],
+  } as unknown as Risk;
   const diligence = { id: 'D01', owner: 'SIVIS', partners: '' } as Diligence;
   const workshop = {
     id: 'J1',
     sessions: [{ code: 'J1.1', owner: 'Cybastion et Lead Chef de projet' }],
   } as unknown as Workshop;
-  const found = mentionsOf({ phases: [phase], risks: [risk], diligences: [diligence], workshops: [workshop] }, parties);
+  const found = mentionsOf(
+    { phases: [phase], risks: [risk], diligences: [diligence], workshops: [workshop] },
+    parties,
+  );
   const by = new Map(found.map(m => [m.text, m]));
   assert.equal(by.get('MTL')?.party?.id, 'ORG-01');
   assert.equal(by.get('lead cp')?.party?.id, 'ROL-01');
@@ -58,7 +69,11 @@ test('visibilité de la partie Réalisation', () => {
   const off = DEFAULT_SETTINGS;
   assert.equal(canSeeDelivery(off, { role: 'admin', userId: 'u1' }, parties), false);
   const on = withSettingsDefaults({
-    delivery: { ...DEFAULT_SETTINGS.delivery, enabled: true, visibility: { roles: ['editor'], organizations: ['ORG-02'], allow: ['u-ok'], deny: ['u-no'] } },
+    delivery: {
+      ...DEFAULT_SETTINGS.delivery,
+      enabled: true,
+      visibility: { roles: ['editor'], organizations: ['ORG-02'], allow: ['u-ok'], deny: ['u-no'] },
+    },
   });
   assert.equal(canSeeDelivery(on, { role: 'admin', userId: 'u1' }, parties), true);
   assert.equal(canSeeDelivery(on, { role: 'editor', userId: 'u2' }, parties), true);

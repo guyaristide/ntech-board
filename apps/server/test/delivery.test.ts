@@ -104,7 +104,13 @@ test('« Mes tickets » : la fiche de personne du membre et les rôles qu’elle
 
 test('cas de test d’une campagne : les critères des US du périmètre, avec leur résultat', () => {
   const stories = [
-    { id: 'US-1', acceptance: [{ id: 'a', text: 'A' }, { id: 'b', text: 'B' }] },
+    {
+      id: 'US-1',
+      acceptance: [
+        { id: 'a', text: 'A' },
+        { id: 'b', text: 'B' },
+      ],
+    },
     { id: 'US-2', acceptance: [{ id: 'c', text: 'C' }] },
   ];
   const campaign = {
@@ -112,7 +118,17 @@ test('cas de test d’une campagne : les critères des US du périmètre, avec l
     results: { 'US-1:a': { status: 'ok', comment: '', by: '', at: '', bug: '' } },
   } as never;
   const cases = casesOf(campaign, stories);
-  assert.deepEqual(cases.map(x => x.key), ['US-1:a', 'US-1:b']);
+  assert.deepEqual(
+    cases.map(x => x.key),
+    ['US-1:a', 'US-1:b'],
+  );
   assert.equal(cases[0].result?.status, 'ok');
-  assert.deepEqual(testSummary(cases.map(x => x.result?.status ?? '')), { total: 2, ok: 1, ko: 0, reserve: 0, na: 0, todo: 1 });
+  assert.deepEqual(testSummary(cases.map(x => x.result?.status ?? '')), {
+    total: 2,
+    ok: 1,
+    ko: 0,
+    reserve: 0,
+    na: 0,
+    todo: 1,
+  });
 });

@@ -7,12 +7,24 @@ import { EditableText } from '../../ui/EditableText';
 import { PropertySelect } from '../../ui/PropertySelect';
 import { ReferenceCard } from '../../ui/ReferenceCard';
 import { Tag } from '../../ui/Tag';
+import page from '../Page.module.css';
+import { SessionForm } from './SessionForm';
 import styles from './Workshop.module.css';
 
 const range = (s: { start: string | null; end: string | null }) => (s.start ? `${s.start} à ${s.end}` : '');
 
 /** Une séquence d'atelier : déroulé, responsable, points à trancher avec leur réponse, notes de séance. */
-export function SessionCard({ workshop, session }: { workshop: string; session: Session }) {
+export function SessionCard({
+  workshop,
+  session,
+  editing = false,
+  onEdit,
+}: {
+  workshop: string;
+  session: Session;
+  editing?: boolean;
+  onEdit?: (open: boolean) => void;
+}) {
   const ws = useWorkspace();
   const canEdit = useCanEdit();
   const [steps, setSteps] = useState(false);
@@ -30,22 +42,38 @@ export function SessionCard({ workshop, session }: { workshop: string; session: 
           <span className={styles.code}>{session.code}</span>
           <h3>{session.title}</h3>
           {session.added ? <Tag value="Séquence ajoutée" tone="orange" /> : null}
+          {canEdit && onEdit && !editing ? (
+            <button
+              type="button"
+              className={`${page.ghost} ${styles.editButton}`}
+              onClick={() => onEdit(true)}
+            >
+              ✎ Modifier
+            </button>
+          ) : null}
         </header>
-        {session.content ? <p className={styles.content}>{session.content}</p> : null}
-        <dl className={styles.meta}>
-          {session.owner ? (
-            <>
-              <dt>Responsable</dt>
-              <dd>{session.owner}</dd>
-            </>
-          ) : null}
-          {session.outcome ? (
-            <>
-              <dt>Résultat attendu</dt>
-              <dd>{session.outcome}</dd>
-            </>
-          ) : null}
-        </dl>
+        {editing ? (
+          <SessionForm workshop={workshop} session={session} onClose={() => onEdit?.(false)} />
+        ) : null}
+        {!editing ? (
+          <>
+            {session.content ? <p className={styles.content}>{session.content}</p> : null}
+            <dl className={styles.meta}>
+              {session.owner ? (
+                <>
+                  <dt>Responsable</dt>
+                  <dd>{session.owner}</dd>
+                </>
+              ) : null}
+              {session.outcome ? (
+                <>
+                  <dt>Résultat attendu</dt>
+                  <dd>{session.outcome}</dd>
+                </>
+              ) : null}
+            </dl>
+          </>
+        ) : null}
 
         {session.steps.length ? (
           <>

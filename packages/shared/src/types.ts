@@ -145,6 +145,11 @@ export interface Workshop {
   agenda: AgendaItem[];
   notes: Block[];
   comments: Comment[];
+  /**
+   * Géré dans l'outil : créé ici, ou dont l'intitulé, la date ou les séquences y ont été modifiés.
+   * Un nouvel import du planning ne le remplace plus.
+   */
+  custom?: boolean;
 }
 
 /** Fiche de l'onglet « Références CdC » du planning : ce que dit le cahier des charges sur un sujet. */

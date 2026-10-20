@@ -32,14 +32,11 @@ import { uid } from '../merge';
 import {
   CommentBody,
   CreateStory,
-  EpicPatch,
   PresenceBody,
   QuestionCreate,
   QuestionPatch,
-  SessionPatch,
   StoryLinkBody,
   StoryPatch,
-  WorkshopPatch,
 } from './schemas';
 
 export const workspaceRoutes = new Hono<AppEnv>();
@@ -238,17 +235,6 @@ workspaceRoutes.get('/history/:kind/:id', read, async c => {
 
 // --- Épiques ----------------------------------------------------------------------------
 
-workspaceRoutes.patch('/epics/:id', write, async c => {
-  const patch = await body(c.req, EpicPatch);
-  if (!patch) return c.json({ error: 'invalid' }, 400);
-  return c.json(
-    await mutate(c.get('project').id, 'epic', c.req.param('id'), c.get('user')!.id, 'update', e => ({
-      ...e,
-      ...patch,
-    })),
-  );
-});
-
 // --- Ateliers ---------------------------------------------------------------------------
 
 const onWorkshop = (
@@ -276,23 +262,6 @@ const onSession = (
   if (!w.sessions.some(s => s.code === code)) throw new NotFound(`session ${code}`);
   return { ...w, sessions: w.sessions.map(s => (s.code === code ? change(s) : s)) };
 };
-
-workspaceRoutes.patch('/workshops/:id', write, async c => {
-  const patch = await body(c.req, WorkshopPatch);
-  if (!patch) return c.json({ error: 'invalid' }, 400);
-  return c.json(await onWorkshop(c, c.req.param('id'), 'update', w => ({ ...w, ...patch }), patch));
-});
-
-workspaceRoutes.patch('/workshops/:id/sessions/:code', write, async c => {
-  const patch = await body(c.req, SessionPatch);
-  if (!patch) return c.json({ error: 'invalid' }, 400);
-  const code = c.req.param('code');
-  return c.json(
-    await onWorkshop(c, c.req.param('id'), `session:${code}`, w =>
-      onSession(w, code, s => ({ ...s, ...patch })),
-    ),
-  );
-});
 
 workspaceRoutes.patch('/workshops/:id/sessions/:code/questions/:qid', write, async c => {
   const patch = await body(c.req, QuestionPatch);

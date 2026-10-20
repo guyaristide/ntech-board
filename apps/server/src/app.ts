@@ -17,6 +17,7 @@ import { partyRoutes } from './routes/parties';
 import { recetteRoutes } from './routes/recette';
 import { tokenRoutes } from './routes/tokens';
 import { pdfRoutes } from './routes/pdf';
+import { programmeRoutes } from './routes/programme';
 import { workspaceRoutes } from './routes/workspace';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -57,6 +58,7 @@ export function createApp() {
   api.route('/', authRoutes);
   api.route('/', workspaceRoutes);
   api.route('/', governanceRoutes);
+  api.route('/', programmeRoutes);
   api.route('/', pdfRoutes);
   api.route('/', partyRoutes);
   api.route('/', deliveryRoutes);

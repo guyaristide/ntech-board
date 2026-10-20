@@ -1,6 +1,7 @@
-import { Link, useSearchParams } from 'react-router-dom';
-import { QUESTION_STATUSES } from '@board/shared';
-import { useWorkspace } from '../model/store';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { programmeOrder, programmeWeeks, QUESTION_STATUSES } from '@board/shared';
+import { programme } from '../model/programme';
+import { useCanEdit, useWorkspace } from '../model/store';
 import type { Question } from '@board/shared';
 import { EditableText } from '../ui/EditableText';
 import { PropertySelect } from '../ui/PropertySelect';
@@ -14,10 +15,25 @@ import { longDate } from './workshop/WorkshopPage';
 /** Programme des ateliers : calendrier des journées et registre consolidé des points à trancher. */
 export function Programme() {
   const ws = useWorkspace();
+  const canEdit = useCanEdit();
+  const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
   const tab = params.get('vue') === 'points' ? 'points' : 'calendar';
   const status = params.get('statut') ?? 'Ouvert';
-  const phases = [...new Set(ws.workshops.map(w => w.phase))];
+  const ordered = programmeOrder(ws.workshops);
+  const phases = programmeWeeks(ws.workshops);
+  const dates = ordered
+    .map(w => w.date)
+    .filter((d): d is string => !!d)
+    .sort();
+  const span = (iso: string) =>
+    new Date(`${iso}T12:00:00`).toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  const create = async (phase?: string) =>
+    navigate(`/atelier/${await programme.createWorkshop({ phase: phase ?? phases.at(-1) ?? '' })}`);
   const all = ws.workshops.flatMap(w => w.sessions.flatMap(s => s.questions.map(q => ({ w, s, q }))));
   const shown = all.filter(x => status === 'Tous' || x.q.status === status);
 
@@ -28,9 +44,9 @@ export function Programme() {
       </span>
       <h1 className={page.h1}>Programme des ateliers</h1>
       <p className={page.lead}>
-        Journées de cadrage d’Abidjan du 13 au 23 octobre 2026, puis cadrage complémentaire de la V2 en
-        janvier 2027. {all.length - all.filter(x => x.q.status === 'Ouvert').length}/{all.length} points
-        tranchés.
+        {ws.workshops.length
+          ? `${ws.workshops.length} atelier${ws.workshops.length > 1 ? 's' : ''}${dates.length ? `, du ${span(dates[0])} au ${span(dates.at(-1)!)}` : ''} · ${all.length - all.filter(x => x.q.status === 'Ouvert').length}/${all.length} points tranchés.`
+          : 'Les journées d’atelier, leurs séquences et les points à trancher.'}
       </p>
       <div className={backlog.toolbar}>
         <div className={backlog.views} role="tablist" aria-label="Vue">
@@ -54,6 +70,11 @@ export function Programme() {
           </button>
         </div>
         <span className={page.actions}>
+          {canEdit ? (
+            <button type="button" className={page.primary} onClick={() => void create()}>
+              + Atelier
+            </button>
+          ) : null}
           <PdfButton
             path="/pdf/couverture"
             title="Couverture de tous les cas d’usage par les ateliers du programme"
@@ -63,11 +84,24 @@ export function Programme() {
         </span>
       </div>
 
-      {tab === 'calendar' ? (
+      {tab === 'calendar' && !ws.workshops.length ? (
+        <div className={page.emptyState}>
+          <strong>Aucun atelier pour le moment</strong>
+          <p>
+            Créez les journées une à une : date, semaine, objectifs, puis leurs séquences et pauses. Un
+            planning Excel peut aussi être importé depuis Administration.
+          </p>
+          {canEdit ? (
+            <button type="button" className={page.primary} onClick={() => void create('')}>
+              + Premier atelier
+            </button>
+          ) : null}
+        </div>
+      ) : tab === 'calendar' ? (
         phases.map((phase, i) => (
           <section key={phase}>
             <div className={styles.weekHead}>
-              <h2 className={page.h2}>{phase}</h2>
+              <h2 className={page.h2}>{phase || 'Sans semaine'}</h2>
               <span className={page.actions}>
                 <PdfButton
                   path={`/pdf/semaine/${i + 1}`}
@@ -90,7 +124,7 @@ export function Programme() {
               </span>
             </div>
             <div className={styles.cards}>
-              {ws.workshops
+              {ordered
                 .filter(w => w.phase === phase)
                 .map(w => {
                   const qs = w.sessions.flatMap(s => s.questions);

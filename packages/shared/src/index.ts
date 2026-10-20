@@ -5,3 +5,4 @@ export * from './stories';
 export * from './parties';
 export * from './delivery';
 export * from './pilotage';
+export * from './programme';
