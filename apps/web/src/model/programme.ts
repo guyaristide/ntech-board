@@ -1,4 +1,4 @@
-import type { AgendaItem, Epic, Workshop } from '@board/shared';
+import type { AgendaItem, Epic, Reference, Workshop } from '@board/shared';
 import { api } from './api';
 import { ops } from './store';
 
@@ -42,6 +42,19 @@ export const programme = {
     const e = await ops.send('epic', 'new', () => api.post<Epic>('/epics', { patch, ...(id ? { id } : {}) }));
     ops.replace('epic', e.id, e);
     return e.id;
+  },
+  createReference: async () => {
+    const r = await ops.send('reference', 'new', () => api.post<Reference>('/references', {}));
+    ops.replace('reference', r.id, r);
+    return r.id;
+  },
+  updateReference: (id: string, patch: Partial<Omit<Reference, 'id'>>) => {
+    ops.local('reference', id, (r: Reference) => ({ ...r, ...patch }));
+    ops.defer(`reference:${id}`, 'reference', id, patch, p => api.patch(`/references/${id}`, p));
+  },
+  deleteReference: async (id: string) => {
+    await ops.send('reference', id, () => api.delete(`/references/${id}`));
+    ops.replace('reference', id, null);
   },
   deleteEpic: async (id: string) => {
     await ops.send('epic', id, () => api.delete(`/epics/${id}`));

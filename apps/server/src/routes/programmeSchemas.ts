@@ -83,3 +83,15 @@ export const EpicPatch = z
   .partial()
   .strict();
 export const EpicCreate = z.object({ id: Code.optional(), patch: EpicPatch.optional() });
+
+export const ReferencePatch = z
+  .object({
+    subject: text(300),
+    says: z.array(text(4000)).max(100),
+    where: text(500),
+    gaps: text(4000),
+    sessions: z.array(id).max(50),
+  })
+  .partial()
+  .strict();
+export const ReferenceCreate = z.object({ patch: ReferencePatch.optional() });

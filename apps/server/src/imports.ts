@@ -100,9 +100,11 @@ export async function importPlanning(
       )
     ).rows.map(r => r.data);
     const { workshops, orphaned, custom } = mergePlanning(previous, planning);
-    await c.query(`DELETE FROM entities WHERE project_id = $1 AND kind IN ('workshop', 'reference')`, [
-      projectId,
-    ]);
+    // Les fiches du cahier des charges créées ou modifiées dans l'outil (révision > 0) restent en place.
+    await c.query(
+      `DELETE FROM entities WHERE project_id = $1 AND (kind = 'workshop' OR (kind = 'reference' AND revision = 0))`,
+      [projectId],
+    );
     for (const [i, w] of workshops.entries())
       await c.query(
         `INSERT INTO entities (project_id, kind, id, data, position, revision) VALUES ($1, 'workshop', $2, $3, $4, 0)`,
@@ -110,7 +112,8 @@ export async function importPlanning(
       );
     for (const [i, r] of planning.references.entries())
       await c.query(
-        `INSERT INTO entities (project_id, kind, id, data, position) VALUES ($1, 'reference', $2, $3, $4)`,
+        `INSERT INTO entities (project_id, kind, id, data, position) VALUES ($1, 'reference', $2, $3, $4)
+         ON CONFLICT (project_id, kind, id) DO NOTHING`,
         [projectId, r.id, r, i],
       );
     await c.query('UPDATE projects SET planning = $2 WHERE id = $1', [projectId, planning.source]);

@@ -19,7 +19,7 @@ import {
 } from '@board/shared';
 import { pool, tx, type Tx } from './db';
 
-type Kind = EntityKind | 'reference';
+type Kind = EntityKind;
 
 /** Signale un changement aux autres instances et navigateurs (délivré à la validation). */
 export const notify = (

@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { useWorkspace } from '../model/store';
+import { programme } from '../model/programme';
+import { useCanEdit, useWorkspace } from '../model/store';
 import { ReferenceCard } from '../ui/ReferenceCard';
+import { ReferenceForm } from './ReferenceForm';
 import page from './Page.module.css';
 import backlog from './backlog/Backlog.module.css';
 
@@ -12,6 +14,8 @@ export function References() {
   const planning = useWorkspace(s => s.planning);
   const [query, setQuery] = useState('');
   const [gapsOnly, setGapsOnly] = useState(false);
+  const [editing, setEditing] = useState<string | null>(null);
+  const canEdit = useCanEdit();
   const words = norm(query).split(/\s+/).filter(Boolean);
   const shown = references.filter(
     r =>
@@ -25,8 +29,8 @@ export function References() {
       </span>
       <h1 className={page.h1}>Références au cahier des charges</h1>
       <p className={page.lead}>
-        {references.length} fiches du cahier des charges v2.1 : ce qu’il dit, où le lire, les écarts à
-        trancher et les séquences d’atelier concernées. Source : {planning}.
+        Le document de référence sujet par sujet : ce qu’il dit, où le lire, les écarts à trancher et les
+        séquences d’atelier concernées.{planning ? ` Source : ${planning}.` : ''}
       </p>
       <div className={backlog.toolbar}>
         <button
@@ -46,11 +50,44 @@ export function References() {
           value={query}
           onChange={e => setQuery(e.target.value)}
         />
+        {canEdit ? (
+          <button
+            type="button"
+            className={page.primary}
+            onClick={async () => {
+              setQuery('');
+              setGapsOnly(false);
+              setEditing(await programme.createReference());
+            }}
+          >
+            + Référence
+          </button>
+        ) : null}
       </div>
+      {!references.length ? (
+        <div className={page.emptyState}>
+          <strong>Aucune fiche pour le moment</strong>
+          <p>
+            Résumez le document de référence (cahier des charges, expression de besoin) sujet par sujet, pour
+            le retrouver depuis les épiques et les séquences d’atelier.
+          </p>
+        </div>
+      ) : null}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 14 }}>
-        {shown.map(r => (
-          <ReferenceCard key={r.id} reference={r} showSessions />
-        ))}
+        {shown.map(r =>
+          editing === r.id ? (
+            <ReferenceForm key={r.id} reference={r} onClose={() => setEditing(null)} />
+          ) : (
+            <div key={r.id} className={canEdit ? page.editable : undefined}>
+              <ReferenceCard reference={r} showSessions />
+              {canEdit ? (
+                <button type="button" className={page.ghost} onClick={() => setEditing(r.id)}>
+                  ✎ Modifier
+                </button>
+              ) : null}
+            </div>
+          ),
+        )}
       </div>
     </div>
   );

@@ -269,6 +269,17 @@
   font-size: 12px;
 }
 
+/* Carte modifiable : son bouton « Modifier » se place en haut à droite. */
+.editable {
+  position: relative;
+}
+
+.editable > button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
 /* État vide : ce qui manque, pourquoi, et l'action pour commencer. */
 .emptyState {
   display: flex;

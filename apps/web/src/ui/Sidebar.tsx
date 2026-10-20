@@ -88,12 +88,10 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
             {ws.diligences.filter(d => diligenceOpen(d.status)).length || ''}
           </span>
         </NavLink>
-        {ws.references.length ? (
-          <NavLink to="/references" className={link}>
-            <span className={styles.icon}>§</span> Références CdC{' '}
-            <span className={styles.count}>{ws.references.length}</span>
-          </NavLink>
-        ) : null}
+        <NavLink to="/references" className={link}>
+          <span className={styles.icon}>§</span> Références{' '}
+          <span className={styles.count}>{ws.references.length || ''}</span>
+        </NavLink>
         {delivery ? (
           <>
             <span className={styles.section}>Réalisation</span>

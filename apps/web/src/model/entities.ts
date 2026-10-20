@@ -27,7 +27,18 @@ export const EMPTY: WorkspaceData = {
 };
 export const KEY: Record<
   EntityKind,
-  'stories' | 'epics' | 'workshops' | 'phases' | 'risks' | 'diligences' | 'parties' | 'releases' | 'sprints' | 'tickets' | 'campaigns'
+  | 'stories'
+  | 'epics'
+  | 'workshops'
+  | 'phases'
+  | 'risks'
+  | 'diligences'
+  | 'parties'
+  | 'releases'
+  | 'sprints'
+  | 'tickets'
+  | 'campaigns'
+  | 'references'
 > = {
   story: 'stories',
   epic: 'epics',
@@ -40,6 +51,7 @@ export const KEY: Record<
   sprint: 'sprints',
   ticket: 'tickets',
   campaign: 'campaigns',
+  reference: 'references',
 };
 
 /** Contenu reçu du serveur, complété des champs apparus depuis (US enregistrées avant le 17/10/2026). */
@@ -51,4 +63,3 @@ export const normalize = (kind: EntityKind, data: unknown) =>
       : kind === 'ticket'
         ? withTicketDefaults(data as Ticket)
         : data;
-

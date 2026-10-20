@@ -21,6 +21,8 @@ import {
   AgendaBody,
   EpicCreate,
   EpicPatch,
+  ReferenceCreate,
+  ReferencePatch,
   SessionCreate,
   SessionPatch,
   WorkshopCreate,
@@ -260,5 +262,53 @@ programmeRoutes.delete('/epics/:id', write, async c => {
       409,
     );
   await deleteEntity(project, user, 'epic', id);
+  return c.json({ ok: true });
+});
+
+// --- Références du cahier des charges ------------------------------------------------------
+
+programmeRoutes.post('/references', write, async c => {
+  const input = await body(c.req, ReferenceCreate);
+  if (!input) return c.json({ error: 'invalid' }, 400);
+  const { project, user } = who(c);
+  const r = await createEntity(
+    project,
+    user,
+    'reference',
+    ids => nextCode(ids, 'R', 2),
+    id => ({
+      id,
+      subject: 'Nouvelle référence',
+      says: [],
+      where: '',
+      gaps: '',
+      sessions: [],
+      ...input.patch,
+    }),
+  );
+  return c.json(r, 201);
+});
+
+programmeRoutes.patch('/references/:id', write, async c => {
+  const patch = await body(c.req, ReferencePatch);
+  if (!patch) return c.json({ error: 'invalid' }, 400);
+  const { project, user } = who(c);
+  return c.json(
+    await mutate(project, 'reference', c.req.param('id'), user, 'update', r => ({ ...r, ...patch }), patch),
+  );
+});
+
+/** Supprime une fiche ; les séquences qui la citaient ne la citent plus. */
+programmeRoutes.delete('/references/:id', write, async c => {
+  const { project, user } = who(c);
+  const id = c.req.param('id');
+  const citing = (await all<Workshop>(project, 'workshop'))
+    .filter(w => w.sessions.some(s => s.refs.includes(id)))
+    .map(w => w.id);
+  await mutateMany(project, 'workshop', citing, user, 'update', w => ({
+    ...w,
+    sessions: w.sessions.map(s => ({ ...s, refs: s.refs.filter(r => r !== id) })),
+  }));
+  await deleteEntity(project, user, 'reference', id);
   return c.json({ ok: true });
 });

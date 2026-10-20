@@ -71,7 +71,8 @@ export type EntityKind =
   | 'release'
   | 'sprint'
   | 'ticket'
-  | 'campaign';
+  | 'campaign'
+  | 'reference';
 export const ENTITY_KINDS: EntityKind[] = [
   'story',
   'epic',
@@ -84,6 +85,7 @@ export const ENTITY_KINDS: EntityKind[] = [
   'sprint',
   'ticket',
   'campaign',
+  'reference',
 ];
 export type EntityOf<K extends EntityKind> = K extends 'story'
   ? Story
@@ -105,7 +107,9 @@ export type EntityOf<K extends EntityKind> = K extends 'story'
                   ? Sprint
                   : K extends 'ticket'
                     ? Ticket
-                    : Campaign;
+                    : K extends 'reference'
+                      ? Reference
+                      : Campaign;
 
 export interface PresenceEntry {
   userId: string;
@@ -120,7 +124,20 @@ export type ServerEvent =
       type: 'entity';
       kind: EntityKind;
       id: string;
-      data: Story | Epic | Workshop | Phase | Risk | Diligence | Party | Release | Sprint | Ticket | Campaign | null;
+      data:
+        | Story
+        | Epic
+        | Workshop
+        | Phase
+        | Risk
+        | Diligence
+        | Party
+        | Release
+        | Sprint
+        | Ticket
+        | Campaign
+        | Reference
+        | null;
       by: string | null;
     }
   | { type: 'presence'; users: PresenceEntry[] }
