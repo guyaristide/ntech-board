@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { programmeOrder, STATUSES, VERSIONS } from '@board/shared';
+import { programmeOrder, STATUSES, versionsOf } from '@board/shared';
 import { ApiError } from '../model/api';
 import { programme } from '../model/programme';
 import { useCanEdit, useWorkspace } from '../model/store';
@@ -85,7 +85,7 @@ export function EpicPage() {
               aria-label="Version"
               onChange={e => set({ version: e.target.value })}
             >
-              {[...new Set([...VERSIONS, epic.version])].map(v => (
+              {[...new Set([...versionsOf(ws.settings), epic.version])].map(v => (
                 <option key={v}>{v}</option>
               ))}
             </select>
@@ -160,7 +160,7 @@ export function EpicPage() {
 
       {reference ? (
         <>
-          <h2 className={page.h2}>Ce que dit le cahier des charges</h2>
+          <h2 className={page.h2}>Ce que dit le document de référence</h2>
           <ReferenceCard reference={reference} showSessions />
         </>
       ) : null}

@@ -54,7 +54,7 @@ export function registerRead(server: McpServer, ctx: Ctx) {
         texte: z.string().optional().describe('Mots à chercher (sans accents ni casse)'),
         epique: z.string().optional().describe('Identifiant d’épique, par exemple UC01'),
         statut: z.enum(STATUSES).optional(),
-        version: z.string().optional().describe('MVP, V1, V2 ou Hors périmètre'),
+        version: z.string().optional().describe('Version ou lot (réglages du projet), ou « Hors périmètre »'),
         plateforme: z.string().optional(),
         limite: z.number().int().min(1).max(200).default(40),
       },

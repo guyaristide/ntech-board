@@ -65,10 +65,20 @@ export function Mentions() {
   return (
     <>
       <div className={backlog.filters}>
-        <button type="button" className={backlog.filter} data-on={!all || undefined} onClick={() => setAll(false)}>
+        <button
+          type="button"
+          className={backlog.filter}
+          data-on={!all || undefined}
+          onClick={() => setAll(false)}
+        >
           À rattacher ({pending.length})
         </button>
-        <button type="button" className={backlog.filter} data-on={all || undefined} onClick={() => setAll(true)}>
+        <button
+          type="button"
+          className={backlog.filter}
+          data-on={all || undefined}
+          onClick={() => setAll(true)}
+        >
           Toutes ({mentions.length})
         </button>
       </div>
@@ -116,7 +126,9 @@ export function Mentions() {
             {!shown.length ? (
               <tr>
                 <td colSpan={3} className={backlog.empty}>
-                  {all ? 'Aucun nom de partie prenante saisi pour le moment.' : 'Tout est rattaché au référentiel.'}
+                  {all
+                    ? 'Aucun nom de partie prenante saisi pour le moment.'
+                    : 'Tout est rattaché au référentiel.'}
                 </td>
               </tr>
             ) : null}

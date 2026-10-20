@@ -16,7 +16,9 @@ export function Recette() {
   const navigate = useNavigate();
   const create = async () => {
     const release = releases.find(r => r.status === 'En cours') ?? releases.find(r => r.status === 'Prévue');
-    navigate(`/realisation/recette/${await delivery.createCampaign(release ? { release: release.id, name: `Recette ${release.name}` } : undefined)}`);
+    navigate(
+      `/realisation/recette/${await delivery.createCampaign(release ? { release: release.id, name: `Recette ${release.name}` } : undefined)}`,
+    );
   };
   return (
     <DeliveryGate>
@@ -26,8 +28,9 @@ export function Recette() {
         </span>
         <h1 className={page.h1}>Recette</h1>
         <p className={page.lead}>
-          Les cas de test sont les critères d’acceptation des US. Chaque campagne choisit son mode : recette interne, par le
-          client dans l’outil, PV seul, ou interne puis validation du client. Le PV se télécharge depuis la campagne.
+          Les cas de test sont les critères d’acceptation des US. Chaque campagne choisit son mode : recette
+          interne, par le client dans l’outil, PV seul, ou interne puis validation du client. Le PV se
+          télécharge depuis la campagne.
         </p>
         {canEdit ? (
           <p className={page.actions}>
@@ -55,7 +58,9 @@ export function Recette() {
                 <span className={styles.small}>
                   {c.scope.length} US · {s.ok}/{s.total} OK{s.ko ? ` · ${s.ko} KO` : ''}
                   {s.reserve ? ` · ${s.reserve} rés.` : ''}
-                  {hasVerdicts(c.mode) ? ` · ${accepted} acceptée${accepted > 1 ? 's' : ''} par le client` : ''}
+                  {hasVerdicts(c.mode)
+                    ? ` · ${accepted} acceptée${accepted > 1 ? 's' : ''} par le client`
+                    : ''}
                 </span>
               </Link>
             );

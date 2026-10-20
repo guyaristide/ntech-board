@@ -32,10 +32,25 @@ export function useRecetteRights(campaign: Campaign) {
 }
 const useMe = () => useWorkspace(s => s.session?.user?.name || s.session?.user?.email || '');
 const when = (iso: string) =>
-  new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  new Date(iso).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
 /** Commentaire saisi localement, envoyé à chaque frappe (regroupé par le store). */
-function Comment({ value, disabled, placeholder, onChange }: { value: string; disabled: boolean; placeholder: string; onChange: (v: string) => void }) {
+function Comment({
+  value,
+  disabled,
+  placeholder,
+  onChange,
+}: {
+  value: string;
+  disabled: boolean;
+  placeholder: string;
+  onChange: (v: string) => void;
+}) {
   const [draft, setDraft] = useState(value);
   useEffect(() => setDraft(value), [value]);
   return (
@@ -54,14 +69,23 @@ function Comment({ value, disabled, placeholder, onChange }: { value: string; di
 }
 
 /** Cas de test : critère, résultat, constat, bug. */
-function CaseRow({ campaign, storyId, criterion }: { campaign: Campaign; storyId: string; criterion: { id: string; text: string } }) {
+function CaseRow({
+  campaign,
+  storyId,
+  criterion,
+}: {
+  campaign: Campaign;
+  storyId: string;
+  criterion: { id: string; text: string };
+}) {
   const rights = useRecetteRights(campaign);
   const me = useMe();
   const [error, setError] = useState('');
   const key = `${storyId}:${criterion.id}`;
   const r = campaign.results[key];
   const status = r?.status ?? '';
-  const set = (next: TestStatus, comment = r?.comment ?? '') => delivery.setResult(campaign.id, key, next, comment, me);
+  const set = (next: TestStatus, comment = r?.comment ?? '') =>
+    delivery.setResult(campaign.id, key, next, comment, me);
   return (
     <div className={styles.case} data-status={status || undefined}>
       <span className={styles.criterion}>{criterion.text}</span>
@@ -81,7 +105,12 @@ function CaseRow({ campaign, storyId, criterion }: { campaign: Campaign; storyId
           </button>
         ))}
       </span>
-      <Comment value={r?.comment ?? ''} disabled={!rights.results} placeholder="Constat" onChange={c => set(status, c)} />
+      <Comment
+        value={r?.comment ?? ''}
+        disabled={!rights.results}
+        placeholder="Constat"
+        onChange={c => set(status, c)}
+      />
       <span className={styles.follow}>
         {r?.bug ? (
           <Link to={`/realisation/ticket/${r.bug}`}>{r.bug}</Link>
@@ -90,21 +119,35 @@ function CaseRow({ campaign, storyId, criterion }: { campaign: Campaign; storyId
             type="button"
             className={page.ghost}
             onClick={() =>
-              void delivery.openBug(campaign.id, key).catch(e => setError(e instanceof ApiError ? (e.message ?? e.code) : 'Erreur'))
+              void delivery
+                .openBug(campaign.id, key)
+                .catch(e => setError(e instanceof ApiError ? (e.message ?? e.code) : 'Erreur'))
             }
           >
             + Bug
           </button>
         ) : null}
         {error ? <span className={styles.error}>{error}</span> : null}
-        {r?.by ? <span className={page.faint} title={`${r.by}, ${when(r.at)}`}>{r.by.split(' ')[0]}</span> : null}
+        {r?.by ? (
+          <span className={page.faint} title={`${r.by}, ${when(r.at)}`}>
+            {r.by.split(' ')[0]}
+          </span>
+        ) : null}
       </span>
     </div>
   );
 }
 
 /** Une US du périmètre : ses cas de test, et le verdict du client selon le mode. */
-export function StoryBlock({ campaign, story, filter }: { campaign: Campaign; story: Story | undefined; filter: 'all' | 'todo' | 'issues' }) {
+export function StoryBlock({
+  campaign,
+  story,
+  filter,
+}: {
+  campaign: Campaign;
+  story: Story | undefined;
+  filter: 'all' | 'todo' | 'issues';
+}) {
   const rights = useRecetteRights(campaign);
   const me = useMe();
   const id = story?.id ?? '';
@@ -112,7 +155,9 @@ export function StoryBlock({ campaign, story, filter }: { campaign: Campaign; st
     const s = campaign.results[`${id}:${c.id}`]?.status ?? '';
     return filter === 'all' || (filter === 'todo' ? s === '' : s === 'ko' || s === 'reserve');
   });
-  const sum = testSummary((story?.acceptance ?? []).map(c => campaign.results[`${id}:${c.id}`]?.status ?? ''));
+  const sum = testSummary(
+    (story?.acceptance ?? []).map(c => campaign.results[`${id}:${c.id}`]?.status ?? ''),
+  );
   const verdict = campaign.verdicts[id];
   if (!story || (filter !== 'all' && !criteria.length)) return null;
   return (
@@ -134,7 +179,15 @@ export function StoryBlock({ campaign, story, filter }: { campaign: Campaign; st
               disabled={!rights.verdicts}
               aria-label={`Verdict du client sur ${story.id}`}
               data-value={verdict?.status || undefined}
-              onChange={e => delivery.setVerdict(campaign.id, story.id, e.target.value as VerdictStatus, verdict?.comment ?? '', me)}
+              onChange={e =>
+                delivery.setVerdict(
+                  campaign.id,
+                  story.id,
+                  e.target.value as VerdictStatus,
+                  verdict?.comment ?? '',
+                  me,
+                )
+              }
             >
               <option value="">Verdict du client</option>
               {Object.entries(VERDICT_LABEL).map(([k, label]) => (
@@ -159,7 +212,9 @@ export function StoryBlock({ campaign, story, filter }: { campaign: Campaign; st
             className={`${page.ghost} ${page.danger}`}
             title="Retirer du périmètre"
             aria-label={`Retirer ${story.id} du périmètre`}
-            onClick={() => delivery.updateCampaign(campaign.id, { scope: campaign.scope.filter(s => s !== story.id) })}
+            onClick={() =>
+              delivery.updateCampaign(campaign.id, { scope: campaign.scope.filter(s => s !== story.id) })
+            }
           >
             ✕
           </button>
@@ -168,7 +223,9 @@ export function StoryBlock({ campaign, story, filter }: { campaign: Campaign; st
       {criteria.map(c => (
         <CaseRow key={c.id} campaign={campaign} storyId={story.id} criterion={c} />
       ))}
-      {!story.acceptance.length ? <p className={styles.empty}>Aucun critère d’acceptation : rien à tester pour cette US.</p> : null}
+      {!story.acceptance.length ? (
+        <p className={styles.empty}>Aucun critère d’acceptation : rien à tester pour cette US.</p>
+      ) : null}
     </section>
   );
 }
@@ -177,7 +234,10 @@ export function StoryBlock({ campaign, story, filter }: { campaign: Campaign; st
 export function TestBar({ summary }: { summary: ReturnType<typeof testSummary> }) {
   const pct = (n: number) => (summary.total ? (n / summary.total) * 100 : 0);
   return (
-    <span className={styles.testBar} aria-label={`${summary.ok} OK, ${summary.ko} KO, ${summary.reserve} réserves, ${summary.todo} à passer`}>
+    <span
+      className={styles.testBar}
+      aria-label={`${summary.ok} OK, ${summary.ko} KO, ${summary.reserve} réserves, ${summary.todo} à passer`}
+    >
       {(['ok', 'reserve', 'ko', 'na'] as const).map(k => (
         <span key={k} data-value={k} style={{ width: `${pct(summary[k])}%` }} />
       ))}

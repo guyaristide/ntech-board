@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { storyMarkdown } from '../model/exporters';
-import { PRIORITIES, SCENARIO_LABEL, SCENARIOS, STATUSES, VERSIONS } from '@board/shared';
+import { actorsOf, PRIORITIES, SCENARIO_LABEL, SCENARIOS, STATUSES, versionsOf } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../model/store';
 import { History } from '../ui/History';
 import type { Story } from '@board/shared';
@@ -15,29 +15,6 @@ import { DiligenceRefs } from './diligences/Diligences';
 import { StoryDelivery } from './delivery/StoryDelivery';
 import { StoryLinks } from './StoryLinks';
 import page from './Page.module.css';
-
-const BASE_ACTORS = [
-  'Touriste',
-  'Touriste diaspora',
-  'Touriste international',
-  'Touriste corporate',
-  'Opérateur',
-  'Hébergeur',
-  'Restaurateur',
-  'Guide',
-  'Complexe multiservice',
-  'Artisan',
-  'Fournisseur B2B',
-  'Agence / tour-opérateur',
-  'Livreur',
-  'Ministère',
-  'SIVIS',
-  'Administrateur régional',
-  'Partenaire institutionnel',
-  'Agent de support',
-  'Administrateur plateforme',
-  'Système',
-];
 
 const updated = (iso: string) =>
   new Date(iso).toLocaleString('fr-FR', {
@@ -69,7 +46,7 @@ export function StoryPage() {
   const epic = ws.epics.find(e => e.id === story.epic);
   const workshop = ws.workshops.find(w => w.id === story.workshop);
   const set = (patch: Partial<Story>) => ws.updateStory(story.id, patch);
-  const actors = [...new Set([...BASE_ACTORS, ...ws.stories.map(s => s.actor)])].filter(Boolean);
+  const actors = actorsOf(ws.settings, ws.stories);
   const siblings = ws.stories.filter(s => s.epic === story.epic);
   const pos = siblings.findIndex(s => s.id === story.id);
   const diligences = ws.diligences.filter(d => d.stories.includes(story.id));
@@ -122,7 +99,7 @@ export function StoryPage() {
       <PropertySelect
         label="Version"
         value={story.version}
-        options={VERSIONS}
+        options={versionsOf(ws.settings)}
         onChange={v => set({ version: v as Story['version'] })}
       />,
     ],

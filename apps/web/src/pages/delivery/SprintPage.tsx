@@ -57,7 +57,11 @@ export function SprintPage() {
           {canEdit ? (
             <span className={page.actions}>
               {sprint.status === 'planned' ? (
-                <button type="button" className={page.primary} onClick={() => void run(() => delivery.startSprint(sprint.id))}>
+                <button
+                  type="button"
+                  className={page.primary}
+                  onClick={() => void run(() => delivery.startSprint(sprint.id))}
+                >
                   Démarrer le sprint
                 </button>
               ) : null}
@@ -85,8 +89,10 @@ export function SprintPage() {
         {closing ? (
           <div className={styles.import}>
             <p>
-              <strong>Clôturer {sprint.name}</strong> : {p.doneCount} ticket{p.doneCount > 1 ? 's' : ''} terminé
-              {p.doneCount > 1 ? 's' : ''} ({amount(p.done, settings)}), {open.length} non terminé{open.length > 1 ? 's' : ''}.
+              <strong>Clôturer {sprint.name}</strong> : {p.doneCount} ticket{p.doneCount > 1 ? 's' : ''}{' '}
+              terminé
+              {p.doneCount > 1 ? 's' : ''} ({amount(p.done, settings)}), {open.length} non terminé
+              {open.length > 1 ? 's' : ''}.
             </p>
             {open.length ? (
               <label className={styles.inline}>
@@ -108,10 +114,12 @@ export function SprintPage() {
               <button
                 type="button"
                 className={page.primary}
-                onClick={() => void run(async () => {
-                  await delivery.closeSprint(sprint.id, moveTo);
-                  setClosing(false);
-                })}
+                onClick={() =>
+                  void run(async () => {
+                    await delivery.closeSprint(sprint.id, moveTo);
+                    setClosing(false);
+                  })
+                }
               >
                 Clôturer
               </button>
@@ -122,19 +130,47 @@ export function SprintPage() {
         <p className={page.kicker}>
           {sprint.id} · <SprintTag sprint={sprint} />
         </p>
-        <EditableText variant="title" value={sprint.name} label="Nom du sprint" multiline={false} onChange={name => set({ name })} />
+        <EditableText
+          variant="title"
+          value={sprint.name}
+          label="Nom du sprint"
+          multiline={false}
+          onChange={name => set({ name })}
+        />
         <div className={page.props}>
           {field(
             'Objectif',
-            <EditableText variant="inline" value={sprint.goal} label="Objectif du sprint" placeholder="Ce que le sprint doit permettre" onChange={goal => set({ goal })} />,
+            <EditableText
+              variant="inline"
+              value={sprint.goal}
+              label="Objectif du sprint"
+              placeholder="Ce que le sprint doit permettre"
+              onChange={goal => set({ goal })}
+            />,
           )}
           {field(
             'Dates',
             <span className={styles.dates}>
-              <input type="date" value={sprint.start ?? ''} disabled={!canEdit} aria-label="Début" onChange={e => set({ start: e.target.value || null })} />
+              <input
+                type="date"
+                value={sprint.start ?? ''}
+                disabled={!canEdit}
+                aria-label="Début"
+                onChange={e => set({ start: e.target.value || null })}
+              />
               →
-              <input type="date" value={sprint.end ?? ''} disabled={!canEdit} aria-label="Fin" onChange={e => set({ end: e.target.value || null })} />
-              {sprint.status === 'active' ? <span className={page.faint}>{workdaysLeft(sprint.end, undefined, sprint.start)} jours ouvrés restants</span> : null}
+              <input
+                type="date"
+                value={sprint.end ?? ''}
+                disabled={!canEdit}
+                aria-label="Fin"
+                onChange={e => set({ end: e.target.value || null })}
+              />
+              {sprint.status === 'active' ? (
+                <span className={page.faint}>
+                  {workdaysLeft(sprint.end, undefined, sprint.start)} jours ouvrés restants
+                </span>
+              ) : null}
             </span>,
           )}
           {settings.delivery.estimation !== 'none'
@@ -158,7 +194,12 @@ export function SprintPage() {
             : null}
           {field(
             'Version',
-            <select className={styles.filter} value={sprint.release} disabled={!canEdit} onChange={e => set({ release: e.target.value })}>
+            <select
+              className={styles.filter}
+              value={sprint.release}
+              disabled={!canEdit}
+              onChange={e => set({ release: e.target.value })}
+            >
               <option value="">Aucune</option>
               {releases.map(r => (
                 <option key={r.id} value={r.id}>
@@ -179,7 +220,11 @@ export function SprintPage() {
         </div>
 
         {(['todo', 'doing', 'done'] as const).map(cat => {
-          const list = items.filter(t => settings.delivery.workflow.find(s => s.id === t.status)?.category === cat || (cat === 'todo' && !settings.delivery.workflow.some(s => s.id === t.status)));
+          const list = items.filter(
+            t =>
+              settings.delivery.workflow.find(s => s.id === t.status)?.category === cat ||
+              (cat === 'todo' && !settings.delivery.workflow.some(s => s.id === t.status)),
+          );
           return (
             <section key={cat}>
               <h2 className={page.h2}>
@@ -205,9 +250,17 @@ export function SprintPage() {
         ) : null}
 
         <h2 className={page.h2}>Revue de sprint</h2>
-        <BlockEditor blocks={sprint.review} onChange={review => set({ review })} placeholder="Ce qui a été montré, retours des parties prenantes" />
+        <BlockEditor
+          blocks={sprint.review}
+          onChange={review => set({ review })}
+          placeholder="Ce qui a été montré, retours des parties prenantes"
+        />
         <h2 className={page.h2}>Rétrospective</h2>
-        <BlockEditor blocks={sprint.retro} onChange={retro => set({ retro })} placeholder="Ce qui a bien marché, ce qui est à améliorer, actions" />
+        <BlockEditor
+          blocks={sprint.retro}
+          onChange={retro => set({ retro })}
+          placeholder="Ce qui a bien marché, ce qui est à améliorer, actions"
+        />
       </div>
     </DeliveryGate>
   );

@@ -70,7 +70,7 @@ export function SessionForm({
         <textarea rows={2} value={session.outcome} onChange={e => set({ outcome: e.target.value })} />
       </label>
       <label className={styles.wide}>
-        Renvoi au cahier des charges
+        Renvoi au document de référence
         <input
           value={session.cdc}
           placeholder="Par exemple « UC 01 Compte »"

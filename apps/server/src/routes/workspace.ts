@@ -3,6 +3,8 @@ import { Hono } from 'hono';
 import { streamSSE } from 'hono/streaming';
 import type { z } from 'zod';
 import {
+  OUT_OF_SCOPE,
+  versionsOf,
   ENTITY_KINDS,
   isDeliveryKind,
   LINK_INVERSE,
@@ -25,6 +27,7 @@ import {
   mutate,
   mutatePair,
   NotFound,
+  getSettings,
 } from '../repo';
 import { setPresence, subscribe } from '../realtime';
 import { fail, log } from '../log';
@@ -102,7 +105,10 @@ workspaceRoutes.post('/stories', write, async c => {
   const at = new Date().toISOString();
   const epic = await getEntity(c.get('project').id, 'epic', input.epic);
   if (!epic) return c.json({ error: 'unknown_epic' }, 400);
-  const version = (['MVP', 'V1', 'V2'] as const).find(v => v === epic.version) ?? 'MVP';
+  const settings = await getSettings(c.get('project').id);
+  const versions = versionsOf(settings);
+  const version =
+    versions.includes(epic.version) && epic.version !== OUT_OF_SCOPE ? epic.version : versions[0];
   const story = await createStory(c.get('project').id, c.get('user')!.id, id => ({
     id,
     epic: input.epic,
@@ -110,7 +116,7 @@ workspaceRoutes.post('/stories', write, async c => {
     description: '',
     targets: [],
     links: [],
-    actor: 'Touriste',
+    actor: settings.actors[0] ?? '',
     asA: '',
     iWant: '',
     soThat: '',

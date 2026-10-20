@@ -55,7 +55,7 @@ interface State extends WorkspaceData {
   updateRaciRow: (phase: string, row: string, patch: Partial<RaciRow>) => void;
   deleteRaciRow: (phase: string, row: string) => Promise<void>;
   commentPhase: (id: string, text: string) => Promise<void>;
-  createRisk: (prefix: 'R' | 'RG-') => Promise<string>;
+  createRisk: (prefix: string) => Promise<string>;
   updateRisk: (id: string, patch: Partial<Omit<Risk, 'id' | 'actions' | 'reviews' | 'comments'>>) => void;
   deleteRisk: (id: string) => Promise<void>;
   reviewRisk: (id: string, phase: string, comment: string) => Promise<void>;

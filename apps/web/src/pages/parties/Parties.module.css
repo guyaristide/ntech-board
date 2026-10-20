@@ -131,3 +131,8 @@
     margin-top: 8px;
   }
 }
+.listRow .prefix {
+  flex: none;
+  width: 80px;
+  font-family: var(--mono);
+}

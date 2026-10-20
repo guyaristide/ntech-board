@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { SCENARIO_LABEL } from '@board/shared';
+import { versionsOf, SCENARIO_LABEL } from '@board/shared';
 import { programme } from '../../model/programme';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import type { Scenario } from '@board/shared';
@@ -34,7 +34,12 @@ export function Backlog() {
   const filters = readFilters(params);
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'id', dir: 1 });
   const [picking, setPicking] = useState(false);
-  const rows = sortStories(applyFilters(ws.stories, filters, query), sort.key, sort.dir);
+  const rows = sortStories(
+    applyFilters(ws.stories, filters, query),
+    sort.key,
+    sort.dir,
+    versionsOf(ws.settings),
+  );
   const active = FILTER_KEYS.filter(k => filters[k].length).length;
 
   const setParam = (mutate: (p: URLSearchParams) => void) => {

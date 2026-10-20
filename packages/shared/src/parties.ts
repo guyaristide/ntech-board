@@ -99,13 +99,30 @@ export interface DeliverySettings {
   visibility: { roles: Role[]; organizations: string[]; allow: string[]; deny: string[] };
 }
 
+/** Périmètre de risque : son libellé et le préfixe de ses identifiants (« Projet », R12). */
+export interface RiskScope {
+  name: string;
+  prefix: string;
+}
+
 export interface ProjectSettings {
   organizationTypes: string[];
+  /** Versions ou lots du cadrage, dans l'ordre (« Hors périmètre » s'y ajoute toujours). */
+  versions: string[];
+  /** Acteurs proposés pour les US, en plus de ceux déjà saisis. */
+  actors: string[];
+  /** Nom du document de référence : « Cahier des charges », « Expression de besoin »… */
+  referenceDocument: string;
+  riskScopes: RiskScope[];
   delivery: DeliverySettings;
 }
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
   organizationTypes: ['Maîtrise d’ouvrage', 'Maîtrise d’œuvre', 'Partenaire', 'Sous-traitant', 'Autorité'],
+  versions: ['MVP', 'V1', 'V2'],
+  actors: [],
+  referenceDocument: 'Cahier des charges',
+  riskScopes: [{ name: 'Projet', prefix: 'R' }],
   delivery: {
     enabled: false,
     key: '',
@@ -146,6 +163,33 @@ export const withSettingsDefaults = (s: Partial<ProjectSettings> | null | undefi
   },
 });
 
+/** Version des US écartées du périmètre : toujours proposée, en dernier. */
+export const OUT_OF_SCOPE = 'Hors périmètre';
+
+/** Versions proposées : celles des réglages, puis « Hors périmètre ». */
+export const versionsOf = (settings: ProjectSettings) => [
+  ...settings.versions.filter(v => v !== OUT_OF_SCOPE),
+  OUT_OF_SCOPE,
+];
+
+/** Acteurs proposés : ceux des réglages, puis ceux déjà saisis dans les US. */
+export const actorsOf = (settings: ProjectSettings, stories: { actor: string }[]) =>
+  [...new Set([...settings.actors, ...stories.map(s => s.actor)])].filter(Boolean);
+
+/**
+ * Périmètres de risque : ceux des réglages, puis ceux déjà présents dans le registre (préfixe tiré
+ * de l'identifiant, R12 → R, RG-04 → RG-), pour qu'un import ne perde aucun bouton de création.
+ */
+export function riskScopesOf(settings: ProjectSettings, risks: { id: string; scope: string }[]) {
+  const scopes = [...settings.riskScopes];
+  for (const r of risks) {
+    const prefix = r.id.match(/^([A-Z]+-?)\d+$/)?.[1];
+    if (prefix && r.scope && !scopes.some(s => s.prefix === prefix || s.name === r.scope))
+      scopes.push({ name: r.scope, prefix });
+  }
+  return scopes;
+}
+
 /** Le membre voit-il la partie Réalisation ? */
 export function canSeeDelivery(
   settings: ProjectSettings,
@@ -168,13 +212,7 @@ export function canSeeDelivery(
 // --- Reprise de l'existant ---------------------------------------------------------------
 
 const norm = (s: string) =>
-  s
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .toLowerCase()
-    .replace(/[’']/g, "'")
-    .replace(/\s+/g, ' ')
-    .trim();
+  s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, ' ').trim();
 
 /** Valeurs d'attente, qui ne désignent personne. */
 const PLACEHOLDERS = new Set(['', 'a designer', 'a confirmer', 'a definir', 'tbd', 'nc', '-', '—']);
@@ -253,7 +291,8 @@ export function mentionsOf(
     add(d.partners, { label: `Diligence ${d.id} · associée`, path });
   }
   for (const w of data.workshops)
-    for (const s of w.sessions) add(s.owner, { label: `Séquence ${s.code} · porteur`, path: `/atelier/${w.id}` });
+    for (const s of w.sessions)
+      add(s.owner, { label: `Séquence ${s.code} · porteur`, path: `/atelier/${w.id}` });
   return [...all.values()].sort(
     (a, b) => b.places.length - a.places.length || a.text.localeCompare(b.text, 'fr'),
   );
@@ -264,5 +303,10 @@ export const partyNames = (parties: Party[], others: string[] = []) => {
   const find = partyIndex(parties);
   const known = parties.filter(p => p.name).map(p => p.name);
   const rest = others.map(o => o.trim()).filter(o => o && !find(o) && !PLACEHOLDERS.has(norm(o)));
-  return [...new Set([...known.sort((a, b) => a.localeCompare(b, 'fr')), ...rest.sort((a, b) => a.localeCompare(b, 'fr'))])];
+  return [
+    ...new Set([
+      ...known.sort((a, b) => a.localeCompare(b, 'fr')),
+      ...rest.sort((a, b) => a.localeCompare(b, 'fr')),
+    ]),
+  ];
 };

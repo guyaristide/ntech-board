@@ -61,4 +61,7 @@ export const TicketCreate = z.union([
   z.object({ patch: TicketPatch.extend({ title: z.string().trim().min(1).max(500) }) }),
 ]);
 
-export const TicketLinkBody = z.object({ ticket: z.string().min(1).max(40), type: z.enum(TICKET_LINK_TYPES) });
+export const TicketLinkBody = z.object({
+  ticket: z.string().min(1).max(40),
+  type: z.enum(TICKET_LINK_TYPES),
+});

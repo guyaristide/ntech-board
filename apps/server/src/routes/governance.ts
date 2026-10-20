@@ -1,9 +1,17 @@
 import { Hono } from 'hono';
-import type { Diligence, Phase, RaciRow, Risk, RiskAction } from '@board/shared';
+import {
+  riskScopesOf,
+  type Diligence,
+  type Phase,
+  type RaciRow,
+  type Risk,
+  type RiskAction,
+} from '@board/shared';
 import { requireRole, type AppEnv, type User } from '../auth';
 import { fail } from '../log';
 import { uid } from '../merge';
-import { createEntity, deleteEntity, getEntity, mutate, nextId, NotFound } from '../repo';
+import { createEntity, deleteEntity, getEntity, getSettings, mutate, nextId, NotFound } from '../repo';
+import { all } from './delivery';
 import {
   CommentBody,
   DiligenceCreate,
@@ -155,6 +163,9 @@ governanceRoutes.post('/risks', write, async c => {
   const input = await body(c.req, RiskCreate);
   if (!input) return c.json({ error: 'invalid' }, 400);
   const { project, user } = ids(c);
+  const scopes = riskScopesOf(await getSettings(project), await all<Risk>(project, 'risk'));
+  if (!scopes.some(s => s.prefix === input.prefix))
+    return c.json({ error: 'invalid', message: 'Périmètre de risque inconnu.' }, 400);
   const risk = await createEntity(
     project,
     user.id,
@@ -162,7 +173,7 @@ governanceRoutes.post('/risks', write, async c => {
     list => nextId(list, input.prefix),
     id => ({
       id,
-      scope: input.prefix === 'RG-' ? 'Groupement' : 'Projet',
+      scope: scopes.find(s => s.prefix === input.prefix)?.name ?? input.prefix,
       category: '',
       title: '',
       cause: '',

@@ -33,8 +33,15 @@ export function StoryDelivery({ story }: { story: Story }) {
     <p className={styles.versions} style={{ margin: '8px 0', fontSize: 14 }}>
       <span className={page.faint}>Réalisation</span>
       <span className={styles.key}>{ticket.id}</span>
-      <Tag value={step?.name ?? ticket.status} tone={step?.category === 'done' ? 'green' : step?.category === 'doing' ? 'blue' : 'gray'} />
-      {sprint ? <Link to={`/realisation/sprint/${sprint.id}`}>{sprint.name}</Link> : <Link to="/realisation">Backlog de réalisation</Link>}
+      <Tag
+        value={step?.name ?? ticket.status}
+        tone={step?.category === 'done' ? 'green' : step?.category === 'doing' ? 'blue' : 'gray'}
+      />
+      {sprint ? (
+        <Link to={`/realisation/sprint/${sprint.id}`}>{sprint.name}</Link>
+      ) : (
+        <Link to="/realisation">Backlog de réalisation</Link>
+      )}
       {release ? <span>{release.name}</span> : null}
       {ticket.estimate !== null ? <span>{amount(ticket.estimate, settings)}</span> : null}
     </p>

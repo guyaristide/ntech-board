@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { diligenceOpen, STATUSES, TONE, VERSIONS } from '@board/shared';
+import { diligenceOpen, STATUSES, TONE, versionsOf } from '@board/shared';
 import { overdue } from '../model/due';
 import { useWorkspace } from '../model/store';
 import { Tag } from '../ui/Tag';
@@ -13,6 +13,7 @@ const TODAY = () => new Date().toISOString().slice(0, 10);
 /** Accueil : où en est le cadrage, diligences, prochain atelier, couverture par plateforme et par épique. */
 export function Home() {
   const ws = useWorkspace();
+  const versions = versionsOf(ws.settings);
   const today = TODAY();
   const nextWorkshop = ws.workshops.find(w => w.date && w.date >= today) ?? ws.workshops[0];
   const questions = ws.workshops.flatMap(w => w.sessions.flatMap(s => s.questions));
@@ -94,7 +95,7 @@ export function Home() {
               <thead>
                 <tr>
                   <th>Plateforme</th>
-                  {VERSIONS.map(v => (
+                  {versions.map(v => (
                     <th key={v}>{v}</th>
                   ))}
                   <th>Total</th>
@@ -110,7 +111,7 @@ export function Home() {
                       <td>
                         <Link to={`/backlog?${q}`}>{p}</Link>
                       </td>
-                      {VERSIONS.map(v => {
+                      {versions.map(v => {
                         const n = list.filter(s => s.version === v).length;
                         return (
                           <td key={v}>
@@ -141,7 +142,7 @@ export function Home() {
           <thead>
             <tr>
               <th>Épique</th>
-              {VERSIONS.map(v => (
+              {versions.map(v => (
                 <th key={v}>{v}</th>
               ))}
               <th>Total</th>
@@ -159,7 +160,7 @@ export function Home() {
                       <span className={styles.cardCode}>{e.id}</span> {e.title}
                     </Link>
                   </td>
-                  {VERSIONS.map(v => {
+                  {versions.map(v => {
                     const n = list.filter(s => s.version === v).length;
                     return (
                       <td key={v}>

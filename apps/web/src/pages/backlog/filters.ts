@@ -73,10 +73,12 @@ const idRank = (id: string) =>
     .replace('-EX', '-1EX')
     .replace(/\d+/g, d => d.padStart(4, '0'));
 
-export function sortStories(stories: Story[], key: SortKey, dir: 1 | -1) {
+/** Tri des US ; `versions` : ordre des versions du projet (réglages). */
+export function sortStories(stories: Story[], key: SortKey, dir: 1 | -1, versions?: string[]) {
   const value = (s: Story): string | number => {
     if (key === 'id') return idRank(s.id);
     if (key === 'workshop') return workshopRank(s.workshop);
+    if (key === 'version' && versions) return versions.indexOf(s.version);
     if (ORDER[key]) return ORDER[key].indexOf(s[key as 'priority']);
     return String(s[key] ?? '').toLowerCase();
   };

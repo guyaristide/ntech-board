@@ -11,7 +11,16 @@ import {
 import { requireDelivery } from '../access';
 import { requireRole, type AppEnv } from '../auth';
 import { fail } from '../log';
-import { createEntity, getEntity, getSettings, deleteEntity, mutate, mutatePair, nextId, NotFound } from '../repo';
+import {
+  createEntity,
+  getEntity,
+  getSettings,
+  deleteEntity,
+  mutate,
+  mutatePair,
+  nextId,
+  NotFound,
+} from '../repo';
 import { all, blankTicket, keyOf } from './delivery';
 import { blocks } from './schemas';
 import { body } from './workspace';
@@ -51,7 +60,10 @@ const ResultBody = z.object({
   status: z.enum(['', 'ok', 'ko', 'reserve', 'na']),
   comment: z.string().max(4000).default(''),
 });
-const VerdictBody = z.object({ status: z.enum(['', 'accepted', 'refused']), comment: z.string().max(4000).default('') });
+const VerdictBody = z.object({
+  status: z.enum(['', 'accepted', 'refused']),
+  comment: z.string().max(4000).default(''),
+});
 
 type Ctx = { get: (k: 'project' | 'user' | 'role') => unknown };
 const who = (c: Ctx) => ({
@@ -102,7 +114,9 @@ recetteRoutes.patch('/campaigns/:id', ...editor, async c => {
   const patch = await body(c.req, CampaignPatch);
   if (!patch) return c.json({ error: 'invalid' }, 400);
   const { project, user } = who(c);
-  return c.json(await mutate(project, 'campaign', c.req.param('id'), user.id, 'update', x => ({ ...x, ...patch }), patch));
+  return c.json(
+    await mutate(project, 'campaign', c.req.param('id'), user.id, 'update', x => ({ ...x, ...patch }), patch),
+  );
 });
 
 /** Ajoute au périmètre les US de la version de la campagne qui n'y sont pas encore. */
@@ -134,7 +148,8 @@ recetteRoutes.put('/campaigns/:id/results/:key', ...member, async c => {
   if (!campaign) return c.json({ error: 'not_found' }, 404);
   if (role === 'viewer' && campaign.mode !== 'client') return c.json({ error: 'forbidden' }, 403);
   const key = c.req.param('key');
-  if (!campaign.scope.includes(key.split(':')[0])) return c.json({ error: 'invalid', message: 'US hors périmètre.' }, 400);
+  if (!campaign.scope.includes(key.split(':')[0]))
+    return c.json({ error: 'invalid', message: 'US hors périmètre.' }, 400);
   return c.json(
     await mutate(
       project,
@@ -161,9 +176,11 @@ recetteRoutes.put('/campaigns/:id/verdicts/:story', ...member, async c => {
   const { project, user } = who(c);
   const campaign = await getEntity(project, 'campaign', c.req.param('id'));
   if (!campaign) return c.json({ error: 'not_found' }, 404);
-  if (!hasVerdicts(campaign.mode)) return c.json({ error: 'invalid', message: 'Pas de verdict client dans ce mode.' }, 400);
+  if (!hasVerdicts(campaign.mode))
+    return c.json({ error: 'invalid', message: 'Pas de verdict client dans ce mode.' }, 400);
   const story = c.req.param('story');
-  if (!campaign.scope.includes(story)) return c.json({ error: 'invalid', message: 'US hors périmètre.' }, 400);
+  if (!campaign.scope.includes(story))
+    return c.json({ error: 'invalid', message: 'US hors périmètre.' }, 400);
   return c.json(
     await mutate(
       project,
@@ -171,7 +188,10 @@ recetteRoutes.put('/campaigns/:id/verdicts/:story', ...member, async c => {
       campaign.id,
       user.id,
       'verdict',
-      x => ({ ...x, verdicts: { ...x.verdicts, [story]: { ...input, by: user.name || user.email, at: now() } } }),
+      x => ({
+        ...x,
+        verdicts: { ...x.verdicts, [story]: { ...input, by: user.name || user.email, at: now() } },
+      }),
       { story, ...input },
     ),
   );
@@ -190,7 +210,8 @@ recetteRoutes.post('/campaigns/:id/results/:key/bug', ...editor, async c => {
   const story = await getEntity(project, 'story', storyId);
   const criterion = (story as Story | null)?.acceptance.find(a => a.id === criterionId);
   if (!story || !criterion) return c.json({ error: 'not_found' }, 404);
-  if (campaign.results[key]?.bug) return c.json({ error: 'invalid', message: 'Un bug est déjà ouvert pour ce cas.' }, 400);
+  if (campaign.results[key]?.bug)
+    return c.json({ error: 'invalid', message: 'Un bug est déjà ouvert pour ce cas.' }, 400);
   const settings = await getSettings(project);
   const tickets = (await all<Ticket>(project, 'ticket')).map(withTicketDefaults);
   const storyTicket = tickets.find(t => t.story === storyId);
@@ -202,7 +223,8 @@ recetteRoutes.post('/campaigns/:id/results/:key/bug', ...editor, async c => {
     ids => nextId(ids, `${keyOf(settings, slug)}-`, 1),
     tid => ({
       ...blankTicket(settings, tid, tickets.reduce((m, t) => Math.max(m, t.rank), 0) + 1),
-      type: settings.delivery.ticketTypes.find(t => t.id === 'bug')?.id ?? settings.delivery.ticketTypes[0].id,
+      type:
+        settings.delivery.ticketTypes.find(t => t.id === 'bug')?.id ?? settings.delivery.ticketTypes[0].id,
       title: `${campaign.name} · ${storyId} : ${criterion.text}`.slice(0, 500),
       story: storyId,
       release: campaign.release,
@@ -214,8 +236,11 @@ recetteRoutes.post('/campaigns/:id/results/:key/bug', ...editor, async c => {
   );
   const [bug] = storyTicket
     ? await mutatePair(project, 'ticket', [created.id, storyTicket.id], user.id, 'link', (a, b) => [
-      { ...a, links: [...(a.links ?? []), { ticket: b.id, type: 'relates' }] },
-      { ...b, links: [...(b.links ?? []).filter(l => l.ticket !== a.id), { ticket: a.id, type: 'relates' }] },
+        { ...a, links: [...(a.links ?? []), { ticket: b.id, type: 'relates' }] },
+        {
+          ...b,
+          links: [...(b.links ?? []).filter(l => l.ticket !== a.id), { ticket: a.id, type: 'relates' }],
+        },
       ])
     : [created];
   const updated = await mutate(project, 'campaign', campaign.id, user.id, 'bug', x => ({

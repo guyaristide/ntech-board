@@ -14,7 +14,8 @@ export interface Comment {
   text: string;
 }
 
-export type Version = 'MVP' | 'V1' | 'V2' | 'Hors périmètre';
+/** Version ou lot du cadrage, parmi ceux des réglages du projet (« Hors périmètre » : écartée). */
+export type Version = string;
 export type Priority = 'Must' | 'Should' | 'Could';
 export type Scenario = 'nominal' | 'alternatif' | 'erreur' | 'exigence';
 export type StoryStatus = 'À cadrer' | 'En atelier' | 'À revoir' | 'Validée' | 'Écartée';

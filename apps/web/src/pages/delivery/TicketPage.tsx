@@ -37,8 +37,19 @@ export function TicketPage() {
   const step = stepOf(settings, ticket.status);
   const blocked = isBlocked(settings, tickets, ticket);
   const me = mine[0];
-  const select = (value: string, label: string, options: [string, string][], onChange: (v: string) => void) => (
-    <select className={styles.filter} value={value} disabled={!canEdit} aria-label={label} onChange={e => onChange(e.target.value)}>
+  const select = (
+    value: string,
+    label: string,
+    options: [string, string][],
+    onChange: (v: string) => void,
+  ) => (
+    <select
+      className={styles.filter}
+      value={value}
+      disabled={!canEdit}
+      aria-label={label}
+      onChange={e => onChange(e.target.value)}
+    >
       {options.map(([v, l]) => (
         <option key={v} value={v}>
           {l}
@@ -47,11 +58,24 @@ export function TicketPage() {
     </select>
   );
   const props: [string, ReactNode][] = [
-    ['Type', select(ticket.type, 'Type', settings.delivery.ticketTypes.map(t => [t.id, t.name]), type => set({ type }))],
+    [
+      'Type',
+      select(
+        ticket.type,
+        'Type',
+        settings.delivery.ticketTypes.map(t => [t.id, t.name]),
+        type => set({ type }),
+      ),
+    ],
     [
       'Étape',
       <span className={styles.dates}>
-        {select(step?.id ?? '', 'Étape', settings.delivery.workflow.map(s => [s.id, s.name]), status => set({ status }))}
+        {select(
+          step?.id ?? '',
+          'Étape',
+          settings.delivery.workflow.map(s => [s.id, s.name]),
+          status => set({ status }),
+        )}
         {blocked ? <Tag value="Bloqué" tone="red" /> : null}
       </span>,
     ],
@@ -66,15 +90,43 @@ export function TicketPage() {
         ) : null}
       </span>,
     ],
-    ...(settings.delivery.estimation !== 'none' ? ([['Estimation', <span className={styles.narrow}><Estimate ticket={ticket} /></span>]] as [string, ReactNode][]) : []),
-    ['Prêt', <span className={styles.narrow}><Ready ticket={ticket} /></span>],
-    ['Version', select(ticket.release, 'Version', [['', 'Sans version'], ...releases.map(r => [r.id, r.name] as [string, string])], release => set({ release }))],
+    ...(settings.delivery.estimation !== 'none'
+      ? ([
+          [
+            'Estimation',
+            <span className={styles.narrow}>
+              <Estimate ticket={ticket} />
+            </span>,
+          ],
+        ] as [string, ReactNode][])
+      : []),
+    [
+      'Prêt',
+      <span className={styles.narrow}>
+        <Ready ticket={ticket} />
+      </span>,
+    ],
+    [
+      'Version',
+      select(
+        ticket.release,
+        'Version',
+        [['', 'Sans version'], ...releases.map(r => [r.id, r.name] as [string, string])],
+        release => set({ release }),
+      ),
+    ],
     [
       'Sprint',
       select(
         ticket.sprint,
         'Sprint',
-        [['', 'Backlog'], ...[...sprints].sort(sprintOrder).filter(s => s.status !== 'closed' || s.id === ticket.sprint).map(s => [s.id, s.name] as [string, string])],
+        [
+          ['', 'Backlog'],
+          ...[...sprints]
+            .sort(sprintOrder)
+            .filter(s => s.status !== 'closed' || s.id === ticket.sprint)
+            .map(s => [s.id, s.name] as [string, string]),
+        ],
         sprint => set({ sprint }),
       ),
     ],
@@ -118,7 +170,12 @@ export function TicketPage() {
                 type="button"
                 className={`${page.ghost} ${page.danger}`}
                 onClick={async () => {
-                  if (!confirm(`Supprimer le ticket ${ticket.id} ?${story ? ` L’US ${story.id} n’est pas supprimée.` : ''}`)) return;
+                  if (
+                    !confirm(
+                      `Supprimer le ticket ${ticket.id} ?${story ? ` L’US ${story.id} n’est pas supprimée.` : ''}`,
+                    )
+                  )
+                    return;
                   await delivery.deleteTicket(ticket.id);
                   navigate(parent ? `/realisation/ticket/${parent.id}` : '/realisation');
                 }}
@@ -131,7 +188,14 @@ export function TicketPage() {
         <p className={page.kicker}>
           {ticket.id} · {settings.delivery.ticketTypes.find(t => t.id === ticket.type)?.name ?? ticket.type}
         </p>
-        <EditableText variant="title" value={ticket.title} label="Intitulé du ticket" placeholder="Sans titre" multiline={false} onChange={title => set({ title })} />
+        <EditableText
+          variant="title"
+          value={ticket.title}
+          label="Intitulé du ticket"
+          placeholder="Sans titre"
+          multiline={false}
+          onChange={title => set({ title })}
+        />
         <div className={page.props}>
           {props.map(([label, value]) => (
             <div key={label} style={{ display: 'contents' }}>
@@ -145,7 +209,11 @@ export function TicketPage() {
         <BlockEditor
           blocks={ticket.description}
           onChange={description => set({ description })}
-          placeholder={story ? 'Précisions techniques ; le besoin est décrit dans l’US du cadrage.' : 'Ce qu’il faut faire, critère de fin'}
+          placeholder={
+            story
+              ? 'Précisions techniques ; le besoin est décrit dans l’US du cadrage.'
+              : 'Ce qu’il faut faire, critère de fin'
+          }
         />
 
         {ticket.type !== 'subtask' ? <Subtasks ticket={ticket} /> : null}
@@ -154,7 +222,13 @@ export function TicketPage() {
         <h2 className={page.h2}>Commentaires</h2>
         <Comments
           items={ticket.comments}
-          onAdd={text => void delivery.commentTicket(ticket.id, text, ws.session?.user?.name || ws.session?.user?.email || '')}
+          onAdd={text =>
+            void delivery.commentTicket(
+              ticket.id,
+              text,
+              ws.session?.user?.name || ws.session?.user?.email || '',
+            )
+          }
         />
         <History kind="ticket" id={ticket.id} stamp={ticket.updatedAt} />
       </div>

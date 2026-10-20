@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { VERSIONS, type Story } from '@board/shared';
+import { OUT_OF_SCOPE, versionsOf, type Story } from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useWorkspace } from '../../model/store';
 import { Tag } from '../../ui/Tag';
@@ -53,13 +53,20 @@ export function ImportStories({ onClose }: { onClose: () => void }) {
     <section className={styles.import} aria-label="Passer des US en réalisation">
       <header className={styles.laneHead}>
         <span className={styles.laneTitle}>Passer des US en réalisation</span>
-        <select className={styles.filter} value={version} onChange={e => setVersion(e.target.value)} aria-label="Version du cadrage">
+        <select
+          className={styles.filter}
+          value={version}
+          onChange={e => setVersion(e.target.value)}
+          aria-label="Version du cadrage"
+        >
           <option value="">Toutes les versions</option>
-          {VERSIONS.filter(v => v !== 'Hors périmètre').map(v => (
-            <option key={v} value={v}>
-              {v}
-            </option>
-          ))}
+          {versionsOf(ws.settings)
+            .filter(v => v !== OUT_OF_SCOPE)
+            .map(v => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
         </select>
         <label className={styles.inline}>
           <input type="checkbox" checked={all} onChange={e => setAll(e.target.checked)} />
@@ -69,7 +76,12 @@ export function ImportStories({ onClose }: { onClose: () => void }) {
           <button type="button" className={page.ghost} onClick={onClose}>
             Fermer
           </button>
-          <button type="button" className={page.primary} disabled={!picked.size || busy} onClick={() => void submit()}>
+          <button
+            type="button"
+            className={page.primary}
+            disabled={!picked.size || busy}
+            onClick={() => void submit()}
+          >
             {busy ? 'Création…' : `Passer en réalisation (${picked.size})`}
           </button>
         </span>
@@ -88,7 +100,16 @@ export function ImportStories({ onClose }: { onClose: () => void }) {
             return (
               <div key={e.id}>
                 <label className={styles.pickEpic}>
-                  <input type="checkbox" checked={on} onChange={ev => toggle(items.map(s => s.id), ev.target.checked)} />
+                  <input
+                    type="checkbox"
+                    checked={on}
+                    onChange={ev =>
+                      toggle(
+                        items.map(s => s.id),
+                        ev.target.checked,
+                      )
+                    }
+                  />
                   {e.id} · {e.title} <span className={page.faint}>({items.length})</span>
                 </label>
                 {items.map(row)}

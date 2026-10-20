@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { PRIORITIES, STATUSES, VERSIONS, type Story, type Ticket, type WorkspaceData } from '@board/shared';
+import { PRIORITIES, STATUSES, type Story, type Ticket, type WorkspaceData } from '@board/shared';
 import { z } from 'zod';
 import { ApiFailure, lines, matches, pick, tool, type Ctx } from './context';
 
@@ -74,7 +74,7 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
         afin_de: z.string().max(2000).optional(),
         description: z.string().max(20000).optional(),
         statut: z.enum(STATUSES).optional(),
-        version: z.enum(VERSIONS).optional(),
+        version: z.string().max(40).optional().describe('Version ou lot, parmi ceux des réglages du projet'),
         priorite: z.enum(PRIORITIES).optional(),
         ajouter_criteres: z.array(z.string().min(1).max(4000)).max(50).optional(),
         cocher_criteres: z
@@ -124,7 +124,7 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
         afin_de: z.string().max(2000).default(''),
         description: z.string().max(20000).default(''),
         criteres: z.array(z.string().min(1).max(4000)).max(50).default([]),
-        version: z.enum(VERSIONS).optional(),
+        version: z.string().max(40).optional().describe('Version ou lot, parmi ceux des réglages du projet'),
         priorite: z.enum(PRIORITIES).optional(),
       },
       write: true,

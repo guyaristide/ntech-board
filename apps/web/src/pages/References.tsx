@@ -12,6 +12,7 @@ const norm = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCas
 export function References() {
   const references = useWorkspace(s => s.references);
   const planning = useWorkspace(s => s.planning);
+  const settings = useWorkspace(s => s.settings);
   const [query, setQuery] = useState('');
   const [gapsOnly, setGapsOnly] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
@@ -27,9 +28,9 @@ export function References() {
       <span className={page.icon} aria-hidden="true">
         📘
       </span>
-      <h1 className={page.h1}>Références au cahier des charges</h1>
+      <h1 className={page.h1}>Références</h1>
       <p className={page.lead}>
-        Le document de référence sujet par sujet : ce qu’il dit, où le lire, les écarts à trancher et les
+        {settings.referenceDocument} sujet par sujet : ce qu’il dit, où le lire, les écarts à trancher et les
         séquences d’atelier concernées.{planning ? ` Source : ${planning}.` : ''}
       </p>
       <div className={backlog.toolbar}>

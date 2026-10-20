@@ -15,7 +15,6 @@ import {
   RISK_VALIDATIONS,
   SCENARIOS,
   STATUSES,
-  VERSIONS,
 } from '@board/shared';
 
 const text = (max = 2000) => z.string().max(max);
@@ -43,7 +42,7 @@ export const StoryPatch = z
     acceptance: z.array(criterion).max(200),
     scenario: z.enum(SCENARIOS),
     source: text(300),
-    version: z.enum(VERSIONS),
+    version: text(40),
     workshop: text(40),
     priority: z.enum(PRIORITIES),
     status: z.enum(STATUSES),
@@ -130,9 +129,12 @@ export const RiskPatch = z
   })
   .partial()
   .strict();
-/** Nouveau risque : R29 (projet) ou RG-11 (groupement). */
+/** Nouveau risque : préfixe de son périmètre (R29, RG-11), parmi ceux des réglages du projet. */
 export const RiskCreate = z.object({
-  prefix: z.enum(['R', 'RG-']).default('R'),
+  prefix: z
+    .string()
+    .regex(/^[A-Z]{1,4}-?$/)
+    .default('R'),
   patch: RiskPatch.optional(),
 });
 export const RiskActionPatch = z
@@ -204,10 +206,29 @@ const userIds = z.array(z.string().max(40)).max(500);
 export const SettingsPatch = z
   .object({
     organizationTypes: z.array(z.string().trim().min(1).max(80)).max(30),
+    versions: z.array(z.string().trim().min(1).max(40)).min(1).max(20),
+    actors: z.array(z.string().trim().min(1).max(80)).max(100),
+    referenceDocument: z.string().trim().min(1).max(80),
+    riskScopes: z
+      .array(
+        z.object({
+          name: z.string().trim().min(1).max(60),
+          prefix: z
+            .string()
+            .trim()
+            .regex(/^[A-Z]{1,4}-?$/),
+        }),
+      )
+      .min(1)
+      .max(10),
     delivery: z
       .object({
         enabled: z.boolean(),
-        key: z.string().trim().toUpperCase().regex(/^[A-Z][A-Z0-9]{0,9}$|^$/),
+        key: z
+          .string()
+          .trim()
+          .toUpperCase()
+          .regex(/^[A-Z][A-Z0-9]{0,9}$|^$/),
         sprintWeeks: z.number().int().min(1).max(8),
         estimation: z.enum(['points', 'days', 'hours', 'none']),
         workflow: z

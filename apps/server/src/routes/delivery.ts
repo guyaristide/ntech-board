@@ -56,7 +56,7 @@ type Ctx = { get: (k: 'project' | 'user') => unknown };
 const who = (c: Ctx) => ({
   project: (c.get('project') as { id: string; slug: string }).id,
   slug: (c.get('project') as { slug: string }).slug,
-  user: (c.get('user') as { id: string; name: string; email: string }),
+  user: c.get('user') as { id: string; name: string; email: string },
 });
 
 export async function all<T>(projectId: string, kind: string): Promise<T[]> {
@@ -69,7 +69,12 @@ export async function all<T>(projectId: string, kind: string): Promise<T[]> {
 
 /** Préfixe des clés de tickets : celui des réglages, sinon tiré de l'identifiant du projet. */
 export const keyOf = (settings: ProjectSettings, slug: string) =>
-  settings.delivery.key || slug.replace(/[^a-z]/gi, '').slice(0, 4).toUpperCase() || 'T';
+  settings.delivery.key ||
+  slug
+    .replace(/[^a-z]/gi, '')
+    .slice(0, 4)
+    .toUpperCase() ||
+  'T';
 
 const now = () => new Date().toISOString();
 
@@ -103,7 +108,9 @@ deliveryRoutes.patch('/releases/:id', ...write, async c => {
   const patch = await body(c.req, ReleasePatch);
   if (!patch) return c.json({ error: 'invalid' }, 400);
   const { project, user } = who(c);
-  return c.json(await mutate(project, 'release', c.req.param('id'), user.id, 'update', r => ({ ...r, ...patch }), patch));
+  return c.json(
+    await mutate(project, 'release', c.req.param('id'), user.id, 'update', r => ({ ...r, ...patch }), patch),
+  );
 });
 
 /** Supprime une version ; les sprints et tickets qui y étaient rattachés n'ont plus de version. */
@@ -113,8 +120,12 @@ deliveryRoutes.delete('/releases/:id', ...write, async c => {
   await deleteEntity(project, user.id, 'release', id);
   const tickets = (await all<Ticket>(project, 'ticket')).filter(t => t.release === id).map(t => t.id);
   const sprints = (await all<Sprint>(project, 'sprint')).filter(s => s.release === id).map(s => s.id);
-  await mutateMany(project, 'ticket', tickets, user.id, 'update', t => ({ ...t, release: '' }), { release: '' });
-  await mutateMany(project, 'sprint', sprints, user.id, 'update', s => ({ ...s, release: '' }), { release: '' });
+  await mutateMany(project, 'ticket', tickets, user.id, 'update', t => ({ ...t, release: '' }), {
+    release: '',
+  });
+  await mutateMany(project, 'sprint', sprints, user.id, 'update', s => ({ ...s, release: '' }), {
+    release: '',
+  });
   return c.json({ ok: true });
 });
 
@@ -154,7 +165,9 @@ deliveryRoutes.patch('/sprints/:id', ...write, async c => {
   const patch = await body(c.req, SprintPatch);
   if (!patch) return c.json({ error: 'invalid' }, 400);
   const { project, user } = who(c);
-  return c.json(await mutate(project, 'sprint', c.req.param('id'), user.id, 'update', s => ({ ...s, ...patch }), patch));
+  return c.json(
+    await mutate(project, 'sprint', c.req.param('id'), user.id, 'update', s => ({ ...s, ...patch }), patch),
+  );
 });
 
 /** Supprime un sprint ; ses tickets retournent au backlog. */
@@ -162,7 +175,9 @@ deliveryRoutes.delete('/sprints/:id', ...write, async c => {
   const { project, user } = who(c);
   const id = c.req.param('id');
   const tickets = (await all<Ticket>(project, 'ticket')).filter(t => t.sprint === id).map(t => t.id);
-  await mutateMany(project, 'ticket', tickets, user.id, 'update', t => ({ ...t, sprint: '' }), { sprint: '' });
+  await mutateMany(project, 'ticket', tickets, user.id, 'update', t => ({ ...t, sprint: '' }), {
+    sprint: '',
+  });
   await deleteEntity(project, user.id, 'sprint', id);
   await pool.query('DELETE FROM sprint_days WHERE project_id = $1 AND sprint = $2', [project, id]);
   return c.json({ ok: true });
@@ -178,7 +193,11 @@ deliveryRoutes.post('/sprints/:id/start', ...write, async c => {
   const { project, user } = who(c);
   const id = c.req.param('id');
   const active = (await all<Sprint>(project, 'sprint')).find(s => s.status === 'active' && s.id !== id);
-  if (active) return c.json({ error: 'sprint_active', message: `${active.name} est déjà en cours : clôturez-le d’abord.` }, 409);
+  if (active)
+    return c.json(
+      { error: 'sprint_active', message: `${active.name} est déjà en cours : clôturez-le d’abord.` },
+      409,
+    );
   return c.json(await mutate(project, 'sprint', id, user.id, 'start', s => ({ ...s, status: 'active' })));
 });
 
@@ -192,13 +211,22 @@ deliveryRoutes.post('/sprints/:id/close', ...write, async c => {
   const { project, user } = who(c);
   const id = c.req.param('id');
   if (input.moveTo === id) return c.json({ error: 'invalid' }, 400);
-  if (input.moveTo && !(await getEntity(project, 'sprint', input.moveTo))) return c.json({ error: 'not_found' }, 404);
+  if (input.moveTo && !(await getEntity(project, 'sprint', input.moveTo)))
+    return c.json({ error: 'not_found' }, 404);
   const settings = await getSettings(project);
   const tickets = (await all<Ticket>(project, 'ticket')).filter(t => t.sprint === id);
   const open = tickets.filter(t => !isDone(settings, t)).map(t => t.id);
-  await mutateMany(project, 'ticket', open, user.id, 'carry', t => ({ ...t, sprint: input.moveTo, updatedAt: now() }), {
-    sprint: input.moveTo,
-  });
+  await mutateMany(
+    project,
+    'ticket',
+    open,
+    user.id,
+    'carry',
+    t => ({ ...t, sprint: input.moveTo, updatedAt: now() }),
+    {
+      sprint: input.moveTo,
+    },
+  );
   const finished = tickets.filter(t => isDone(settings, t));
   const velocity = load(finished).total;
   // Dernier relevé du burndown, avant que les tickets non terminés quittent le sprint.
@@ -265,9 +293,12 @@ deliveryRoutes.post('/tickets', ...write, async c => {
   }
   // Une US déjà en réalisation n'est pas reprise une seconde fois.
   const taken = new Set(existing.map(t => t.story).filter(Boolean));
-  const stories = (await all<Story>(project, 'story')).filter(s => input.stories.includes(s.id) && !taken.has(s.id));
+  const stories = (await all<Story>(project, 'story')).filter(
+    s => input.stories.includes(s.id) && !taken.has(s.id),
+  );
   const releases = await all<Release>(project, 'release');
-  const releaseOf = (s: Story) => releases.find(r => r.versions.includes(s.version) && r.status !== 'Abandonnée')?.id ?? '';
+  const releaseOf = (s: Story) =>
+    releases.find(r => r.versions.includes(s.version) && r.status !== 'Abandonnée')?.id ?? '';
   const created = await createMany(
     project,
     user.id,
@@ -292,11 +323,21 @@ deliveryRoutes.patch('/tickets/:id', ...write, async c => {
   const settings = await getSettings(project);
   if (patch.status && !settings.delivery.workflow.some(s => s.id === patch.status))
     return c.json({ error: 'invalid', message: 'Étape inconnue.' }, 400);
-  if (patch.sprint && !(await getEntity(project, 'sprint', patch.sprint))) return c.json({ error: 'not_found' }, 404);
+  if (patch.sprint && !(await getEntity(project, 'sprint', patch.sprint)))
+    return c.json({ error: 'not_found' }, 404);
   if (patch.parent === c.req.param('id')) return c.json({ error: 'invalid' }, 400);
-  if (patch.parent && !(await getEntity(project, 'ticket', patch.parent))) return c.json({ error: 'not_found' }, 404);
+  if (patch.parent && !(await getEntity(project, 'ticket', patch.parent)))
+    return c.json({ error: 'not_found' }, 404);
   return c.json(
-    await mutate(project, 'ticket', c.req.param('id'), user.id, 'update', t => ({ ...t, ...patch, updatedAt: now() }), patch),
+    await mutate(
+      project,
+      'ticket',
+      c.req.param('id'),
+      user.id,
+      'update',
+      t => ({ ...t, ...patch, updatedAt: now() }),
+      patch,
+    ),
   );
 });
 
@@ -312,7 +353,9 @@ deliveryRoutes.delete('/tickets/:id', ...write, async c => {
     ...t,
     links: (t.links ?? []).filter(l => l.ticket !== id),
   }));
-  await mutateMany(project, 'ticket', children, user.id, 'update', t => ({ ...t, parent: '' }), { parent: '' });
+  await mutateMany(project, 'ticket', children, user.id, 'update', t => ({ ...t, parent: '' }), {
+    parent: '',
+  });
   return c.json({ ok: true });
 });
 
@@ -342,9 +385,17 @@ deliveryRoutes.delete('/tickets/:id/links/:other', ...write, async c => {
   const { project, user } = who(c);
   const [id, other] = [c.req.param('id'), c.req.param('other')];
   const drop = (t: Ticket, x: string) => ({ ...t, links: (t.links ?? []).filter(l => l.ticket !== x) });
-  const [ticket] = await mutatePair(project, 'ticket', [id, other], user.id, 'unlink', (a, b) => [drop(a, other), drop(b, id)], {
-    ticket: other,
-  });
+  const [ticket] = await mutatePair(
+    project,
+    'ticket',
+    [id, other],
+    user.id,
+    'unlink',
+    (a, b) => [drop(a, other), drop(b, id)],
+    {
+      ticket: other,
+    },
+  );
   return c.json(ticket);
 });
 

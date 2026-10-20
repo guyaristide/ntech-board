@@ -107,8 +107,8 @@ export function SessionCard({
               aria-expanded={cdc}
               onClick={() => setCdc(c => !c)}
             >
-              {cdc ? '▾' : '▸'} Cahier des charges{session.cdc ? ` : ${session.cdc}` : ''} (
-              {refs.map(r => r.id).join(', ')})
+              {cdc ? '▾' : '▸'} {ws.settings.referenceDocument}
+              {session.cdc ? ` : ${session.cdc}` : ''} ({refs.map(r => r.id).join(', ')})
             </button>
             {cdc ? (
               <div className={styles.refs}>

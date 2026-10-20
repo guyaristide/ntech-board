@@ -33,7 +33,12 @@ pdfRoutes.onError((err, c) => {
 pdfRoutes.get('/pdf/semaine/:n', read, async c => {
   const p = c.get('project');
   const ws = await getWorkspace(p.id, p.planning);
-  const doc = await weekPdf(p.title, programmeOrder(ws.workshops), Number(c.req.param('n')), c.req.query('deroule') === '1');
+  const doc = await weekPdf(
+    p.title,
+    programmeOrder(ws.workshops),
+    Number(c.req.param('n')),
+    c.req.query('deroule') === '1',
+  );
   return doc ? send(doc) : c.json({ error: 'not_found' }, 404);
 });
 

@@ -1,5 +1,12 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ACTION_STATUSES, RISK_LEVELS, RISK_STATUSES, type RiskAction, type Risk } from '@board/shared';
+import {
+  riskScopesOf,
+  ACTION_STATUSES,
+  RISK_LEVELS,
+  RISK_STATUSES,
+  type RiskAction,
+  type Risk,
+} from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
 import { PropertySelect } from '../../ui/PropertySelect';
@@ -52,7 +59,8 @@ export function Risks() {
   const critical = open.filter(r => ['Élevé', 'Critique'].includes(levelOf(r.initial)));
   const actions = ws.risks.flatMap(r => r.actions.map(a => ({ r, a })));
   const actionStatus = params.get('action') ?? '';
-  const create = async (prefix: 'R' | 'RG-') => navigate(`/risque/${await ws.createRisk(prefix)}`);
+  const create = async (prefix: string) => navigate(`/risque/${await ws.createRisk(prefix)}`);
+  const scopes = riskScopesOf(ws.settings, ws.risks);
 
   return (
     <div className={`${page.page} ${page.wide}`}>
@@ -97,12 +105,16 @@ export function Risks() {
         ) : null}
         {canEdit ? (
           <span className={page.actions}>
-            <button type="button" className={page.ghost} onClick={() => void create('R')}>
-              + Risque projet
-            </button>
-            <button type="button" className={page.ghost} onClick={() => void create('RG-')}>
-              + Risque groupement
-            </button>
+            {scopes.map(s => (
+              <button
+                key={s.prefix}
+                type="button"
+                className={page.ghost}
+                onClick={() => void create(s.prefix)}
+              >
+                + Risque {s.name}
+              </button>
+            ))}
           </span>
         ) : null}
       </div>

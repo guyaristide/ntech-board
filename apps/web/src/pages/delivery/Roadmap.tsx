@@ -4,7 +4,8 @@ import {
   amount,
   progress,
   RELEASE_STATUSES,
-  VERSIONS,
+  OUT_OF_SCOPE,
+  versionsOf,
   type Release,
   type ReleaseStatus,
   type Sprint,
@@ -208,21 +209,25 @@ export function Roadmap() {
                 </span>
                 <span className={styles.versions}>
                   Couvre :
-                  {VERSIONS.filter(v => v !== 'Hors périmètre').map(v => (
-                    <label key={v} className={styles.inline}>
-                      <input
-                        type="checkbox"
-                        disabled={!canEdit}
-                        checked={r.versions.includes(v)}
-                        onChange={e =>
-                          delivery.updateRelease(r.id, {
-                            versions: e.target.checked ? [...r.versions, v] : r.versions.filter(x => x !== v),
-                          })
-                        }
-                      />
-                      <Tag value={v} />
-                    </label>
-                  ))}
+                  {versionsOf(settings)
+                    .filter(v => v !== OUT_OF_SCOPE)
+                    .map(v => (
+                      <label key={v} className={styles.inline}>
+                        <input
+                          type="checkbox"
+                          disabled={!canEdit}
+                          checked={r.versions.includes(v)}
+                          onChange={e =>
+                            delivery.updateRelease(r.id, {
+                              versions: e.target.checked
+                                ? [...r.versions, v]
+                                : r.versions.filter(x => x !== v),
+                            })
+                          }
+                        />
+                        <Tag value={v} />
+                      </label>
+                    ))}
                 </span>
                 <EditableText
                   variant="inline"

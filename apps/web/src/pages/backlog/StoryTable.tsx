@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PRIORITIES, STATUSES, targetLabel, VERSIONS } from '@board/shared';
+import { PRIORITIES, STATUSES, targetLabel, versionsOf } from '@board/shared';
 import { useWorkspace } from '../../model/store';
 import type { Story } from '@board/shared';
 import { PropertySelect } from '../../ui/PropertySelect';
@@ -31,6 +31,7 @@ export function StoryTable({
   compact?: boolean;
 }) {
   const update = useWorkspace(s => s.updateStory);
+  const settings = useWorkspace(s => s.settings);
   const workshops = useWorkspace(s => s.workshops).map(w => w.id);
   const columns = compact ? COLUMNS.filter(c => c.key !== 'epic') : COLUMNS;
   return (
@@ -92,7 +93,7 @@ export function StoryTable({
                 <PropertySelect
                   label="Version"
                   value={s.version}
-                  options={VERSIONS}
+                  options={versionsOf(settings)}
                   onChange={v => update(s.id, { version: v as Story['version'] })}
                 />
               </td>
