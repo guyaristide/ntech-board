@@ -227,6 +227,20 @@
   font-size: 12px;
 }
 
+.badgeButton {
+  padding: 1px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: none;
+  cursor: pointer;
+}
+
+.badgeButton:hover {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
 .empty {
   padding: 24px !important;
   color: var(--text-faint);

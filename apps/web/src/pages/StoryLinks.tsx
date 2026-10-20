@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { featureGroup, LINK_LABEL, LINK_TYPES, type LinkType, type Story } from '@board/shared';
+import { useDrawer } from '../model/drawer';
 import { similarStories } from '../model/similar';
 import { useCanEdit, useWorkspace } from '../model/store';
 import { StoryPicker } from '../ui/StoryPicker';
@@ -8,14 +9,23 @@ import { Tag } from '../ui/Tag';
 import page from './Page.module.css';
 import styles from '../ui/Relations.module.css';
 
-/** Une US citée dans une liste : identifiant, titre, statut. */
-function StoryRef({ story, id }: { story?: Story; id: string }) {
+/** Une US citée dans une liste : identifiant et titre ouvrent son aperçu dans le tiroir, statut. */
+function StoryRef({ story, id, from }: { story?: Story; id: string; from: string }) {
+  const open = useDrawer(s => s.open);
   return (
     <>
-      <Link to={`/us/${id}`} className={styles.code}>
-        {id}
+      <button type="button" className={styles.refOpen} title="Voir l’US liée" onClick={() => open(from, id)}>
+        <span className={styles.code}>{id}</span>
+        <span className={styles.refTitle}>{story ? story.title || 'Sans titre' : 'US supprimée'}</span>
+      </button>
+      <Link
+        to={`/us/${id}`}
+        className={styles.refGo}
+        title="Ouvrir la fiche"
+        aria-label={`Ouvrir la fiche ${id}`}
+      >
+        ↗
       </Link>
-      <span className={styles.refTitle}>{story ? story.title || 'Sans titre' : 'US supprimée'}</span>
       {story ? <Tag value={story.status} /> : null}
     </>
   );
@@ -49,7 +59,7 @@ export function StoryLinks({ story }: { story: Story }) {
               .filter(l => l.type === t)
               .map(l => (
                 <li key={l.story}>
-                  <StoryRef id={l.story} story={byId.get(l.story)} />
+                  <StoryRef id={l.story} story={byId.get(l.story)} from={story.id} />
                   {canEdit ? (
                     <span className={styles.rowActions}>
                       <select
@@ -86,7 +96,7 @@ export function StoryLinks({ story }: { story: Story }) {
           <ul className={styles.refs}>
             {group.map(id => (
               <li key={id}>
-                <StoryRef id={id} story={byId.get(id)} />
+                <StoryRef id={id} story={byId.get(id)} from={story.id} />
               </li>
             ))}
           </ul>
@@ -119,7 +129,7 @@ export function StoryLinks({ story }: { story: Story }) {
           <ul className={styles.refs}>
             {suggestions.map(({ story: s, score }) => (
               <li key={s.id}>
-                <StoryRef id={s.id} story={s} />
+                <StoryRef id={s.id} story={s} from={story.id} />
                 <span className={styles.score} title="Part des mots du titre et du besoin en commun">
                   {Math.round(score * 100)} %
                 </span>

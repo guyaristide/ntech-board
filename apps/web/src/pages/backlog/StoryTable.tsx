@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PRIORITIES, STATUSES, targetLabel, versionsOf } from '@board/shared';
+import { useDrawer } from '../../model/drawer';
 import { useWorkspace } from '../../model/store';
 import type { Story } from '@board/shared';
 import { PropertySelect } from '../../ui/PropertySelect';
@@ -31,6 +32,7 @@ export function StoryTable({
   compact?: boolean;
 }) {
   const update = useWorkspace(s => s.updateStory);
+  const openDrawer = useDrawer(s => s.open);
   const settings = useWorkspace(s => s.settings);
   const workshops = useWorkspace(s => s.workshops).map(w => w.id);
   const columns = compact ? COLUMNS.filter(c => c.key !== 'epic') : COLUMNS;
@@ -71,9 +73,14 @@ export function StoryTable({
                   </span>
                 ) : null}
                 {s.links.length ? (
-                  <span className={styles.badge} title={`Liée à ${s.links.map(l => l.story).join(', ')}`}>
+                  <button
+                    type="button"
+                    className={`${styles.badge} ${styles.badgeButton}`}
+                    title={`Voir les US liées : ${s.links.map(l => l.story).join(', ')}`}
+                    onClick={() => openDrawer(s.id, s.links[0].story)}
+                  >
                     ⛓ {s.links.length}
-                  </span>
+                  </button>
                 ) : null}
                 {s.targets.length ? (
                   <span className={styles.targets}>{s.targets.map(targetLabel).join(' · ')}</span>
