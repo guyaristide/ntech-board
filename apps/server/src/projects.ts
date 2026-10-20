@@ -1,4 +1,10 @@
-import type { Member, Role } from '@board/shared';
+import {
+  settingsTemplate,
+  withSettingsDefaults,
+  type Member,
+  type ProjectSettings,
+  type Role,
+} from '@board/shared';
 import { pool, tx } from './db';
 import { forgetProject } from './tenancy';
 
@@ -9,6 +15,27 @@ export async function createProject(slug: string, title: string, subtitle = '') 
   );
   forgetProject(slug);
   return rows[0].id;
+}
+
+/** Réglages d'un projet repris d'un autre (sans son contenu) : référentiels, workflow, types, versions. */
+export async function settingsFrom(slug: string): Promise<ProjectSettings> {
+  const { rows } = await pool.query<{ settings: Partial<ProjectSettings> }>(
+    'SELECT settings FROM projects WHERE slug = $1',
+    [slug],
+  );
+  if (!rows[0]) throw new Error(`Projet inconnu : ${slug}`);
+  return settingsTemplate(withSettingsDefaults(rows[0].settings));
+}
+
+/** Projets dont l'utilisateur peut reprendre les réglages : tous pour un super-administrateur, sinon ceux qu'il administre. */
+export async function templateProjects(userId: string, superadmin: boolean, except: string) {
+  const { rows } = await pool.query<{ slug: string; title: string }>(
+    `SELECT p.slug, p.title FROM projects p
+      WHERE p.id <> $3 AND ($2 OR EXISTS (SELECT 1 FROM memberships m WHERE m.project_id = p.id AND m.user_id = $1 AND m.role = 'admin'))
+      ORDER BY p.title`,
+    [userId, superadmin, except],
+  );
+  return rows;
 }
 
 export async function updateProject(id: string, slug: string, patch: { title?: string; subtitle?: string }) {

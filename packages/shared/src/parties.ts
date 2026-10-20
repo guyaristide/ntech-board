@@ -163,6 +163,22 @@ export const withSettingsDefaults = (s: Partial<ProjectSettings> | null | undefi
   },
 });
 
+/**
+ * Réglages repris d'un autre projet : tout, sauf ce qui n'a de sens que dans le projet d'origine
+ * (clé des tickets, organisations et membres nommés dans la visibilité de la Réalisation).
+ */
+export const settingsTemplate = (from: ProjectSettings): ProjectSettings => {
+  const s = withSettingsDefaults(from);
+  return {
+    ...s,
+    delivery: {
+      ...s.delivery,
+      key: '',
+      visibility: { ...s.delivery.visibility, organizations: [], allow: [], deny: [] },
+    },
+  };
+};
+
 /** Version des US écartées du périmètre : toujours proposée, en dernier. */
 export const OUT_OF_SCOPE = 'Hors périmètre';
 

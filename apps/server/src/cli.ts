@@ -15,7 +15,7 @@ import {
 import { parseRaci, parseRisks, type RawRaci, type RawRisks } from './importers/governance';
 import { parsePlanning, type RawPlanning } from './importers/planning';
 import type { RawStories } from './merge';
-import { addMember, createProject, listMembers, listProjects, projectIdOf } from './projects';
+import { addMember, createProject, listMembers, listProjects, projectIdOf, settingsFrom } from './projects';
 
 /**
  * Administration en ligne de commande (en local : npm run cli -- <commande> ;
@@ -23,7 +23,7 @@ import { addMember, createProject, listMembers, listProjects, projectIdOf } from
  */
 const HELP = `Commandes :
   migrate                                          Applique les migrations
-  project:create <slug> --title "…" [--subtitle "…"] [--admin email]
+  project:create <slug> --title "…" [--subtitle "…"] [--admin email] [--from <projet>]
   project:list
   member:add <slug> <email> [--role admin|editor|viewer] [--name "…"]
   member:list <slug>
@@ -43,6 +43,7 @@ const { positionals, values } = parseArgs({
     title: { type: 'string' },
     subtitle: { type: 'string' },
     admin: { type: 'string' },
+    from: { type: 'string' },
     role: { type: 'string', default: 'editor' },
     name: { type: 'string', default: '' },
   },
@@ -64,9 +65,14 @@ async function run() {
     case 'project:create': {
       const [slug] = args;
       if (!slug || !values.title) throw new Error('Usage : project:create <slug> --title "…"');
+      // --from : réglages et référentiels repris d'un projet existant, sans son contenu.
+      const template = values.from ? await settingsFrom(values.from) : null;
       const id = await createProject(slug, values.title, values.subtitle ?? '');
+      if (template) await pool.query('UPDATE projects SET settings = $2 WHERE id = $1', [id, template]);
       if (values.admin) await addMember(id, values.admin, 'admin');
-      console.log(`Projet « ${slug} » créé${values.admin ? `, administrateur ${values.admin}` : ''}.`);
+      console.log(
+        `Projet « ${slug} » créé${values.admin ? `, administrateur ${values.admin}` : ''}${template ? `, réglages repris de « ${values.from} »` : ''}.`,
+      );
       return;
     }
     case 'project:list':

@@ -6,6 +6,8 @@ import {
   nextCode,
   nextSessionCode,
   programmeOrder,
+  settingsTemplate,
+  withSettingsDefaults,
   burndown,
   forecast,
   mentionsOrganization,
@@ -175,4 +177,21 @@ test('programme : ordre par semaine puis par date, identifiants suivants', () =>
     nextSessionCode({ id: 'J5', sessions: [{ code: 'J5.1' }, { code: 'J5.3' }] as never }),
     'J5.4',
   );
+});
+
+test('réglages repris d’un autre projet : sans clé de tickets ni accès nominatifs', () => {
+  const from = withSettingsDefaults({
+    versions: ['Lot 1'],
+    delivery: {
+      ...DEFAULT_SETTINGS.delivery,
+      enabled: true,
+      key: 'ETO',
+      visibility: { roles: ['admin'], organizations: ['ORG-01'], allow: ['u1'], deny: ['u2'] },
+    },
+  });
+  const t = settingsTemplate(from);
+  assert.deepEqual(t.versions, ['Lot 1']);
+  assert.equal(t.delivery.enabled, true);
+  assert.equal(t.delivery.key, '');
+  assert.deepEqual(t.delivery.visibility, { roles: ['admin'], organizations: [], allow: [], deny: [] });
 });

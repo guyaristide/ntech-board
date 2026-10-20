@@ -14,8 +14,17 @@ import { parseRaci, parseRisks, type RawRaci, type RawRisks } from '../importers
 import { parsePlanning } from '../importers/planning';
 import { sendInvitation } from '../mail';
 import type { RawStories } from '../merge';
-import { addMember, adminCount, listMembers, removeMember, setRole, updateProject } from '../projects';
-import { getWorkspace } from '../repo';
+import {
+  addMember,
+  adminCount,
+  listMembers,
+  removeMember,
+  setRole,
+  settingsFrom,
+  templateProjects,
+  updateProject,
+} from '../projects';
+import { getWorkspace, saveSettings } from '../repo';
 import { saveUpload } from '../storage';
 
 /** Administration d'un projet : membres, invitations, imports, export. */
@@ -23,6 +32,23 @@ export const adminRoutes = new Hono<AppEnv>();
 adminRoutes.use('*', requireRole('admin'));
 
 adminRoutes.get('/members', async c => c.json(await listMembers(c.get('project').id)));
+
+/** Projets dont on peut reprendre les réglages : ceux que l'on administre (tous pour un super-administrateur). */
+adminRoutes.get('/templates', async c =>
+  c.json(await templateProjects(c.get('user')!.id, c.get('superadmin'), c.get('project').id)),
+);
+
+/** Reprend les réglages et référentiels d'un autre projet (sans son contenu) ; remplace ceux du projet. */
+adminRoutes.post('/settings/copy', async c => {
+  const input = z.object({ from: z.string().max(60) }).safeParse(await c.req.json().catch(() => null));
+  if (!input.success) return c.json({ error: 'invalid' }, 400);
+  const p = c.get('project');
+  const user = c.get('user')!;
+  const allowed = await templateProjects(user.id, c.get('superadmin'), p.id);
+  if (!allowed.some(x => x.slug === input.data.from)) return c.json({ error: 'forbidden' }, 403);
+  const settings = await settingsFrom(input.data.from);
+  return c.json(await saveSettings(p.id, user.id, settings, { copiedFrom: input.data.from }));
+});
 
 const Invite = z.object({
   email: z.email().max(200),

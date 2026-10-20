@@ -4,6 +4,7 @@ import { api, ApiError } from '../model/api';
 import { useIsAdmin, useWorkspace } from '../model/store';
 import { Avatar } from '../ui/Presence';
 import page from './Page.module.css';
+import { SettingsTemplate } from './SettingsTemplate';
 import styles from './Admin.module.css';
 
 const ERRORS: Record<string, string> = {
@@ -221,6 +222,8 @@ export function Admin() {
           Enregistrer
         </button>
       </form>
+
+      <SettingsTemplate />
 
       <h2 className={page.h2}>Imports</h2>
       <p className={page.faint}>
