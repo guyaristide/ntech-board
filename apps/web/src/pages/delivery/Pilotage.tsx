@@ -29,13 +29,14 @@ import { useBurndown } from './usePilotage';
 
 const pct = (done: number, total: number) => (total ? Math.round((done / total) * 100) : 0);
 
-export function Meter({ done, total }: { done: number; total: number }) {
+/** Barre d'avancement, avec son pourcentage sauf `bare` (le pourcentage est affiché ailleurs). */
+export function Meter({ done, total, bare }: { done: number; total: number; bare?: boolean }) {
   return (
-    <span className={styles.meter} title={`${pct(done, total)} % terminé`}>
+    <span className={styles.meter} data-empty={!total || undefined} title={`${pct(done, total)} % terminé`}>
       <span>
         <span style={{ width: `${pct(done, total)}%` }} />
       </span>
-      <span>{total ? `${pct(done, total)} %` : '—'}</span>
+      {bare ? null : <span>{total ? `${pct(done, total)} %` : '—'}</span>}
     </span>
   );
 }
@@ -164,7 +165,7 @@ export function Pilotage() {
           {active ? (
             <Link to={`/realisation/sprint/${active.id}`} className={styles.kpi}>
               <span className={styles.kpiLabel}>{active.name}</span>
-              <span className={styles.kpiValue}>{pct(sum(ownDone), sum(own))} %</span>
+              <span className={styles.kpiValue}>{pct(sum(ownDone), sum(own))} %</span>
               <span className={page.faint}>
                 {count
                   ? `${ownDone.length}/${own.length} tickets`
@@ -183,7 +184,7 @@ export function Pilotage() {
             <Link to="/realisation/versions" className={styles.kpi}>
               <span className={styles.kpiLabel}>{current.name}</span>
               <span className={styles.kpiValue}>
-                {pct(count ? currentP.doneCount : currentP.done, count ? currentP.count : currentP.total)} %
+                {pct(count ? currentP.doneCount : currentP.done, count ? currentP.count : currentP.total)} %
               </span>
               <span className={currentF.late ? styles.late : page.faint}>
                 {current.end ? `Visée ${shortDay(current.end)}` : 'Sans date visée'}
@@ -194,7 +195,7 @@ export function Pilotage() {
           <div className={styles.kpi}>
             <span className={styles.kpiLabel}>Vélocité moyenne</span>
             <span className={styles.kpiValue}>
-              {v.average === null ? '—' : v.average.toFixed(v.average % 1 ? 1 : 0)}
+              {v.average === null ? '—' : v.average.toLocaleString('fr-FR', { maximumFractionDigits: 1 })}
             </span>
             <span className={page.faint}>
               {v.average === null

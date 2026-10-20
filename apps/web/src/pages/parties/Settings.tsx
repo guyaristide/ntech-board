@@ -41,7 +41,8 @@ function EditableList<T extends { id: string; name: string }>({
   add: (name: string) => T;
 }) {
   const [draft, setDraft] = useState('');
-  const set = (i: number, patch: Partial<T>) => onChange(items.map((x, j) => (j === i ? { ...x, ...patch } : x)));
+  const set = (i: number, patch: Partial<T>) =>
+    onChange(items.map((x, j) => (j === i ? { ...x, ...patch } : x)));
   const move = (i: number, d: number) => {
     const next = [...items];
     [next[i], next[i + d]] = [next[i + d], next[i]];
@@ -51,15 +52,37 @@ function EditableList<T extends { id: string; name: string }>({
     <div className={styles.list}>
       {items.map((item, i) => (
         <div key={item.id} className={styles.listRow}>
-          <input type="text" value={item.name} aria-label="Libellé" onChange={e => set(i, { name: e.target.value } as Partial<T>)} />
+          <input
+            type="text"
+            value={item.name}
+            aria-label="Libellé"
+            onChange={e => set(i, { name: e.target.value } as Partial<T>)}
+          />
           {extra?.(item, patch => set(i, patch))}
-          <button type="button" className={page.ghost} disabled={!i} onClick={() => move(i, -1)} aria-label="Monter">
+          <button
+            type="button"
+            className={page.ghost}
+            disabled={!i}
+            onClick={() => move(i, -1)}
+            aria-label="Monter"
+          >
             ↑
           </button>
-          <button type="button" className={page.ghost} disabled={i === items.length - 1} onClick={() => move(i, 1)} aria-label="Descendre">
+          <button
+            type="button"
+            className={page.ghost}
+            disabled={i === items.length - 1}
+            onClick={() => move(i, 1)}
+            aria-label="Descendre"
+          >
             ↓
           </button>
-          <button type="button" className={`${page.ghost} ${page.danger}`} onClick={() => onChange(items.filter((_, j) => j !== i))} aria-label="Retirer">
+          <button
+            type="button"
+            className={`${page.ghost} ${page.danger}`}
+            onClick={() => onChange(items.filter((_, j) => j !== i))}
+            aria-label="Retirer"
+          >
             ✕
           </button>
         </div>
@@ -73,7 +96,13 @@ function EditableList<T extends { id: string; name: string }>({
           setDraft('');
         }}
       >
-        <input type="text" value={draft} placeholder="Ajouter…" aria-label="Ajouter" onChange={e => setDraft(e.target.value)} />
+        <input
+          type="text"
+          value={draft}
+          placeholder="Ajouter…"
+          aria-label="Ajouter"
+          onChange={e => setDraft(e.target.value)}
+        />
         <button type="submit" className={page.ghost}>
           Ajouter
         </button>
@@ -99,7 +128,8 @@ export function Settings() {
   if (!admin) return <div className={page.page}>Réservé aux administrateurs du projet.</div>;
 
   const d = draft.delivery;
-  const setD = (patch: Partial<DeliverySettings>) => setDraft(s => ({ ...s, delivery: { ...s.delivery, ...patch } }));
+  const setD = (patch: Partial<DeliverySettings>) =>
+    setDraft(s => ({ ...s, delivery: { ...s.delivery, ...patch } }));
   const v = d.visibility;
   const setV = (patch: Partial<DeliverySettings['visibility']>) => setD({ visibility: { ...v, ...patch } });
   const toggle = (list: string[], value: string, on: boolean) =>
@@ -133,7 +163,12 @@ export function Settings() {
           <label htmlFor="delivery-on">Activée</label>
           <span className={styles.checks}>
             <label>
-              <input id="delivery-on" type="checkbox" checked={d.enabled} onChange={e => setD({ enabled: e.target.checked })} />
+              <input
+                id="delivery-on"
+                type="checkbox"
+                checked={d.enabled}
+                onChange={e => setD({ enabled: e.target.checked })}
+              />
               Suivi des sprints et des tickets dans ce tableau
             </label>
           </span>
@@ -147,10 +182,16 @@ export function Settings() {
               placeholder="ETO"
               onChange={e => setD({ key: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '') })}
             />
-            <p className={styles.hint}>Préfixe des tickets : {d.key || 'ETO'}-1, {d.key || 'ETO'}-2…</p>
+            <p className={styles.hint}>
+              Préfixe des tickets : {d.key || 'ETO'}-1, {d.key || 'ETO'}-2…
+            </p>
           </span>
           <label htmlFor="delivery-weeks">Durée des sprints</label>
-          <select id="delivery-weeks" value={d.sprintWeeks} onChange={e => setD({ sprintWeeks: Number(e.target.value) })}>
+          <select
+            id="delivery-weeks"
+            value={d.sprintWeeks}
+            onChange={e => setD({ sprintWeeks: Number(e.target.value) })}
+          >
             {[1, 2, 3, 4, 5, 6, 7, 8].map(n => (
               <option key={n} value={n}>
                 {n} semaine{n > 1 ? 's' : ''} (modifiable sprint par sprint)
@@ -158,7 +199,11 @@ export function Settings() {
             ))}
           </select>
           <label htmlFor="delivery-estimation">Estimation</label>
-          <select id="delivery-estimation" value={d.estimation} onChange={e => setD({ estimation: e.target.value as Estimation })}>
+          <select
+            id="delivery-estimation"
+            value={d.estimation}
+            onChange={e => setD({ estimation: e.target.value as Estimation })}
+          >
             {Object.entries(ESTIMATION_LABEL).map(([k, label]) => (
               <option key={k} value={k}>
                 {label}
@@ -217,9 +262,20 @@ export function Settings() {
         <EditableList
           items={d.workflow}
           onChange={workflow => setD({ workflow })}
-          add={name => ({ id: uniqueId(name, d.workflow.map(s => s.id)), name, category: 'doing' as StepCategory })}
+          add={name => ({
+            id: uniqueId(
+              name,
+              d.workflow.map(s => s.id),
+            ),
+            name,
+            category: 'doing' as StepCategory,
+          })}
           extra={(step, set) => (
-            <select value={step.category} aria-label="Catégorie" onChange={e => set({ category: e.target.value as StepCategory })}>
+            <select
+              value={step.category}
+              aria-label="Catégorie"
+              onChange={e => set({ category: e.target.value as StepCategory })}
+            >
               {Object.entries(STEP_CATEGORY_LABEL).map(([k, label]) => (
                 <option key={k} value={k}>
                   {label}
@@ -228,7 +284,9 @@ export function Settings() {
             </select>
           )}
         />
-        <p className={styles.hint}>La catégorie sert aux indicateurs : ce qui reste à faire, en cours, terminé.</p>
+        <p className={styles.hint}>
+          La catégorie sert aux indicateurs : ce qui reste à faire, en cours, terminé.
+        </p>
       </section>
 
       <section className={styles.section}>
@@ -236,7 +294,13 @@ export function Settings() {
         <EditableList
           items={d.ticketTypes}
           onChange={ticketTypes => setD({ ticketTypes })}
-          add={name => ({ id: uniqueId(name, d.ticketTypes.map(t => t.id)), name })}
+          add={name => ({
+            id: uniqueId(
+              name,
+              d.ticketTypes.map(t => t.id),
+            ),
+            name,
+          })}
         />
       </section>
 
@@ -245,10 +309,17 @@ export function Settings() {
         <EditableList
           items={d.readiness}
           onChange={readiness => setD({ readiness })}
-          add={name => ({ id: uniqueId(name, d.readiness.map(c => c.id)), name })}
+          add={name => ({
+            id: uniqueId(
+              name,
+              d.readiness.map(c => c.id),
+            ),
+            name,
+          })}
         />
         <p className={styles.hint}>
-          Ce qu’un ticket doit remplir avant d’entrer dans un sprint ; il doit aussi être estimé si le projet estime.
+          Ce qu’un ticket doit remplir avant d’entrer dans un sprint ; il doit aussi être estimé si le projet
+          estime.
         </p>
       </section>
 
@@ -256,12 +327,15 @@ export function Settings() {
         <h2 className={page.h2}>Types d’organisations</h2>
         <EditableList
           items={draft.organizationTypes.map(name => ({ id: name, name }))}
-          onChange={list => setDraft(s => ({ ...s, organizationTypes: list.map(x => x.name.trim()).filter(Boolean) }))}
+          onChange={list =>
+            setDraft(s => ({ ...s, organizationTypes: list.map(x => x.name.trim()).filter(Boolean) }))
+          }
           add={name => ({ id: name, name })}
         />
       </section>
 
-      <p className={page.actions}>
+      <p className={styles.saveBar}>
+        {dirty ? <span className={page.faint}>Modifications non enregistrées</span> : null}
         <button type="button" className={page.ghost} disabled={!dirty} onClick={() => setDraft(ws.settings)}>
           Annuler
         </button>

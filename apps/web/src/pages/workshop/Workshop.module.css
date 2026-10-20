@@ -230,6 +230,15 @@
   margin-left: 14px;
 }
 
+@media (max-width: 720px) {
+  .toggle + .toggle {
+    margin-left: 0;
+  }
+  .toggle {
+    display: block;
+  }
+}
+
 .refs {
   display: flex;
   flex-direction: column;

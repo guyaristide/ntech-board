@@ -34,14 +34,14 @@ export function RaciMatrix({ phase, compare }: { phase: Phase; compare: Phase | 
       <div className={backlog.tableWrap}>
         <table
           className={`${backlog.table} ${styles.matrix}`}
-          style={{ minWidth: 520 + phase.actors.length * 62 }}
+          style={{ minWidth: 520 + phase.actors.length * 78 }}
         >
           <colgroup>
             <col style={{ width: 52 }} />
             <col style={{ width: 260 }} />
             <col style={{ width: 200 }} />
             {phase.actors.map(a => (
-              <col key={a.id} style={{ width: 62 }} />
+              <col key={a.id} style={{ width: 78 }} />
             ))}
             <col style={{ width: 96 }} />
             {canEdit ? <col style={{ width: 64 }} /> : null}

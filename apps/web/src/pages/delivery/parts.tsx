@@ -12,7 +12,11 @@ import styles from './Delivery.module.css';
 /** « lun. 19 oct. » */
 export const shortDay = (iso: string | null) =>
   iso
-    ? new Date(`${iso}T12:00:00`).toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' })
+    ? new Date(`${iso}T12:00:00`).toLocaleDateString('fr-FR', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+      })
     : '—';
 export const period = (s: { start: string | null; end: string | null }) =>
   s.start || s.end ? `${shortDay(s.start)} → ${shortDay(s.end)}` : 'Dates à fixer';
@@ -20,11 +24,16 @@ export const period = (s: { start: string | null; end: string | null }) =>
 /** Sprint en cours d'abord, puis les sprints prévus par date ; les sprints clos à la fin. */
 export const sprintOrder = (a: Sprint, b: Sprint) => {
   const rank = { active: 0, planned: 1, closed: 2 };
-  return rank[a.status] - rank[b.status] || (a.start ?? '9').localeCompare(b.start ?? '9');
+  // Prévus : le plus proche d'abord ; clos : le plus récent d'abord.
+  const byDate = (a.start ?? '9').localeCompare(b.start ?? '9');
+  return rank[a.status] - rank[b.status] || (a.status === 'closed' ? -byDate : byDate);
 };
 
 export const SprintTag = ({ sprint }: { sprint: Sprint }) => (
-  <Tag value={SPRINT_STATUS_LABEL[sprint.status]} tone={sprint.status === 'active' ? 'blue' : sprint.status === 'closed' ? 'green' : 'gray'} />
+  <Tag
+    value={SPRINT_STATUS_LABEL[sprint.status]}
+    tone={sprint.status === 'active' ? 'blue' : sprint.status === 'closed' ? 'green' : 'gray'}
+  />
 );
 
 /** Partie réservée : message pour qui ne la voit pas (réglages du projet). */
@@ -124,7 +133,9 @@ export function Estimate({ ticket }: { ticket: Ticket }) {
       aria-label={`Estimation de ${ticket.id}`}
       placeholder="?"
       value={ticket.estimate ?? ''}
-      onChange={e => delivery.updateTicket(ticket.id, { estimate: e.target.value === '' ? null : Number(e.target.value) })}
+      onChange={e =>
+        delivery.updateTicket(ticket.id, { estimate: e.target.value === '' ? null : Number(e.target.value) })
+      }
     />
   );
 }

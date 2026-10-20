@@ -16,6 +16,8 @@ import styles from '../Overview.module.css';
 import { shortDay } from './parts';
 import { Meter } from './Pilotage';
 
+const pct = (done: number, total: number) => `${total ? Math.round((done / total) * 100) : 0} %`;
+
 /** Accueil, partie Réalisation : sprint en cours, version visée, mes tickets, recette. */
 export function HomeDelivery() {
   const sees = useSeesDelivery();
@@ -38,15 +40,18 @@ export function HomeDelivery() {
   const tests = testSummary(testing.flatMap(c => casesOf(c, stories).map(x => x.result?.status ?? '')));
   return (
     <>
-      <h2 className={page.h2}>
-        Réalisation · <Link to="/realisation/pilotage">pilotage</Link>
-      </h2>
+      <div className={styles.sectionHead}>
+        <h2 className={page.h2}>Réalisation</h2>
+        <Link to="/realisation/pilotage" className={page.ghost}>
+          Voir le pilotage →
+        </Link>
+      </div>
       <div className={styles.cards}>
         {active ? (
           <Link to={`/realisation/sprint/${active.id}`} className={styles.card}>
-            <span className={styles.cardCode}>Sprint en cours</span>
-            <strong>{active.name}</strong>
-            <Meter done={est(own.filter(t => isDone(settings, t)))} total={est(own)} />
+            <span className={styles.cardCode}>Sprint en cours · {active.name}</span>
+            <span className={styles.stat}>{pct(est(own.filter(t => isDone(settings, t))), est(own))}</span>
+            <Meter bare done={est(own.filter(t => isDone(settings, t)))} total={est(own)} />
             <span className={page.faint}>
               {workdaysLeft(active.end, undefined, active.start)} jours ouvrés restants
             </span>
@@ -54,9 +59,11 @@ export function HomeDelivery() {
         ) : null}
         {current && p && f ? (
           <Link to="/realisation/versions" className={styles.card}>
-            <span className={styles.cardCode}>Version visée</span>
-            <strong>{current.name}</strong>
-            <Meter done={count ? p.doneCount : p.done} total={count ? p.count : p.total} />
+            <span className={styles.cardCode}>Version visée · {current.name}</span>
+            <span className={styles.stat}>
+              {pct(count ? p.doneCount : p.done, count ? p.count : p.total)}
+            </span>
+            <Meter bare done={count ? p.doneCount : p.done} total={count ? p.count : p.total} />
             <span className={page.faint}>
               {current.end ? `Livraison ${shortDay(current.end)}` : 'Sans date'}
               {f.date ? `, prévue ${shortDay(f.date)}` : ''}

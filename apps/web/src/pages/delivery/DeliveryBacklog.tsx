@@ -59,7 +59,11 @@ function Lane({ sprint, tickets }: { sprint: Sprint | null; tickets: Ticket[] })
         )}
         <span className={styles.laneLoad}>
           <LoadBar value={total} max={sprint?.capacity ?? null} label="Charge et capacité" />
-          {unestimated ? <span className={styles.missing}>{unestimated} non estimé{unestimated > 1 ? 's' : ''}</span> : null}
+          {unestimated ? (
+            <span className={styles.missing}>
+              {unestimated} non estimé{unestimated > 1 ? 's' : ''}
+            </span>
+          ) : null}
         </span>
       </header>
       {list.map(t => (
@@ -75,7 +79,9 @@ function Lane({ sprint, tickets }: { sprint: Sprint | null; tickets: Ticket[] })
       ))}
       {!list.length ? (
         <p className={styles.emptyLane}>
-          {sprint ? 'Glissez ici des tickets du backlog, ou choisissez ce sprint dans la colonne Sprint.' : 'Le backlog est vide.'}
+          {sprint
+            ? 'Glissez ici des tickets du backlog, ou choisissez ce sprint dans la colonne Sprint.'
+            : 'Le backlog est vide.'}
         </p>
       ) : null}
     </section>
@@ -115,7 +121,12 @@ export function DeliveryBacklog() {
           le reclasser ou le planifier dans un sprint.
         </p>
         <div className={backlog.toolbar}>
-          <select className={styles.filter} value={release} onChange={e => setRelease(e.target.value)} aria-label="Version">
+          <select
+            className={styles.filter}
+            value={release}
+            onChange={e => setRelease(e.target.value)}
+            aria-label="Version"
+          >
             <option value="">Toutes les versions</option>
             {releases.map(r => (
               <option key={r.id} value={r.id}>
@@ -125,6 +136,7 @@ export function DeliveryBacklog() {
           </select>
           <input
             className={backlog.search}
+            style={{ marginLeft: 0 }}
             type="search"
             placeholder="Rechercher un ticket"
             value={q}
@@ -164,7 +176,12 @@ export function DeliveryBacklog() {
         {open.map(s => (
           <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} />
         ))}
-        <Lane sprint={null} tickets={shown.filter(t => !t.sprint || (!inClosed.has(t.sprint) && !sprints.some(s => s.id === t.sprint)))} />
+        <Lane
+          sprint={null}
+          tickets={shown.filter(
+            t => !t.sprint || (!inClosed.has(t.sprint) && !sprints.some(s => s.id === t.sprint)),
+          )}
+        />
         {sprints.some(s => s.status === 'closed') ? (
           <p className={page.faint}>
             Les sprints clos et leurs tickets sont dans <Link to="/realisation/sprints">Sprints</Link>.

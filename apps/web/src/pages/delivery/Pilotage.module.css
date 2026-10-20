@@ -51,7 +51,7 @@
   fill: var(--accent);
 }
 .average {
-  stroke: #e9a23b;
+  stroke: var(--warn);
   stroke-width: 1.5;
   stroke-dasharray: 6 4;
 }
@@ -81,12 +81,12 @@
   background: repeating-linear-gradient(90deg, var(--text-faint) 0 4px, transparent 4px 7px);
 }
 .legend span[data-k='average']::before {
-  background: repeating-linear-gradient(90deg, #e9a23b 0 5px, transparent 5px 8px);
+  background: repeating-linear-gradient(90deg, var(--warn) 0 5px, transparent 5px 8px);
 }
 
 .kpis {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 12px;
   margin: 12px 0 20px;
 }
@@ -109,6 +109,7 @@ a.kpi:hover {
 }
 .kpiValue {
   font-size: 26px;
+  font-variant-numeric: tabular-nums;
   font-weight: 700;
   line-height: 1.1;
 }
@@ -118,6 +119,14 @@ a.kpi:hover {
 
 .wrap {
   overflow-x: auto;
+  /* Ombres de défilement : visibles seulement quand il reste du contenu de ce côté. */
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent) left / 32px 100% no-repeat local,
+    linear-gradient(to left, var(--bg) 30%, transparent) right / 32px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.14), transparent) left / 12px 100% no-repeat
+      scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.14), transparent) right / 12px 100% no-repeat
+      scroll;
 }
 .table {
   width: 100%;
@@ -132,6 +141,9 @@ a.kpi:hover {
   font-weight: 500;
   text-align: left;
   white-space: nowrap;
+}
+.table td:first-child {
+  min-width: 200px;
 }
 .table td {
   padding: 6px 8px;
@@ -162,7 +174,7 @@ a.kpi:hover {
 .meter > span:first-child > span {
   display: block;
   height: 100%;
-  background: #2f9e6e;
+  background: var(--ok);
 }
 .meter > span:last-child {
   min-width: 38px;
@@ -189,7 +201,7 @@ a.kpi:hover {
   font-size: 13px;
 }
 .tab[data-on] {
-  border-color: rgba(35, 131, 226, 0.5);
+  border-color: var(--accent-line);
   background: var(--accent-soft);
   color: var(--accent);
 }
@@ -200,11 +212,19 @@ a.kpi:hover {
   gap: 8px;
 }
 .report select {
-  padding: 3px 6px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg);
-  color: var(--text);
-  font: inherit;
+  min-height: 28px;
   font-size: 13px;
+}
+
+/* Téléphone : le graphique est réduit, ses textes sont agrandis dans le viewBox. */
+@media (max-width: 720px) {
+  .axis,
+  .value {
+    font-size: 16px;
+  }
+}
+
+/* Rien à mesurer : pas de barre vide, qu'on lirait comme 0 % d'avancement. */
+.meter[data-empty] > span:first-child {
+  visibility: hidden;
 }

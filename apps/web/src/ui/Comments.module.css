@@ -73,7 +73,8 @@
 }
 
 .send:disabled {
-  opacity: 0.4;
+  background: var(--bg-active);
+  color: var(--text-faint);
   cursor: default;
 }
 

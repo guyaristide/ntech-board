@@ -94,7 +94,7 @@ export function StoryPage() {
       />,
     ],
     [
-      '👤',
+      '○',
       'Acteur',
       <PropertySelect
         label="Acteur"
@@ -261,6 +261,7 @@ export function StoryPage() {
         onChange={description => set({ description })}
       />
 
+      <h3 className={page.h3}>Commentaires{story.comments.length ? ` (${story.comments.length})` : ''}</h3>
       <Comments
         items={story.comments}
         onAdd={text => void ws.commentStory(story.id, text)}

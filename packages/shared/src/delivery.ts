@@ -126,12 +126,13 @@ export const isDeliveryKind = (kind: string): kind is DeliveryKind =>
 /** Unité courte d'estimation : « 5 pts », « 3 j », « 6 h ». */
 export const UNIT: Record<string, string> = { points: 'pts', days: 'j', hours: 'h', none: '' };
 export const amount = (n: number, settings: ProjectSettings) =>
-  `${Number.isInteger(n) ? n : n.toFixed(1)} ${UNIT[settings.delivery.estimation]}`.trim();
+  `${n.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} ${UNIT[settings.delivery.estimation]}`.trim();
 
 /** Catégorie d'une étape : à faire, en cours, terminé (première étape si l'identifiant est inconnu). */
 export const stepOf = (settings: ProjectSettings, status: string) =>
   settings.delivery.workflow.find(s => s.id === status) ?? settings.delivery.workflow[0];
-export const isDone = (settings: ProjectSettings, t: Ticket) => stepOf(settings, t.status)?.category === 'done';
+export const isDone = (settings: ProjectSettings, t: Ticket) =>
+  stepOf(settings, t.status)?.category === 'done';
 
 /** Ticket prêt : tous les critères cochés, et estimé si le projet estime. */
 export const isReady = (settings: ProjectSettings, t: Ticket) =>
@@ -276,14 +277,24 @@ export const hasVerdicts = (mode: CampaignMode) => mode === 'client' || mode ===
 /** Bilan d'une liste de résultats : nombre de cas par résultat, et cas non encore passés. */
 export function testSummary(results: TestStatus[]) {
   const count = (s: TestStatus) => results.filter(r => r === s).length;
-  return { total: results.length, ok: count('ok'), ko: count('ko'), reserve: count('reserve'), na: count('na'), todo: count('') };
+  return {
+    total: results.length,
+    ok: count('ok'),
+    ko: count('ko'),
+    reserve: count('reserve'),
+    na: count('na'),
+    todo: count(''),
+  };
 }
 
 /**
  * Cas de test d'une campagne : les critères d'acceptation des US du périmètre, avec leur résultat.
  * Un critère ajouté après le lancement apparaît comme non passé ; un critère supprimé disparaît.
  */
-export function casesOf(campaign: Campaign, stories: { id: string; acceptance: { id: string; text: string }[] }[]) {
+export function casesOf(
+  campaign: Campaign,
+  stories: { id: string; acceptance: { id: string; text: string }[] }[],
+) {
   const byId = new Map(stories.map(s => [s.id, s]));
   return campaign.scope.flatMap(id =>
     (byId.get(id)?.acceptance ?? []).map(c => ({

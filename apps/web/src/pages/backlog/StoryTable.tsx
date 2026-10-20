@@ -8,14 +8,14 @@ import type { SortKey } from './filters';
 import styles from './Backlog.module.css';
 
 const COLUMNS: { key: SortKey; label: string; width?: string }[] = [
-  { key: 'id', label: 'ID', width: '120px' },
+  { key: 'id', label: 'ID', width: '112px' },
   { key: 'title', label: 'Titre' },
-  { key: 'actor', label: 'Acteur', width: '170px' },
-  { key: 'epic', label: 'Épique', width: '90px' },
-  { key: 'version', label: 'Version', width: '120px' },
-  { key: 'workshop', label: 'Atelier', width: '90px' },
-  { key: 'priority', label: 'Priorité', width: '100px' },
-  { key: 'status', label: 'Statut', width: '130px' },
+  { key: 'actor', label: 'Acteur', width: '150px' },
+  { key: 'epic', label: 'Épique', width: '70px' },
+  { key: 'version', label: 'Version', width: '86px' },
+  { key: 'workshop', label: 'Atelier', width: '68px' },
+  { key: 'priority', label: 'Priorité', width: '88px' },
+  { key: 'status', label: 'Statut', width: '112px' },
 ];
 
 /** Vue tableau du backlog : tri par colonne, propriétés modifiables sur place. */

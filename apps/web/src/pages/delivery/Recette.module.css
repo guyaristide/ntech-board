@@ -3,7 +3,9 @@
 .select,
 .comment,
 .add input {
+  min-width: 0;
   max-width: 100%;
+  min-height: 28px;
   padding: 3px 6px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -18,8 +20,9 @@
   opacity: 1;
 }
 .inline {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
+  max-width: 100%;
   align-items: center;
   gap: 6px;
 }
@@ -47,6 +50,8 @@
   font-size: 13px;
 }
 .chip button {
+  min-width: 20px;
+  min-height: 20px;
   border: 0;
   background: none;
   color: var(--text-faint);
@@ -71,13 +76,13 @@
   background: var(--bg-active);
 }
 .testBar span[data-value='ok'] {
-  background: #2f9e6e;
+  background: var(--ok);
 }
 .testBar span[data-value='reserve'] {
-  background: #e9a23b;
+  background: var(--warn);
 }
 .testBar span[data-value='ko'] {
-  background: var(--danger);
+  background: var(--ko);
 }
 .testBar span[data-value='na'] {
   background: var(--line-strong);
@@ -99,7 +104,7 @@
   font-size: 13px;
 }
 .filter[data-on] {
-  border-color: rgba(35, 131, 226, 0.5);
+  border-color: var(--accent-line);
   background: var(--accent-soft);
   color: var(--accent);
 }
@@ -141,6 +146,8 @@
 }
 .verdict {
   display: inline-flex;
+  flex: 1 1 320px;
+  justify-content: flex-end;
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
@@ -158,7 +165,7 @@
 
 .case {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(140px, 260px) 110px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(180px, 1.2fr) 112px;
   gap: 8px;
   align-items: center;
   padding: 6px 10px;
@@ -169,13 +176,13 @@
   border-bottom: 0;
 }
 .case[data-status='ko'] {
-  box-shadow: inset 3px 0 0 var(--danger);
+  box-shadow: inset 3px 0 0 var(--ko);
 }
 .case[data-status='reserve'] {
-  box-shadow: inset 3px 0 0 #e9a23b;
+  box-shadow: inset 3px 0 0 var(--warn);
 }
 .case[data-status='ok'] {
-  box-shadow: inset 3px 0 0 #2f9e6e;
+  box-shadow: inset 3px 0 0 var(--ok);
 }
 .criterion {
   min-width: 0;
@@ -204,19 +211,19 @@
   cursor: default;
 }
 .result[aria-pressed='true'][data-value='ok'] {
-  border-color: #2f9e6e;
-  background: #2f9e6e;
+  border-color: var(--ok);
+  background: var(--ok);
   color: #fff;
 }
 .result[aria-pressed='true'][data-value='ko'] {
-  border-color: var(--danger);
-  background: var(--danger);
+  border-color: var(--ko);
+  background: var(--ko);
   color: #fff;
 }
 .result[aria-pressed='true'][data-value='reserve'] {
-  border-color: #e9a23b;
-  background: #e9a23b;
-  color: #fff;
+  border-color: var(--warn);
+  background: var(--warn);
+  color: var(--on-warn);
 }
 .result[aria-pressed='true'][data-value='na'] {
   background: var(--bg-active);
@@ -227,6 +234,7 @@
 }
 .follow {
   display: inline-flex;
+  justify-content: flex-end;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
@@ -243,5 +251,34 @@
   .comment {
     grid-column: 1 / -1;
     grid-row: 3;
+  }
+}
+
+.verdict .comment {
+  flex: 1 1 200px;
+  max-width: 340px;
+}
+.nowrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Tactile : boutons de résultat et de retrait d'au moins 36 px. */
+@media (pointer: coarse) {
+  .result {
+    min-width: 48px;
+    min-height: 36px;
+  }
+  .chip button {
+    min-width: 32px;
+    min-height: 32px;
+  }
+  .select,
+  .comment,
+  .add input {
+    min-height: 36px;
+    font-size: 16px;
   }
 }

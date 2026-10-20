@@ -70,7 +70,9 @@ export function WorkshopPage() {
       <p className={page.lead}>{longDate(w.date)}</p>
 
       <div className={page.props}>
-        <span className={page.propLabel}>◉ Statut du PV</span>
+        <span className={page.propLabel}>
+          <span aria-hidden="true">◉</span> Statut du PV
+        </span>
         <div className={page.propValue}>
           <PropertySelect
             label="Statut du PV"
@@ -81,7 +83,9 @@ export function WorkshopPage() {
         </div>
         {w.pvDue ? (
           <>
-            <span className={page.propLabel}>✉ Échéances</span>
+            <span className={page.propLabel}>
+              <span aria-hidden="true">✉︎</span> Échéances
+            </span>
             <div className={page.propText}>
               PV le {longDate(w.pvDue)} · livrable à SIVIS le {longDate(w.deliverableDue)} · validation
               attendue le {longDate(w.validationDue)}
@@ -90,7 +94,9 @@ export function WorkshopPage() {
         ) : null}
         {w.prep.length ? (
           <>
-            <span className={page.propLabel}>? Questionnaires</span>
+            <span className={page.propLabel}>
+              <span aria-hidden="true">?</span> Questionnaires
+            </span>
             <div className={page.propText}>
               {w.prep.map(p => (
                 <div key={p.tab}>
@@ -101,11 +107,15 @@ export function WorkshopPage() {
           </>
         ) : w.questionnaire ? (
           <>
-            <span className={page.propLabel}>? Questionnaire</span>
+            <span className={page.propLabel}>
+              <span aria-hidden="true">?</span> Questionnaire
+            </span>
             <div className={page.propText}>{w.questionnaire}</div>
           </>
         ) : null}
-        <span className={page.propLabel}>✓ Points tranchés</span>
+        <span className={page.propLabel}>
+          <span aria-hidden="true">✓</span> Points tranchés
+        </span>
         <div className={page.propText}>
           {settled}/{questions.length}
         </div>

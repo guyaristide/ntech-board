@@ -41,11 +41,11 @@
   margin-left: auto;
   width: 220px;
   max-width: 100%;
-  padding: 4px 8px;
+  min-height: 28px;
+  padding: 3px 8px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   background: transparent;
-  outline: none;
 }
 
 .search:focus {
@@ -64,6 +64,7 @@
 }
 
 .filter {
+  min-height: 28px;
   padding: 2px 10px;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
@@ -78,7 +79,7 @@
 }
 
 .filter[data-on] {
-  border-color: rgba(35, 131, 226, 0.5);
+  border-color: var(--accent-line);
   background: var(--accent-soft);
   color: var(--accent);
 }
@@ -143,6 +144,14 @@
 
 .tableWrap {
   overflow-x: auto;
+  /* Ombres de défilement : visibles seulement quand il reste du contenu de ce côté. */
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent) left / 32px 100% no-repeat local,
+    linear-gradient(to left, var(--bg) 30%, transparent) right / 32px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.14), transparent) left / 12px 100% no-repeat
+      scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.14), transparent) right / 12px 100% no-repeat
+      scroll;
 }
 
 .table {
@@ -155,11 +164,18 @@
 .table th,
 .table td {
   height: 36px;
-  padding: 0 6px;
+  padding: 4px 6px;
   border-bottom: 1px solid var(--line);
   border-right: 1px solid var(--line);
   vertical-align: middle;
   text-align: left;
+}
+
+.table th {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .table th:last-child,
@@ -287,6 +303,9 @@
     max-width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
+    /* Fondu à droite : des onglets restent à faire défiler. */
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+    padding-right: 24px;
   }
 
   .view {
@@ -321,4 +340,16 @@
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Tactile : cibles de 36 px, police de 16 px dans les champs (pas de zoom sur iPhone). */
+@media (pointer: coarse) {
+  .filter,
+  .view {
+    min-height: 36px;
+  }
+  .search {
+    min-height: 36px;
+    font-size: 16px;
+  }
 }

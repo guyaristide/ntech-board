@@ -18,8 +18,8 @@
   font-size: 14px;
 }
 .create input {
-  flex: 1;
-  min-width: 200px;
+  flex: 1 1 220px;
+  min-width: 0;
   max-width: 360px;
 }
 .secret {
@@ -33,14 +33,12 @@
   margin: 0 0 8px;
 }
 .code {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  position: relative;
   margin: 6px 0 14px;
 }
 .code pre {
   margin: 0;
-  padding: 10px 12px;
+  padding: 10px 84px 10px 12px;
   overflow-x: auto;
   border-radius: 6px;
   background: var(--bg-subtle);
@@ -50,13 +48,33 @@
   white-space: pre;
 }
 .code button {
-  align-self: flex-end;
-  order: -1;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--bg-subtle);
+}
+@media (max-width: 720px) {
+  /* Le bouton passe au-dessus du code, sans le recouvrir. */
+  .code pre {
+    padding: 40px 12px 10px;
+  }
 }
 .tokens {
   width: 100%;
+  min-width: 620px;
   border-collapse: collapse;
   font-size: 14px;
+}
+.tokens td,
+.tokens th {
+  white-space: nowrap;
+}
+.inlineCode {
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--bg-active);
+  font-family: var(--mono);
+  font-size: 12px;
 }
 .tokens th {
   padding: 6px 8px;
@@ -76,6 +94,14 @@
 }
 .wrap {
   overflow-x: auto;
+  /* Ombres de défilement : visibles seulement quand il reste du contenu de ce côté. */
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent) left / 32px 100% no-repeat local,
+    linear-gradient(to left, var(--bg) 30%, transparent) right / 32px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.14), transparent) left / 12px 100% no-repeat
+      scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.14), transparent) right / 12px 100% no-repeat
+      scroll;
 }
 .tabs {
   display: flex;
@@ -92,7 +118,7 @@
   font-size: 13px;
 }
 .tab[data-on] {
-  border-color: rgba(35, 131, 226, 0.5);
+  border-color: var(--accent-line);
   background: var(--accent-soft);
   color: var(--accent);
 }

@@ -55,7 +55,7 @@ export function SessionCard({ workshop, session }: { workshop: string; session: 
               aria-expanded={steps}
               onClick={() => setSteps(s => !s)}
             >
-              {steps ? '▾' : '▸'} Déroulé en {session.steps.length} étapes
+              {steps ? '▾' : '▸'} Déroulé en {session.steps.length} étape{session.steps.length > 1 ? 's' : ''}
             </button>
             {steps ? (
               <ol className={styles.steps}>

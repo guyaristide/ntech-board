@@ -126,6 +126,27 @@ a.card:hover {
 
 .matrixWrap {
   overflow-x: auto;
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent) left / 32px 100% no-repeat local,
+    linear-gradient(to left, var(--bg) 30%, transparent) right / 32px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.14), transparent) left / 12px 100% no-repeat
+      scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.14), transparent) right / 12px 100% no-repeat
+      scroll;
+}
+
+@media (max-width: 720px) {
+  .matrix {
+    min-width: 640px;
+  }
+  .matrix th:first-child,
+  .matrix td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    min-width: 180px;
+    background: var(--bg);
+  }
 }
 
 .weekHead {
@@ -137,4 +158,17 @@ a.card:hover {
 }
 .weekHead a {
   text-decoration: none;
+}
+
+.tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
 }

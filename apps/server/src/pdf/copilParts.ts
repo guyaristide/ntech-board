@@ -40,7 +40,7 @@ export function chart(b: NonNullable<ReturnType<typeof burndown>>, width: number
     unbreakable: true,
     stack: [
       {
-        text: `${Number.isInteger(b.max) ? b.max : b.max.toFixed(1)} ${unit}`.trim(),
+        text: `${b.max.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} ${unit}`.trim(),
         fontSize: 7,
         color: GREY.light,
         margin: [0, 0, 0, 2],

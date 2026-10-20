@@ -64,11 +64,11 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
       </button>
       <div onClick={onNavigate}>
         <NavLink to="/" end className={link}>
-          <span className={styles.icon}>⌂</span> Accueil
+          <span className={styles.icon}>⌂︎</span> Accueil
         </NavLink>
         <span className={styles.section}>Cadrage</span>
         <NavLink to="/backlog" className={link}>
-          <span className={styles.icon}>☰</span> Backlog des US{' '}
+          <span className={styles.icon}>☰︎</span> Backlog des US{' '}
           <span className={styles.count}>{ws.stories.length}</span>
         </NavLink>
         <NavLink to="/programme" className={link}>
@@ -79,13 +79,13 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
           <span className={styles.count}>{ws.phases.length}</span>
         </NavLink>
         <NavLink to="/risques" className={link}>
-          <span className={styles.icon}>⚠</span> Risques{' '}
+          <span className={styles.icon}>⚠︎</span> Risques{' '}
           <span className={styles.count}>{ws.risks.length}</span>
         </NavLink>
         <NavLink to="/diligences" className={link}>
-          <span className={styles.icon}>☑</span> Diligences{' '}
+          <span className={styles.icon}>☑︎</span> Diligences{' '}
           <span className={styles.count} title="Diligences à mener">
-            {ws.diligences.filter(d => diligenceOpen(d.status)).length}
+            {ws.diligences.filter(d => diligenceOpen(d.status)).length || ''}
           </span>
         </NavLink>
         {ws.references.length ? (
@@ -102,13 +102,15 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
             </NavLink>
             <NavLink to="/realisation" end className={link}>
               <span className={styles.icon}>☷</span> Backlog de réalisation{' '}
-              <span className={styles.count}>{ws.tickets.filter(t => !t.sprint).length}</span>
+              <span className={styles.count} title="Tickets non planifiés dans un sprint">
+                {ws.tickets.filter(t => !t.sprint).length || ''}
+              </span>
             </NavLink>
             <NavLink to="/realisation/tableau" className={link}>
               <span className={styles.icon}>▥</span> Tableau du sprint
             </NavLink>
             <NavLink to="/realisation/mes-tickets" className={link}>
-              <span className={styles.icon}>☺</span> Mes tickets{' '}
+              <span className={styles.icon}>☺︎</span> Mes tickets{' '}
               <span className={styles.count}>{mine || ''}</span>
             </NavLink>
             <NavLink to="/realisation/sprints" className={link}>
@@ -116,17 +118,19 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
               <span className={styles.count}>{ws.sprints.find(s => s.status === 'active')?.name ?? ''}</span>
             </NavLink>
             <NavLink to="/realisation/versions" className={link}>
-              <span className={styles.icon}>⚑</span> Feuille de route
+              <span className={styles.icon}>⚑︎</span> Feuille de route
             </NavLink>
             <NavLink to="/realisation/recette" className={link}>
               <span className={styles.icon}>✓</span> Recette{' '}
-              <span className={styles.count}>{ws.campaigns.filter(c => c.status === 'En cours').length || ''}</span>
+              <span className={styles.count}>
+                {ws.campaigns.filter(c => c.status === 'En cours').length || ''}
+              </span>
             </NavLink>
           </>
         ) : null}
         <span className={styles.section}>Projet</span>
         <NavLink to="/parties" className={link}>
-          <span className={styles.icon}>👥</span> Parties prenantes{' '}
+          <span className={styles.icon}>⚇</span> Parties prenantes{' '}
           <span className={styles.count}>{ws.parties.length}</span>
         </NavLink>
         <NavLink to="/acces-mcp" className={link}>
@@ -135,10 +139,10 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         {admin ? (
           <>
             <NavLink to="/reglages" className={link}>
-              <span className={styles.icon}>⚒</span> Réglages
+              <span className={styles.icon}>⚒︎</span> Réglages
             </NavLink>
             <NavLink to="/admin" className={link}>
-              <span className={styles.icon}>⚙</span> Administration
+              <span className={styles.icon}>⚙︎</span> Administration
             </NavLink>
           </>
         ) : null}
@@ -192,10 +196,10 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
           </div>
         ) : null}
         <button type="button" className={styles.link} onClick={() => exportCsv(ws.stories)}>
-          <span className={styles.icon}>↧</span> Exporter le backlog (CSV)
+          <span className={styles.icon}>↧︎</span> Exporter le backlog (CSV)
         </button>
         <button type="button" className={styles.link} onClick={() => exportJson(ws)}>
-          <span className={styles.icon}>↧</span> Exporter le tableau (JSON)
+          <span className={styles.icon}>↧︎</span> Exporter le tableau (JSON)
         </button>
         {user ? (
           <div className={styles.account}>
@@ -225,9 +229,10 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
                   {user.name || 'Indiquer votre nom'}
                 </button>
               )}
-              <span className={styles.role}>
-                {user.email} · {ws.session?.role ? ROLE_LABEL[ws.session.role] : ''}
+              <span className={styles.role} title={user.email}>
+                {user.email}
               </span>
+              <span className={styles.role}>{ws.session?.role ? ROLE_LABEL[ws.session.role] : ''}</span>
             </div>
             <button
               type="button"
@@ -236,7 +241,7 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
               aria-label="Se déconnecter"
               onClick={() => void ws.logout()}
             >
-              ⏻
+              ⏻︎
             </button>
           </div>
         ) : null}

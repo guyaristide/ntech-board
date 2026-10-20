@@ -50,10 +50,11 @@
   display: grid;
   grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
   gap: 10px 16px;
-  align-items: center;
+  align-items: start;
   margin: 8px 0 4px;
 }
 .fields > label {
+  padding-top: 5px;
   color: var(--text-muted);
   font-size: 14px;
 }
@@ -88,6 +89,32 @@
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
+}
+.listRow input[type='text'] {
+  flex: 1 1 220px;
+  min-width: 0;
+  max-width: 340px;
+}
+/* Enregistrement toujours à portée quand des réglages ont changé. */
+.saveBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+@media (pointer: coarse) {
+  .listRow button {
+    min-width: 36px;
+    min-height: 36px;
+  }
 }
 .hint {
   margin: 2px 0 0;

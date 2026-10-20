@@ -115,6 +115,7 @@
 
 .add {
   align-self: flex-start;
+  text-align: left;
   margin-top: 2px;
   padding: 3px 2px;
   border: 0;

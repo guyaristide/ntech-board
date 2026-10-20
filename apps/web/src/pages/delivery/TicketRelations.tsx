@@ -1,6 +1,13 @@
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { byRank, stepOf, TICKET_LINK_LABEL, TICKET_LINK_TYPES, type Ticket, type TicketLinkType } from '@board/shared';
+import {
+  byRank,
+  stepOf,
+  TICKET_LINK_LABEL,
+  TICKET_LINK_TYPES,
+  type Ticket,
+  type TicketLinkType,
+} from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit } from '../../model/store';
 import { Tag } from '../../ui/Tag';
@@ -10,7 +17,15 @@ import styles from './Delivery.module.css';
 import k from './Tickets.module.css';
 
 /** Ligne courte d'un ticket lié : clé, intitulé, étape. */
-function Mini({ ticket, after, step: showStep = true }: { ticket: Ticket; after?: ReactNode; step?: boolean }) {
+function Mini({
+  ticket,
+  after,
+  step: showStep = true,
+}: {
+  ticket: Ticket;
+  after?: ReactNode;
+  step?: boolean;
+}) {
   const { settings } = useDelivery();
   const step = stepOf(settings, ticket.status);
   return (
@@ -20,7 +35,10 @@ function Mini({ ticket, after, step: showStep = true }: { ticket: Ticket; after?
       </Link>
       <span className={k.miniTitle}>{ticket.title || 'Sans titre'}</span>
       {showStep ? (
-        <Tag value={step?.name ?? ticket.status} tone={step?.category === 'done' ? 'green' : step?.category === 'doing' ? 'blue' : 'gray'} />
+        <Tag
+          value={step?.name ?? ticket.status}
+          tone={step?.category === 'done' ? 'green' : step?.category === 'doing' ? 'blue' : 'gray'}
+        />
       ) : null}
       {after}
     </li>
@@ -33,7 +51,8 @@ export function Subtasks({ ticket }: { ticket: Ticket }) {
   const canEdit = useCanEdit();
   const [title, setTitle] = useState('');
   const children = tickets.filter(t => t.parent === ticket.id).sort(byRank);
-  const type = settings.delivery.ticketTypes.find(t => t.id === 'subtask')?.id ?? settings.delivery.ticketTypes[0].id;
+  const type =
+    settings.delivery.ticketTypes.find(t => t.id === 'subtask')?.id ?? settings.delivery.ticketTypes[0].id;
   return (
     <>
       <h2 className={page.h2}>Sous-tâches ({children.length})</h2>
@@ -74,7 +93,12 @@ export function Subtasks({ ticket }: { ticket: Ticket }) {
             setTitle('');
           }}
         >
-          <input value={title} placeholder="Nouvelle sous-tâche : intitulé, puis Entrée" aria-label="Nouvelle sous-tâche" onChange={e => setTitle(e.target.value)} />
+          <input
+            value={title}
+            placeholder="Nouvelle sous-tâche : intitulé, puis Entrée"
+            aria-label="Nouvelle sous-tâche"
+            onChange={e => setTitle(e.target.value)}
+          />
         </form>
       ) : null}
     </>
@@ -113,7 +137,12 @@ export function TicketLinks({ ticket }: { ticket: Ticket }) {
                     ticket={other}
                     after={
                       canEdit ? (
-                        <button type="button" className={page.ghost} aria-label={`Retirer la liaison avec ${l.ticket}`} onClick={() => void delivery.unlinkTickets(ticket.id, l.ticket)}>
+                        <button
+                          type="button"
+                          className={page.ghost}
+                          aria-label={`Retirer la liaison avec ${l.ticket}`}
+                          onClick={() => void delivery.unlinkTickets(ticket.id, l.ticket)}
+                        >
                           ✕
                         </button>
                       ) : null
@@ -133,20 +162,31 @@ export function TicketLinks({ ticket }: { ticket: Ticket }) {
             add();
           }}
         >
-          <select className={styles.select} value={type} aria-label="Nature de la liaison" onChange={e => setType(e.target.value as TicketLinkType)}>
+          <select
+            className={styles.select}
+            value={type}
+            aria-label="Nature de la liaison"
+            onChange={e => setType(e.target.value as TicketLinkType)}
+          >
             {TICKET_LINK_TYPES.map(k => (
               <option key={k} value={k}>
                 {TICKET_LINK_LABEL[k]}
               </option>
             ))}
           </select>
-          <input list="ticket-candidates" value={query} placeholder="Clé ou intitulé du ticket" aria-label="Ticket à lier" onChange={e => setQuery(e.target.value)} />
+          <input
+            list="ticket-candidates"
+            value={query}
+            placeholder="Clé ou intitulé du ticket"
+            aria-label="Ticket à lier"
+            onChange={e => setQuery(e.target.value)}
+          />
           <datalist id="ticket-candidates">
             {candidates.map(t => (
               <option key={t.id} value={`${t.id} · ${t.title}`} />
             ))}
           </datalist>
-          <button type="submit" className={page.ghost}>
+          <button type="submit" className={page.outline}>
             + Lier
           </button>
         </form>

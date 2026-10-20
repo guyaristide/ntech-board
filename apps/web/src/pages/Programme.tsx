@@ -24,7 +24,7 @@ export function Programme() {
   return (
     <div className={`${page.page} ${page.wide}`}>
       <span className={page.icon} aria-hidden="true">
-        📅
+        🗓️
       </span>
       <h1 className={page.h1}>Programme des ateliers</h1>
       <p className={page.lead}>
@@ -50,7 +50,7 @@ export function Programme() {
             className={backlog.view}
             onClick={() => setParams({ vue: 'points' })}
           >
-            ? Points à trancher
+            ◇ Points à trancher
           </button>
         </div>
         <span className={page.actions}>
@@ -98,12 +98,14 @@ export function Programme() {
                   const us = ws.stories.filter(s => s.workshop === w.id).length;
                   return (
                     <Link key={w.id} to={`/atelier/${w.id}`} className={styles.card}>
-                      <span className={styles.cardCode}>
-                        {w.id} · {longDate(w.date)}
+                      <span className={styles.cardHead}>
+                        <span className={styles.cardCode}>{w.id}</span>
+                        <span className={page.faint}>{longDate(w.date)}</span>
                       </span>
                       <strong>{w.title}</strong>
                       <span className={page.faint}>
-                        {w.sessions.length} séquences · {us} US · {done}/{qs.length} points tranchés
+                        {w.sessions.length} séquence{w.sessions.length > 1 ? 's' : ''} · {us} US · {done}/
+                        {qs.length} points tranchés
                       </span>
                       <span>
                         <Tag value={w.pvStatus}>{`PV : ${w.pvStatus}`}</Tag>
@@ -160,7 +162,7 @@ export function Programme() {
                         value={q.answer}
                         placeholder="Réponse…"
                         label="Réponse"
-                markdown
+                        markdown
                         onChange={answer =>
                           ws.updateQuestion(w.id, s.code, q.id, {
                             answer,

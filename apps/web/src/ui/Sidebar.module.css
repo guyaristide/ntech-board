@@ -85,9 +85,15 @@
 }
 
 .icon {
-  width: 18px;
-  text-align: center;
+  display: inline-grid;
+  place-items: center;
   flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1;
+  font-variant-emoji: text;
 }
 
 .code {
@@ -213,7 +219,7 @@ kbd {
 
 .role {
   overflow: hidden;
-  color: var(--text-faint);
+  color: var(--text-muted);
   font-size: 11px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -221,8 +227,9 @@ kbd {
 
 .logout {
   flex: none;
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
   padding: 0;
   border: 0;
   border-radius: var(--radius);
@@ -233,4 +240,10 @@ kbd {
 .logout:hover {
   background: var(--bg-hover);
   color: var(--text);
+}
+
+@media (pointer: coarse) {
+  .link {
+    min-height: 36px;
+  }
 }

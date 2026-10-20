@@ -58,6 +58,7 @@ export function Home() {
               />
             ))}
           </div>
+          <span className={page.faint}>sur {ws.stories.length} US, par statut</span>
         </Link>
         <Link to="/programme?vue=points" className={styles.card}>
           <span className={styles.cardCode}>Points à trancher</span>
@@ -173,9 +174,11 @@ export function Home() {
                   <td>{list.length}</td>
                   <td>{list.filter(s => s.status === 'Validée').length}</td>
                   <td>
-                    {e.workshops.map(w => (
-                      <Tag key={w} value={w} />
-                    ))}
+                    <span className={styles.tags}>
+                      {e.workshops.map(w => (
+                        <Tag key={w} value={w} />
+                      ))}
+                    </span>
                   </td>
                 </tr>
               );

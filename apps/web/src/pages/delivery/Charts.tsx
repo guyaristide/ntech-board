@@ -3,10 +3,10 @@ import styles from './Pilotage.module.css';
 
 const W = 520;
 const H = 220;
-const PAD = { l: 32, r: 10, t: 14, b: 26 };
+const PAD = { l: 34, r: 14, t: 14, b: 28 };
 const day = (iso: string) =>
   new Date(`${iso}T12:00:00`).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-const fmt = (n: number) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+const fmt = (n: number) => n.toLocaleString('fr-FR', { maximumFractionDigits: 1 });
 
 /** Graduations « rondes » de l'axe vertical, jusqu'à la première au-dessus du maximum. */
 function ticks(max: number) {
@@ -31,7 +31,10 @@ export function Burndown({ data, unit }: { data: NonNullable<ReturnType<typeof b
       .map((v, i) => (v === null ? '' : `${x(i)},${y(v)}`))
       .filter(Boolean)
       .join(' ');
-  const every = Math.max(1, Math.ceil(n / 8));
+  const every = Math.max(1, Math.ceil(n / 6));
+  // Un repère tous les `every` jours, et le dernier jour, sans qu'il touche le précédent.
+  const labelled = (i: number) => i === n - 1 || (i % every === 0 && n - 1 - i >= Math.ceil(every * 0.75));
+  const anchor = (i: number) => (i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle');
   const last = data.points.findLastIndex(p => p.remaining !== null);
   return (
     <figure className={styles.chart}>
@@ -49,8 +52,8 @@ export function Burndown({ data, unit }: { data: NonNullable<ReturnType<typeof b
           </g>
         ))}
         {data.points.map((p, i) =>
-          i % every === 0 || i === n - 1 ? (
-            <text key={p.day} x={x(i)} y={H - 8} textAnchor="middle" className={styles.axis}>
+          labelled(i) ? (
+            <text key={p.day} x={x(i)} y={H - 8} textAnchor={anchor(i)} className={styles.axis}>
               {day(p.day)}
             </text>
           ) : null,

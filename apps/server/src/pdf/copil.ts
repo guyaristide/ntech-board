@@ -89,7 +89,7 @@ export async function copilPdf(project: string, ws: WorkspaceData, days: SprintD
         'Vélocité moyenne',
         v.average === null
           ? 'Pas encore de sprint clos'
-          : `${count ? `${v.average.toFixed(1)} tickets` : unit(v.average)} par sprint (${Math.min(v.closed.length, 3)} derniers sprints)`,
+          : `${count ? `${v.average.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} tickets` : unit(v.average)} par sprint (${Math.min(v.closed.length, 3)} derniers sprints)`,
       ],
     ]),
   ];

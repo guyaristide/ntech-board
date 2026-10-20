@@ -19,7 +19,14 @@ const TABS: [Tab, string][] = [
 ];
 
 /** Alias saisis séparés par des virgules. */
-const aliasList = (text: string) => [...new Set(text.split(',').map(a => a.trim()).filter(Boolean))];
+const aliasList = (text: string) => [
+  ...new Set(
+    text
+      .split(',')
+      .map(a => a.trim())
+      .filter(Boolean),
+  ),
+];
 
 /** Cellule de texte modifiable sur place. */
 function Cell({ party, field, label }: { party: Party; field: keyof Party; label: string }) {
@@ -123,14 +130,19 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
           [
             'Rattachés',
             90,
-            p => ws.parties.filter(x => x.organization === p.id).length || '—',
+            p =>
+              ws.parties.filter(x => x.organization === p.id).length || <span className={page.faint}>—</span>,
           ],
         ]
       : type === 'person'
         ? [
             ['Nom', 170, p => <Cell party={p} field="name" label="Nom" />],
             ['Fonction', undefined, p => <Cell party={p} field="function" label="Fonction" />],
-            ['Organisation', 170, p => <PartyRef party={p} field="organization" of="organization" label="Organisation" />],
+            [
+              'Organisation',
+              170,
+              p => <PartyRef party={p} field="organization" of="organization" label="Organisation" />,
+            ],
             ['E-mail', 180, p => <Cell party={p} field="email" label="E-mail" />],
             ['Téléphone', 130, p => <Cell party={p} field="phone" label="Téléphone" />],
             ...(members
@@ -153,7 +165,11 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
           ]
         : [
             ['Rôle', undefined, p => <Cell party={p} field="name" label="Rôle" />],
-            ['Organisation', 190, p => <PartyRef party={p} field="organization" of="organization" label="Organisation" />],
+            [
+              'Organisation',
+              190,
+              p => <PartyRef party={p} field="organization" of="organization" label="Organisation" />,
+            ],
             ['Tenu par', 190, p => <PartyRef party={p} field="holder" of="person" label="Tenu par" />],
           ];
   return (
@@ -179,7 +195,10 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
         </thead>
         <tbody>
           {rows.map(p => (
-            <tr key={p.id} title={type !== 'organization' && p.organization ? orgName(p.organization) : undefined}>
+            <tr
+              key={p.id}
+              title={type !== 'organization' && p.organization ? orgName(p.organization) : undefined}
+            >
               <td className={backlog.mono}>{p.id}</td>
               {columns.map(([title, , render]) => (
                 <td key={title}>{render(p)}</td>
@@ -222,8 +241,7 @@ export function Parties() {
     if (admin) api.get<Member[]>('/admin/members').then(setMembers, () => setMembers(null));
   }, [admin]);
   const pending = mentionsOf(ws, ws.parties).filter(m => !m.party).length;
-  const count = (t: Tab) =>
-    t === 'reprise' ? pending : ws.parties.filter(p => p.type === t).length;
+  const count = (t: Tab) => (t === 'reprise' ? pending : ws.parties.filter(p => p.type === t).length);
 
   return (
     <div className={`${page.page} ${page.wide}`}>
@@ -232,8 +250,8 @@ export function Parties() {
       </span>
       <h1 className={page.h1}>Parties prenantes</h1>
       <p className={page.lead}>
-        Organisations, personnes et rôles du projet. Le RACI, les risques, les diligences et les
-        séquences d’atelier y renvoient : un nom, un sigle ou un alias suffit à les reconnaître.
+        Organisations, personnes et rôles du projet. Le RACI, les risques, les diligences et les séquences
+        d’atelier y renvoient : un nom, un sigle ou un alias suffit à les reconnaître.
       </p>
       <div className={backlog.toolbar}>
         <div className={backlog.views} role="tablist" aria-label="Vue">
@@ -254,6 +272,7 @@ export function Parties() {
           <button
             type="button"
             className={page.primary}
+            style={{ marginLeft: 'auto' }}
             onClick={() => void ws.createParty(tab, { name: '' })}
           >
             + {PARTY_LABEL[tab]}

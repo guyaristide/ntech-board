@@ -8,6 +8,23 @@
   border-collapse: collapse;
 }
 
+.table th {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Téléphone : la date de dernière connexion est masquée, l'action « Retirer » reste visible. */
+@media (max-width: 720px) {
+  .table {
+    min-width: 0;
+  }
+  .table th:nth-child(3),
+  .table td:nth-child(3) {
+    display: none;
+  }
+}
+
 .table th,
 .table td {
   padding: 8px 6px;
@@ -37,21 +54,7 @@
   color: var(--text-faint);
 }
 
-select,
-.invite input:not([type='checkbox']),
-.projectForm input {
-  padding: 5px 8px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--bg);
-  outline: none;
-}
-
-select:focus,
-.invite input:focus,
-.projectForm input:focus {
-  border-color: var(--accent);
-}
+/* Champs : style de base commun (styles/global.css). */
 
 .invite {
   display: flex;
@@ -111,10 +114,36 @@ select:focus,
   cursor: pointer;
 }
 
+.drop:hover {
+  border-color: var(--accent-line);
+  background: var(--bg-hover);
+}
+
 .drop span,
 .drop small {
   color: var(--text-muted);
   font-size: 13px;
+}
+
+.drop small {
+  overflow-wrap: anywhere;
+}
+
+.drop input[type='file'] {
+  max-width: 100%;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.drop input[type='file']::file-selector-button {
+  margin-right: 10px;
+  padding: 4px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
 }
 
 .error,

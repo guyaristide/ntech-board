@@ -10,6 +10,7 @@
 
 .actor {
   vertical-align: bottom !important;
+  padding: 6px 4px !important;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.25;
@@ -18,8 +19,9 @@
 
 .actor span {
   display: -webkit-box;
-  padding: 6px 0;
   overflow: hidden;
+  overflow-wrap: anywhere;
+  hyphens: auto;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
@@ -150,7 +152,7 @@
 
 .counts {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 4px;
 }
 

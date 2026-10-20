@@ -39,11 +39,14 @@ export function CampaignPage() {
         </div>
       </DeliveryGate>
     );
-  const set = (patch: Parameters<typeof delivery.updateCampaign>[1]) => delivery.updateCampaign(campaign.id, patch);
+  const set = (patch: Parameters<typeof delivery.updateCampaign>[1]) =>
+    delivery.updateCampaign(campaign.id, patch);
   const byId = new Map(ws.stories.map(s => [s.id, s]));
   const summary = testSummary(casesOf(campaign, ws.stories).map(x => x.result?.status ?? ''));
   const candidates = ws.stories.filter(s => !campaign.scope.includes(s.id) && s.status !== 'Écartée');
-  const signable = ws.parties.filter(p => (p.type === 'person' || p.type === 'role') && !campaign.signatories.includes(p.id));
+  const signable = ws.parties.filter(
+    p => (p.type === 'person' || p.type === 'role') && !campaign.signatories.includes(p.id),
+  );
   const field = (label: string, node: ReactNode) => (
     <div style={{ display: 'contents' }}>
       <span className={page.propLabel}>{label}</span>
@@ -62,7 +65,10 @@ export function CampaignPage() {
         <nav className={page.crumbs} aria-label="Fil d’Ariane">
           <Link to="/realisation/recette">Recette</Link> / <span>{campaign.id}</span>
           <span className={page.actions}>
-            <PdfButton path={`/pdf/recette/${campaign.id}`} title="Procès-verbal de recette, avec bloc de signatures">
+            <PdfButton
+              path={`/pdf/recette/${campaign.id}`}
+              title="Procès-verbal de recette, avec bloc de signatures"
+            >
               ⤓ PV de recette
             </PdfButton>
             {rights.manage ? (
@@ -70,7 +76,10 @@ export function CampaignPage() {
                 type="button"
                 className={`${page.ghost} ${page.danger}`}
                 onClick={async () => {
-                  if (!confirm(`Supprimer ${campaign.name} et ses résultats ? Les bugs ouverts sont conservés.`)) return;
+                  if (
+                    !confirm(`Supprimer ${campaign.name} et ses résultats ? Les bugs ouverts sont conservés.`)
+                  )
+                    return;
                   await delivery.deleteCampaign(campaign.id);
                   navigate('/realisation/recette');
                 }}
@@ -83,11 +92,22 @@ export function CampaignPage() {
         <p className={page.kicker}>
           {campaign.id} · <StatusTag status={campaign.status} />
         </p>
-        <EditableText variant="title" value={campaign.name} label="Nom de la campagne" multiline={false} onChange={name => set({ name })} />
+        <EditableText
+          variant="title"
+          value={campaign.name}
+          label="Nom de la campagne"
+          multiline={false}
+          onChange={name => set({ name })}
+        />
         <div className={page.props}>
           {field(
             'Version',
-            <select className={styles.select} value={campaign.release} disabled={!rights.manage} onChange={e => set({ release: e.target.value })}>
+            <select
+              className={styles.select}
+              value={campaign.release}
+              disabled={!rights.manage}
+              onChange={e => set({ release: e.target.value })}
+            >
               <option value="">Aucune</option>
               {releases.map(r => (
                 <option key={r.id} value={r.id}>
@@ -98,7 +118,12 @@ export function CampaignPage() {
           )}
           {field(
             'Mode',
-            <select className={styles.select} value={campaign.mode} disabled={!rights.manage} onChange={e => set({ mode: e.target.value as CampaignMode })}>
+            <select
+              className={styles.select}
+              value={campaign.mode}
+              disabled={!rights.manage}
+              onChange={e => set({ mode: e.target.value as CampaignMode })}
+            >
               {Object.entries(CAMPAIGN_MODE_LABEL).map(([k, label]) => (
                 <option key={k} value={k}>
                   {label}
@@ -108,7 +133,12 @@ export function CampaignPage() {
           )}
           {field(
             'Statut',
-            <select className={styles.select} value={campaign.status} disabled={!rights.manage} onChange={e => set({ status: e.target.value as CampaignStatus })}>
+            <select
+              className={styles.select}
+              value={campaign.status}
+              disabled={!rights.manage}
+              onChange={e => set({ status: e.target.value as CampaignStatus })}
+            >
               {CAMPAIGN_STATUSES.map(s => (
                 <option key={s}>{s}</option>
               ))}
@@ -117,9 +147,25 @@ export function CampaignPage() {
           {field(
             'Dates',
             <span className={styles.inline}>
-              <input type="date" className={styles.select} value={campaign.start ?? ''} disabled={!rights.manage} aria-label="Début" onChange={e => set({ start: e.target.value || null })} />
-              →
-              <input type="date" className={styles.select} value={campaign.end ?? ''} disabled={!rights.manage} aria-label="Fin" onChange={e => set({ end: e.target.value || null })} />
+              <input
+                type="date"
+                className={styles.select}
+                value={campaign.start ?? ''}
+                disabled={!rights.manage}
+                aria-label="Début"
+                onChange={e => set({ start: e.target.value || null })}
+              />
+              <span className={styles.nowrap}>
+                →
+                <input
+                  type="date"
+                  className={styles.select}
+                  value={campaign.end ?? ''}
+                  disabled={!rights.manage}
+                  aria-label="Fin"
+                  onChange={e => set({ end: e.target.value || null })}
+                />
+              </span>
             </span>,
           )}
           {field(
@@ -129,14 +175,25 @@ export function CampaignPage() {
                 <span key={sid} className={styles.chip}>
                   {assigneeName(ws.parties, sid)}
                   {rights.manage ? (
-                    <button type="button" aria-label="Retirer" onClick={() => set({ signatories: campaign.signatories.filter(x => x !== sid) })}>
+                    <button
+                      type="button"
+                      aria-label="Retirer"
+                      onClick={() => set({ signatories: campaign.signatories.filter(x => x !== sid) })}
+                    >
                       ✕
                     </button>
                   ) : null}
                 </span>
               ))}
               {rights.manage ? (
-                <select className={styles.select} value="" aria-label="Ajouter un signataire" onChange={e => e.target.value && set({ signatories: [...campaign.signatories, e.target.value] })}>
+                <select
+                  className={styles.select}
+                  value=""
+                  aria-label="Ajouter un signataire"
+                  onChange={e =>
+                    e.target.value && set({ signatories: [...campaign.signatories, e.target.value] })
+                  }
+                >
                   <option value="">+ Signataire</option>
                   {signable.map(p => (
                     <option key={p.id} value={p.id}>
@@ -152,7 +209,11 @@ export function CampaignPage() {
             <span className={styles.inline}>
               {campaign.scope.length} US · {summary.total} cas de test
               {rights.manage && campaign.release ? (
-                <button type="button" className={page.ghost} onClick={() => void delivery.refreshScope(campaign.id)}>
+                <button
+                  type="button"
+                  className={page.ghost}
+                  onClick={() => void delivery.refreshScope(campaign.id)}
+                >
                   + US de la version
                 </button>
               ) : null}
@@ -163,8 +224,8 @@ export function CampaignPage() {
         <div className={styles.progress}>
           <TestBar summary={summary} />
           <span>
-            {summary.ok} OK · {summary.ko} KO · {summary.reserve} réserve{summary.reserve > 1 ? 's' : ''} · {summary.na} N.A. ·{' '}
-            <strong>{summary.todo} à passer</strong>
+            {summary.ok} OK · {summary.ko} KO · {summary.reserve} réserve{summary.reserve > 1 ? 's' : ''} ·{' '}
+            {summary.na} N.A. · <strong>{summary.todo} à passer</strong>
           </span>
         </div>
         <div className={styles.toolbar}>
@@ -175,7 +236,13 @@ export function CampaignPage() {
               ['issues', 'KO et réserves'],
             ] as const
           ).map(([k, label]) => (
-            <button key={k} type="button" className={styles.filter} data-on={filter === k || undefined} onClick={() => setFilter(k)}>
+            <button
+              key={k}
+              type="button"
+              className={styles.filter}
+              data-on={filter === k || undefined}
+              onClick={() => setFilter(k)}
+            >
               {label}
             </button>
           ))}
@@ -187,7 +254,13 @@ export function CampaignPage() {
                 addStory();
               }}
             >
-              <input list="campaign-stories" value={adding} placeholder="Ajouter une US au périmètre" aria-label="Ajouter une US" onChange={e => setAdding(e.target.value)} />
+              <input
+                list="campaign-stories"
+                value={adding}
+                placeholder="Ajouter une US au périmètre"
+                aria-label="Ajouter une US"
+                onChange={e => setAdding(e.target.value)}
+              />
               <datalist id="campaign-stories">
                 {candidates.map(s => (
                   <option key={s.id} value={`${s.id} · ${s.title}`} />

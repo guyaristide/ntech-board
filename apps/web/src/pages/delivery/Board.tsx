@@ -1,6 +1,15 @@
 import { useState, type DragEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { amount, byRank, isBlocked, load, rankAt, stepOf, type Ticket, type WorkflowStep } from '@board/shared';
+import {
+  amount,
+  byRank,
+  isBlocked,
+  load,
+  rankAt,
+  stepOf,
+  type Ticket,
+  type WorkflowStep,
+} from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { Tag } from '../../ui/Tag';
@@ -46,7 +55,9 @@ function Card({ ticket, onDrop }: { ticket: Ticket; onDrop: (e: DragEvent) => vo
         <span className={styles.key}>{ticket.id}</span>
         <span>{type?.name ?? ticket.type}</span>
         {ticket.parent ? <span title="Sous-tâche de">↳ {ticket.parent}</span> : null}
-        {ticket.estimate !== null && settings.delivery.estimation !== 'none' ? <span>{amount(ticket.estimate, settings)}</span> : null}
+        {ticket.estimate !== null && settings.delivery.estimation !== 'none' ? (
+          <span>{amount(ticket.estimate, settings)}</span>
+        ) : null}
         {blocked ? <Tag value="Bloqué" tone="red" /> : null}
       </span>
       {ticket.assignee ? <span className={k.assignee}>{assigneeName(parties, ticket.assignee)}</span> : null}
@@ -91,6 +102,7 @@ function Column({ step, tickets }: { step: WorkflowStep; tickets: Ticket[] }) {
       {list.map(t => (
         <Card key={t.id} ticket={t} onDrop={e => drop(e, t.id)} />
       ))}
+      {!list.length ? <p className={k.columnEmpty}>Aucun ticket</p> : null}
     </section>
   );
 }
@@ -119,7 +131,8 @@ export function Board() {
   const inSprint = tickets.filter(t => t.sprint === sprintId);
   const shown = inSprint.filter(
     t =>
-      (!who || (who === 'moi' ? mine.includes(t.assignee) : who === 'aucun' ? !t.assignee : t.assignee === who)) &&
+      (!who ||
+        (who === 'moi' ? mine.includes(t.assignee) : who === 'aucun' ? !t.assignee : t.assignee === who)) &&
       (!type || t.type === type) &&
       (!blockedOnly || isBlocked(settings, tickets, t)),
   );
@@ -134,7 +147,8 @@ export function Board() {
         <h1 className={page.h1}>Tableau du sprint</h1>
         {sprint ? (
           <p className={page.lead}>
-            <Link to={`/realisation/sprint/${sprint.id}`}>{sprint.name}</Link> <SprintTag sprint={sprint} /> · {period(sprint)}
+            <Link to={`/realisation/sprint/${sprint.id}`}>{sprint.name}</Link> <SprintTag sprint={sprint} /> ·{' '}
+            {period(sprint)}
             {sprint.goal ? ` · ${sprint.goal}` : ''}
           </p>
         ) : (
@@ -143,15 +157,27 @@ export function Board() {
           </p>
         )}
         <div className={k.filters}>
-          <select className={styles.filter} value={sprintId} aria-label="Sprint" onChange={e => put('sprint', e.target.value)}>
+          <select
+            className={styles.filter}
+            value={sprintId}
+            aria-label="Sprint"
+            onChange={e => put('sprint', e.target.value)}
+          >
             {ordered.map(s => (
               <option key={s.id} value={s.id}>
                 {s.name}
               </option>
             ))}
-            {sprint && sprint.status === 'closed' ? <option value={sprint.id}>{sprint.name} (clos)</option> : null}
+            {sprint && sprint.status === 'closed' ? (
+              <option value={sprint.id}>{sprint.name} (clos)</option>
+            ) : null}
           </select>
-          <select className={styles.filter} value={who} aria-label="Responsable" onChange={e => put('responsable', e.target.value)}>
+          <select
+            className={styles.filter}
+            value={who}
+            aria-label="Responsable"
+            onChange={e => put('responsable', e.target.value)}
+          >
             <option value="">Tous les responsables</option>
             <option value="moi" disabled={!mine.length}>
               Mes tickets
@@ -163,7 +189,12 @@ export function Board() {
               </option>
             ))}
           </select>
-          <select className={styles.filter} value={type} aria-label="Type" onChange={e => put('type', e.target.value)}>
+          <select
+            className={styles.filter}
+            value={type}
+            aria-label="Type"
+            onChange={e => put('type', e.target.value)}
+          >
             <option value="">Tous les types</option>
             {settings.delivery.ticketTypes.map(t => (
               <option key={t.id} value={t.id}>
@@ -172,7 +203,11 @@ export function Board() {
             ))}
           </select>
           <label className={styles.inline}>
-            <input type="checkbox" checked={blockedOnly} onChange={e => put('bloques', e.target.checked ? '1' : null)} />
+            <input
+              type="checkbox"
+              checked={blockedOnly}
+              onChange={e => put('bloques', e.target.checked ? '1' : null)}
+            />
             Bloqués seulement
           </label>
           <span className={page.faint}>
@@ -182,7 +217,11 @@ export function Board() {
         {sprint ? (
           <div className={k.board}>
             {settings.delivery.workflow.map(step => (
-              <Column key={step.id} step={step} tickets={shown.filter(t => stepOf(settings, t.status)?.id === step.id)} />
+              <Column
+                key={step.id}
+                step={step}
+                tickets={shown.filter(t => stepOf(settings, t.status)?.id === step.id)}
+              />
             ))}
           </div>
         ) : null}

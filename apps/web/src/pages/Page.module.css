@@ -53,6 +53,7 @@
 }
 
 .lead {
+  max-width: 76ch;
   margin: 0 0 18px;
   color: var(--text-muted);
   font-size: 16px;
@@ -61,7 +62,7 @@
 .props {
   display: grid;
   grid-template-columns: 160px minmax(0, 1fr);
-  align-items: center;
+  align-items: start;
   margin: 14px 0 18px;
   row-gap: 1px;
 }
@@ -69,16 +70,32 @@
 .propLabel {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   min-height: 34px;
   padding: 0 6px;
   color: var(--text-muted);
   font-size: 14px;
 }
 
+.propLabel > [aria-hidden] {
+  flex: none;
+  width: 16px;
+  color: var(--text-faint);
+  text-align: center;
+}
+
 .propValue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
   min-width: 0;
+  min-height: 34px;
   font-size: 14px;
+}
+
+.propValue > * {
+  max-width: 100%;
 }
 
 .propValue :is(input, select) {
@@ -153,6 +170,34 @@
   color: var(--text);
 }
 
+.ghost:disabled,
+.primary:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.ghost:disabled:hover {
+  background: none;
+  color: var(--text-muted);
+}
+
+/* Action secondaire visible comme un bouton : « + Lier », « Ajouter ». */
+.outline {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.outline:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
 .danger:hover {
   color: var(--danger);
 }
@@ -161,14 +206,24 @@
   padding: 4px 10px;
   border: 0;
   border-radius: var(--radius);
-  background: var(--accent);
+  background: var(--accent-fill);
   color: #fff;
   font-size: 14px;
   font-weight: 500;
 }
 
-.primary:hover {
+.primary:hover:not(:disabled) {
   filter: brightness(1.08);
+}
+
+/* Écran tactile : des cibles d'au moins 36 px. */
+@media (pointer: coarse) {
+  .ghost,
+  .primary,
+  .outline {
+    min-height: 36px;
+    min-width: 36px;
+  }
 }
 
 .list {
@@ -212,6 +267,29 @@
   color: var(--text-muted);
   font-family: var(--mono);
   font-size: 12px;
+}
+
+/* État vide : ce qui manque, pourquoi, et l'action pour commencer. */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 16px 0;
+  padding: 16px 18px;
+  border-radius: 8px;
+  background: var(--callout);
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.emptyState strong {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.emptyState p {
+  margin: 0 0 4px;
 }
 
 @media (max-width: 720px) {

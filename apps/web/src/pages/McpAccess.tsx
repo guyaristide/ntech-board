@@ -135,7 +135,7 @@ export function McpAccess() {
       >
         <input
           value={name}
-          placeholder="Nom du jeton (par exemple : Claude Code, portable)"
+          placeholder="Nom du jeton (ex. : Claude Code, portable)"
           aria-label="Nom du jeton"
           maxLength={80}
           onChange={e => setName(e.target.value)}
@@ -177,7 +177,11 @@ export function McpAccess() {
         ))}
       </div>
       <p className={page.faint}>
-        {fresh ? '' : `Remplacez ${PLACEHOLDER} par votre jeton. `}
+        {fresh ? null : (
+          <>
+            Remplacez <code className={styles.inlineCode}>{PLACEHOLDER}</code> par votre jeton.{' '}
+          </>
+        )}
         {WHERE[client]}
       </p>
       <Code text={shown[client as keyof typeof shown]} />

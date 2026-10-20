@@ -4,21 +4,31 @@
   --bg-hover: rgba(55, 53, 47, 0.06);
   --bg-active: rgba(55, 53, 47, 0.1);
   --bg-subtle: #fbfbfa;
+  /* Carte posée sur un fond (colonnes du tableau, encadrés) : plus claire que son fond. */
+  --bg-card: #ffffff;
   --text: #37352f;
   --text-muted: rgba(55, 53, 47, 0.65);
-  --text-faint: rgba(55, 53, 47, 0.45);
+  --text-faint: rgba(55, 53, 47, 0.58);
   --line: rgba(55, 53, 47, 0.09);
   --line-strong: rgba(55, 53, 47, 0.16);
   --accent: #2383e2;
   --accent-soft: rgba(35, 131, 226, 0.14);
   --danger: #eb5757;
+  /* États (recette, avancement) : fonds pleins assez sombres pour un texte blanc, sauf la réserve. */
+  --accent-line: rgba(35, 131, 226, 0.5);
+  /* Fond des boutons pleins : texte blanc lisible (contraste AA). */
+  --accent-fill: #1f74c9;
+  --ok: #1f8a5b;
+  --warn: #e9a23b;
+  --on-warn: #3b2600;
+  --ko: #d64545;
   --shadow-pop:
     0 0 0 1px rgba(15, 15, 15, 0.05), 0 3px 6px rgba(15, 15, 15, 0.1), 0 9px 24px rgba(15, 15, 15, 0.2);
   --radius: 4px;
   --sidebar-w: 260px;
   --font:
-    ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial,
-    sans-serif;
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif,
+    'Apple Color Emoji';
   --mono: 'SFMono-Regular', Menlo, Consolas, monospace;
 
   --tag-gray: rgba(227, 226, 224, 0.5);
@@ -50,9 +60,10 @@
     --bg-hover: rgba(255, 255, 255, 0.055);
     --bg-active: rgba(255, 255, 255, 0.09);
     --bg-subtle: #1f1f1f;
+    --bg-card: #262626;
     --text: rgba(255, 255, 255, 0.86);
     --text-muted: rgba(255, 255, 255, 0.55);
-    --text-faint: rgba(255, 255, 255, 0.36);
+    --text-faint: rgba(255, 255, 255, 0.48);
     --line: rgba(255, 255, 255, 0.09);
     --line-strong: rgba(255, 255, 255, 0.16);
     --shadow-pop:
@@ -76,6 +87,14 @@
     --tag-red: #6e3630;
     --tag-red-text: rgba(255, 255, 255, 0.88);
     --callout: #252525;
+    --accent: #529cca;
+    --accent-soft: rgba(82, 156, 202, 0.18);
+    --accent-line: rgba(82, 156, 202, 0.55);
+    --accent-fill: #2f6fae;
+    --danger: #ff7369;
+    --ok: #2f9e6e;
+    --warn: #d9952f;
+    --ko: #e05a50;
     color-scheme: dark;
   }
 }
@@ -162,4 +181,35 @@ textarea:focus-visible {
   to {
     opacity: 1;
   }
+}
+
+/*
+ * Champs de saisie : un style de base commun (spécificité nulle avec :where, tout style de
+ * composant l'emporte), pour qu'aucun champ ne garde l'aspect natif du navigateur.
+ */
+:where(
+  input:not([type='checkbox'], [type='radio'], [type='file'], [type='range'], [type='color']),
+  select,
+  textarea
+) {
+  padding: 4px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+:where(input, select, textarea):focus-visible {
+  outline: 2px solid var(--accent-line);
+  outline-offset: 0;
+  border-color: var(--accent);
+}
+:where(input, select, textarea):disabled {
+  opacity: 0.6;
+}
+:where(button):focus-visible,
+:where(a):focus-visible {
+  outline: 2px solid var(--accent-line);
+  outline-offset: 1px;
 }

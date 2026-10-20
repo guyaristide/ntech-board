@@ -1,6 +1,7 @@
 .tag {
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
+  vertical-align: middle;
+  font-family: var(--font);
   max-width: 100%;
   height: 20px;
   padding: 0 6px;

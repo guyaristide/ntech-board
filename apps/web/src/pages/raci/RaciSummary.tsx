@@ -21,7 +21,7 @@ export function RaciSummary({ phases }: { phases: Phase[] }) {
   if (!phases.length) return null;
   return (
     <div className={backlog.tableWrap}>
-      <table className={backlog.table} style={{ minWidth: 220 + phases.length * 150 }}>
+      <table className={backlog.table} style={{ minWidth: 220 + phases.length * 184 }}>
         <colgroup>
           <col style={{ width: 220 }} />
           {phases.map(p => (

@@ -16,8 +16,15 @@ export function MyTickets() {
   const list = tickets.filter(t => mine.includes(t.assignee));
   const open = list.filter(t => !isDone(settings, t));
   const groups = [
-    ...[...sprints].sort(sprintOrder).filter(s => s.status !== 'closed').map(s => ({ key: s.id, title: s.name, items: open.filter(t => t.sprint === s.id) })),
-    { key: 'backlog', title: 'Backlog', items: open.filter(t => !t.sprint || !sprints.some(s => s.id === t.sprint && s.status !== 'closed')) },
+    ...[...sprints]
+      .sort(sprintOrder)
+      .filter(s => s.status !== 'closed')
+      .map(s => ({ key: s.id, title: s.name, items: open.filter(t => t.sprint === s.id) })),
+    {
+      key: 'backlog',
+      title: 'Backlog',
+      items: open.filter(t => !t.sprint || !sprints.some(s => s.id === t.sprint && s.status !== 'closed')),
+    },
   ].filter(g => g.items.length);
   const done = list.filter(t => isDone(settings, t));
   return (
@@ -28,14 +35,21 @@ export function MyTickets() {
         </span>
         <h1 className={page.h1}>Mes tickets</h1>
         {!mine.length ? (
-          <p className={page.lead}>
-            Votre compte n’est relié à aucune fiche de personne. Dans{' '}
-            <Link to="/parties?vue=person">Parties prenantes › Personnes</Link>, un administrateur relie votre fiche à votre
-            compte (colonne Compte) ; les tickets attribués à votre fiche, ou aux rôles que vous tenez, apparaîtront ici.
-          </p>
+          <div className={page.emptyState}>
+            <strong>Votre compte n’est relié à aucune fiche de personne</strong>
+            <p>
+              Les tickets attribués à votre fiche, ou aux rôles que vous tenez, apparaîtront ici. Un
+              administrateur relie votre fiche à votre compte dans Parties prenantes, onglet Personnes,
+              colonne Compte.
+            </p>
+            <Link to="/parties?vue=person" className={page.outline}>
+              Ouvrir les parties prenantes
+            </Link>
+          </div>
         ) : (
           <p className={page.lead}>
-            {open.length} ticket{open.length > 1 ? 's' : ''} à mener, {done.length} terminé{done.length > 1 ? 's' : ''}.
+            {open.length} ticket{open.length > 1 ? 's' : ''} à mener, {done.length} terminé
+            {done.length > 1 ? 's' : ''}.
           </p>
         )}
         {groups.map(g => (

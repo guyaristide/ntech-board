@@ -105,13 +105,6 @@ function DiligenceTable({ items }: { items: Diligence[] }) {
               </td>
             </tr>
           ))}
-          {!items.length ? (
-            <tr>
-              <td colSpan={7} className={backlog.empty}>
-                Aucune diligence ne correspond.
-              </td>
-            </tr>
-          ) : null}
         </tbody>
       </table>
     </div>
@@ -166,97 +159,119 @@ export function Diligences() {
       </span>
       <h1 className={page.h1}>Diligences</h1>
       <p className={page.lead}>
-        {ws.diligences.length} diligences issues des ateliers, dont {open.length} à mener
-        {late.length ? ` et ${late.length} en retard` : ''}. Chacune a un responsable, ce dont elle dépend et
-        les US qu’elle conditionne.
+        {ws.diligences.length
+          ? `${ws.diligences.length} diligence${ws.diligences.length > 1 ? 's' : ''} issue${ws.diligences.length > 1 ? 's' : ''} des ateliers, dont ${open.length} à mener${late.length ? ` et ${late.length} en retard` : ''}. `
+          : ''}
+        Chaque diligence a un responsable, ce dont elle dépend et les US qu’elle conditionne.
       </p>
 
-      <div className={backlog.toolbar}>
-        <div className={backlog.views} role="tablist" aria-label="Vue">
-          {VIEWS.map(([v, label]) => (
-            <button
-              key={v}
-              type="button"
-              role="tab"
-              aria-selected={view === v}
-              className={backlog.view}
-              onClick={() => update({ vue: v === 'registre' ? '' : v })}
-            >
-              {label}
+      {!ws.diligences.length ? (
+        <div className={page.emptyState}>
+          <strong>Aucune diligence pour l’instant</strong>
+          <p>
+            Les diligences naissent des ateliers : ce qu’une partie s’engage à produire, étudier, trancher ou
+            fournir.
+          </p>
+          {canEdit ? (
+            <button type="button" className={page.primary} onClick={() => void create()}>
+              Nouvelle diligence
             </button>
-          ))}
+          ) : null}
         </div>
-        <span className={backlog.total}>{shown.length} diligences</span>
-        <input
-          type="search"
-          className={backlog.search}
-          placeholder="Rechercher…"
-          aria-label="Rechercher une diligence"
-          value={params.get('q') ?? ''}
-          onChange={e => update({ q: e.target.value })}
-        />
-        {canEdit ? (
-          <button type="button" className={page.primary} onClick={() => void create()}>
-            Nouvelle diligence
-          </button>
-        ) : null}
-      </div>
-
-      <div className={backlog.filters}>
-        {['', ...DILIGENCE_KINDS].map(k => (
-          <button
-            key={k || 'all'}
-            type="button"
-            className={backlog.filter}
-            data-on={kind === k || undefined}
-            title={k ? DILIGENCE_KIND_HINT[k as Diligence['kind']] : undefined}
-            onClick={() => update({ type: k })}
-          >
-            {k || 'Tous types'} · {ws.diligences.filter(d => !k || d.kind === k).length}
-          </button>
-        ))}
-        <select
-          className={styles.select}
-          aria-label="Statut"
-          value={status}
-          onChange={e => update({ statut: e.target.value })}
-        >
-          <option value="">Tous statuts</option>
-          <option value="ouvertes">À mener (ni réalisées ni abandonnées)</option>
-          {DILIGENCE_STATUSES.map(s => (
-            <option key={s}>{s}</option>
-          ))}
-        </select>
-        <select
-          className={styles.select}
-          aria-label="Responsable"
-          value={owner}
-          onChange={e => update({ responsable: e.target.value })}
-        >
-          <option value="">Tous responsables</option>
-          {partiesOf(ws.diligences, ws.parties).map(p => (
-            <option key={p}>{p}</option>
-          ))}
-        </select>
-      </div>
-
-      {view === 'registre' ? (
-        <DiligenceTable items={shown} />
       ) : (
-        owners.map(o => {
-          const items = shown.filter(d => ownerOf(d) === o);
-          return items.length ? (
-            <section key={o} aria-label={o}>
-              <h2 className={page.h2}>
-                {o}{' '}
-                <span className={page.faint}>
-                  {items.filter(d => diligenceOpen(d.status)).length} à mener sur {items.length}
-                </span>
-              </h2>
-              <DiligenceTable items={items} />
-            </section>
-          ) : null;
-        })
+        <>
+          <div className={backlog.toolbar}>
+            <div className={backlog.views} role="tablist" aria-label="Vue">
+              {VIEWS.map(([v, label]) => (
+                <button
+                  key={v}
+                  type="button"
+                  role="tab"
+                  aria-selected={view === v}
+                  className={backlog.view}
+                  onClick={() => update({ vue: v === 'registre' ? '' : v })}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <span className={backlog.total}>{shown.length} diligences</span>
+            <input
+              type="search"
+              className={backlog.search}
+              placeholder="Rechercher…"
+              aria-label="Rechercher une diligence"
+              value={params.get('q') ?? ''}
+              onChange={e => update({ q: e.target.value })}
+            />
+            {canEdit ? (
+              <button type="button" className={page.primary} onClick={() => void create()}>
+                Nouvelle diligence
+              </button>
+            ) : null}
+          </div>
+
+          <div className={backlog.filters}>
+            {['', ...DILIGENCE_KINDS].map(k => (
+              <button
+                key={k || 'all'}
+                type="button"
+                className={backlog.filter}
+                data-on={kind === k || undefined}
+                title={k ? DILIGENCE_KIND_HINT[k as Diligence['kind']] : undefined}
+                onClick={() => update({ type: k })}
+              >
+                {k || 'Tous types'} · {ws.diligences.filter(d => !k || d.kind === k).length}
+              </button>
+            ))}
+            <select
+              className={styles.select}
+              aria-label="Statut"
+              value={status}
+              onChange={e => update({ statut: e.target.value })}
+            >
+              <option value="">Tous statuts</option>
+              <option value="ouvertes" title="Ni réalisées ni abandonnées">
+                À mener
+              </option>
+              {DILIGENCE_STATUSES.map(s => (
+                <option key={s}>{s}</option>
+              ))}
+            </select>
+            <select
+              className={styles.select}
+              aria-label="Responsable"
+              value={owner}
+              onChange={e => update({ responsable: e.target.value })}
+            >
+              <option value="">Tous responsables</option>
+              {partiesOf(ws.diligences, ws.parties).map(p => (
+                <option key={p}>{p}</option>
+              ))}
+            </select>
+          </div>
+
+          {!shown.length ? (
+            <p className={page.emptyState}>Aucune diligence ne correspond à ces filtres.</p>
+          ) : view === 'registre' ? (
+            <DiligenceTable items={shown} />
+          ) : (
+            owners.map(o => {
+              const items = shown.filter(d => ownerOf(d) === o);
+              return items.length ? (
+                <section key={o} aria-label={o}>
+                  <h2 className={page.h2}>
+                    {o}{' '}
+                    <span className={page.faint}>
+                      {items.filter(d => diligenceOpen(d.status)).length} à mener sur {items.length}
+                    </span>
+                  </h2>
+                  <DiligenceTable items={items} />
+                </section>
+              ) : null;
+            })
+          )}
+        </>
       )}
     </div>
   );

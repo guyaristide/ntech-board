@@ -36,11 +36,15 @@ export function EpicPage() {
       <h1 className={page.h1}>{epic.title}</h1>
       <p className={page.lead}>{epic.summary}</p>
       <div className={page.props}>
-        <span className={page.propLabel}>⬢ Version</span>
+        <span className={page.propLabel}>
+          <span aria-hidden="true">⬢</span> Version
+        </span>
         <div className={page.propText}>
           <Tag value={epic.version} />
         </div>
-        <span className={page.propLabel}>▦ Ateliers</span>
+        <span className={page.propLabel}>
+          <span aria-hidden="true">▦</span> Ateliers
+        </span>
         <div className={`${page.propText} ${styles.inline}`}>
           {epic.workshops.length
             ? epic.workshops.map(w => (
@@ -50,9 +54,13 @@ export function EpicPage() {
               ))
             : 'À définir'}
         </div>
-        <span className={page.propLabel}>§ Source</span>
+        <span className={page.propLabel}>
+          <span aria-hidden="true">§</span> Source
+        </span>
         <div className={page.propText}>{epic.source}</div>
-        <span className={page.propLabel}>◉ Avancement</span>
+        <span className={page.propLabel}>
+          <span aria-hidden="true">◉</span> Avancement
+        </span>
         <div className={`${page.propText} ${styles.inline}`}>
           {STATUSES.map(st => {
             const n = stories.filter(s => s.status === st).length;

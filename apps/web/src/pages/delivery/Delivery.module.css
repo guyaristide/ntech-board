@@ -2,7 +2,9 @@
 
 .filter,
 .select {
+  min-width: 0;
   max-width: 100%;
+  min-height: 28px;
   padding: 3px 6px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -25,7 +27,9 @@
 }
 
 .inline {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
   align-items: center;
   gap: 6px;
   font-size: 14px;
@@ -54,6 +58,10 @@
 .lane,
 .rows {
   container: rows / inline-size;
+}
+.rows {
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 .lane {
   margin: 16px 0;
@@ -99,7 +107,7 @@ a.laneTitle:hover {
 /* Ligne de ticket */
 .row {
   display: grid;
-  grid-template-columns: 16px 74px 70px minmax(0, 1fr) 130px 60px 54px 120px 120px;
+  grid-template-columns: 16px 64px 44px minmax(200px, 1fr) 120px 56px 52px 112px 112px;
   gap: 6px;
   align-items: center;
   min-height: 38px;
@@ -138,19 +146,20 @@ a.laneTitle:hover {
 }
 .title {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 2px 6px;
   min-width: 0;
 }
 .title > :first-child {
-  flex: 1;
+  flex: 1 1 180px;
   min-width: 0;
 }
 .storyLink {
   flex: none;
   color: var(--text-faint);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 12px;
   text-decoration: none;
 }
 .storyLink:hover {
@@ -159,7 +168,8 @@ a.laneTitle:hover {
 .estimate {
   width: 100%;
   min-width: 48px;
-  padding: 3px 4px;
+  min-height: 28px;
+  padding: 3px 6px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--bg);
@@ -181,6 +191,7 @@ a.laneTitle:hover {
 }
 .ready {
   width: 100%;
+  min-height: 28px;
   padding: 2px 6px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -242,6 +253,16 @@ a.laneTitle:hover {
 .card .bar {
   max-width: none;
 }
+.card > button {
+  align-self: flex-start;
+}
+.cardHead > :first-child {
+  font-weight: 600;
+}
+.cardHead > select {
+  flex: none;
+  width: auto;
+}
 
 /* Cartes (sprints, versions) */
 .cards {
@@ -271,12 +292,28 @@ a.card:hover {
   gap: 8px;
 }
 .dates {
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+.dates > select {
+  min-width: 0;
+  max-width: 100%;
+}
+/* Début → fin sur une ligne, même dans une carte étroite. */
+.card .dates {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.card .dates input {
+  width: 100%;
+  min-width: 0;
 }
 .dates input[type='date'] {
+  min-height: 28px;
   padding: 2px 6px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -332,91 +369,8 @@ a.card:hover {
   white-space: nowrap;
 }
 
-/* Frise */
-.timeline {
-  position: relative;
-  margin: 16px 0;
-  padding: 26px 0 8px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.months {
-  position: absolute;
-  inset: 0 0 auto 120px;
-  height: 22px;
-}
-.months span {
-  position: absolute;
-  top: 4px;
-  padding-left: 4px;
-  border-left: 1px solid var(--line);
-  color: var(--text-faint);
-  font-size: 11px;
-  white-space: nowrap;
-}
-.track {
-  position: relative;
-  height: 26px;
-  margin-left: 120px;
-}
-.trackLabel {
-  position: absolute;
-  left: -116px;
-  top: 4px;
-  width: 110px;
-  overflow: hidden;
-  color: var(--text-muted);
-  font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.releaseBar,
-.sprintBar {
-  position: absolute;
-  top: 5px;
-  height: 16px;
-  border-radius: 4px;
-}
-.releaseBar {
-  background: var(--tag-purple);
-}
-.releaseBar[data-status='Livrée'] {
-  background: var(--tag-green);
-}
-.releaseBar[data-status='Abandonnée'] {
-  background: var(--tag-gray);
-}
-.sprintBar {
-  overflow: hidden;
-  background: var(--tag-blue);
-  color: var(--tag-blue-text);
-  font-size: 10px;
-  line-height: 16px;
-  text-align: center;
-  text-decoration: none;
-  outline: 1px solid var(--bg);
-}
-.sprintBar[data-status='closed'] {
-  background: var(--tag-gray);
-  color: var(--tag-gray-text);
-}
-.axis {
-  position: absolute;
-  inset: 0 0 0 120px;
-  pointer-events: none;
-}
-.today {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: var(--danger);
-  opacity: 0.5;
-}
-
 /* Les lignes s'adaptent à la largeur de leur liste (backlog large, fiche de sprint plus étroite). */
-@container rows (max-width: 899px) {
+@container rows (max-width: 1023px) {
   .row {
     grid-template-columns: 16px 64px minmax(0, 1fr) 54px 54px 110px 110px;
   }
@@ -454,6 +408,20 @@ a.card:hover {
   }
   .row > .sprintSel {
     grid-area: sprint;
+  }
+}
+/* Tactile : cibles de 36 px, et police de 16 px pour éviter le zoom de Safari sur iPhone. */
+@media (pointer: coarse) {
+  .select,
+  .filter,
+  .estimate,
+  .ready,
+  .dates input[type='date'] {
+    min-height: 36px;
+    font-size: 16px;
+  }
+  .key {
+    padding: 6px 0;
   }
 }
 @media (max-width: 600px) {

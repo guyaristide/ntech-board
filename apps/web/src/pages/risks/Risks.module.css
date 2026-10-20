@@ -7,6 +7,7 @@
 .rating select,
 .reviewForm select,
 .reviewForm input {
+  min-height: 28px;
   padding: 2px 8px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);

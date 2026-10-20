@@ -202,16 +202,16 @@ export function Risks() {
             />
           </div>
           <div className={backlog.tableWrap}>
-            <table className={backlog.table}>
+            <table className={backlog.table} style={{ minWidth: 1100 }}>
               <colgroup>
-                <col style={{ width: 70 }} />
+                <col style={{ width: 60 }} />
                 <col />
-                <col style={{ width: 150 }} />
-                <col style={{ width: 120 }} />
-                <col style={{ width: 120 }} />
-                <col style={{ width: 150 }} />
-                <col style={{ width: 110 }} />
                 <col style={{ width: 130 }} />
+                <col style={{ width: 104 }} />
+                <col style={{ width: 104 }} />
+                <col style={{ width: 140 }} />
+                <col style={{ width: 104 }} />
+                <col style={{ width: 120 }} />
               </colgroup>
               <thead>
                 <tr>

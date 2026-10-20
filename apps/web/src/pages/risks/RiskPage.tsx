@@ -141,9 +141,9 @@ export function RiskPage() {
     ],
     ['⚠', 'Cotation initiale', rating('initial')],
     ['⛨', 'Cotation résiduelle', rating('residual')],
-    ['👤', 'Propriétaire', person('Propriétaire du risque', 'owner')],
-    ['⚒', 'Responsable action', person('Responsable de l’action', 'actionOwner')],
-    ['⚖', 'Autorité d’arbitrage', person('Autorité d’arbitrage', 'authority')],
+    ['○', 'Propriétaire', person('Propriétaire du risque', 'owner')],
+    ['⚒︎', 'Responsable action', person('Responsable de l’action', 'actionOwner')],
+    ['⚖︎', 'Autorité d’arbitrage', person('Autorité d’arbitrage', 'authority')],
     [
       '◷',
       'Échéance',
