@@ -32,7 +32,7 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
   const mine = ws.tickets.filter(
     t => myParties.includes(t.assignee) && stepOf(ws.settings, t.status)?.category !== 'done',
   ).length;
-  const [open, setOpen] = useState({ epics: true, workshops: true });
+  const [open, setOpen] = useState({ epics: false, workshops: false });
   const [editingName, setEditingName] = useState(false);
   const link = ({ isActive }: { isActive: boolean }) =>
     isActive ? `${styles.link} ${styles.active}` : styles.link;
