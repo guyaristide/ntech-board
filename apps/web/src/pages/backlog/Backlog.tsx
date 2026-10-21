@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { versionsOf, SCENARIO_LABEL } from '@board/shared';
+import { exportCsv } from '../../model/exporters';
 import { programme } from '../../model/programme';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import type { Scenario } from '@board/shared';
@@ -41,6 +42,7 @@ export function Backlog() {
     versionsOf(ws.settings),
   );
   const active = FILTER_KEYS.filter(k => filters[k].length).length;
+  const filtered = rows.length !== ws.stories.length;
 
   const setParam = (mutate: (p: URLSearchParams) => void) => {
     const next = new URLSearchParams(params);
@@ -101,6 +103,19 @@ export function Backlog() {
           ))}
         </div>
         <span className={styles.total}>{rows.length} US</span>
+        <button
+          type="button"
+          className={page.ghost}
+          disabled={!rows.length}
+          title={
+            filtered
+              ? 'Exporter en CSV les US affichées, selon les filtres, la recherche et le tri en cours'
+              : 'Exporter en CSV toutes les US du backlog'
+          }
+          onClick={() => exportCsv(rows, filtered ? 'backlog-filtre' : 'backlog')}
+        >
+          ⤓ {filtered ? `Exporter ces ${rows.length} US` : 'Exporter'} (CSV)
+        </button>
         <input
           type="search"
           className={styles.search}

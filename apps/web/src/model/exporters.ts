@@ -33,8 +33,11 @@ export const exportJson = (ws: WorkspaceData & { session: { project: { slug: str
 
 const cell = (v: string) => `"${v.replace(/"/g, '""')}"`;
 
-/** Backlog au format CSV (séparateur point-virgule, lisible par Excel en français). */
-export function exportCsv(stories: Story[]) {
+/**
+ * Backlog au format CSV (séparateur point-virgule, lisible par Excel en français).
+ * `name` : nom du fichier sans date ni extension (« backlog » par défaut).
+ */
+export function exportCsv(stories: Story[], name = 'backlog') {
   const head = [
     'ID',
     'Épique',
@@ -76,7 +79,7 @@ export function exportCsv(stories: Story[]) {
     s.body.map(b => b.text).join('\n'),
   ]);
   const csv = [head, ...rows].map(r => r.map(v => cell(String(v ?? ''))).join(';')).join('\r\n');
-  download(`backlog-${stamp()}.csv`, 'text/csv;charset=utf-8', `﻿${csv}`);
+  download(`${name}-${stamp()}.csv`, 'text/csv;charset=utf-8', `﻿${csv}`);
 }
 
 /** Markdown d'une US, pour un copier-coller dans un PV ou un ticket. */
