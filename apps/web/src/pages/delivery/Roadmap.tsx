@@ -16,6 +16,7 @@ import { EditableText } from '../../ui/EditableText';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
 import { DeliveryGate, period, sprintOrder } from './parts';
+import { ReleaseSprints, SprintPlanner, type PlanMode } from './ReleaseSprints';
 import styles from './Delivery.module.css';
 import tl from './Timeline.module.css';
 
@@ -138,6 +139,14 @@ export function Roadmap() {
   const { settings, releases, sprints, tickets } = useDelivery();
   const canEdit = useCanEdit();
   const sorted = [...releases].sort((a, b) => (a.end ?? '9').localeCompare(b.end ?? '9'));
+  const [planning, setPlanning] = useState<{ release: string; mode: PlanMode } | null>(null);
+  const planned = planning && releases.find(r => r.id === planning.release);
+  const openPlanner = (release: string, mode: PlanMode) => {
+    setPlanning({ release, mode });
+    requestAnimationFrame(() =>
+      document.getElementById('planificateur')?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    );
+  };
   return (
     <DeliveryGate>
       <div className={`${page.page} ${page.wide}`}>
@@ -157,6 +166,16 @@ export function Roadmap() {
           </p>
         ) : null}
         <Timeline releases={sorted} sprints={[...sprints].sort(sprintOrder)} />
+        {planning && planned ? (
+          <div id="planificateur">
+            <SprintPlanner
+              key={`${planning.release}:${planning.mode}`}
+              release={planned}
+              mode={planning.mode}
+              onClose={() => setPlanning(null)}
+            />
+          </div>
+        ) : null}
         <div className={styles.cards}>
           {sorted.map(r => {
             const p = progress(
@@ -239,6 +258,7 @@ export function Roadmap() {
                 <span className={styles.bar} aria-label={`${pct} % terminé`}>
                   <span style={{ width: `${pct}%` }} />
                 </span>
+                <ReleaseSprints release={r} onPlan={mode => openPlanner(r.id, mode)} />
                 <span className={page.faint}>
                   {p.doneCount}/{p.count} tickets terminés
                   {p.total ? ` · ${amount(p.done, settings)} sur ${amount(p.total, settings)}` : ''}

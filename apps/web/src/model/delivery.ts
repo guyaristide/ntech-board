@@ -1,5 +1,13 @@
 import { useShallow } from 'zustand/react/shallow';
-import type { Campaign, Release, Sprint, TestStatus, Ticket, TicketLinkType, VerdictStatus } from '@board/shared';
+import type {
+  Campaign,
+  Release,
+  Sprint,
+  TestStatus,
+  Ticket,
+  TicketLinkType,
+  VerdictStatus,
+} from '@board/shared';
 export { byRank, rankAt } from '@board/shared';
 import { api } from './api';
 import { ops, useWorkspace } from './store';
@@ -10,7 +18,10 @@ import { ops, useWorkspace } from './store';
  */
 type Editable<T> = Partial<Omit<T, 'id'>>;
 
-const created = <T extends { id: string }>(kind: 'release' | 'sprint' | 'ticket' | 'campaign', items: T[]) => {
+const created = <T extends { id: string }>(
+  kind: 'release' | 'sprint' | 'ticket' | 'campaign',
+  items: T[],
+) => {
   for (const item of items) ops.replace(kind, item.id, item);
   return items;
 };
@@ -33,6 +44,30 @@ export const delivery = {
     const s = await ops.send('sprint', 'new', () => api.post<Sprint>('/sprints', { patch }));
     return created('sprint', [s])[0].id;
   },
+  /** Crée d'un coup les sprints d'une version (voir l'API /releases/:id/sprints). */
+  planSprints: async (
+    release: string,
+    plan: {
+      start: string;
+      weeks: number;
+      until: string | null;
+      count: number | null;
+      capacity: number | null;
+    },
+  ) =>
+    created(
+      'sprint',
+      await ops.send('release', release, () => api.post<Sprint[]>(`/releases/${release}/sprints`, plan)),
+    ),
+  /** Met à jour d'un coup les sprints d'une version : dates des sprints prévus, capacité. */
+  replanSprints: async (
+    release: string,
+    patch: { start?: string | null; weeks?: number | null; capacity?: number | null },
+  ) =>
+    created(
+      'sprint',
+      await ops.send('release', release, () => api.patch<Sprint[]>(`/releases/${release}/sprints`, patch)),
+    ),
   updateSprint: (id: string, patch: Editable<Sprint>) => {
     ops.local('sprint', id, (s: Sprint) => ({ ...s, ...patch }));
     ops.defer(`sprint:${id}`, 'sprint', id, patch, p => api.patch(`/sprints/${id}`, p));
@@ -48,7 +83,10 @@ export const delivery = {
 
   /** Passe des US du cadrage en réalisation : un ticket « US » chacune. */
   addStories: async (stories: string[], patch?: Editable<Ticket>) =>
-    created('ticket', await ops.send('ticket', 'new', () => api.post<Ticket[]>('/tickets', { stories, patch }))),
+    created(
+      'ticket',
+      await ops.send('ticket', 'new', () => api.post<Ticket[]>('/tickets', { stories, patch })),
+    ),
   createTicket: async (patch: Editable<Ticket> & { title: string }) =>
     created('ticket', await ops.send('ticket', 'new', () => api.post<Ticket[]>('/tickets', { patch })))[0].id,
   updateTicket: (id: string, patch: Editable<Ticket>) => {
@@ -92,7 +130,10 @@ export const delivery = {
   setResult: (id: string, key: string, status: TestStatus, comment: string, by: string) => {
     ops.local('campaign', id, (x: Campaign) => ({
       ...x,
-      results: { ...x.results, [key]: { bug: x.results[key]?.bug ?? '', status, comment, by, at: new Date().toISOString() } },
+      results: {
+        ...x.results,
+        [key]: { bug: x.results[key]?.bug ?? '', status, comment, by, at: new Date().toISOString() },
+      },
     }));
     ops.defer(`result:${id}:${key}`, 'campaign', id, { status, comment }, p =>
       api.put(`/campaigns/${id}/results/${encodeURIComponent(key)}`, p),
@@ -110,7 +151,9 @@ export const delivery = {
   /** Ouvre un bug depuis un cas KO ou en réserve. */
   openBug: async (id: string, key: string) => {
     const r = await ops.send('campaign', id, () =>
-      api.post<{ campaign: Campaign; bug: Ticket }>(`/campaigns/${id}/results/${encodeURIComponent(key)}/bug`),
+      api.post<{ campaign: Campaign; bug: Ticket }>(
+        `/campaigns/${id}/results/${encodeURIComponent(key)}/bug`,
+      ),
     );
     ops.replace('campaign', id, r.campaign);
     ops.replace('ticket', r.bug.id, r.bug);

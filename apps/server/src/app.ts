@@ -13,6 +13,7 @@ import { adminRoutes } from './routes/admin';
 import { authRoutes } from './routes/auth';
 import { governanceRoutes } from './routes/governance';
 import { deliveryRoutes } from './routes/delivery';
+import { sprintPlanRoutes } from './routes/sprintPlan';
 import { partyRoutes } from './routes/parties';
 import { recetteRoutes } from './routes/recette';
 import { tokenRoutes } from './routes/tokens';
@@ -62,6 +63,7 @@ export function createApp() {
   api.route('/', pdfRoutes);
   api.route('/', partyRoutes);
   api.route('/', deliveryRoutes);
+  api.route('/', sprintPlanRoutes);
   api.route('/', recetteRoutes);
   api.route('/', tokenRoutes);
   // Le serveur MCP rappelle l'API du tableau (mêmes contrôles), sans repasser par le réseau.

@@ -65,3 +65,25 @@ export const TicketLinkBody = z.object({
   ticket: z.string().min(1).max(40),
   type: z.enum(TICKET_LINK_TYPES),
 });
+
+/** Création en série des sprints d'une version : jusqu'à une date, ou un nombre de sprints. */
+export const SprintPlan = z
+  .object({
+    start: z.iso.date(),
+    weeks: z.number().int().min(1).max(8),
+    until: z.iso.date().nullable().default(null),
+    count: z.number().int().min(1).max(26).nullable().default(null),
+    capacity: amount.default(null),
+  })
+  .refine(p => p.until || p.count, { message: 'until_or_count' });
+/**
+ * Mise à jour en série des sprints d'une version. Dates : les sprints pas encore commencés sont
+ * réenchaînés à partir de `start`, sur `weeks` semaines. Capacité : sprints prévus et en cours.
+ */
+export const SprintReplan = z
+  .object({
+    start: z.iso.date().nullable().default(null),
+    weeks: z.number().int().min(1).max(8).nullable().default(null),
+    capacity: amount.optional(),
+  })
+  .strict();
