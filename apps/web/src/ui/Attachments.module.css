@@ -9,7 +9,7 @@
 .root:focus-visible,
 .root[data-over] {
   border-color: var(--accent);
-  background: var(--accent-fill);
+  background: var(--accent-soft);
 }
 
 .none {

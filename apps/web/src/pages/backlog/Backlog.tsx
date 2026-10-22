@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { versionsOf, SCENARIO_LABEL } from '@board/shared';
+import { delivery } from '../../model/delivery';
 import { exportCsv } from '../../model/exporters';
 import { programme } from '../../model/programme';
-import { useCanEdit, useWorkspace } from '../../model/store';
+import { useCanEdit, useSeesDelivery, useWorkspace } from '../../model/store';
 import type { Scenario } from '@board/shared';
 import { Popover } from '../../ui/Popover';
 import page from '../Page.module.css';
@@ -35,6 +36,9 @@ export function Backlog() {
   const filters = readFilters(params);
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'id', dir: 1 });
   const [picking, setPicking] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [sent, setSent] = useState<{ busy?: boolean; text?: string }>({});
+  const sees = useSeesDelivery();
   const rows = sortStories(
     applyFilters(ws.stories, filters, query),
     sort.key,
@@ -75,6 +79,28 @@ export function Backlog() {
     navigate(`/us/${id}?nouvelle=1`);
   };
   const epicFilter = filters.epic.length === 1 ? filters.epic[0] : null;
+
+  // Sélection : seules les US affichées comptent, les filtres peuvent en masquer.
+  const select = (ids: string[], on: boolean) =>
+    setSelected(prev => {
+      const next = new Set(prev);
+      ids.forEach(id => (on ? next.add(id) : next.delete(id)));
+      return next;
+    });
+  const chosen = rows.filter(s => selected.has(s.id));
+  const taken = new Set(ws.tickets.map(t => t.story).filter(Boolean));
+  const toDeliver = chosen.filter(s => !taken.has(s.id) && s.status !== 'Écartée');
+  const skipped = chosen.length - toDeliver.length;
+  const deliver = async () => {
+    setSent({ busy: true });
+    try {
+      const created = await delivery.addStories(toDeliver.map(s => s.id));
+      setSelected(new Set());
+      setSent({ text: `${created.length} ticket(s) créé(s) dans le backlog de réalisation.` });
+    } catch {
+      setSent({ text: 'Passage en réalisation impossible, réessayez.' });
+    }
+  };
 
   return (
     <div className={`${page.page} ${page.wide}`}>
@@ -188,9 +214,45 @@ export function Backlog() {
         ) : null}
       </div>
 
+      {chosen.length && view === 'table' ? (
+        <div className={styles.bulk} role="region" aria-label="Actions sur la sélection">
+          <strong>{chosen.length} US sélectionnée(s)</strong>
+          {sees && canEdit ? (
+            <button
+              type="button"
+              className={page.primary}
+              disabled={!toDeliver.length || sent.busy}
+              title="Crée un ticket par US dans le backlog de réalisation ; le ticket reste lié à son US"
+              onClick={() => void deliver()}
+            >
+              {sent.busy ? 'Création…' : `⇢ Passer en réalisation (${toDeliver.length})`}
+            </button>
+          ) : null}
+          <button type="button" className={page.ghost} onClick={() => exportCsv(chosen, 'backlog-selection')}>
+            ⤓ Exporter la sélection (CSV)
+          </button>
+          <button type="button" className={page.ghost} onClick={() => setSelected(new Set())}>
+            Désélectionner
+          </button>
+          {sees && skipped ? (
+            <span className={page.faint}>{skipped} ignorée(s) : déjà en réalisation ou écartée(s)</span>
+          ) : null}
+        </div>
+      ) : null}
+      {sent.text && !sent.busy ? (
+        <p className={styles.bulk} role="status">
+          {sent.text} <Link to="/realisation">Ouvrir le backlog de réalisation</Link>
+          <button type="button" className={page.ghost} onClick={() => setSent({})}>
+            OK
+          </button>
+        </p>
+      ) : null}
+
       {view === 'table' ? (
         <StoryTable
           stories={rows}
+          selected={selected}
+          onSelect={select}
           sort={sort}
           onSort={key => setSort(s => ({ key, dir: s.key === key ? (-s.dir as 1 | -1) : 1 }))}
         />
