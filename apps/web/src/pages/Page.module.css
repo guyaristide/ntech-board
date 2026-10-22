@@ -52,9 +52,10 @@
   letter-spacing: -0.01em;
 }
 
+/* Toute la largeur de la page, comme le titre ; pas de mot seul en dernière ligne. */
 .lead {
-  max-width: 76ch;
   margin: 0 0 18px;
+  text-wrap: pretty;
   color: var(--text-muted);
   font-size: 16px;
 }
