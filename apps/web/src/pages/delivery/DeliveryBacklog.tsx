@@ -8,13 +8,26 @@ import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { useTicketColumns } from './exports';
 import { ImportStories } from './ImportStories';
+import { TicketBulkBar } from './TicketBulkBar';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag, TicketRow } from './parts';
 import styles from './Delivery.module.css';
 
 const DRAG = 'application/x-ticket';
 
+type Select = (ids: string[], on: boolean) => void;
+
 /** Une colonne de planification : un sprint, ou le backlog (sprint vide). */
-function Lane({ sprint, tickets }: { sprint: Sprint | null; tickets: Ticket[] }) {
+function Lane({
+  sprint,
+  tickets,
+  selected,
+  onSelect,
+}: {
+  sprint: Sprint | null;
+  tickets: Ticket[];
+  selected: Set<string>;
+  onSelect?: Select;
+}) {
   const canEdit = useCanEdit();
   const { settings } = useDelivery();
   const [over, setOver] = useState(false);
@@ -42,6 +55,20 @@ function Lane({ sprint, tickets }: { sprint: Sprint | null; tickets: Ticket[] })
       onDrop={e => drop(e, null)}
     >
       <header className={styles.laneHead}>
+        {onSelect && list.length ? (
+          <input
+            type="checkbox"
+            className={styles.pick}
+            checked={list.every(t => selected.has(t.id))}
+            aria-label={`Sélectionner tous les tickets de ${sprint?.name ?? 'Backlog'}`}
+            onChange={e =>
+              onSelect(
+                list.map(t => t.id),
+                e.target.checked,
+              )
+            }
+          />
+        ) : null}
         {sprint ? (
           <>
             <Link to={`/realisation/sprint/${sprint.id}`} className={styles.laneTitle}>
@@ -77,6 +104,8 @@ function Lane({ sprint, tickets }: { sprint: Sprint | null; tickets: Ticket[] })
             e.dataTransfer.effectAllowed = 'move';
           }}
           onDrop={e => drop(e, t.id)}
+          selected={selected.has(t.id)}
+          onSelect={onSelect && (on => onSelect([t.id], on))}
         />
       ))}
       {!list.length ? (
@@ -101,6 +130,13 @@ export function DeliveryBacklog() {
   const [release, setRelease] = useState('');
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const select: Select = (ids, on) =>
+    setSelected(prev => {
+      const next = new Set(prev);
+      ids.forEach(id => (on ? next.add(id) : next.delete(id)));
+      return next;
+    });
   // Les sous-tâches vivent avec leur ticket parent (fiche ticket, tableau du sprint).
   const shown = tickets.filter(
     t =>
@@ -118,6 +154,9 @@ export function DeliveryBacklog() {
     [...l].sort(byRank),
   );
   const columns = useTicketColumns();
+  // Seuls les tickets affichés comptent : un filtre peut en masquer.
+  const chosen = exported.filter(t => selected.has(t.id));
+  const lane = { selected, onSelect: canEdit ? select : undefined };
 
   return (
     <DeliveryGate>
@@ -192,10 +231,13 @@ export function DeliveryBacklog() {
           </form>
         ) : null}
         {importing ? <ImportStories onClose={() => setImporting(false)} /> : null}
+        {chosen.length ? (
+          <TicketBulkBar tickets={chosen} columns={columns} onClear={() => setSelected(new Set())} />
+        ) : null}
         {open.map(s => (
-          <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} />
+          <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} {...lane} />
         ))}
-        <Lane sprint={null} tickets={unplanned} />
+        <Lane sprint={null} tickets={unplanned} {...lane} />
         {sprints.some(s => s.status === 'closed') ? (
           <p className={page.faint}>
             Les sprints clos et leurs tickets sont dans <Link to="/realisation/sprints">Sprints</Link>.

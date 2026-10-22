@@ -61,6 +61,17 @@ export const TicketCreate = z.union([
   z.object({ patch: TicketPatch.extend({ title: z.string().trim().min(1).max(500) }) }),
 ]);
 
+/** Actions groupées sur des tickets choisis : version, sprint, étape, responsable, type. */
+const ticketIds = z.array(z.string().min(1).max(40)).min(1).max(500);
+export const TicketBulk = z.object({
+  ids: ticketIds,
+  patch: TicketPatch.pick({ type: true, status: true, release: true, sprint: true, assignee: true }).refine(
+    p => Object.keys(p).length > 0,
+    { message: 'empty' },
+  ),
+});
+export const TicketIds = z.object({ ids: ticketIds });
+
 export const TicketLinkBody = z.object({
   ticket: z.string().min(1).max(40),
   type: z.enum(TICKET_LINK_TYPES),

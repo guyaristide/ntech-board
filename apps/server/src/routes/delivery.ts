@@ -34,7 +34,9 @@ import {
   SprintClose,
   SprintCreate,
   SprintPatch,
+  TicketBulk,
   TicketCreate,
+  TicketIds,
   TicketLinkBody,
   TicketPatch,
 } from './deliverySchemas';
@@ -357,6 +359,61 @@ deliveryRoutes.delete('/tickets/:id', ...write, async c => {
     parent: '',
   });
   return c.json({ ok: true });
+});
+
+/** Modifie d'un coup les tickets choisis (même version, sprint, étape, responsable ou type). */
+deliveryRoutes.patch('/tickets', ...write, async c => {
+  const input = await body(c.req, TicketBulk);
+  if (!input) return c.json({ error: 'invalid' }, 400);
+  const { project, user } = who(c);
+  const { patch } = input;
+  const settings = await getSettings(project);
+  if (patch.status && !settings.delivery.workflow.some(s => s.id === patch.status))
+    return c.json({ error: 'invalid', message: 'Étape inconnue.' }, 400);
+  if (patch.type && !settings.delivery.ticketTypes.some(t => t.id === patch.type))
+    return c.json({ error: 'invalid', message: 'Type inconnu.' }, 400);
+  if (patch.sprint && !(await getEntity(project, 'sprint', patch.sprint)))
+    return c.json({ error: 'not_found' }, 404);
+  if (patch.release && !(await getEntity(project, 'release', patch.release)))
+    return c.json({ error: 'not_found' }, 404);
+  const at = now();
+  const tickets = await mutateMany(
+    project,
+    'ticket',
+    input.ids,
+    user.id,
+    'update',
+    t => ({ ...t, ...patch, updatedAt: at }),
+    patch,
+  );
+  return c.json(tickets);
+});
+
+/** Supprime les tickets choisis ; les liaisons et les sous-tâches restantes sont nettoyées. */
+deliveryRoutes.post('/tickets/suppression', ...write, async c => {
+  const input = await body(c.req, TicketIds);
+  if (!input) return c.json({ error: 'invalid' }, 400);
+  const { project, user } = who(c);
+  const gone = new Set<string>();
+  for (const id of input.ids) {
+    try {
+      await deleteEntity(project, user.id, 'ticket', id);
+      gone.add(id);
+    } catch (e) {
+      if (!(e instanceof NotFound)) throw e;
+    }
+  }
+  const others = (await all<Ticket>(project, 'ticket')).map(withTicketDefaults);
+  const linked = others.filter(t => t.links.some(l => gone.has(l.ticket))).map(t => t.id);
+  const orphans = others.filter(t => gone.has(t.parent)).map(t => t.id);
+  await mutateMany(project, 'ticket', linked, user.id, 'unlink', t => ({
+    ...t,
+    links: (t.links ?? []).filter(l => !gone.has(l.ticket)),
+  }));
+  await mutateMany(project, 'ticket', orphans, user.id, 'update', t => ({ ...t, parent: '' }), {
+    parent: '',
+  });
+  return c.json({ deleted: [...gone] });
 });
 
 /** Liaison entre deux tickets, posée des deux côtés dans une transaction (une seule par couple). */

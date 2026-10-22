@@ -93,6 +93,22 @@ export const delivery = {
     ops.local('ticket', id, (t: Ticket) => ({ ...t, ...patch, updatedAt: new Date().toISOString() }));
     ops.defer(`ticket:${id}`, 'ticket', id, patch, p => api.patch(`/tickets/${id}`, p));
   },
+  /** Même modification sur plusieurs tickets, affichée tout de suite puis envoyée en une requête. */
+  updateTickets: async (
+    ids: string[],
+    patch: Pick<Editable<Ticket>, 'type' | 'status' | 'release' | 'sprint' | 'assignee'>,
+  ) => {
+    const at = new Date().toISOString();
+    ids.forEach(id => ops.local('ticket', id, (t: Ticket) => ({ ...t, ...patch, updatedAt: at })));
+    const saved = await ops.send('ticket', 'bulk', () => api.patch<Ticket[]>('/tickets', { ids, patch }));
+    saved.forEach(t => ops.replace('ticket', t.id, t));
+  },
+  deleteTickets: async (ids: string[]) => {
+    const { deleted } = await ops.send('ticket', 'bulk', () =>
+      api.post<{ deleted: string[] }>('/tickets/suppression', { ids }),
+    );
+    deleted.forEach(id => ops.replace('ticket', id, null));
+  },
   deleteTicket: async (id: string) => {
     await ops.send('ticket', id, () => api.delete(`/tickets/${id}`));
     ops.replace('ticket', id, null);

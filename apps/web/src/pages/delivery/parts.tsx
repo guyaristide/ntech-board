@@ -145,10 +145,15 @@ export function TicketRow({
   ticket,
   onDragStart,
   onDrop,
+  selected,
+  onSelect,
 }: {
   ticket: Ticket;
   onDragStart?: (e: DragEvent) => void;
   onDrop?: (e: DragEvent) => void;
+  /** Sélection pour les actions groupées : une case à la place de la poignée. */
+  selected?: boolean;
+  onSelect?: (on: boolean) => void;
 }) {
   const ws = useWorkspace();
   const { settings, releases, sprints, tickets } = useDelivery();
@@ -166,6 +171,7 @@ export function TicketRow({
       className={styles.row}
       data-over={over || undefined}
       data-done={step?.category === 'done' || undefined}
+      data-selected={selected || undefined}
       draggable={canEdit}
       onDragStart={onDragStart}
       onDragOver={e => {
@@ -179,9 +185,19 @@ export function TicketRow({
         onDrop?.(e);
       }}
     >
-      <span className={styles.handle} aria-hidden="true">
-        {canEdit ? '⋮⋮' : ''}
-      </span>
+      {onSelect ? (
+        <input
+          type="checkbox"
+          className={styles.pick}
+          checked={!!selected}
+          aria-label={`Sélectionner ${ticket.id}`}
+          onChange={e => onSelect(e.target.checked)}
+        />
+      ) : (
+        <span className={styles.handle} aria-hidden="true">
+          {canEdit ? '⋮⋮' : ''}
+        </span>
+      )}
       <Link to={`/realisation/ticket/${ticket.id}`} className={styles.key}>
         {ticket.id}
       </Link>

@@ -123,6 +123,15 @@ a.laneTitle:hover {
 .row[data-done] .title {
   color: var(--text-muted);
 }
+.row[data-selected] {
+  background: var(--accent-soft);
+}
+.pick {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  cursor: pointer;
+}
 .row[draggable='true'] {
   cursor: grab;
 }
@@ -391,6 +400,16 @@ a.card:hover {
   .row > .handle {
     display: none;
   }
+  /* Avec la case de sélection : une colonne étroite à gauche, devant la clé. */
+  .row:has(> .pick) {
+    grid-template-columns: 20px 56px 50px minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'pick key title title title'
+      '. estimate ready status sprint';
+  }
+  .row > .pick {
+    grid-area: pick;
+  }
   .row > .key {
     grid-area: key;
   }
@@ -434,4 +453,8 @@ a.card:hover {
   .pickRow .key {
     display: none;
   }
+}
+
+.bulkSelect {
+  max-width: 200px;
 }
