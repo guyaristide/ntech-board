@@ -74,7 +74,13 @@ workspaceRoutes.get('/workspace', read, async c => {
   const data = await getWorkspace(p.id, p.planning);
   // La partie Réalisation n'est envoyée qu'à ceux qui la voient (réglages du projet).
   if (!(await seesDelivery(p.id, c.get('role'), c.get('user')!.id)))
-    Object.assign(data, { releases: [], sprints: [], tickets: [], campaigns: [] });
+    Object.assign(data, {
+      releases: [],
+      sprints: [],
+      tickets: [],
+      campaigns: [],
+      attachments: data.attachments.filter(a => !isDeliveryKind(a.owner.kind)),
+    });
   return c.json(data);
 });
 

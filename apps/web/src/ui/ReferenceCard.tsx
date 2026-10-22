@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { AttachmentsFold } from './Attachments';
 import type { Reference } from '@board/shared';
 import styles from './ReferenceCard.module.css';
 
@@ -68,6 +69,7 @@ export function ReferenceCard({ reference, showSessions }: { reference: Referenc
           })}
         </p>
       ) : null}
+      <AttachmentsFold kind="reference" id={reference.id} />
     </article>
   );
 }

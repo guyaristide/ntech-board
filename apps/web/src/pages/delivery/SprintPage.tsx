@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react';
+import { Attachments } from '../../ui/Attachments';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { amount, isDone, progress, workdaysLeft, STEP_CATEGORY_LABEL } from '@board/shared';
 import { ApiError } from '../../model/api';
@@ -286,6 +287,8 @@ export function SprintPage() {
           onChange={retro => set({ retro })}
           placeholder="Ce qui a bien marché, ce qui est à améliorer, actions"
         />
+        <h2 className={page.h2}>Pièces jointes</h2>
+        <Attachments kind="sprint" id={sprint.id} />
       </div>
     </DeliveryGate>
   );

@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Attachments } from '../../ui/Attachments';
 import { programmeOrder, programmeWeeks, PV_STATUSES } from '@board/shared';
 import { programme } from '../../model/programme';
 import { useCanEdit, useWorkspace } from '../../model/store';
@@ -293,6 +294,8 @@ export function WorkshopPage() {
         onChange={notes => ws.updateWorkshop(w.id, { notes })}
         placeholder="Synthèse, décisions, actions…"
       />
+      <h2 className={page.h2}>Pièces jointes</h2>
+      <Attachments kind="workshop" id={w.id} />
       <h2 className={page.h2}>Commentaires</h2>
       <Comments items={w.comments} onAdd={text => void ws.commentWorkshop(w.id, text)} />
     </div>

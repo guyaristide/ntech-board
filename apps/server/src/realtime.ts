@@ -1,5 +1,12 @@
 import pg from 'pg';
-import { isDeliveryKind, type EntityKind, type PresenceEntry, type Role, type ServerEvent } from '@board/shared';
+import {
+  isDeliveryKind,
+  type Attachment,
+  type EntityKind,
+  type PresenceEntry,
+  type Role,
+  type ServerEvent,
+} from '@board/shared';
 import { seesDelivery } from './access';
 import { env } from './env';
 import { scheduleDay } from './pilotage';
@@ -94,7 +101,9 @@ export async function listen(
     if (n.kind === 'ticket' || n.kind === 'sprint') scheduleDay(n.projectId, log);
     const data = await getEntity(n.projectId, n.kind, n.id);
     const event: ServerEvent = { type: 'entity', kind: n.kind, id: n.id, data, by: n.by };
-    if (!isDeliveryKind(n.kind)) return broadcast(n.projectId, event);
+    // Pièce jointe : elle suit la visibilité de l'élément qui la porte.
+    const owner = n.kind === 'attachment' && data ? (data as Attachment).owner.kind : n.kind;
+    if (!isDeliveryKind(owner)) return broadcast(n.projectId, event);
     // Partie Réalisation : seulement aux membres qui la voient (évalué une fois par membre).
     const allowed = new Map<string, boolean>();
     for (const c of clients.values()) {

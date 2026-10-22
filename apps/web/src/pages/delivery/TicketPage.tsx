@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { Attachments } from '../../ui/Attachments';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { isBlocked, stepOf } from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
@@ -219,6 +220,8 @@ export function TicketPage() {
         {ticket.type !== 'subtask' ? <Subtasks ticket={ticket} /> : null}
         <TicketLinks ticket={ticket} />
 
+        <h2 className={page.h2}>Pièces jointes</h2>
+        <Attachments kind="ticket" id={ticket.id} />
         <h2 className={page.h2}>Commentaires</h2>
         <Comments
           items={ticket.comments}

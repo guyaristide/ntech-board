@@ -61,8 +61,9 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `SESSION_DAYS` | `30` | non |
 | `LOGIN_TOKEN_MINUTES` | `20` | non |
 | `COOKIE_SECURE` | `auto` : cookies `Secure` en HTTPS, d'après `X-Forwarded-Proto` | non |
+| `SECRETS_KEY` | Clé de chiffrement des clés de stockage (Cloudinary, MinIO, S3) saisies dans les réglages, par exemple `openssl rand -base64 32`. Sans elle, les pièces jointes restent sur le serveur (volume `board-storage`). **Ne plus la changer ensuite** : les clés déjà enregistrées deviendraient illisibles, il faudrait les ressaisir | non, mais nécessaire pour Cloudinary, MinIO ou S3 |
 
-Marquez `POSTGRES_PASSWORD` et `SMTP_PASSWORD` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
+Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD` et `SECRETS_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
 
 ### Paramètres SMTP (Brevo)
 
@@ -183,7 +184,7 @@ Dans la ressource, ouvrez **Scheduled Tasks**, puis **+ Add** :
   sh -c 'pg_dump -U board -d board -Fc -f /backups/board-$(date +%Y%m%d-%H%M).dump && find /backups -name "board-*.dump" -mtime +14 -delete'
   ```
 
-La commande fait la même chose que `deploy/backup.sh` : un fichier par nuit, 14 jours de conservation, dans le volume `board-backups`. Copiez régulièrement ce volume hors du serveur, vers un stockage S3, un autre serveur ou un NAS. Une sauvegarde qui reste sur la même machine ne protège pas contre la perte du serveur. Le volume `board-storage` contient les fichiers importés : sauvegardez-le aussi.
+La commande fait la même chose que `deploy/backup.sh` : un fichier par nuit, 14 jours de conservation, dans le volume `board-backups`. Copiez régulièrement ce volume hors du serveur, vers un stockage S3, un autre serveur ou un NAS. Une sauvegarde qui reste sur la même machine ne protège pas contre la perte du serveur. Le volume `board-storage` contient les fichiers importés et les pièces jointes gardées sur le serveur (dossier `files/`) : sauvegardez-le aussi. Les pièces jointes rangées dans Cloudinary, MinIO ou S3 relèvent des sauvegardes de ce service.
 
 La restauration est décrite dans [EXPLOITATION.md](EXPLOITATION.md#restaurer-une-sauvegarde).
 

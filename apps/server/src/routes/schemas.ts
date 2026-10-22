@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import {
   ACTION_NATURES,
+  FILE_CATEGORY_KEYS,
+  MAX_FILE_MB,
+  type FileCategory,
   ACTION_STATUSES,
   DILIGENCE_KINDS,
   DILIGENCE_STATUSES,
@@ -210,6 +213,24 @@ export const SettingsPatch = z
     actors: z.array(z.string().trim().min(1).max(80)).max(100),
     referenceDocument: z.string().trim().min(1).max(80),
     mcp: z.object({ roles: z.array(z.enum(ROLES)).max(3) }),
+    files: z
+      .object({
+        store: z.string().trim().min(1).max(40),
+        root: z
+          .string()
+          .trim()
+          .max(80)
+          .regex(/^[\w./-]*$/),
+        folders: z.enum(['element', 'type', 'date', 'flat', 'custom']),
+        template: z
+          .string()
+          .trim()
+          .max(160)
+          .regex(/^[\w{}./-]*$/),
+        maxMb: z.number().min(0.1).max(MAX_FILE_MB),
+        categories: z.array(z.enum(FILE_CATEGORY_KEYS as [FileCategory, ...FileCategory[]])).max(10),
+      })
+      .partial(),
     riskScopes: z
       .array(
         z.object({

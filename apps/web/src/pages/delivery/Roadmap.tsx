@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { AttachmentsFold } from '../../ui/Attachments';
 import { Link } from 'react-router-dom';
 import {
   amount,
@@ -263,6 +264,7 @@ export function Roadmap() {
                   <span style={{ width: `${pct}%` }} />
                 </span>
                 <ReleaseSprints release={r} onPlan={mode => openPlanner(r.id, mode)} />
+                <AttachmentsFold kind="release" id={r.id} />
                 <span className={page.faint}>
                   {p.doneCount}/{p.count} tickets terminés
                   {p.total ? ` · ${amount(p.done, settings)} sur ${amount(p.total, settings)}` : ''}

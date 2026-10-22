@@ -16,6 +16,7 @@ import page from '../Page.module.css';
 import styles from './Parties.module.css';
 import { EditableList } from './EditableList';
 import { SettingsCadrage } from './SettingsCadrage';
+import { SettingsFiles } from './SettingsFiles';
 
 const slug = (s: string) =>
   s
@@ -29,7 +30,6 @@ const uniqueId = (name: string, taken: string[]) => {
   while (taken.includes(id)) id = `${id}-2`;
   return id;
 };
-
 
 /**
  * Réglages du projet, réservés aux administrateurs : partie Réalisation (activation, clé des tickets,
@@ -244,6 +244,7 @@ export function Settings() {
       </section>
 
       <SettingsCadrage draft={draft} setDraft={setDraft} />
+      <SettingsFiles draft={draft} setDraft={setDraft} />
 
       <p className={styles.saveBar}>
         {dirty ? <span className={page.faint}>Modifications non enregistrées</span> : null}

@@ -40,6 +40,11 @@ export const env = {
   sessionDays: Number(process.env.SESSION_DAYS ?? 30),
   loginTokenMinutes: Number(process.env.LOGIN_TOKEN_MINUTES ?? 20),
   storageDir: process.env.STORAGE_DIR ?? './storage',
+  /**
+   * Clé de chiffrement des secrets enregistrés en base (clés Cloudinary, S3…). Toute chaîne longue
+   * et aléatoire (par exemple `openssl rand -base64 32`). Sans elle, seul le stockage local est utilisable.
+   */
+  secretsKey: process.env.SECRETS_KEY ?? '',
   webDist: process.env.WEB_DIST ?? '',
   mail: {
     host: process.env.SMTP_HOST ?? '',

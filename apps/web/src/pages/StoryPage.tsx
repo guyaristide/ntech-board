@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react';
+import { Attachments } from '../ui/Attachments';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { storyMarkdown } from '../model/exporters';
 import { actorsOf, PRIORITIES, SCENARIO_LABEL, SCENARIOS, STATUSES, versionsOf } from '@board/shared';
@@ -238,6 +239,8 @@ export function StoryPage() {
         onChange={description => set({ description })}
       />
 
+      <h3 className={page.h3}>Pièces jointes</h3>
+      <Attachments kind="story" id={story.id} />
       <h3 className={page.h3}>Commentaires{story.comments.length ? ` (${story.comments.length})` : ''}</h3>
       <Comments
         items={story.comments}

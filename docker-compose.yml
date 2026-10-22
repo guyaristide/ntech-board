@@ -25,6 +25,8 @@ services:
       SESSION_DAYS: ${SESSION_DAYS:-30}
       LOGIN_TOKEN_MINUTES: ${LOGIN_TOKEN_MINUTES:-20}
       COOKIE_SECURE: ${COOKIE_SECURE:-auto}
+      # Chiffre les clés des stockages de fichiers (Cloudinary, MinIO, S3). Ne plus la changer ensuite.
+      SECRETS_KEY: ${SECRETS_KEY:-}
     volumes:
       - board-storage:/app/storage
     depends_on:

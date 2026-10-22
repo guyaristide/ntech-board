@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react';
+import { Attachments } from '../../ui/Attachments';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ACTION_NATURES,
@@ -397,6 +398,8 @@ export function RiskPage() {
         onChange={notes => set({ notes })}
         placeholder="Suivi, éléments de contexte…"
       />
+      <h2 className={page.h2}>Pièces jointes</h2>
+      <Attachments kind="risk" id={risk.id} />
       <h2 className={page.h2}>Commentaires</h2>
       <Comments items={risk.comments} onAdd={text => void ws.commentRisk(risk.id, text)} />
       <p className={page.faint}>Source : {risk.source}</p>

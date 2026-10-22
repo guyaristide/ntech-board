@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react';
+import { Attachments } from '../../ui/Attachments';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   CAMPAIGN_MODE_LABEL,
@@ -287,6 +288,8 @@ export function CampaignPage() {
             Périmètre vide. Choisissez la version puis « + US de la version », ou ajoutez des US une à une.
           </p>
         ) : null}
+        <h2 className={page.h2}>Pièces jointes</h2>
+        <Attachments kind="campaign" id={campaign.id} />
       </div>
     </DeliveryGate>
   );

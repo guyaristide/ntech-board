@@ -1,3 +1,4 @@
+import { DEFAULT_FILE_SETTINGS, type FileSettings } from './files';
 import type { Role } from './api';
 import type { Block, Diligence, Phase, Risk, Workshop } from './types';
 
@@ -117,6 +118,8 @@ export interface ProjectSettings {
   /** Accès MCP (jetons personnels) : rôles autorisés ; les administrateurs le sont toujours. */
   mcp: { roles: Role[] };
   delivery: DeliverySettings;
+  /** Pièces jointes : stockage des nouveaux fichiers, rangement, taille et types acceptés. */
+  files: FileSettings;
 }
 
 export const DEFAULT_SETTINGS: ProjectSettings = {
@@ -126,6 +129,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   referenceDocument: 'Cahier des charges',
   riskScopes: [{ name: 'Projet', prefix: 'R' }],
   mcp: { roles: ['admin'] },
+  files: DEFAULT_FILE_SETTINGS,
   delivery: {
     enabled: false,
     key: '',
@@ -159,6 +163,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
 export const withSettingsDefaults = (s: Partial<ProjectSettings> | null | undefined): ProjectSettings => ({
   ...DEFAULT_SETTINGS,
   ...s,
+  files: { ...DEFAULT_FILE_SETTINGS, ...s?.files },
   delivery: {
     ...DEFAULT_SETTINGS.delivery,
     ...s?.delivery,
@@ -174,6 +179,8 @@ export const settingsTemplate = (from: ProjectSettings): ProjectSettings => {
   const s = withSettingsDefaults(from);
   return {
     ...s,
+    // Les stockages configurés (et leurs clés) restent propres à chaque projet.
+    files: { ...s.files, store: 'local' },
     delivery: {
       ...s.delivery,
       key: '',

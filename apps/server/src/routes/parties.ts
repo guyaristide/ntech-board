@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { listBackends, LOCAL } from '../files/backends';
 import { newParty, PARTY_PREFIX, type ProjectSettings } from '@board/shared';
 import { requireRole, type AppEnv } from '../auth';
 import { fail } from '../log';
@@ -55,10 +56,14 @@ partyRoutes.patch('/settings', requireRole('admin'), async c => {
   if (!patch) return c.json({ error: 'invalid' }, 400);
   const p = c.get('project');
   const current = await getSettings(p.id);
+  const store = patch.files?.store;
+  if (store && store !== LOCAL && !(await listBackends(p.id)).some(b => b.id === store))
+    return c.json({ error: 'unknown_store', message: 'Ce stockage n’existe pas.' }, 400);
   const next: ProjectSettings = {
     ...current,
     ...patch,
     delivery: { ...current.delivery, ...patch.delivery },
+    files: { ...current.files, ...patch.files },
   };
   return c.json(await saveSettings(p.id, c.get('user')!.id, next, patch));
 });

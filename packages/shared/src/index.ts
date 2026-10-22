@@ -7,3 +7,4 @@ export * from './delivery';
 export * from './pilotage';
 export * from './programme';
 export * from './sprintPlan';
+export * from './files';

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Attachments } from '../../ui/Attachments';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { DILIGENCE_KIND_HINT, DILIGENCE_KINDS, DILIGENCE_STATUSES, type Diligence } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
@@ -276,6 +277,8 @@ export function DiligencePage() {
         placeholder="Avancement, échanges avec les parties… Tapez « / » pour choisir un bloc"
       />
 
+      <h2 className={page.h2}>Pièces jointes</h2>
+      <Attachments kind="diligence" id={d.id} />
       <h2 className={page.h2}>Commentaires</h2>
       <Comments items={d.comments} onAdd={t => void ws.commentDiligence(d.id, t)} />
       <History kind="diligence" id={d.id} stamp={`${d.status}-${d.comments.length}-${d.stories.length}`} />

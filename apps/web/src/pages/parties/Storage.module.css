@@ -1,0 +1,64 @@
+/* Réglages des fichiers : stockages configurés et formulaire d'ajout. */
+.fieldLabel {
+  padding-top: 5px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.warn {
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.template {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  font-family: var(--mono);
+}
+
+.stores {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.stores li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.active {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.storeForm {
+  padding: 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--bg-subtle);
+}
+
+.storeForm input[type='text'],
+.storeForm input[type='password'],
+.storeForm select {
+  width: 100%;
+  max-width: 420px;
+}

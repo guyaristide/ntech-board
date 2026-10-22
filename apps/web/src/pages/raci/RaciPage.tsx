@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { Attachments } from '../../ui/Attachments';
 import { useSearchParams } from 'react-router-dom';
 import { partyNames, PHASE_STATUSES, raciCheck, type Phase, type RaciRow } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
@@ -301,6 +302,8 @@ export function RaciPage() {
             onChange={notes => ws.updatePhase(phase.id, { notes })}
             placeholder="Points à confirmer, arbitrages, changements de rôle…"
           />
+          <h2 className={page.h2}>Pièces jointes</h2>
+          <Attachments kind="phase" id={phase.id} />
           <h2 className={page.h2}>Commentaires</h2>
           <Comments items={phase.comments} onAdd={text => void ws.commentPhase(phase.id, text)} />
           <History kind="phase" id={phase.id} stamp={`${phase.raci.length}-${phase.comments.length}`} />

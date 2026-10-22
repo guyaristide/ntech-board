@@ -15,6 +15,7 @@ import {
   type Release,
   type Sprint,
   type Ticket,
+  type Attachment,
   type Campaign,
 } from '@board/shared';
 import { pool, tx, type Tx } from './db';
@@ -59,6 +60,7 @@ export async function getWorkspace(projectId: string, planning: string | null): 
     sprints: of<Sprint>('sprint'),
     tickets: of<Ticket>('ticket'),
     campaigns: of<Campaign>('campaign'),
+    attachments: of<Attachment>('attachment'),
   };
 }
 
@@ -74,7 +76,12 @@ export async function getSettings(projectId: string): Promise<ProjectSettings> {
 }
 
 /** Enregistre les réglages (journalisés) et fait recharger les navigateurs ouverts. */
-export async function saveSettings(projectId: string, userId: string, settings: ProjectSettings, patch: unknown) {
+export async function saveSettings(
+  projectId: string,
+  userId: string,
+  settings: ProjectSettings,
+  patch: unknown,
+) {
   await tx(async c => {
     await c.query('UPDATE projects SET settings = $2 WHERE id = $1', [projectId, settings]);
     await c.query(
@@ -280,7 +287,20 @@ export async function createMany<K extends EntityKind>(
 export const createStory = (projectId: string, userId: string, build: (id: string) => Story) =>
   createEntity(projectId, userId, 'story', ids => nextStoryId(ids, build('').epic), build);
 
+type DeleteHook = (projectId: string, userId: string, kind: EntityKind, id: string) => Promise<void>;
+const deleteHooks: DeleteHook[] = [];
+/** Action à mener après la suppression d'une entité (pièces jointes de l'élément supprimé…). */
+export const onDelete = (hook: DeleteHook) => void deleteHooks.push(hook);
+
 export async function deleteEntity(projectId: string, userId: string, kind: EntityKind, id: string) {
+  await deleteRow(projectId, userId, kind, id);
+  for (const hook of deleteHooks)
+    await hook(projectId, userId, kind, id).catch(err =>
+      console.error(`Après suppression de ${kind} ${id}`, err),
+    );
+}
+
+async function deleteRow(projectId: string, userId: string, kind: EntityKind, id: string) {
   await tx(async c => {
     const { rowCount } = await c.query(
       `DELETE FROM entities WHERE project_id = $1 AND kind = $2 AND id = $3`,
