@@ -2,7 +2,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CAMPAIGN_MODE_LABEL, casesOf, hasVerdicts, testSummary } from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
+import { ExportButton } from '../../ui/ExportButton';
 import page from '../Page.module.css';
+import { useCampaignColumns } from './exports';
 import { DeliveryGate, period } from './parts';
 import { StatusTag, TestBar } from './RecetteParts';
 import styles from './Recette.module.css';
@@ -14,6 +16,7 @@ export function Recette() {
   const { releases, campaigns } = useDelivery();
   const canEdit = useCanEdit();
   const navigate = useNavigate();
+  const columns = useCampaignColumns();
   const create = async () => {
     const release = releases.find(r => r.status === 'En cours') ?? releases.find(r => r.status === 'Prévue');
     navigate(
@@ -32,13 +35,14 @@ export function Recette() {
           interne, par le client dans l’outil, PV seul, ou interne puis validation du client. Le PV se
           télécharge depuis la campagne.
         </p>
-        {canEdit ? (
-          <p className={page.actions}>
+        <p className={page.actions}>
+          {canEdit ? (
             <button type="button" className={page.primary} onClick={() => void create()}>
               + Campagne
             </button>
-          </p>
-        ) : null}
+          ) : null}
+          <ExportButton name="recette-campagnes" rows={campaigns} columns={columns} noun="campagnes" />
+        </p>
         <div className={cards.cards}>
           {campaigns.map(c => {
             const s = testSummary(casesOf(c, stories).map(x => x.result?.status ?? ''));

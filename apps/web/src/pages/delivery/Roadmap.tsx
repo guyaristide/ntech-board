@@ -13,8 +13,10 @@ import {
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
+import { ExportButton } from '../../ui/ExportButton';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
+import { useReleaseColumns } from './exports';
 import { DeliveryGate, period, sprintOrder } from './parts';
 import { ReleaseSprints, SprintPlanner, type PlanMode } from './ReleaseSprints';
 import styles from './Delivery.module.css';
@@ -139,6 +141,7 @@ export function Roadmap() {
   const { settings, releases, sprints, tickets } = useDelivery();
   const canEdit = useCanEdit();
   const sorted = [...releases].sort((a, b) => (a.end ?? '9').localeCompare(b.end ?? '9'));
+  const releaseColumns = useReleaseColumns();
   const [planning, setPlanning] = useState<{ release: string; mode: PlanMode } | null>(null);
   const planned = planning && releases.find(r => r.id === planning.release);
   const openPlanner = (release: string, mode: PlanMode) => {
@@ -158,13 +161,14 @@ export function Roadmap() {
           Les versions à livrer, avec leurs dates et leur avancement. Les US d’une version du cadrage (MVP,
           V1…) sont rangées par défaut dans la version qui la couvre.
         </p>
-        {canEdit ? (
-          <p className={page.actions}>
+        <p className={page.actions}>
+          {canEdit ? (
             <button type="button" className={page.primary} onClick={() => void delivery.createRelease()}>
               + Version
             </button>
-          </p>
-        ) : null}
+          ) : null}
+          <ExportButton name="versions" rows={sorted} columns={releaseColumns} noun="versions" />
+        </p>
         <Timeline releases={sorted} sprints={[...sprints].sort(sprintOrder)} />
         {planning && planned ? (
           <div id="planificateur">

@@ -275,7 +275,7 @@ export function WorkshopPage() {
         </p>
       ) : null}
       {stories.length ? (
-        <StoryList stories={stories} />
+        <StoryList stories={stories} exportName={`us-${w.id}`} />
       ) : (
         <p className={page.faint}>Aucune US rattachée à cet atelier.</p>
       )}

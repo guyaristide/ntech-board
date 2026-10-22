@@ -201,15 +201,31 @@ export function Backlog() {
   );
 }
 
-/** Liste d'US triable, intégrée dans les pages d'épique et d'atelier. */
-export function StoryList({ stories }: { stories: Parameters<typeof StoryTable>[0]['stories'] }) {
+/** Liste d'US triable, intégrée dans les pages d'épique et d'atelier ; `exportName` : export CSV. */
+export function StoryList({
+  stories,
+  exportName,
+}: {
+  stories: Parameters<typeof StoryTable>[0]['stories'];
+  exportName?: string;
+}) {
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'id', dir: 1 });
+  const sorted = sortStories(stories, sort.key, sort.dir);
   return (
-    <StoryTable
-      compact
-      stories={sortStories(stories, sort.key, sort.dir)}
-      sort={sort}
-      onSort={key => setSort(s => ({ key, dir: s.key === key ? (-s.dir as 1 | -1) : 1 }))}
-    />
+    <>
+      {exportName ? (
+        <p className={page.actions}>
+          <button type="button" className={page.ghost} onClick={() => exportCsv(sorted, exportName)}>
+            ⤓ Exporter ces {sorted.length} US (CSV)
+          </button>
+        </p>
+      ) : null}
+      <StoryTable
+        compact
+        stories={sorted}
+        sort={sort}
+        onSort={key => setSort(s => ({ key, dir: s.key === key ? (-s.dir as 1 | -1) : 1 }))}
+      />
+    </>
   );
 }

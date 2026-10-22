@@ -11,8 +11,10 @@ import {
 import { delivery, useDelivery } from '../../model/delivery';
 import { useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
+import { ExportButton } from '../../ui/ExportButton';
 import { PdfButton } from '../../ui/PdfButton';
 import page from '../Page.module.css';
+import { campaignCases, caseColumns } from './exports';
 import { assigneeName } from './fields';
 import { DeliveryGate } from './parts';
 import { StatusTag, StoryBlock, TestBar, useRecetteRights } from './RecetteParts';
@@ -71,6 +73,13 @@ export function CampaignPage() {
             >
               ⤓ PV de recette
             </PdfButton>
+            <ExportButton
+              name={`recette-${campaign.id.toLowerCase()}`}
+              rows={campaignCases(campaign, ws.stories, filter)}
+              columns={caseColumns(campaign)}
+              filtered={filter !== 'all'}
+              noun="cas de test"
+            />
             {rights.manage ? (
               <button
                 type="button"

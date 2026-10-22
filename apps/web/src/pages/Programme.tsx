@@ -2,11 +2,13 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { programmeOrder, programmeWeeks, QUESTION_STATUSES } from '@board/shared';
 import { programme } from '../model/programme';
 import { useCanEdit, useWorkspace } from '../model/store';
-import type { Question } from '@board/shared';
+import type { Question, Session, Workshop } from '@board/shared';
 import { EditableText } from '../ui/EditableText';
+import { ExportButton, type Column } from '../ui/ExportButton';
 import { PropertySelect } from '../ui/PropertySelect';
 import { PdfButton } from '../ui/PdfButton';
 import { Tag } from '../ui/Tag';
+import { frDate } from './exportFormat';
 import page from './Page.module.css';
 import styles from './Overview.module.css';
 import backlog from './backlog/Backlog.module.css';
@@ -36,6 +38,25 @@ export function Programme() {
     navigate(`/atelier/${await programme.createWorkshop({ phase: phase ?? phases.at(-1) ?? '' })}`);
   const all = ws.workshops.flatMap(w => w.sessions.flatMap(s => s.questions.map(q => ({ w, s, q }))));
   const shown = all.filter(x => status === 'Tous' || x.q.status === status);
+  const workshopColumns: Column<Workshop>[] = [
+    ['Atelier', w => w.id],
+    ['Date', w => frDate(w.date)],
+    ['Semaine', w => w.phase],
+    ['Intitulé', w => w.title],
+    ['Séquences', w => w.sessions.length],
+    ['US', w => ws.stories.filter(s => s.workshop === w.id).length],
+    ['Points tranchés', w => w.sessions.flatMap(s => s.questions).filter(q => q.status !== 'Ouvert').length],
+    ['Points', w => w.sessions.flatMap(s => s.questions).length],
+    ['Statut du PV', w => w.pvStatus],
+  ];
+  const pointColumns: Column<{ w: Workshop; s: Session; q: Question }>[] = [
+    ['Atelier', x => x.w.id],
+    ['Séquence', x => x.s.code],
+    ['Intitulé de la séquence', x => x.s.title],
+    ['Point à trancher', x => x.q.text],
+    ['Réponse', x => x.q.answer],
+    ['Statut', x => x.q.status],
+  ];
 
   return (
     <div className={`${page.page} ${page.wide}`}>
@@ -70,6 +91,17 @@ export function Programme() {
           </button>
         </div>
         <span className={page.actions}>
+          {tab === 'calendar' ? (
+            <ExportButton name="ateliers" rows={ordered} columns={workshopColumns} noun="ateliers" />
+          ) : (
+            <ExportButton
+              name="points-a-trancher"
+              rows={shown}
+              columns={pointColumns}
+              filtered={shown.length !== all.length}
+              noun="points"
+            />
+          )}
           {canEdit ? (
             <button type="button" className={page.primary} onClick={() => void create()}>
               + Atelier

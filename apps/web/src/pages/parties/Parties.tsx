@@ -4,6 +4,7 @@ import { mentionsOf, PARTY_LABEL, type Member, type Party, type PartyType } from
 import { api } from '../../model/api';
 import { useCanEdit, useIsAdmin, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
+import { ExportButton, type Column } from '../../ui/ExportButton';
 import { PropertySelect } from '../../ui/PropertySelect';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
@@ -226,6 +227,47 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
   );
 }
 
+/** Colonnes d'export d'un type de partie, avec les noms à la place des identifiants. */
+function exportColumns(type: PartyType, parties: Party[], members: Member[] | null): Column<Party>[] {
+  const name = (id: string) => parties.find(p => p.id === id)?.name ?? id;
+  const aliases: Column<Party> = ['Alias', p => p.aliases.join(', ')];
+  if (type === 'organization')
+    return [
+      ['ID', p => p.id],
+      ['Sigle', p => p.short],
+      ['Nom', p => p.name],
+      ['Type', p => p.category],
+      ['Rattachés', p => parties.filter(x => x.organization === p.id).length],
+      aliases,
+    ];
+  if (type === 'person')
+    return [
+      ['ID', p => p.id],
+      ['Nom', p => p.name],
+      ['Fonction', p => p.function],
+      ['Organisation', p => name(p.organization)],
+      ['E-mail', p => p.email],
+      ['Téléphone', p => p.phone],
+      ...(members
+        ? [['Compte', p => members.find(m => m.userId === p.userId)?.email ?? ''] as Column<Party>]
+        : []),
+      aliases,
+    ];
+  return [
+    ['ID', p => p.id],
+    ['Rôle', p => p.name],
+    ['Organisation', p => name(p.organization)],
+    ['Tenu par', p => name(p.holder)],
+    aliases,
+  ];
+}
+
+const EXPORT_NAME: Record<PartyType, [string, string]> = {
+  organization: ['organisations', 'organisations'],
+  person: ['personnes', 'personnes'],
+  role: ['roles', 'rôles'],
+};
+
 /**
  * Référentiel des parties prenantes du projet : organisations, personnes et rôles, auxquels
  * renvoient le RACI, les risques, les diligences et les séquences d'atelier.
@@ -268,15 +310,24 @@ export function Parties() {
             </button>
           ))}
         </div>
-        {canEdit && tab !== 'reprise' ? (
-          <button
-            type="button"
-            className={page.primary}
-            style={{ marginLeft: 'auto' }}
-            onClick={() => void ws.createParty(tab, { name: '' })}
-          >
-            + {PARTY_LABEL[tab]}
-          </button>
+        {tab !== 'reprise' ? (
+          <span className={page.actions}>
+            <ExportButton
+              name={`parties-${EXPORT_NAME[tab][0]}`}
+              rows={ws.parties.filter(p => p.type === tab)}
+              columns={exportColumns(tab, ws.parties, members)}
+              noun={EXPORT_NAME[tab][1]}
+            />
+            {canEdit ? (
+              <button
+                type="button"
+                className={page.primary}
+                onClick={() => void ws.createParty(tab, { name: '' })}
+              >
+                + {PARTY_LABEL[tab]}
+              </button>
+            ) : null}
+          </span>
         ) : null}
       </div>
       {tab === 'reprise' ? <Mentions /> : <PartyTable type={tab} members={members} />}

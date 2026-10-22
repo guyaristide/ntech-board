@@ -12,8 +12,10 @@ import {
 } from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
+import { ExportButton } from '../../ui/ExportButton';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
+import { useTicketColumns } from './exports';
 import { assigneeName, useMyParties } from './fields';
 import { DeliveryGate, period, sprintOrder, SprintTag } from './parts';
 import styles from './Delivery.module.css';
@@ -137,6 +139,13 @@ export function Board() {
       (!blockedOnly || isBlocked(settings, tickets, t)),
   );
   const assignees = [...new Set(inSprint.map(t => t.assignee).filter(Boolean))];
+  const columns = useTicketColumns();
+  // Export : colonne par colonne, dans l'ordre du tableau.
+  const exported = sprint
+    ? settings.delivery.workflow.flatMap(step =>
+        shown.filter(t => stepOf(settings, t.status)?.id === step.id).sort(byRank),
+      )
+    : [];
 
   return (
     <DeliveryGate>
@@ -213,6 +222,13 @@ export function Board() {
           <span className={page.faint}>
             {shown.length} ticket{shown.length > 1 ? 's' : ''}
           </span>
+          <ExportButton
+            name={sprint ? `tableau-${sprint.name.toLowerCase().replace(/\s+/g, '-')}` : 'tableau'}
+            rows={exported}
+            columns={columns}
+            filtered={!!(who || type || blockedOnly)}
+            noun="tickets"
+          />
         </div>
         {sprint ? (
           <div className={k.board}>

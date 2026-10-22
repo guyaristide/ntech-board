@@ -16,13 +16,16 @@ import {
   velocity,
   workdaysLeft,
   type GroupProgress,
+  type Release,
 } from '@board/shared';
 import { useDelivery } from '../../model/delivery';
 import { useWorkspace } from '../../model/store';
+import { ExportButton, type Column } from '../../ui/ExportButton';
 import { PdfButton } from '../../ui/PdfButton';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
 import { Burndown, Velocity } from './Charts';
+import { day } from './exports';
 import { DeliveryGate, period, shortDay } from './parts';
 import styles from './Pilotage.module.css';
 import { useBurndown } from './usePilotage';
@@ -132,6 +135,61 @@ export function Pilotage() {
           platformKeys,
         );
 
+  const shownReleases = releases.filter(r => r.status !== 'Abandonnée');
+  const forecastText = (r: Release) => {
+    const p = releaseProgress(settings, r, tickets);
+    const f = forecast(settings, r, tickets, sprints);
+    return r.status === 'Livrée'
+      ? 'Livrée'
+      : !p.count
+        ? '—'
+        : f.remaining === 0
+          ? 'Terminée'
+          : f.date
+            ? `${shortDay(f.date)} · ${f.sprints} sprint${(f.sprints ?? 0) > 1 ? 's' : ''}${f.late ? ', en retard' : ''}`
+            : 'Vélocité inconnue';
+  };
+  const releaseColumns: Column<Release>[] = [
+    ['Version', r => r.name],
+    ['Livraison visée', r => day(r.end)],
+    ['Statut', r => r.status],
+    [
+      count ? 'Tickets terminés' : 'Réalisé',
+      r => {
+        const p = releaseProgress(settings, r, tickets);
+        return count
+          ? `${p.doneCount}/${p.count}`
+          : `${amount(p.done, settings)} / ${amount(p.total, settings)}`;
+      },
+    ],
+    ['Non estimés', r => (count ? '' : releaseProgress(settings, r, tickets).unestimated)],
+    [
+      'Avancement (%)',
+      r => {
+        const p = releaseProgress(settings, r, tickets);
+        return count ? pct(p.doneCount, p.count) : pct(p.done, p.total);
+      },
+    ],
+    ['Prévision', r => forecastText(r)],
+    ['Date prévue', r => day(forecast(settings, r, tickets, sprints).date ?? null)],
+  ];
+  const groupColumns: Column<GroupProgress>[] = [
+    [by === 'epic' ? 'Cas d’usage' : 'Plateforme', r => r.label],
+    ['US', r => r.stories],
+    ['Validées', r => r.validated],
+    ['En réalisation', r => r.started],
+    ['Terminées', r => r.finished],
+    ['Tickets terminés', r => r.ticketsDone],
+    ['Tickets', r => r.tickets],
+    ...(count
+      ? []
+      : ([
+          ['Réalisé', r => amount(r.done, settings)],
+          ['Estimation', r => amount(r.total, settings)],
+        ] as Column<GroupProgress>[])),
+    ['Avancement (%)', r => (count ? pct(r.ticketsDone, r.tickets) : pct(r.done, r.total))],
+  ];
+
   return (
     <DeliveryGate>
       <div className={`${page.page} ${page.wide}`}>
@@ -159,6 +217,22 @@ export function Pilotage() {
           >
             ⤓ Rapport COPIL
           </PdfButton>
+          <ExportButton
+            name="pilotage-versions"
+            rows={shownReleases}
+            columns={releaseColumns}
+            noun="versions"
+            label="Exporter les versions"
+          />
+          <ExportButton
+            name={by === 'epic' ? 'pilotage-cas-d-usage' : 'pilotage-plateformes'}
+            rows={groups.filter(r => r.stories)}
+            columns={groupColumns}
+            noun={by === 'epic' ? 'cas d’usage' : 'plateformes'}
+            label={
+              by === 'epic' ? 'Exporter l’avancement par cas d’usage' : 'Exporter l’avancement par plateforme'
+            }
+          />
         </div>
 
         <div className={styles.kpis}>
@@ -267,48 +341,36 @@ export function Pilotage() {
                 </tr>
               </thead>
               <tbody>
-                {releases
-                  .filter(r => r.status !== 'Abandonnée')
-                  .map(r => {
-                    const p = releaseProgress(settings, r, tickets);
-                    const f = forecast(settings, r, tickets, sprints);
-                    return (
-                      <tr key={r.id}>
-                        <td>
-                          <Link to="/realisation/versions">{r.name}</Link>
-                        </td>
-                        <td>{shortDay(r.end)}</td>
-                        <td>
-                          <Tag value={r.status} />
-                        </td>
-                        <td className={styles.n}>
-                          {count
-                            ? `${p.doneCount}/${p.count}`
-                            : `${amount(p.done, settings)} / ${amount(p.total, settings)}`}
-                          {p.unestimated && !count ? (
-                            <span className={page.faint}>
-                              {' '}
-                              · {p.unestimated} non estimé{p.unestimated > 1 ? 's' : ''}
-                            </span>
-                          ) : null}
-                        </td>
-                        <td className={styles.progressCell}>
-                          <Meter done={count ? p.doneCount : p.done} total={count ? p.count : p.total} />
-                        </td>
-                        <td className={f.late ? styles.late : undefined}>
-                          {r.status === 'Livrée'
-                            ? 'Livrée'
-                            : !p.count
-                              ? '—'
-                              : f.remaining === 0
-                                ? 'Terminée'
-                                : f.date
-                                  ? `${shortDay(f.date)} · ${f.sprints} sprint${(f.sprints ?? 0) > 1 ? 's' : ''}${f.late ? ', en retard' : ''}`
-                                  : 'Vélocité inconnue'}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                {shownReleases.map(r => {
+                  const p = releaseProgress(settings, r, tickets);
+                  const f = forecast(settings, r, tickets, sprints);
+                  return (
+                    <tr key={r.id}>
+                      <td>
+                        <Link to="/realisation/versions">{r.name}</Link>
+                      </td>
+                      <td>{shortDay(r.end)}</td>
+                      <td>
+                        <Tag value={r.status} />
+                      </td>
+                      <td className={styles.n}>
+                        {count
+                          ? `${p.doneCount}/${p.count}`
+                          : `${amount(p.done, settings)} / ${amount(p.total, settings)}`}
+                        {p.unestimated && !count ? (
+                          <span className={page.faint}>
+                            {' '}
+                            · {p.unestimated} non estimé{p.unestimated > 1 ? 's' : ''}
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className={styles.progressCell}>
+                        <Meter done={count ? p.doneCount : p.done} total={count ? p.count : p.total} />
+                      </td>
+                      <td className={f.late ? styles.late : undefined}>{forecastText(r)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

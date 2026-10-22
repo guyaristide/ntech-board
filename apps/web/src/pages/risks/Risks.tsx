@@ -9,11 +9,13 @@ import {
 } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
+import { ExportButton } from '../../ui/ExportButton';
 import { PropertySelect } from '../../ui/PropertySelect';
 import { Tag } from '../../ui/Tag';
 import backlog from '../backlog/Backlog.module.css';
 import page from '../Page.module.css';
 import { RiskHeatmap } from './RiskHeatmap';
+import { ACTION_COLUMNS, RISK_COLUMNS } from './riskExport';
 import { BASIS_LABEL, cotationAt, levelOf, scoreOf, type Basis } from './riskView';
 import { dueLabel, overdue } from '../../model/due';
 import styles from './Risks.module.css';
@@ -59,6 +61,7 @@ export function Risks() {
   const critical = open.filter(r => ['Élevé', 'Critique'].includes(levelOf(r.initial)));
   const actions = ws.risks.flatMap(r => r.actions.map(a => ({ r, a })));
   const actionStatus = params.get('action') ?? '';
+  const shownActions = actions.filter(x => !actionStatus || x.a.status === actionStatus);
   const create = async (prefix: string) => navigate(`/risque/${await ws.createRisk(prefix)}`);
   const scopes = riskScopesOf(ws.settings, ws.risks);
 
@@ -103,20 +106,37 @@ export function Risks() {
             ))}
           </div>
         ) : null}
-        {canEdit ? (
-          <span className={page.actions}>
-            {scopes.map(s => (
-              <button
-                key={s.prefix}
-                type="button"
-                className={page.ghost}
-                onClick={() => void create(s.prefix)}
-              >
-                + Risque {s.name}
-              </button>
-            ))}
-          </span>
-        ) : null}
+        <span className={page.actions}>
+          {view === 'actions' ? (
+            <ExportButton
+              name="plan-d-actions"
+              rows={shownActions}
+              columns={ACTION_COLUMNS}
+              filtered={shownActions.length !== actions.length}
+              noun="actions"
+            />
+          ) : (
+            <ExportButton
+              name="risques"
+              rows={view === 'registre' ? shown : ws.risks}
+              columns={RISK_COLUMNS}
+              filtered={view === 'registre' && shown.length !== ws.risks.length}
+              noun="risques"
+            />
+          )}
+          {canEdit
+            ? scopes.map(s => (
+                <button
+                  key={s.prefix}
+                  type="button"
+                  className={page.ghost}
+                  onClick={() => void create(s.prefix)}
+                >
+                  + Risque {s.name}
+                </button>
+              ))
+            : null}
+        </span>
       </div>
 
       {view === 'matrice' ? (
@@ -318,57 +338,55 @@ export function Risks() {
                 </tr>
               </thead>
               <tbody>
-                {actions
-                  .filter(x => !actionStatus || x.a.status === actionStatus)
-                  .map(({ r, a }) => (
-                    <tr key={`${r.id}:${a.id}`}>
-                      <td>
-                        <Link to={`/risque/${r.id}`} className={backlog.mono} title={r.title}>
-                          {r.id}
-                        </Link>
-                      </td>
-                      <td>
-                        <EditableText
-                          variant="inline"
-                          value={a.text}
-                          label="Action"
-                          onChange={text => ws.updateRiskAction(r.id, a.id, { text })}
-                        />
-                      </td>
-                      <td>
-                        <Tag value={a.nature} />
-                      </td>
-                      <td>
-                        <EditableText
-                          variant="inline"
-                          multiline={false}
-                          value={a.owner}
-                          label="Responsable"
-                          placeholder="À désigner"
-                          onChange={owner => ws.updateRiskAction(r.id, a.id, { owner })}
-                        />
-                      </td>
-                      <td
-                        className={
-                          overdue(a.due) && !['Réalisée', 'Abandonnée'].includes(a.status)
-                            ? styles.late
-                            : undefined
+                {shownActions.map(({ r, a }) => (
+                  <tr key={`${r.id}:${a.id}`}>
+                    <td>
+                      <Link to={`/risque/${r.id}`} className={backlog.mono} title={r.title}>
+                        {r.id}
+                      </Link>
+                    </td>
+                    <td>
+                      <EditableText
+                        variant="inline"
+                        value={a.text}
+                        label="Action"
+                        onChange={text => ws.updateRiskAction(r.id, a.id, { text })}
+                      />
+                    </td>
+                    <td>
+                      <Tag value={a.nature} />
+                    </td>
+                    <td>
+                      <EditableText
+                        variant="inline"
+                        multiline={false}
+                        value={a.owner}
+                        label="Responsable"
+                        placeholder="À désigner"
+                        onChange={owner => ws.updateRiskAction(r.id, a.id, { owner })}
+                      />
+                    </td>
+                    <td
+                      className={
+                        overdue(a.due) && !['Réalisée', 'Abandonnée'].includes(a.status)
+                          ? styles.late
+                          : undefined
+                      }
+                    >
+                      {dueLabel(a.due)}
+                    </td>
+                    <td>
+                      <PropertySelect
+                        label="Statut de l’action"
+                        value={a.status}
+                        options={ACTION_STATUSES}
+                        onChange={v =>
+                          v && ws.updateRiskAction(r.id, a.id, { status: v as RiskAction['status'] })
                         }
-                      >
-                        {dueLabel(a.due)}
-                      </td>
-                      <td>
-                        <PropertySelect
-                          label="Statut de l’action"
-                          value={a.status}
-                          options={ACTION_STATUSES}
-                          onChange={v =>
-                            v && ws.updateRiskAction(r.id, a.id, { status: v as RiskAction['status'] })
-                          }
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                      />
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

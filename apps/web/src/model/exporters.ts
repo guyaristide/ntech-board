@@ -33,6 +33,18 @@ export const exportJson = (ws: WorkspaceData & { session: { project: { slug: str
 
 const cell = (v: string) => `"${v.replace(/"/g, '""')}"`;
 
+/** Une colonne d'export : son en-tête et sa valeur pour une ligne. */
+export type Column<T> = [string, (row: T) => string | number | boolean | null | undefined];
+
+/** CSV (séparateur point-virgule, BOM : lisible par Excel en français) à partir de colonnes. */
+export function downloadCsv<T>(name: string, columns: Column<T>[], rows: T[]) {
+  const lines = [columns.map(([h]) => h), ...rows.map(r => columns.map(([, get]) => get(r)))];
+  const csv = lines
+    .map(l => l.map(v => cell(v === true ? 'Oui' : v === false ? 'Non' : String(v ?? ''))).join(';'))
+    .join('\r\n');
+  download(`${name}-${stamp()}.csv`, 'text/csv;charset=utf-8', `\ufeff${csv}`);
+}
+
 /**
  * Backlog au format CSV (séparateur point-virgule, lisible par Excel en français).
  * `name` : nom du fichier sans date ni extension (« backlog » par défaut).

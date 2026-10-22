@@ -10,9 +10,11 @@ import {
 } from '@board/shared';
 import { dueLabel, overdue } from '../../model/due';
 import { useCanEdit, useWorkspace } from '../../model/store';
+import { ExportButton, type Column } from '../../ui/ExportButton';
 import { PropertySelect } from '../../ui/PropertySelect';
 import { Tag } from '../../ui/Tag';
 import backlog from '../backlog/Backlog.module.css';
+import { frDate } from '../exportFormat';
 import page from '../Page.module.css';
 import styles from './Diligences.module.css';
 
@@ -20,6 +22,23 @@ type View = 'registre' | 'responsables';
 const VIEWS: [View, string][] = [
   ['registre', '☰ Registre'],
   ['responsables', '◫ Par responsable'],
+];
+
+const COLUMNS: Column<Diligence>[] = [
+  ['ID', d => d.id],
+  ['Diligence', d => d.title],
+  ['Détail', d => d.detail],
+  ['Type', d => d.kind],
+  ['Responsable', d => d.owner],
+  ['Avec', d => d.partners],
+  ['Dépend de', d => d.dependency],
+  ['Échéance', d => frDate(d.due)],
+  ['Statut', d => d.status],
+  ['Résultat', d => d.outcome],
+  ['Ateliers', d => d.workshops.join(', ')],
+  ['US', d => d.stories.join(', ')],
+  ['Risques', d => d.risks.join(', ')],
+  ['Source', d => d.source],
 ];
 
 const norm = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
@@ -196,6 +215,13 @@ export function Diligences() {
               ))}
             </div>
             <span className={backlog.total}>{shown.length} diligences</span>
+            <ExportButton
+              name="diligences"
+              rows={view === 'registre' ? shown : owners.flatMap(o => shown.filter(d => ownerOf(d) === o))}
+              columns={COLUMNS}
+              filtered={shown.length !== ws.diligences.length}
+              noun="diligences"
+            />
             <input
               type="search"
               className={backlog.search}

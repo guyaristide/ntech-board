@@ -204,7 +204,7 @@ export function EpicPage() {
           </button>
         ) : null}
       </div>
-      <StoryList stories={stories} />
+      <StoryList stories={stories} exportName={`us-${epic.id}`} />
 
       <h2 className={page.h2}>Notes de l’épique</h2>
       <BlockEditor blocks={epic.body} onChange={body => ws.updateEpic(epic.id, { body })} />

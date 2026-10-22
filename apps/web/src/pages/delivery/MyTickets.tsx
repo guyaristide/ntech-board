@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { byRank, isDone } from '@board/shared';
 import { useDelivery } from '../../model/delivery';
+import { ExportButton } from '../../ui/ExportButton';
 import page from '../Page.module.css';
+import { useTicketColumns } from './exports';
 import { useMyParties } from './fields';
 import { DeliveryGate, sprintOrder, TicketRow } from './parts';
 import styles from './Delivery.module.css';
@@ -27,6 +29,9 @@ export function MyTickets() {
     },
   ].filter(g => g.items.length);
   const done = list.filter(t => isDone(settings, t));
+  const columns = useTicketColumns();
+  // Export : à mener par sprint, puis terminés, dans l'ordre de l'écran.
+  const exported = [...groups.flatMap(g => [...g.items].sort(byRank)), ...[...done].sort(byRank)];
   return (
     <DeliveryGate>
       <div className={`${page.page} ${page.wide}`}>
@@ -47,10 +52,15 @@ export function MyTickets() {
             </Link>
           </div>
         ) : (
-          <p className={page.lead}>
-            {open.length} ticket{open.length > 1 ? 's' : ''} à mener, {done.length} terminé
-            {done.length > 1 ? 's' : ''}.
-          </p>
+          <>
+            <p className={page.lead}>
+              {open.length} ticket{open.length > 1 ? 's' : ''} à mener, {done.length} terminé
+              {done.length > 1 ? 's' : ''}.
+            </p>
+            <p className={page.actions}>
+              <ExportButton name="mes-tickets" rows={exported} columns={columns} noun="tickets" />
+            </p>
+          </>
         )}
         {groups.map(g => (
           <section key={g.key} className={styles.lane}>

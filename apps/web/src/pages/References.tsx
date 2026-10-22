@@ -1,10 +1,21 @@
 import { useState } from 'react';
 import { programme } from '../model/programme';
 import { useCanEdit, useWorkspace } from '../model/store';
+import { ExportButton, type Column } from '../ui/ExportButton';
 import { ReferenceCard } from '../ui/ReferenceCard';
+import type { Reference } from '@board/shared';
 import { ReferenceForm } from './ReferenceForm';
 import page from './Page.module.css';
 import backlog from './backlog/Backlog.module.css';
+
+const COLUMNS: Column<Reference>[] = [
+  ['Référence', r => r.id],
+  ['Sujet', r => r.subject],
+  ['Ce que dit le document', r => r.says.join('\n')],
+  ['Où le lire', r => r.where],
+  ['Écarts à trancher', r => r.gaps],
+  ['Séquences', r => r.sessions.join(', ')],
+];
 
 const norm = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
@@ -43,6 +54,13 @@ export function References() {
           Avec écarts à trancher · {references.filter(r => r.gaps).length}
         </button>
         <span className={backlog.total}>{shown.length} fiches</span>
+        <ExportButton
+          name="references"
+          rows={shown}
+          columns={COLUMNS}
+          filtered={shown.length !== references.length}
+          noun="fiches"
+        />
         <input
           type="search"
           className={backlog.search}

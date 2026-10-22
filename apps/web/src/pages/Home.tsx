@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { diligenceOpen, STATUSES, TONE, versionsOf } from '@board/shared';
 import { overdue } from '../model/due';
 import { useWorkspace } from '../model/store';
+import { ExportButton, type Column } from '../ui/ExportButton';
 import { Tag } from '../ui/Tag';
 import { HomeDelivery } from './delivery/HomeDelivery';
 import page from './Page.module.css';
@@ -26,6 +27,25 @@ export function Home() {
     a.localeCompare(b, 'fr'),
   );
   const onPlatform = (p: string) => ws.stories.filter(s => s.targets.some(t => t.platform === p));
+  const validated = (list: typeof ws.stories) => list.filter(s => s.status === 'Validée').length;
+  const platformColumns: Column<string>[] = [
+    ['Plateforme', p => p],
+    ...versions.map((v): Column<string> => [v, p => onPlatform(p).filter(s => s.version === v).length]),
+    ['Total', p => onPlatform(p).length],
+    ['Validées', p => validated(onPlatform(p))],
+  ];
+  const ofEpic = (id: string) => ws.stories.filter(s => s.epic === id);
+  const epicColumns: Column<(typeof ws.epics)[number]>[] = [
+    ['Épique', e => e.id],
+    ['Intitulé', e => e.title],
+    ...versions.map((v): Column<(typeof ws.epics)[number]> => [
+      v,
+      e => ofEpic(e.id).filter(s => s.version === v).length,
+    ]),
+    ['Total', e => ofEpic(e.id).length],
+    ['Validées', e => validated(ofEpic(e.id))],
+    ['Ateliers', e => e.workshops.join(', ')],
+  ];
   const byStatus = (list: typeof ws.stories) =>
     STATUSES.map(st => ({ st, n: list.filter(s => s.status === st).length }));
 
@@ -89,7 +109,17 @@ export function Home() {
 
       {platforms.length ? (
         <>
-          <h2 className={page.h2}>Couverture par plateforme</h2>
+          <div className={styles.weekHead}>
+            <h2 className={page.h2}>Couverture par plateforme</h2>
+            <span className={page.actions}>
+              <ExportButton
+                name="couverture-plateformes"
+                rows={platforms}
+                columns={platformColumns}
+                noun="plateformes"
+              />
+            </span>
+          </div>
           <div className={styles.matrixWrap}>
             <table className={styles.matrix}>
               <thead>
@@ -136,7 +166,12 @@ export function Home() {
         </>
       ) : null}
 
-      <h2 className={page.h2}>Couverture par épique</h2>
+      <div className={styles.weekHead}>
+        <h2 className={page.h2}>Couverture par épique</h2>
+        <span className={page.actions}>
+          <ExportButton name="couverture-epiques" rows={ws.epics} columns={epicColumns} noun="épiques" />
+        </span>
+      </div>
       <div className={styles.matrixWrap}>
         <table className={styles.matrix}>
           <thead>

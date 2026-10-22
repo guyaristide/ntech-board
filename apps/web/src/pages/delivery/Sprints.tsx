@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import { amount, progress } from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit } from '../../model/store';
+import { ExportButton } from '../../ui/ExportButton';
 import page from '../Page.module.css';
+import { useSprintColumns } from './exports';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag } from './parts';
 import styles from './Delivery.module.css';
 
@@ -11,6 +13,7 @@ export function Sprints() {
   const { settings, sprints, tickets, releases } = useDelivery();
   const canEdit = useCanEdit();
   const list = [...sprints].sort(sprintOrder);
+  const columns = useSprintColumns();
   const closed = sprints
     .filter(s => s.status === 'closed' && s.velocity !== null)
     .sort((a, b) => (b.end ?? '').localeCompare(a.end ?? ''));
@@ -30,13 +33,14 @@ export function Sprints() {
             ? ` Vélocité moyenne des ${recent.length} derniers sprints : ${amount(average, settings)}.`
             : ''}
         </p>
-        {canEdit ? (
-          <p className={page.actions}>
+        <p className={page.actions}>
+          {canEdit ? (
             <button type="button" className={page.primary} onClick={() => void delivery.createSprint()}>
               + Sprint
             </button>
-          </p>
-        ) : null}
+          ) : null}
+          <ExportButton name="sprints" rows={list} columns={columns} noun="sprints" />
+        </p>
         <div className={styles.cards}>
           {list.map(s => {
             const items = tickets.filter(t => t.sprint === s.id || s.carried.includes(t.id));

@@ -6,7 +6,9 @@ import { byRank, delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
 import { EditableText } from '../../ui/EditableText';
+import { ExportButton, type Column } from '../../ui/ExportButton';
 import page from '../Page.module.css';
+import { useTicketColumns } from './exports';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag, TicketRow } from './parts';
 import styles from './Delivery.module.css';
 
@@ -20,6 +22,7 @@ export function SprintPage() {
   const [moveTo, setMoveTo] = useState('');
   const [error, setError] = useState('');
   const sprint = sprints.find(s => s.id === id);
+  const ticketColumns = useTicketColumns();
   if (!sprint)
     return (
       <DeliveryGate>
@@ -34,6 +37,20 @@ export function SprintPage() {
   const p = progress(settings, items);
   const open = items.filter(t => !isDone(settings, t));
   const next = sprints.filter(s => s.status === 'planned' && s.id !== sprint.id).sort(sprintOrder);
+  const categoryOf = (t: (typeof items)[number]) =>
+    settings.delivery.workflow.find(s => s.id === t.status)?.category ?? 'todo';
+  // Export : les sections de la fiche dans leur ordre (à faire, en cours, terminé), puis les reportés.
+  const exported = [
+    ...(['todo', 'doing', 'done'] as const).flatMap(cat =>
+      items.filter(t => categoryOf(t) === cat).map(t => ({ t, group: STEP_CATEGORY_LABEL[cat] })),
+    ),
+    ...carried.map(t => ({ t, group: 'Reporté à la clôture' })),
+  ];
+  type Row = (typeof exported)[number];
+  const columns: Column<Row>[] = [
+    ['Section', r => r.group],
+    ...ticketColumns.map(([h, get]): Column<Row> => [h, r => get(r.t)]),
+  ];
   const run = async (fn: () => Promise<unknown>) => {
     setError('');
     try {
@@ -54,35 +71,43 @@ export function SprintPage() {
       <div className={`${page.page} ${page.wide}`}>
         <nav className={page.crumbs} aria-label="Fil d’Ariane">
           <Link to="/realisation/sprints">Sprints</Link> / <span>{sprint.name}</span>
-          {canEdit ? (
-            <span className={page.actions}>
-              {sprint.status === 'planned' ? (
+          <span className={page.actions}>
+            <ExportButton
+              name={sprint.name.toLowerCase().replace(/\s+/g, '-')}
+              rows={exported}
+              columns={columns}
+              noun="tickets"
+            />
+            {canEdit ? (
+              <>
+                {sprint.status === 'planned' ? (
+                  <button
+                    type="button"
+                    className={page.primary}
+                    onClick={() => void run(() => delivery.startSprint(sprint.id))}
+                  >
+                    Démarrer le sprint
+                  </button>
+                ) : null}
+                {sprint.status === 'active' ? (
+                  <button type="button" className={page.primary} onClick={() => setClosing(true)}>
+                    Clôturer le sprint
+                  </button>
+                ) : null}
                 <button
                   type="button"
-                  className={page.primary}
-                  onClick={() => void run(() => delivery.startSprint(sprint.id))}
+                  className={`${page.ghost} ${page.danger}`}
+                  onClick={async () => {
+                    if (!confirm(`Supprimer ${sprint.name} ? Ses tickets retournent au backlog.`)) return;
+                    await delivery.deleteSprint(sprint.id);
+                    navigate('/realisation/sprints');
+                  }}
                 >
-                  Démarrer le sprint
+                  Supprimer
                 </button>
-              ) : null}
-              {sprint.status === 'active' ? (
-                <button type="button" className={page.primary} onClick={() => setClosing(true)}>
-                  Clôturer le sprint
-                </button>
-              ) : null}
-              <button
-                type="button"
-                className={`${page.ghost} ${page.danger}`}
-                onClick={async () => {
-                  if (!confirm(`Supprimer ${sprint.name} ? Ses tickets retournent au backlog.`)) return;
-                  await delivery.deleteSprint(sprint.id);
-                  navigate('/realisation/sprints');
-                }}
-              >
-                Supprimer
-              </button>
-            </span>
-          ) : null}
+              </>
+            ) : null}
+          </span>
         </nav>
         {error ? <p className={styles.missing}>{error}</p> : null}
 

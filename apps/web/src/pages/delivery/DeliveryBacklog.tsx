@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { isReady, load, type Sprint, type Ticket } from '@board/shared';
 import { byRank, delivery, rankAt, useDelivery } from '../../model/delivery';
 import { useCanEdit } from '../../model/store';
+import { ExportButton } from '../../ui/ExportButton';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
+import { useTicketColumns } from './exports';
 import { ImportStories } from './ImportStories';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag, TicketRow } from './parts';
 import styles from './Delivery.module.css';
@@ -108,6 +110,14 @@ export function DeliveryBacklog() {
   );
   const open = sprints.filter(s => s.status !== 'closed').sort(sprintOrder);
   const inClosed = new Set(sprints.filter(s => s.status === 'closed').map(s => s.id));
+  const unplanned = shown.filter(
+    t => !t.sprint || (!inClosed.has(t.sprint) && !sprints.some(s => s.id === t.sprint)),
+  );
+  // Export : ce que montrent les colonnes, dans leur ordre (sprints ouverts, puis backlog).
+  const exported = [...open.map(s => shown.filter(t => t.sprint === s.id)), unplanned].flatMap(l =>
+    [...l].sort(byRank),
+  );
+  const columns = useTicketColumns();
 
   return (
     <DeliveryGate>
@@ -143,16 +153,25 @@ export function DeliveryBacklog() {
             onChange={e => setQ(e.target.value)}
           />
           <span className={backlog.total}>{shown.length} tickets</span>
-          {canEdit ? (
-            <span className={page.actions}>
-              <button type="button" className={page.ghost} onClick={() => void delivery.createSprint()}>
-                + Sprint
-              </button>
-              <button type="button" className={page.primary} onClick={() => setImporting(true)}>
-                + US validées
-              </button>
-            </span>
-          ) : null}
+          <span className={page.actions}>
+            <ExportButton
+              name="backlog-realisation"
+              rows={exported}
+              columns={columns}
+              filtered={!!(release || q)}
+              noun="tickets"
+            />
+            {canEdit ? (
+              <>
+                <button type="button" className={page.ghost} onClick={() => void delivery.createSprint()}>
+                  + Sprint
+                </button>
+                <button type="button" className={page.primary} onClick={() => setImporting(true)}>
+                  + US validées
+                </button>
+              </>
+            ) : null}
+          </span>
         </div>
         {canEdit ? (
           <form
@@ -176,12 +195,7 @@ export function DeliveryBacklog() {
         {open.map(s => (
           <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} />
         ))}
-        <Lane
-          sprint={null}
-          tickets={shown.filter(
-            t => !t.sprint || (!inClosed.has(t.sprint) && !sprints.some(s => s.id === t.sprint)),
-          )}
-        />
+        <Lane sprint={null} tickets={unplanned} />
         {sprints.some(s => s.status === 'closed') ? (
           <p className={page.faint}>
             Les sprints clos et leurs tickets sont dans <Link to="/realisation/sprints">Sprints</Link>.

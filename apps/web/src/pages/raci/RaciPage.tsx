@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { partyNames, PHASE_STATUSES, raciCheck, type Phase } from '@board/shared';
+import { partyNames, PHASE_STATUSES, raciCheck, type Phase, type RaciRow } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
 import { Comments } from '../../ui/Comments';
 import { EditableText } from '../../ui/EditableText';
+import { ExportButton, type Column } from '../../ui/ExportButton';
 import { History } from '../../ui/History';
 import { PropertySelect } from '../../ui/PropertySelect';
 import backlog from '../backlog/Backlog.module.css';
@@ -21,6 +22,16 @@ const slug = (s: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
     .slice(0, 40) || Math.random().toString(36).slice(2, 8);
+
+/** Matrice d'une phase à l'export : une ligne par activité, une colonne par acteur. */
+const raciColumns = (phase: Phase): Column<RaciRow>[] => [
+  ['Phase', () => `${phase.id} · ${phase.title}`],
+  ['N°', r => r.id],
+  ['Activité', r => r.activity],
+  ['Livrable', r => r.deliverable],
+  ...phase.actors.map((a): Column<RaciRow> => [a.name, r => r.cells[a.id] ?? '']),
+  ['Contrôle', r => raciCheck(r, phase.actors).problems.join(', ') || 'Conforme'],
+];
 
 /** Phase affichée par défaut : celle en cours, sinon la première. */
 export const currentPhase = (phases: Phase[]) => phases.find(p => p.status === 'En cours') ?? phases[0];
@@ -76,11 +87,22 @@ export function RaciPage() {
             </button>
           ))}
         </div>
-        {canEdit ? (
-          <button type="button" className={page.ghost} onClick={() => setCreating(c => !c)}>
-            + Nouvelle phase
-          </button>
-        ) : null}
+        <span className={page.actions}>
+          {phase ? (
+            <ExportButton
+              name={`raci-${phase.id}`}
+              rows={phase.raci}
+              columns={raciColumns(phase)}
+              noun="activités"
+              label={`Exporter ${phase.id}`}
+            />
+          ) : null}
+          {canEdit ? (
+            <button type="button" className={page.ghost} onClick={() => setCreating(c => !c)}>
+              + Nouvelle phase
+            </button>
+          ) : null}
+        </span>
       </div>
 
       {creating ? (
