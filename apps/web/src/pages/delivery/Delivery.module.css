@@ -458,3 +458,37 @@ a.card:hover {
 .bulkSelect {
   max-width: 200px;
 }
+.fold {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-left: -4px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-muted);
+  font-size: 17px;
+  cursor: pointer;
+}
+.fold:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.lane[data-folded] .laneHead {
+  border-bottom: 0;
+  border-radius: 8px;
+}
+.foldAll {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin: 0 0 6px;
+}
+@media (pointer: coarse) {
+  .fold {
+    width: 36px;
+    height: 36px;
+  }
+}

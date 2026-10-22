@@ -16,17 +16,38 @@ const DRAG = 'application/x-ticket';
 
 type Select = (ids: string[], on: boolean) => void;
 
+/** Sprints et backlog repliés, mémorisés dans ce navigateur (« backlog » pour le backlog). */
+const FOLDED = 'realisation.replies';
+const readFolded = () => {
+  try {
+    return new Set<string>(JSON.parse(localStorage.getItem(FOLDED) ?? '[]'));
+  } catch {
+    return new Set<string>();
+  }
+};
+const saveFolded = (ids: Set<string>) => {
+  try {
+    localStorage.setItem(FOLDED, JSON.stringify([...ids]));
+  } catch {
+    /* stockage indisponible : le pliage vaut pour cette visite */
+  }
+};
+
 /** Une colonne de planification : un sprint, ou le backlog (sprint vide). */
 function Lane({
   sprint,
   tickets,
   selected,
   onSelect,
+  folded,
+  onFold,
 }: {
   sprint: Sprint | null;
   tickets: Ticket[];
   selected: Set<string>;
   onSelect?: Select;
+  folded: boolean;
+  onFold: () => void;
 }) {
   const canEdit = useCanEdit();
   const { settings } = useDelivery();
@@ -42,9 +63,11 @@ function Lane({
   };
   const { total, unestimated } = load(list);
   const ready = list.filter(t => isReady(settings, t)).length;
+  const picked = list.filter(t => selected.has(t.id)).length;
   return (
     <section
       className={styles.lane}
+      data-folded={folded || undefined}
       data-over={over || undefined}
       onDragOver={e => {
         if (!canEdit) return;
@@ -55,6 +78,16 @@ function Lane({
       onDrop={e => drop(e, null)}
     >
       <header className={styles.laneHead}>
+        <button
+          type="button"
+          className={styles.fold}
+          aria-expanded={!folded}
+          aria-label={`${folded ? 'Déplier' : 'Replier'} ${sprint?.name ?? 'le backlog'}`}
+          title={folded ? 'Déplier' : 'Replier'}
+          onClick={onFold}
+        >
+          {folded ? '▸' : '▾'}
+        </button>
         {onSelect && list.length ? (
           <input
             type="checkbox"
@@ -75,7 +108,9 @@ function Lane({
               {sprint.name}
             </Link>
             <SprintTag sprint={sprint} />
-            <span className={page.faint}>{period(sprint)}</span>
+            <span className={page.faint}>
+              {period(sprint)} · {list.length} ticket{list.length > 1 ? 's' : ''}
+            </span>
             {sprint.goal ? <span className={styles.goal}>{sprint.goal}</span> : null}
           </>
         ) : (
@@ -86,6 +121,11 @@ function Lane({
             </span>
           </>
         )}
+        {folded && picked ? (
+          <span className={page.faint}>
+            {picked} sélectionné{picked > 1 ? 's' : ''}
+          </span>
+        ) : null}
         <span className={styles.laneLoad}>
           <LoadBar value={total} max={sprint?.capacity ?? null} label="Charge et capacité" />
           {unestimated ? (
@@ -95,20 +135,22 @@ function Lane({
           ) : null}
         </span>
       </header>
-      {list.map(t => (
-        <TicketRow
-          key={t.id}
-          ticket={t}
-          onDragStart={e => {
-            e.dataTransfer.setData(DRAG, t.id);
-            e.dataTransfer.effectAllowed = 'move';
-          }}
-          onDrop={e => drop(e, t.id)}
-          selected={selected.has(t.id)}
-          onSelect={onSelect && (on => onSelect([t.id], on))}
-        />
-      ))}
-      {!list.length ? (
+      {folded
+        ? null
+        : list.map(t => (
+            <TicketRow
+              key={t.id}
+              ticket={t}
+              onDragStart={e => {
+                e.dataTransfer.setData(DRAG, t.id);
+                e.dataTransfer.effectAllowed = 'move';
+              }}
+              onDrop={e => drop(e, t.id)}
+              selected={selected.has(t.id)}
+              onSelect={onSelect && (on => onSelect([t.id], on))}
+            />
+          ))}
+      {!list.length && !folded ? (
         <p className={styles.emptyLane}>
           {sprint
             ? 'Glissez ici des tickets du backlog, ou choisissez ce sprint dans la colonne Sprint.'
@@ -131,6 +173,14 @@ export function DeliveryBacklog() {
   const [q, setQ] = useState('');
   const [title, setTitle] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [folded, setFolded] = useState(readFolded);
+  const fold = (ids: string[], on: boolean) =>
+    setFolded(prev => {
+      const next = new Set(prev);
+      ids.forEach(id => (on ? next.add(id) : next.delete(id)));
+      saveFolded(next);
+      return next;
+    });
   const select: Select = (ids, on) =>
     setSelected(prev => {
       const next = new Set(prev);
@@ -157,6 +207,12 @@ export function DeliveryBacklog() {
   // Seuls les tickets affichés comptent : un filtre peut en masquer.
   const chosen = exported.filter(t => selected.has(t.id));
   const lane = { selected, onSelect: canEdit ? select : undefined };
+  const laneIds = [...open.map(s => s.id), 'backlog'];
+  const laneProps = (id: string) => ({
+    ...lane,
+    folded: folded.has(id),
+    onFold: () => fold([id], !folded.has(id)),
+  });
 
   return (
     <DeliveryGate>
@@ -234,10 +290,28 @@ export function DeliveryBacklog() {
         {chosen.length ? (
           <TicketBulkBar tickets={chosen} columns={columns} onClear={() => setSelected(new Set())} />
         ) : null}
+        <p className={styles.foldAll}>
+          <button
+            type="button"
+            className={page.ghost}
+            disabled={laneIds.every(id => folded.has(id))}
+            onClick={() => fold(laneIds, true)}
+          >
+            ▸ Tout replier
+          </button>
+          <button
+            type="button"
+            className={page.ghost}
+            disabled={!laneIds.some(id => folded.has(id))}
+            onClick={() => fold(laneIds, false)}
+          >
+            ▾ Tout déplier
+          </button>
+        </p>
         {open.map(s => (
-          <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} {...lane} />
+          <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} {...laneProps(s.id)} />
         ))}
-        <Lane sprint={null} tickets={unplanned} {...lane} />
+        <Lane sprint={null} tickets={unplanned} {...laneProps('backlog')} />
         {sprints.some(s => s.status === 'closed') ? (
           <p className={page.faint}>
             Les sprints clos et leurs tickets sont dans <Link to="/realisation/sprints">Sprints</Link>.
