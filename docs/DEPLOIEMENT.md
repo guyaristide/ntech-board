@@ -225,7 +225,7 @@ Un tenant est un projet, servi à l'adresse `<slug>-board.neiba-technologies.com
    - construisez le cadrage dans l'outil (**Programme des ateliers** › **+ Atelier**, **Backlog** › **Nouvelle US** › **+ Nouvelle épique**, **Références** › **+ Référence**), ou importez-le dans **Administration** › **Membres et imports** : planning des ateliers (`.xlsx`), backlog des US (`.json` au format `{ epics, stories }`) ;
    - **Administration** › **Membres et imports** : invitez les participants, avec leur e-mail et leur rôle.
 
-   Ces opérations existent aussi en ligne de commande : `import:planning`, `import:stories`, `import:raci`, `import:risks`, `member:add` (voir [EXPLOITATION.md](EXPLOITATION.md#ligne-de-commande)).
+   Un assistant connecté au MCP avec un jeton administrateur peut tout faire sans accès au serveur, imports compris (voir [EXPLOITATION.md](EXPLOITATION.md#serveur-mcp)). Ces opérations existent aussi en ligne de commande : `import:planning`, `import:stories`, `import:raci`, `import:risks`, `member:add` (voir [EXPLOITATION.md](EXPLOITATION.md#ligne-de-commande)).
 
 5. **Vérifier.** `node apps/server/dist/cli.js project:list` liste les projets avec leurs membres et leurs US. Si l'adresse affiche « Tableau introuvable », le slug ne correspond pas au sous-domaine, ou le domaine n'est pas encore pris en compte par Coolify.
 

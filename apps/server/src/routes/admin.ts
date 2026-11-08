@@ -1,9 +1,10 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { ROLE_LABEL, ROLES } from '@board/shared';
+import { ROLE_LABEL, ROLES, type WorkspaceData } from '@board/shared';
 import { originOf, requireRole, type AppEnv } from '../auth';
 import {
   importCadrage,
+  importSnapshot,
   importPhases,
   importPlanning,
   importRisks,
@@ -11,7 +12,7 @@ import {
   type RawCadrage,
 } from '../imports';
 import { parseRaci, parseRisks, type RawRaci, type RawRisks } from '../importers/governance';
-import { parsePlanning } from '../importers/planning';
+import { parsePlanning, type RawPlanning } from '../importers/planning';
 import { sendInvitation } from '../mail';
 import type { RawStories } from '../merge';
 import {
@@ -125,18 +126,21 @@ adminRoutes.patch('/project', async c => {
 
 const MAX_UPLOAD = 15 * 1024 * 1024;
 
-/** Import d'un planning d'ateliers (.xlsx) ; le fichier est conservé dans le stockage du projet. */
+/** Import d'un planning d'ateliers (.xlsx ou JSON) ; le fichier est conservé dans le stockage du projet. */
 adminRoutes.post('/import/planning', async c => {
   const form = await c.req.parseBody();
   const file = form.file;
-  if (!(file instanceof File) || !file.name.toLowerCase().endsWith('.xlsx'))
+  const json = file instanceof File && file.name.toLowerCase().endsWith('.json');
+  if (!(file instanceof File) || (!json && !file.name.toLowerCase().endsWith('.xlsx')))
     return c.json({ error: 'xlsx_required' }, 400);
   if (file.size > MAX_UPLOAD) return c.json({ error: 'too_large' }, 413);
   const buffer = Buffer.from(await file.arrayBuffer());
   const p = c.get('project');
   await saveUpload(p.slug, file.name, buffer);
   try {
-    const planning = await parsePlanning(buffer, file.name);
+    const planning = json
+      ? (JSON.parse(buffer.toString('utf8')) as RawPlanning)
+      : await parsePlanning(buffer, file.name);
     return c.json(await importPlanning(p.id, planning, c.get('user')!.id));
   } catch (e) {
     return c.json({ error: 'parse_failed', message: (e as Error).message }, 422);
@@ -197,6 +201,22 @@ adminRoutes.post('/import/cadrage', async c => {
   await saveUpload(p.slug, file.name, Buffer.from(text));
   try {
     return c.json(await importCadrage(p.id, JSON.parse(text) as RawCadrage, c.get('user')!.id));
+  } catch (e) {
+    return c.json({ error: 'parse_failed', message: (e as Error).message }, 422);
+  }
+});
+
+/** Restaure un export complet (GET /admin/export) dans un projet qui n'a pas encore d'US. */
+adminRoutes.post('/import/snapshot', async c => {
+  const form = await c.req.parseBody();
+  const file = form.file;
+  if (!(file instanceof File)) return c.json({ error: 'file_required' }, 400);
+  if (file.size > MAX_UPLOAD) return c.json({ error: 'too_large' }, 413);
+  const text = await file.text();
+  const p = c.get('project');
+  await saveUpload(p.slug, file.name, Buffer.from(text));
+  try {
+    return c.json(await importSnapshot(p.id, JSON.parse(text) as Partial<WorkspaceData>, c.get('user')!.id));
   } catch (e) {
     return c.json({ error: 'parse_failed', message: (e as Error).message }, 422);
   }

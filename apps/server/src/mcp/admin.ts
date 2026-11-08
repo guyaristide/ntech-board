@@ -16,14 +16,18 @@ const FORMATS = `Quoi importer :
 - cadrage : { parties?: [], diligences?: [], stories?: [{ id, description?, targets?, links? }] } ;
 - raci : { source, phases: [] } ou classeur .xlsx ;
 - risques : { source, risks: [] } ou classeur .xlsx ;
-- planning : classeur .xlsx seulement.
-Les éléments nouveaux sont ajoutés, ceux jamais modifiés dans l'outil sont remplacés, ceux modifiés sont conservés.`;
+- planning : { source, references: [], workshops: [] } ou classeur .xlsx ;
+- restauration : un export complet, dans un projet qui n'a pas encore d'US.
+Les éléments nouveaux sont ajoutés, ceux jamais modifiés dans l'outil sont remplacés, ceux modifiés sont conservés.
+Pour un gros fichier (plus de quelques centaines d'Ko), un assistant qui a accès au fichier l'envoie plutôt avec :
+curl -H "Authorization: Bearer <jeton>" -F file=@fichier.json https://<tableau>/api/admin/import/<stories|cadrage|raci|risks|planning|snapshot>`;
 const IMPORT_PATH = {
   backlog: '/admin/import/stories',
   cadrage: '/admin/import/cadrage',
   raci: '/admin/import/raci',
   risques: '/admin/import/risks',
   planning: '/admin/import/planning',
+  restauration: '/admin/import/snapshot',
 } as const;
 
 interface Member {
@@ -41,7 +45,7 @@ export function registerAdmin(server: McpServer, ctx: Ctx) {
       title: 'Importer des données en masse',
       description: `Importe d'un coup, comme l'écran Membres et imports. ${FORMATS} Fournir « donnees » (JSON) ou « xlsx_base64 ».`,
       input: {
-        quoi: z.enum(['backlog', 'cadrage', 'raci', 'risques', 'planning']),
+        quoi: z.enum(['backlog', 'cadrage', 'raci', 'risques', 'planning', 'restauration']),
         donnees: z.record(z.string(), z.unknown()).optional(),
         xlsx_base64: z.string().optional(),
         nom_fichier: z.string().max(120).optional(),

@@ -25,7 +25,7 @@ programme d'ateliers avec leurs points à trancher, risques, diligences, parties
 accès, la partie Réalisation (tickets, sprints, versions, recette, pilotage). Commencez par l'outil « projet ».
 Les écritures sont signées du nom du membre propriétaire du jeton et visibles en temps réel par l'équipe.
 Pour construire beaucoup d'éléments d'un coup, utilisez « executer_lot » (avec simuler=true d'abord) ou, pour un
-administrateur, « importer_donnees ». Demandez confirmation avant toute suppression ou invitation.`;
+administrateur, « importer_donnees », qui remplace l'écran d'imports et la ligne de commande. Demandez confirmation avant toute suppression ou invitation.`;
 
 export function mcpRoutes(fetchApi: (req: Request) => Promise<Response>) {
   const routes = new Hono<AppEnv>();

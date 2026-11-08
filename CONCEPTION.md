@@ -114,7 +114,7 @@ Le dernier lot de travail est venu du premier déploiement réel, quand la conne
 - un **diagnostic d'hôte** quand le projet n'est pas trouvé : hôte reçu et projet déduit, pour repérer tout de suite une erreur de `PROJECT_HOSTS` ;
 - des routes d'API inconnues qui répondent en 404 JSON au lieu de renvoyer la page d'accueil.
 
-L'administration courante (créer un projet, ajouter un membre, importer) passe par l'écran d'administration ou par une ligne de commande, utilisable aussi dans le conteneur.
+L'administration courante (créer un projet, ajouter un membre, importer) passe par l'écran d'administration ou par une ligne de commande, utilisable aussi dans le conteneur. Hormis la création d'un projet, le serveur MCP permet tout cela sans accès au serveur.
 
 ## Ce qui a été écarté
 
