@@ -201,6 +201,6 @@ test('accès MCP : administrateurs toujours, autres rôles selon les réglages',
   const s = withSettingsDefaults(null);
   assert.equal(canUseMcp(s, 'admin'), true);
   assert.equal(canUseMcp(s, 'editor'), false);
-  assert.equal(canUseMcp({ ...s, mcp: { roles: ['editor'] } }, 'editor'), true);
+  assert.equal(canUseMcp({ ...s, mcp: { roles: ['editor'], deletions: false } }, 'editor'), true);
   assert.equal(canUseMcp(s, null), false);
 });

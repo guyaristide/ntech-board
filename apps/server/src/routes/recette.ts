@@ -42,7 +42,7 @@ recetteRoutes.onError((err, c) => {
 });
 
 const id = z.string().max(40);
-const CampaignPatch = z
+export const CampaignPatch = z
   .object({
     name: z.string().max(200),
     release: id,

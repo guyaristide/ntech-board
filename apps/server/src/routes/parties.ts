@@ -55,6 +55,8 @@ partyRoutes.patch('/settings', requireRole('admin'), async c => {
   const patch = await body(c.req, SettingsPatch);
   if (!patch) return c.json({ error: 'invalid' }, 400);
   const p = c.get('project');
+  // L'accès MCP se règle à l'écran, par une personne : un jeton ne peut pas élargir ses propres droits.
+  if (patch.mcp && c.get('apiToken')) return c.json({ error: 'forbidden' }, 403);
   const current = await getSettings(p.id);
   const store = patch.files?.store;
   if (store && store !== LOCAL && !(await listBackends(p.id)).some(b => b.id === store))
@@ -64,6 +66,7 @@ partyRoutes.patch('/settings', requireRole('admin'), async c => {
     ...patch,
     delivery: { ...current.delivery, ...patch.delivery },
     files: { ...current.files, ...patch.files },
+    mcp: { ...current.mcp, ...patch.mcp },
   };
   return c.json(await saveSettings(p.id, c.get('user')!.id, next, patch));
 });

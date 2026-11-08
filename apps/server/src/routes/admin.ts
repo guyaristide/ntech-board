@@ -24,7 +24,7 @@ import {
   templateProjects,
   updateProject,
 } from '../projects';
-import { getWorkspace, saveSettings } from '../repo';
+import { getSettings, getWorkspace, saveSettings } from '../repo';
 import { saveUpload } from '../storage';
 
 /** Administration d'un projet : membres, invitations, imports, export. */
@@ -47,6 +47,8 @@ adminRoutes.post('/settings/copy', async c => {
   const allowed = await templateProjects(user.id, c.get('superadmin'), p.id);
   if (!allowed.some(x => x.slug === input.data.from)) return c.json({ error: 'forbidden' }, 403);
   const settings = await settingsFrom(input.data.from);
+  // Un jeton ne change pas l'accès MCP, même en reprenant les réglages d'un autre projet.
+  if (c.get('apiToken')) settings.mcp = (await getSettings(p.id)).mcp;
   return c.json(await saveSettings(p.id, user.id, settings, { copiedFrom: input.data.from }));
 });
 

@@ -116,7 +116,8 @@ export interface ProjectSettings {
   referenceDocument: string;
   riskScopes: RiskScope[];
   /** Accès MCP (jetons personnels) : rôles autorisés ; les administrateurs le sont toujours. */
-  mcp: { roles: Role[] };
+  /** Accès MCP : rôles autorisés ; `deletions` ouvre les outils de suppression (fermés par défaut). */
+  mcp: { roles: Role[]; deletions: boolean };
   delivery: DeliverySettings;
   /** Pièces jointes : stockage des nouveaux fichiers, rangement, taille et types acceptés. */
   files: FileSettings;
@@ -128,7 +129,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
   actors: [],
   referenceDocument: 'Cahier des charges',
   riskScopes: [{ name: 'Projet', prefix: 'R' }],
-  mcp: { roles: ['admin'] },
+  mcp: { roles: ['admin'], deletions: false },
   files: DEFAULT_FILE_SETTINGS,
   delivery: {
     enabled: false,
@@ -164,6 +165,7 @@ export const withSettingsDefaults = (s: Partial<ProjectSettings> | null | undefi
   ...DEFAULT_SETTINGS,
   ...s,
   files: { ...DEFAULT_FILE_SETTINGS, ...s?.files },
+  mcp: { ...DEFAULT_SETTINGS.mcp, ...s?.mcp },
   delivery: {
     ...DEFAULT_SETTINGS.delivery,
     ...s?.delivery,
@@ -181,6 +183,8 @@ export const settingsTemplate = (from: ProjectSettings): ProjectSettings => {
     ...s,
     // Les stockages configurés (et leurs clés) restent propres à chaque projet.
     files: { ...s.files, store: 'local' },
+    // Autoriser les suppressions reste un choix explicite, projet par projet.
+    mcp: { ...s.mcp, deletions: false },
     delivery: {
       ...s.delivery,
       key: '',

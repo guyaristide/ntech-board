@@ -17,6 +17,8 @@ export interface Ctx {
   workspace: () => Promise<WorkspaceData>;
   /** Le membre voit la partie Réalisation. */
   delivery: boolean;
+  /** Le projet autorise les suppressions par le MCP, et le membre peut supprimer. */
+  deletions: boolean;
 }
 
 export const MESSAGES: Record<string, string> = {
@@ -32,6 +34,11 @@ export class ApiFailure extends Error {}
 type Shape = z.ZodRawShape;
 type Result = { content: { type: 'text'; text: string }[]; isError?: boolean };
 
+type Entry = { shape: Shape; run: (args: never) => Promise<string> };
+const registries = new WeakMap<McpServer, Map<string, Entry>>();
+/** Outils déclarés sur ce serveur, pour les exécuter en lot. */
+export const toolsOf = (server: McpServer) => registries.get(server) ?? new Map<string, Entry>();
+
 /**
  * Déclare un outil : la réponse est un texte (Markdown) ; une erreur de l'API devient un message
  * d'erreur lisible plutôt qu'une exception.
@@ -39,9 +46,11 @@ type Result = { content: { type: 'text'; text: string }[]; isError?: boolean };
 export function tool<S extends Shape>(
   server: McpServer,
   name: string,
-  config: { title: string; description: string; input?: S; write?: boolean },
+  config: { title: string; description: string; input?: S; write?: boolean; destructive?: boolean },
   run: (args: z.infer<z.ZodObject<S>>) => Promise<string>,
 ) {
+  if (!registries.has(server)) registries.set(server, new Map());
+  registries.get(server)!.set(name, { shape: config.input ?? {}, run: run as Entry['run'] });
   server.registerTool(
     name,
     {
@@ -49,7 +58,7 @@ export function tool<S extends Shape>(
       description: config.description,
       inputSchema: config.input ?? {},
       annotations: config.write
-        ? { readOnlyHint: false, destructiveHint: false, openWorldHint: false }
+        ? { readOnlyHint: false, destructiveHint: !!config.destructive, openWorldHint: false }
         : { readOnlyHint: true, openWorldHint: false },
     },
     (async (args: never): Promise<Result> => {

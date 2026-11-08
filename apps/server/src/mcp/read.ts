@@ -1,5 +1,13 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { diligenceOpen, riskLevel, riskScore, STATUSES, ticketsOfStory, type Story } from '@board/shared';
+import {
+  diligenceOpen,
+  fileSize,
+  riskLevel,
+  riskScore,
+  STATUSES,
+  ticketsOfStory,
+  type Story,
+} from '@board/shared';
 import { z } from 'zod';
 import { lines, list, matches, tool, type Ctx } from './context';
 
@@ -8,7 +16,105 @@ import { lines, list, matches, tool, type Ctx } from './context';
 const story = (s: Story) => `${s.id} · [${s.status} · ${s.version} · ${s.priority}] ${s.title}`;
 const date = (iso: string | null) => iso ?? 'date à fixer';
 
+/** Types d'éléments lisibles en entier : leur liste dans le tableau, et leur nom dans l'historique. */
+const ELEMENTS = {
+  us: ['stories', 'story'],
+  epique: ['epics', 'epic'],
+  atelier: ['workshops', 'workshop'],
+  reference: ['references', 'reference'],
+  phase: ['phases', 'phase'],
+  risque: ['risks', 'risk'],
+  diligence: ['diligences', 'diligence'],
+  partie_prenante: ['parties', 'party'],
+  version: ['releases', 'release'],
+  sprint: ['sprints', 'sprint'],
+  ticket: ['tickets', 'ticket'],
+  campagne: ['campaigns', 'campaign'],
+  piece_jointe: ['attachments', 'attachment'],
+} as const;
+const ELEMENT_NAMES = Object.keys(ELEMENTS) as [keyof typeof ELEMENTS, ...(keyof typeof ELEMENTS)[]];
+
 export function registerRead(server: McpServer, ctx: Ctx) {
+  tool(
+    server,
+    'lire_element',
+    {
+      title: 'Lire un élément en entier',
+      description:
+        'Tous les champs d’un élément, en JSON, avec les identifiants nécessaires aux outils de modification (lignes RACI, actions, critères…).',
+      input: { type: z.enum(ELEMENT_NAMES), id: z.string() },
+    },
+    async a => {
+      const ws = await ctx.workspace();
+      const items = ws[ELEMENTS[a.type][0]] as { id: string }[];
+      const item = items.find(x => x.id.toLowerCase() === a.id.toLowerCase());
+      return item ? JSON.stringify(item, null, 1) : `Élément ${a.type} ${a.id} introuvable.`;
+    },
+  );
+  tool(
+    server,
+    'exporter_donnees',
+    {
+      title: 'Exporter des éléments',
+      description: 'Liste complète en JSON d’un type d’éléments, par pages.',
+      input: {
+        type: z.enum(ELEMENT_NAMES),
+        depuis: z.number().int().min(0).default(0),
+        limite: z.number().int().min(1).max(500).default(100),
+      },
+    },
+    async a => {
+      const ws = await ctx.workspace();
+      const items = ws[ELEMENTS[a.type][0]] as unknown[];
+      return lines(
+        `${items.length} élément(s), ${a.depuis} à ${Math.min(a.depuis + a.limite, items.length)} ci-dessous.`,
+        JSON.stringify(items.slice(a.depuis, a.depuis + a.limite)),
+      );
+    },
+  );
+  tool(
+    server,
+    'historique',
+    {
+      title: 'Historique d’un élément',
+      description: 'Qui a fait quoi sur un élément, du plus récent au plus ancien.',
+      input: { type: z.enum(ELEMENT_NAMES), id: z.string() },
+    },
+    async a => {
+      const rows = await ctx.api<unknown[]>(
+        'GET',
+        `/history/${ELEMENTS[a.type][1]}/${encodeURIComponent(a.id)}`,
+      );
+      return JSON.stringify(rows);
+    },
+  );
+  tool(
+    server,
+    'pieces_jointes',
+    {
+      title: 'Lister les pièces jointes',
+      description: 'Fichiers joints au projet, ou à un élément.',
+      input: { id: z.string().optional().describe('Identifiant de l’élément') },
+    },
+    async a => {
+      const ws = await ctx.workspace();
+      return list(
+        ws.attachments.filter(f => !a.id || f.owner.id === a.id),
+        f => `- ${f.id} · ${f.name} · ${f.owner.kind} ${f.owner.id} · ${fileSize(f.size)} · ${f.byName}`,
+      );
+    },
+  );
+  tool(
+    server,
+    'reglages',
+    {
+      title: 'Réglages du projet',
+      description:
+        'Versions, acteurs, périmètres de risque, workflow et types de tickets, fichiers, en JSON.',
+    },
+    async () => JSON.stringify((await ctx.workspace()).settings, null, 1),
+  );
+
   tool(
     server,
     'projet',

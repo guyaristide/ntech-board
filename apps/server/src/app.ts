@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import { secureHeaders } from 'hono/secure-headers';
-import { context, sameOrigin, type AppEnv } from './auth';
+import { context, guardTokenDeletions, sameOrigin, type AppEnv } from './auth';
 import { pool } from './db';
 import { env } from './env';
 import { accessLog, fail } from './log';
@@ -52,7 +52,7 @@ export function createApp() {
   app.use('/api/*', accessLog);
 
   const api = new Hono<AppEnv>();
-  api.use('*', context, sameOrigin);
+  api.use('*', context, sameOrigin, guardTokenDeletions);
   api.onError((err, c) => {
     fail('erreur', `${c.req.method} ${new URL(c.req.url).pathname}`, err);
     return c.json({ error: 'server_error' }, 500);

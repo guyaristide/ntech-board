@@ -142,6 +142,25 @@ async function fromToken(c: Context<AppEnv>, projectId: string, token: string) {
   if (row.touch) await pool.query('UPDATE api_tokens SET last_used_at = now() WHERE id = $1', [row.tid]);
 }
 
+/**
+ * Un jeton ne supprime rien tant que le projet ne l'autorise pas (Réglages › Accès MCP) : ni par les
+ * outils du MCP, ni en appelant l'API directement. Retirer une liaison n'efface aucun élément.
+ */
+export const guardTokenDeletions: MiddlewareHandler<AppEnv> = async (c, next) => {
+  const removing =
+    (c.req.method === 'DELETE' && !c.req.path.includes('/links/')) ||
+    (c.req.method === 'POST' && c.req.path.endsWith('/tickets/suppression'));
+  if (removing && c.get('apiToken') && !(await getSettings(c.get('project').id)).mcp.deletions)
+    return c.json(
+      {
+        error: 'deletion_disabled',
+        message: 'Les suppressions par jeton sont fermées sur ce projet (Réglages du projet › Accès MCP).',
+      },
+      403,
+    );
+  await next();
+};
+
 const RANK: Record<Role, number> = { viewer: 0, editor: 1, admin: 2 };
 
 /** Exige un rôle minimal sur le projet courant. */

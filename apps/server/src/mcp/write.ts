@@ -1,12 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { PRIORITIES, STATUSES, type Story, type Ticket, type WorkspaceData } from '@board/shared';
+import { PRIORITIES, SCENARIOS, STATUSES, type Story, type Ticket, type WorkspaceData } from '@board/shared';
 import { z } from 'zod';
 import { ApiFailure, lines, matches, pick, tool, type Ctx } from './context';
 
 /**
  * Outils d'écriture : chacun appelle la route de l'API qu'utilise l'interface, sous l'identité du
- * membre. Rien n'est supprimé par ces outils.
+ * membre.
  */
 
 const COMMENT_PATH = {
@@ -15,6 +15,7 @@ const COMMENT_PATH = {
   risque: 'risks',
   diligence: 'diligences',
   atelier: 'workshops',
+  phase: 'phases',
 } as const;
 const block = (text: string) => ({ id: randomUUID().slice(0, 8), type: 'p' as const, text });
 
@@ -36,6 +37,31 @@ function resolve<T extends { id: string; name: string }>(items: T[], value: stri
   return x.id;
 }
 
+/** Champs d'une US communs à la création et à la modification. */
+const storyExtras = {
+  acteur: z.string().max(80).optional(),
+  atelier: z.string().max(40).optional().describe('Identifiant de l’atelier qui cadre l’US'),
+  scenario: z.enum(SCENARIOS).optional(),
+  source: z.string().max(300).optional(),
+  plateformes: z
+    .array(z.object({ platform: z.string().min(1).max(80), module: z.string().max(120).default('') }))
+    .max(30)
+    .optional(),
+};
+const storyExtraPatch = (a: {
+  acteur?: string;
+  atelier?: string;
+  scenario?: Story['scenario'];
+  source?: string;
+  plateformes?: Story['targets'];
+}): Partial<Story> => ({
+  ...(a.acteur !== undefined ? { actor: a.acteur } : {}),
+  ...(a.atelier !== undefined ? { workshop: a.atelier } : {}),
+  ...(a.scenario ? { scenario: a.scenario } : {}),
+  ...(a.source !== undefined ? { source: a.source } : {}),
+  ...(a.plateformes ? { targets: a.plateformes } : {}),
+});
+
 export function registerWrite(server: McpServer, ctx: Ctx) {
   tool(
     server,
@@ -43,9 +69,9 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
     {
       title: 'Commenter',
       description:
-        'Ajoute un commentaire, signé de votre nom, sur une US, un ticket, un risque, une diligence ou un atelier.',
+        'Ajoute un commentaire, signé de votre nom, sur une US, un ticket, un risque, une diligence, un atelier ou une phase.',
       input: {
-        cible: z.enum(['us', 'ticket', 'risque', 'diligence', 'atelier']),
+        cible: z.enum(['us', 'ticket', 'risque', 'diligence', 'atelier', 'phase']),
         id: z.string(),
         texte: z.string().min(1).max(5000),
       },
@@ -65,7 +91,7 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
     {
       title: 'Modifier une US',
       description:
-        'Modifie une user story : titre, récit, description, statut, version, priorité ; ajoute des critères d’acceptation ou en coche. Seuls les champs fournis changent.',
+        'Modifie une user story : titre, récit, description, statut, version, priorité, épique, acteur, atelier, scénario, plateformes, source ; ajoute, coche ou remplace des critères d’acceptation. Seuls les champs fournis changent.',
       input: {
         id: z.string(),
         titre: z.string().max(300).optional(),
@@ -82,6 +108,13 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
           .max(200)
           .optional()
           .describe('Identifiants de critères à marquer comme satisfaits'),
+        remplacer_criteres: z
+          .array(z.string().min(1).max(4000))
+          .max(200)
+          .optional()
+          .describe('Remplace tous les critères par cette liste'),
+        epique: z.string().max(40).optional().describe('Déplace l’US dans cette épique'),
+        ...storyExtras,
       },
       write: true,
     },
@@ -89,7 +122,8 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
       const ws = await ctx.workspace();
       const s = ws.stories.find(x => x.id.toLowerCase() === a.id.toLowerCase());
       if (!s) throw new ApiFailure(`US ${a.id} introuvable.`);
-      const patch: Partial<Story> = {};
+      const patch: Partial<Story> = storyExtraPatch(a);
+      if (a.epique) patch.epic = a.epique;
       if (a.titre !== undefined) patch.title = a.titre;
       if (a.en_tant_que !== undefined) patch.asA = a.en_tant_que;
       if (a.je_veux !== undefined) patch.iWant = a.je_veux;
@@ -103,6 +137,12 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
           ...s.acceptance.map(c => (a.cocher_criteres?.includes(c.id) ? { ...c, done: true } : c)),
           ...(a.ajouter_criteres ?? []).map(text => ({ id: randomUUID().slice(0, 8), text, done: false })),
         ];
+      if (a.remplacer_criteres)
+        patch.acceptance = a.remplacer_criteres.map(text => ({
+          id: randomUUID().slice(0, 8),
+          text,
+          done: false,
+        }));
       if (!Object.keys(patch).length) return 'Aucun champ à modifier.';
       await ctx.api('PATCH', `/stories/${encodeURIComponent(s.id)}`, patch);
       return `${s.id} modifiée : ${Object.keys(patch).join(', ')}.`;
@@ -126,6 +166,7 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
         criteres: z.array(z.string().min(1).max(4000)).max(50).default([]),
         version: z.string().max(40).optional().describe('Version ou lot, parmi ceux des réglages du projet'),
         priorite: z.enum(PRIORITIES).optional(),
+        ...storyExtras,
       },
       write: true,
     },
@@ -141,6 +182,7 @@ export function registerWrite(server: McpServer, ctx: Ctx) {
           acceptance: a.criteres.map(text => ({ id: randomUUID().slice(0, 8), text, done: false })),
           ...(a.version ? { version: a.version } : {}),
           ...(a.priorite ? { priority: a.priorite } : {}),
+          ...storyExtraPatch(a),
         },
       });
       return `US créée : ${s.id} · ${s.title}.`;
@@ -286,6 +328,57 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
         if (!Object.keys(patch).length) return 'Aucun champ à modifier.';
         const t = await ctx.api<Ticket>('PATCH', `/tickets/${encodeURIComponent(a.id)}`, patch);
         return `${t.id} modifié : ${Object.keys(patch).join(', ')}.`;
+      },
+    );
+
+    tool(
+      server,
+      'modifier_tickets',
+      {
+        title: 'Modifier plusieurs tickets',
+        description:
+          'Applique d’un coup la même version, le même sprint, la même étape, le même responsable ou le même type à plusieurs tickets.',
+        input: {
+          ids: z.array(z.string()).min(1).max(500),
+          type: common.type,
+          etape: common.etape,
+          sprint: common.sprint,
+          version: common.version,
+          responsable: common.responsable,
+        },
+        write: true,
+      },
+      async ({ ids, ...a }) => {
+        const patch = await fields(a);
+        if (!Object.keys(patch).length) return 'Aucun champ à modifier.';
+        const saved = await ctx.api<Ticket[]>('PATCH', '/tickets', { ids, patch });
+        return `${saved.length} ticket(s) modifié(s) : ${Object.keys(patch).join(', ')}.`;
+      },
+    );
+
+    tool(
+      server,
+      'passer_en_realisation',
+      {
+        title: 'Passer des US en réalisation',
+        description:
+          'Crée un ticket lié pour chaque US citée. Les US déjà en réalisation sont ignorées. Sans liste, utilisez les filtres : toutes les US validées, éventuellement d’une version.',
+        input: {
+          us: z.array(z.string()).max(1000).optional(),
+          version_cadrage: z.string().optional().describe('Version de l’US dans le cadrage : MVP, V1…'),
+        },
+        write: true,
+      },
+      async a => {
+        const ws = await ctx.workspace();
+        const stories =
+          a.us ??
+          ws.stories
+            .filter(s => s.status === 'Validée' && (!a.version_cadrage || s.version === a.version_cadrage))
+            .map(s => s.id);
+        if (!stories.length) return 'Aucune US à passer en réalisation.';
+        const made = await ctx.api<Ticket[]>('POST', '/tickets', { stories });
+        return `${made.length} ticket(s) créé(s) sur ${stories.length} US citée(s).`;
       },
     );
   }

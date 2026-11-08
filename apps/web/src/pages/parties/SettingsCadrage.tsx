@@ -112,6 +112,7 @@ export function SettingsCadrage({ draft, setDraft }: Props) {
                     onChange={e =>
                       set({
                         mcp: {
+                          ...draft.mcp,
                           roles: e.target.checked
                             ? [...new Set([...draft.mcp.roles, r])]
                             : draft.mcp.roles.filter(x => x !== r),
@@ -127,6 +128,21 @@ export function SettingsCadrage({ draft, setDraft }: Props) {
             <p className={styles.hint}>
               Qui peut créer des jetons et connecter un assistant au tableau, avec ses propres droits. Les
               jetons d’un rôle retiré cessent aussitôt de fonctionner.
+            </p>
+          </span>
+          <span className={styles.fieldLabel}>Suppressions</span>
+          <span>
+            <label className={styles.checks}>
+              <input
+                type="checkbox"
+                checked={draft.mcp.deletions}
+                onChange={e => set({ mcp: { ...draft.mcp, deletions: e.target.checked } })}
+              />
+              Autoriser un assistant à supprimer des éléments
+            </label>
+            <p className={styles.hint}>
+              Fermé par défaut : sans cette case, le MCP crée et modifie mais ne supprime rien. Une
+              suppression est définitive.
             </p>
           </span>
         </div>
