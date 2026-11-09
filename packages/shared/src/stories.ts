@@ -40,3 +40,23 @@ export function featureGroup(stories: Story[], id: string): string[] {
   seen.delete(id);
   return [...seen];
 }
+
+const fold = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+const startsWord = (text: string, word: string) => {
+  for (let i = text.indexOf(word); i >= 0; i = text.indexOf(word, i + 1)) {
+    if (i === 0 || !/[\p{L}\p{N}]/u.test(text[i - 1])) return true;
+  }
+  return false;
+};
+
+/**
+ * Chaque mot cherché commence un mot du texte, sans tenir compte de la casse ni des accents :
+ * « ia » trouve « l'IA » et « Assistant IA », pas « initial » ni « commercial ».
+ */
+export const matchesWords = (text: string, query: string) => {
+  const hay = fold(text);
+  return fold(query)
+    .split(/\s+/)
+    .filter(Boolean)
+    .every(w => startsWord(hay, w));
+};

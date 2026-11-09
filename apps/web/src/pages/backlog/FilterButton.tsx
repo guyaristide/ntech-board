@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { matchesWords } from '@board/shared';
 import { Popover } from '../../ui/Popover';
 import { Tag } from '../../ui/Tag';
 import styles from './Backlog.module.css';
+
+/** Au-delà, la liste se parcourt mal : un champ permet de la réduire. */
+const SEARCH_FROM = 8;
 
 /** Filtre multi-valeurs d'une propriété, présenté comme une puce de filtre Notion. */
 export function FilterButton({
@@ -18,8 +22,16 @@ export function FilterButton({
   render?: (v: string) => string;
 }) {
   const [open, setOpen] = useState(false);
+  const [term, setTerm] = useState('');
   const toggle = (v: string) =>
     onChange(selected.includes(v) ? selected.filter(x => x !== v) : [...selected, v]);
+  const close = () => {
+    setOpen(false);
+    setTerm('');
+  };
+  const found = options.filter(o => matchesWords(render(o.value) || 'Vide', term));
+  const shown = term ? found : options;
+  const unchecked = found.filter(o => !selected.includes(o.value));
   return (
     <div className={styles.filterRoot}>
       <button
@@ -35,9 +47,30 @@ export function FilterButton({
           : ''}{' '}
         ▾
       </button>
-      <Popover open={open} onClose={() => setOpen(false)}>
+      <Popover open={open} onClose={close}>
+        {options.length >= SEARCH_FROM ? (
+          <input
+            type="search"
+            className={styles.filterSearch}
+            placeholder="Chercher une valeur…"
+            aria-label={`Chercher dans ${label}`}
+            autoFocus
+            value={term}
+            onChange={e => setTerm(e.target.value)}
+          />
+        ) : null}
+        {term && unchecked.length > 1 ? (
+          <button
+            type="button"
+            className={styles.filterAll}
+            onClick={() => onChange([...selected, ...unchecked.map(o => o.value)])}
+          >
+            Tout cocher ({unchecked.length})
+          </button>
+        ) : null}
+        {term && !found.length ? <p className={styles.filterNone}>Aucune valeur</p> : null}
         <ul className={styles.filterList}>
-          {options.map(o => (
+          {shown.map(o => (
             <li key={o.value}>
               <label>
                 <input

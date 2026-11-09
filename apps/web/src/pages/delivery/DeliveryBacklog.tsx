@@ -9,6 +9,7 @@ import backlog from '../backlog/Backlog.module.css';
 import { useTicketColumns } from './exports';
 import { ImportStories } from './ImportStories';
 import { TicketBulkBar } from './TicketBulkBar';
+import { TicketFilters, useTicketFilters } from './TicketFilters';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag, TicketRow } from './parts';
 import styles from './Delivery.module.css';
 
@@ -188,12 +189,14 @@ export function DeliveryBacklog() {
       return next;
     });
   // Les sous-tâches vivent avec leur ticket parent (fiche ticket, tableau du sprint).
-  const shown = tickets.filter(
+  const filters = useTicketFilters();
+  const candidates = tickets.filter(
     t =>
       !(t.parent && tickets.some(p => p.id === t.parent)) &&
       (!release || t.release === release) &&
-      (!q || `${t.id} ${t.title} ${t.story}`.toLowerCase().includes(q.toLowerCase())),
+      filters.search(t, q),
   );
+  const shown = candidates.filter(t => filters.matches(t));
   const open = sprints.filter(s => s.status !== 'closed').sort(sprintOrder);
   const inClosed = new Set(sprints.filter(s => s.status === 'closed').map(s => s.id));
   const unplanned = shown.filter(
@@ -253,7 +256,7 @@ export function DeliveryBacklog() {
               name="backlog-realisation"
               rows={exported}
               columns={columns}
-              filtered={!!(release || q)}
+              filtered={!!(release || q || filters.active)}
               noun="tickets"
             />
             {canEdit ? (
@@ -268,6 +271,7 @@ export function DeliveryBacklog() {
             ) : null}
           </span>
         </div>
+        <TicketFilters filters={filters} tickets={candidates} />
         {canEdit ? (
           <form
             className={styles.quickAdd}

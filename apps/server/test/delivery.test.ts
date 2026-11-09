@@ -5,6 +5,7 @@ import {
   casesOf,
   isBlocked,
   isReady,
+  matchesWords,
   newParty,
   partiesOfUser,
   nextSprintDates,
@@ -131,4 +132,14 @@ test('cas de test d’une campagne : les critères des US du périmètre, avec l
     na: 0,
     todo: 1,
   });
+});
+
+test('la recherche par mots trouve « IA » comme un mot, pas dans « initial »', () => {
+  assert.ok(matchesWords('Portail › Assistant IA', 'ia'));
+  assert.ok(matchesWords("Enrichir le POI par l'IA", 'IA'));
+  assert.ok(matchesWords('Créer un compte', 'creer comp'));
+  assert.ok(matchesWords('ETO-12 Titre', 'eto-12'));
+  assert.ok(matchesWords('Sans recherche', '  '));
+  assert.ok(!matchesWords('Contrat initial et commercial', 'ia'));
+  assert.ok(!matchesWords('Portail › Assistant IA', 'ia paiement'));
 });
