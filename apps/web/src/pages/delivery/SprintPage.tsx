@@ -1,16 +1,19 @@
 import { useState, type ReactNode } from 'react';
 import { Attachments } from '../../ui/Attachments';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { amount, isDone, progress, workdaysLeft, STEP_CATEGORY_LABEL } from '@board/shared';
 import { ApiError } from '../../model/api';
 import { byRank, delivery, useDelivery } from '../../model/delivery';
-import { useCanEdit } from '../../model/store';
+import { useCanEdit, useWorkspace } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
 import { EditableText } from '../../ui/EditableText';
 import { ExportButton, type Column } from '../../ui/ExportButton';
 import page from '../Page.module.css';
+import backlog from '../backlog/Backlog.module.css';
+import { assigneeName } from './fields';
 import { useTicketColumns } from './exports';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag, TicketRow } from './parts';
+import { TicketFilters, useTicketFilters } from './TicketFilters';
 import styles from './Delivery.module.css';
 
 /** Fiche d'un sprint : objectif, dates, capacité, tickets par étape, revue et rétrospective, clôture. */
@@ -24,6 +27,11 @@ export function SprintPage() {
   const [error, setError] = useState('');
   const sprint = sprints.find(s => s.id === id);
   const ticketColumns = useTicketColumns();
+  const parties = useWorkspace(s => s.parties);
+  const filters = useTicketFilters();
+  const [params] = useSearchParams();
+  const q = params.get('q') ?? '';
+  const who = params.get('responsable') ?? '';
   if (!sprint)
     return (
       <DeliveryGate>
@@ -35,7 +43,18 @@ export function SprintPage() {
   const set = (patch: Parameters<typeof delivery.updateSprint>[1]) => delivery.updateSprint(sprint.id, patch);
   const items = tickets.filter(t => t.sprint === sprint.id).sort(byRank);
   const carried = tickets.filter(t => sprint.carried.includes(t.id));
+  // Avancement, charge et clôture valent pour tout le sprint ; les filtres ne changent que les listes.
   const p = progress(settings, items);
+  const matching = (t: (typeof items)[number]) =>
+    filters.matches(t) &&
+    filters.search(t, q) &&
+    (!who || (who === 'aucun' ? !t.assignee : t.assignee === who));
+  const shown = items.filter(matching);
+  const shownCarried = carried.filter(matching);
+  const narrowed = filters.active || !!q || !!who;
+  const put = (key: string, value: string) =>
+    filters.update(next => (value ? next.set(key, value) : next.delete(key)));
+  const assignees = [...new Set([...items, ...carried].map(t => t.assignee).filter(Boolean))];
   const open = items.filter(t => !isDone(settings, t));
   const next = sprints.filter(s => s.status === 'planned' && s.id !== sprint.id).sort(sprintOrder);
   const categoryOf = (t: (typeof items)[number]) =>
@@ -43,9 +62,9 @@ export function SprintPage() {
   // Export : les sections de la fiche dans leur ordre (à faire, en cours, terminé), puis les reportés.
   const exported = [
     ...(['todo', 'doing', 'done'] as const).flatMap(cat =>
-      items.filter(t => categoryOf(t) === cat).map(t => ({ t, group: STEP_CATEGORY_LABEL[cat] })),
+      shown.filter(t => categoryOf(t) === cat).map(t => ({ t, group: STEP_CATEGORY_LABEL[cat] })),
     ),
-    ...carried.map(t => ({ t, group: 'Reporté à la clôture' })),
+    ...shownCarried.map(t => ({ t, group: 'Reporté à la clôture' })),
   ];
   type Row = (typeof exported)[number];
   const columns: Column<Row>[] = [
@@ -77,6 +96,7 @@ export function SprintPage() {
               name={sprint.name.toLowerCase().replace(/\s+/g, '-')}
               rows={exported}
               columns={columns}
+              filtered={narrowed}
               noun="tickets"
             />
             {canEdit ? (
@@ -245,8 +265,39 @@ export function SprintPage() {
               )}
         </div>
 
+        <div className={backlog.toolbar}>
+          <input
+            className={backlog.search}
+            style={{ marginLeft: 0 }}
+            type="search"
+            placeholder="Rechercher un ticket"
+            aria-label="Rechercher dans le sprint"
+            value={q}
+            onChange={e => put('q', e.target.value)}
+          />
+          <select
+            className={styles.filter}
+            value={who}
+            aria-label="Responsable"
+            onChange={e => put('responsable', e.target.value)}
+          >
+            <option value="">Tous les responsables</option>
+            <option value="aucun">Non attribués</option>
+            {assignees.map(a => (
+              <option key={a} value={a}>
+                {assigneeName(parties, a)}
+              </option>
+            ))}
+          </select>
+          <span className={backlog.total}>
+            {narrowed
+              ? `${shown.length + shownCarried.length} tickets sur ${items.length + carried.length}`
+              : `${items.length + carried.length} tickets`}
+          </span>
+        </div>
+        <TicketFilters filters={filters} tickets={[...items, ...carried]} />
         {(['todo', 'doing', 'done'] as const).map(cat => {
-          const list = items.filter(
+          const list = shown.filter(
             t =>
               settings.delivery.workflow.find(s => s.id === t.status)?.category === cat ||
               (cat === 'todo' && !settings.delivery.workflow.some(s => s.id === t.status)),
@@ -264,11 +315,11 @@ export function SprintPage() {
             </section>
           );
         })}
-        {carried.length ? (
+        {shownCarried.length ? (
           <section>
-            <h2 className={page.h2}>Reportés à la clôture ({carried.length})</h2>
+            <h2 className={page.h2}>Reportés à la clôture ({shownCarried.length})</h2>
             <div className={styles.rows}>
-              {carried.map(t => (
+              {shownCarried.map(t => (
                 <TicketRow key={t.id} ticket={t} />
               ))}
             </div>
