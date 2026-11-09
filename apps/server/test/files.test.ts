@@ -51,5 +51,9 @@ test('les secrets sont chiffrés et relus', () => {
   assert.ok(!stored.includes('cle-secrete'));
   assert.notEqual(encrypt('cle-secrete-minio'), stored);
   assert.equal(decrypt(stored), 'cle-secrete-minio');
-  assert.throws(() => decrypt(stored.replace(/.$/, c => (c === 'A' ? 'B' : 'A'))));
+  // Premier caractère des données : tous ses bits comptent, contrairement au dernier du base64.
+  const parts = stored.split('.');
+  const data = parts[3];
+  parts[3] = (data[0] === 'A' ? 'B' : 'A') + data.slice(1);
+  assert.throws(() => decrypt(parts.join('.')));
 });
