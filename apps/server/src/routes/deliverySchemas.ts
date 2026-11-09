@@ -39,6 +39,8 @@ export const SprintCreate = z.object({ patch: SprintPatch.optional() });
 /** Clôture : les tickets non terminés vont au backlog, ou dans le sprint indiqué. */
 export const SprintClose = z.object({ moveTo: id.default('') });
 
+const labels = z.array(text(40)).max(20);
+
 export const TicketPatch = z
   .object({
     type: id,
@@ -51,6 +53,7 @@ export const TicketPatch = z
     ready: z.array(id).max(30),
     assignee: id,
     parent: id,
+    labels,
     description: blocks,
   })
   .partial()
@@ -61,15 +64,24 @@ export const TicketCreate = z.union([
   z.object({ patch: TicketPatch.extend({ title: z.string().trim().min(1).max(500) }) }),
 ]);
 
-/** Actions groupées sur des tickets choisis : version, sprint, étape, responsable, type. */
+/** Actions groupées sur des tickets choisis : version, sprint, étape, responsable, type, étiquettes. */
 const ticketIds = z.array(z.string().min(1).max(40)).min(1).max(500);
-export const TicketBulk = z.object({
-  ids: ticketIds,
-  patch: TicketPatch.pick({ type: true, status: true, release: true, sprint: true, assignee: true }).refine(
-    p => Object.keys(p).length > 0,
-    { message: 'empty' },
-  ),
-});
+export const TicketBulk = z
+  .object({
+    ids: ticketIds,
+    patch: TicketPatch.pick({
+      type: true,
+      status: true,
+      release: true,
+      sprint: true,
+      assignee: true,
+    }).default({}),
+    addLabels: labels.default([]),
+    removeLabels: labels.default([]),
+  })
+  .refine(b => Object.keys(b.patch).length > 0 || b.addLabels.length > 0 || b.removeLabels.length > 0, {
+    message: 'empty',
+  });
 export const TicketIds = z.object({ ids: ticketIds });
 
 export const TicketLinkBody = z.object({

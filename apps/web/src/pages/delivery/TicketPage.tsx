@@ -11,6 +11,7 @@ import { History } from '../../ui/History';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
 import { AssigneeSelect, useMyParties } from './fields';
+import { TicketLabels } from './Labels';
 import { DeliveryGate, Estimate, Ready, sprintOrder } from './parts';
 import { Subtasks, TicketLinks } from './TicketRelations';
 import styles from './Delivery.module.css';
@@ -91,6 +92,7 @@ export function TicketPage() {
         ) : null}
       </span>,
     ],
+    ['Étiquettes', <TicketLabels ticket={ticket} />],
     ...(settings.delivery.estimation !== 'none'
       ? ([
           [

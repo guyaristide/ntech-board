@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Ticket } from '@board/shared';
+import { labelsOf, type Ticket } from '@board/shared';
 import { ApiError } from '../../model/api';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useWorkspace } from '../../model/store';
@@ -7,6 +7,7 @@ import { ExportButton, type Column } from '../../ui/ExportButton';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { assigneeName } from './fields';
+import { LabelInput } from './Labels';
 import { sprintOrder } from './parts';
 import styles from './Delivery.module.css';
 
@@ -23,7 +24,7 @@ const PROMPT = '__';
 
 /**
  * Actions groupées sur les tickets cochés : changer la version, le sprint, l'étape, le responsable
- * ou le type d'un coup, exporter la sélection, supprimer.
+ * ou le type d'un coup, ajouter ou retirer une étiquette, exporter la sélection, supprimer.
  */
 export function TicketBulkBar({
   tickets,
@@ -45,6 +46,15 @@ export function TicketBulkBar({
     try {
       await delivery.updateTickets(ids, { [field]: value });
       setNote(`${LABEL[field]} : « ${label} » pour ${n}.`);
+    } catch (e) {
+      setNote(e instanceof ApiError ? e.message : 'Modification impossible, réessayez.');
+    }
+  };
+  const label = async (add: string[], remove: string[]) => {
+    setNote('Étiquettes en cours de modification…');
+    try {
+      await delivery.labelTickets(ids, add, remove);
+      setNote(`Étiquette « ${add[0] ?? remove[0]} » ${add.length ? 'ajoutée à' : 'retirée de'} ${n}.`);
     } catch (e) {
       setNote(e instanceof ApiError ? e.message : 'Modification impossible, réessayez.');
     }
@@ -96,6 +106,7 @@ export function TicketBulkBar({
     </select>
   );
 
+  const present = labelsOf(tickets);
   const persons = people('person');
   const roles = people('role');
   return (
@@ -127,6 +138,24 @@ export function TicketBulkBar({
         'type',
         settings.delivery.ticketTypes.map(t => [t.id, t.name] as const),
       )}
+      <LabelInput onAdd={l => void label([l], [])} />
+      {present.length ? (
+        <select
+          className={`${styles.filter} ${styles.bulkSelect}`}
+          value={PROMPT}
+          aria-label="Retirer une étiquette des tickets sélectionnés"
+          onChange={e => void label([], [e.target.value])}
+        >
+          <option value={PROMPT} disabled>
+            Retirer une étiquette…
+          </option>
+          {present.map(l => (
+            <option key={l} value={l}>
+              {l}
+            </option>
+          ))}
+        </select>
+      ) : null}
       <ExportButton name="tickets-selection" rows={tickets} columns={columns} label="Exporter la sélection" />
       <button type="button" className={`${page.ghost} ${page.danger}`} onClick={() => void remove()}>
         Supprimer

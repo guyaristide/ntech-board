@@ -4,6 +4,9 @@ import {
   load,
   nextSprintDates,
   TICKET_LINK_INVERSE,
+  canonicalLabels,
+  changeLabels,
+  labelsOf,
   withTicketDefaults,
   type ProjectSettings,
   type Release,
@@ -53,6 +56,10 @@ deliveryRoutes.onError((err, c) => {
   fail('erreur', `${c.req.method} ${new URL(c.req.url).pathname}`, err);
   return c.json({ error: 'server_error' }, 500);
 });
+
+/** Écriture des étiquettes alignée sur celle déjà utilisée dans le projet. */
+const canonical = async (project: string, labels: string[]) =>
+  canonicalLabels(labels, labelsOf(await all<Ticket>(project, 'ticket')));
 
 type Ctx = { get: (k: 'project' | 'user') => unknown };
 const who = (c: Ctx) => ({
@@ -262,6 +269,7 @@ export const blankTicket = (settings: ProjectSettings, id: string, rank: number)
   ready: [],
   assignee: '',
   links: [],
+  labels: [],
   description: [],
   comments: [],
   createdAt: now(),
@@ -279,6 +287,7 @@ deliveryRoutes.post('/tickets', ...write, async c => {
   const settings = await getSettings(project);
   const existing = await all<Ticket>(project, 'ticket');
   let rank = existing.reduce((m, t) => Math.max(m, t.rank), 0);
+  if (input.patch?.labels) input.patch.labels = canonicalLabels(input.patch.labels, labelsOf(existing));
   const base = (id: string) => blankTicket(settings, id, ++rank);
   const pick = (ids: string[]) => nextId(ids, `${keyOf(settings, slug)}-`, 1);
   if (!('stories' in input)) {
@@ -328,6 +337,7 @@ deliveryRoutes.patch('/tickets/:id', ...write, async c => {
   if (patch.sprint && !(await getEntity(project, 'sprint', patch.sprint)))
     return c.json({ error: 'not_found' }, 404);
   if (patch.parent === c.req.param('id')) return c.json({ error: 'invalid' }, 400);
+  if (patch.labels) patch.labels = await canonical(project, patch.labels);
   if (patch.parent && !(await getEntity(project, 'ticket', patch.parent)))
     return c.json({ error: 'not_found' }, 404);
   return c.json(
@@ -377,14 +387,20 @@ deliveryRoutes.patch('/tickets', ...write, async c => {
   if (patch.release && !(await getEntity(project, 'release', patch.release)))
     return c.json({ error: 'not_found' }, 404);
   const at = now();
+  const add = await canonical(project, input.addLabels);
+  const { removeLabels: remove } = input;
   const tickets = await mutateMany(
     project,
     'ticket',
     input.ids,
     user.id,
     'update',
-    t => ({ ...t, ...patch, updatedAt: at }),
-    patch,
+    t => ({ ...t, ...patch, labels: changeLabels(t.labels, add, remove), updatedAt: at }),
+    {
+      ...patch,
+      ...(add.length ? { addLabels: add } : {}),
+      ...(remove.length ? { removeLabels: remove } : {}),
+    },
   );
   return c.json(tickets);
 });

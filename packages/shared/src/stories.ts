@@ -41,7 +41,7 @@ export function featureGroup(stories: Story[], id: string): string[] {
   return [...seen];
 }
 
-const fold = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+export const fold = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 const startsWord = (text: string, word: string) => {
   for (let i = text.indexOf(word); i >= 0; i = text.indexOf(word, i + 1)) {
     if (i === 0 || !/[\p{L}\p{N}]/u.test(text[i - 1])) return true;

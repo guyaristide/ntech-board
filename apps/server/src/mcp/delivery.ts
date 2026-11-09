@@ -27,7 +27,8 @@ const row = (ws: WorkspaceData, t: Ticket) => {
   const sprint = ws.sprints.find(s => s.id === t.sprint)?.name ?? 'backlog';
   const step = stepOf(ws.settings, t.status)?.name ?? t.status;
   const est = t.estimate === null ? '' : ` · ${amount(t.estimate, ws.settings)}`;
-  return `${t.id} · [${t.type} · ${step} · ${sprint}${est}] ${t.title}${t.assignee ? ` · ${party(ws, t.assignee)}` : ''}${isBlocked(ws.settings, ws.tickets, t) ? ' · BLOQUÉ' : ''}`;
+  const labels = t.labels?.length ? ` · ${t.labels.map(l => `#${l}`).join(' ')}` : '';
+  return `${t.id} · [${t.type} · ${step} · ${sprint}${est}] ${t.title}${t.assignee ? ` · ${party(ws, t.assignee)}` : ''}${isBlocked(ws.settings, ws.tickets, t) ? ' · BLOQUÉ' : ''}${labels}`;
 };
 
 export function registerDelivery(server: McpServer, ctx: Ctx) {
@@ -45,6 +46,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
         etape: z.string().optional().describe('Étape du workflow, par exemple « En cours »'),
         responsable: z.string().optional().describe('Identifiant ou nom de partie prenante'),
         type: z.string().optional(),
+        etiquette: z.string().optional().describe('Étiquette portée par le ticket'),
         non_termines: z.boolean().default(false),
         limite: z.number().int().min(1).max(300).default(60),
       },
@@ -77,6 +79,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
             (step === undefined || t.status === step) &&
             (type === undefined || t.type === type) &&
             (who === undefined || who.includes(t.assignee)) &&
+            (!a.etiquette || (t.labels ?? []).some(l => matches(a.etiquette, l))) &&
             (!a.non_termines || !isDone(ws.settings, t)) &&
             matches(a.texte, t.id, t.title, ...t.description.map(b => b.text)),
         );

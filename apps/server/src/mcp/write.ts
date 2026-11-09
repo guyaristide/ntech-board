@@ -249,6 +249,7 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
     version?: string;
     responsable?: string;
     description?: string;
+    etiquettes?: string[];
   }) => {
     const ws = await ctx.workspace();
     const d = ws.settings.delivery;
@@ -267,6 +268,7 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
     if (a.version !== undefined)
       patch.release = a.version === '' ? '' : resolve(ws.releases, a.version, 'Version');
     if (a.responsable !== undefined) patch.assignee = party(ws, a.responsable);
+    if (a.etiquettes !== undefined) patch.labels = a.etiquettes;
     if (a.description !== undefined) patch.description = a.description ? [block(a.description)] : [];
     return patch;
   };
@@ -281,6 +283,11 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
       .optional()
       .describe('Identifiant ou nom de personne ou de rôle ; vide pour retirer'),
     description: z.string().max(20000).optional(),
+    etiquettes: z
+      .array(z.string().min(1).max(40))
+      .max(20)
+      .optional()
+      .describe('Remplace toutes les étiquettes du ticket ; une liste vide les retire'),
   };
 
   if (editor) {
@@ -319,7 +326,7 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
       {
         title: 'Modifier un ticket',
         description:
-          'Fait avancer ou replanifie un ticket : étape, estimation, sprint, version, responsable, titre, description. Seuls les champs fournis changent.',
+          'Fait avancer ou replanifie un ticket : étape, estimation, sprint, version, responsable, étiquettes, titre, description. Seuls les champs fournis changent.',
         input: { id: z.string(), titre: z.string().min(1).max(500).optional(), ...common },
         write: true,
       },
@@ -337,7 +344,7 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
       {
         title: 'Modifier plusieurs tickets',
         description:
-          'Applique d’un coup la même version, le même sprint, la même étape, le même responsable ou le même type à plusieurs tickets.',
+          'Applique d’un coup la même version, le même sprint, la même étape, le même responsable ou le même type à plusieurs tickets, et ajoute ou retire des étiquettes sans toucher aux autres.',
         input: {
           ids: z.array(z.string()).min(1).max(500),
           type: common.type,
@@ -345,14 +352,20 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
           sprint: common.sprint,
           version: common.version,
           responsable: common.responsable,
+          ajouter_etiquettes: z.array(z.string().min(1).max(40)).max(20).optional(),
+          retirer_etiquettes: z.array(z.string().min(1).max(40)).max(20).optional(),
         },
         write: true,
       },
-      async ({ ids, ...a }) => {
+      async ({ ids, ajouter_etiquettes: addLabels = [], retirer_etiquettes: removeLabels = [], ...a }) => {
         const patch = await fields(a);
-        if (!Object.keys(patch).length) return 'Aucun champ à modifier.';
-        const saved = await ctx.api<Ticket[]>('PATCH', '/tickets', { ids, patch });
-        return `${saved.length} ticket(s) modifié(s) : ${Object.keys(patch).join(', ')}.`;
+        const changed = [
+          ...Object.keys(patch),
+          ...(addLabels.length || removeLabels.length ? ['labels'] : []),
+        ];
+        if (!changed.length) return 'Aucun champ à modifier.';
+        const saved = await ctx.api<Ticket[]>('PATCH', '/tickets', { ids, patch, addLabels, removeLabels });
+        return `${saved.length} ticket(s) modifié(s) : ${changed.join(', ')}.`;
       },
     );
 

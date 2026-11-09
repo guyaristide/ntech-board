@@ -164,6 +164,10 @@ a.laneTitle:hover {
   flex: 1 1 180px;
   min-width: 0;
 }
+/* Avec des étiquettes, l'intitulé garde toute la largeur ; elles passent dessous, avec l'US. */
+.title[data-labelled] > :first-child {
+  flex-basis: 100%;
+}
 .storyLink {
   flex: none;
   color: var(--text-faint);
@@ -480,6 +484,29 @@ a.card:hover {
   border-bottom: 0;
   border-radius: 8px;
 }
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.labelInput {
+  width: 170px;
+  min-width: 0;
+}
+
+.labelRemove {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--text-faint);
+}
+
+.labelRemove:hover {
+  color: var(--danger);
+}
+
 .foldAll {
   display: flex;
   justify-content: flex-end;

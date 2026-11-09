@@ -1,4 +1,5 @@
 import type { Party, ProjectSettings } from './parties';
+import { fold } from './stories';
 import type { Block, Comment } from './types';
 
 /**
@@ -90,14 +91,45 @@ export interface Ticket {
   /** Partie prenante responsable (identifiant d'une personne ou d'un rôle). */
   assignee: string;
   links: TicketLink[];
+  /** Étiquettes libres du projet : un chantier, un thème, une équipe… */
+  labels: string[];
   description: Block[];
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
 }
 
-/** Ticket complété des champs apparus depuis sa création (liaisons, lot 3). */
-export const withTicketDefaults = (t: Ticket): Ticket => ({ ...t, links: t.links ?? [] });
+/** Ticket complété des champs apparus depuis sa création (liaisons, étiquettes). */
+export const withTicketDefaults = (t: Ticket): Ticket => ({
+  ...t,
+  links: t.links ?? [],
+  labels: t.labels ?? [],
+});
+
+/** Étiquettes utilisées dans le projet, triées. */
+export const labelsOf = (tickets: Pick<Ticket, 'labels'>[]) =>
+  [...new Set(tickets.flatMap(t => t.labels ?? []))].sort((a, b) => a.localeCompare(b, 'fr'));
+
+/**
+ * Nettoie des étiquettes et reprend l'écriture déjà connue du projet : « ia » rejoint « IA »,
+ * sans casse ni accents différents qui couperaient un filtre en deux.
+ */
+export const canonicalLabels = (wanted: string[], known: string[]) => {
+  const spelling = new Map(known.map(l => [fold(l), l]));
+  const out = new Map<string, string>();
+  for (const raw of wanted) {
+    const label = raw.trim().replace(/\s+/g, ' ');
+    const key = fold(label);
+    if (label && !out.has(key)) out.set(key, spelling.get(key) ?? label);
+  }
+  return [...out.values()];
+};
+
+/** Ajoute et retire des étiquettes, sans toucher aux autres. */
+export const changeLabels = (labels: string[] | undefined, add: string[], remove: string[]) => {
+  const removed = new Set(remove.map(fold));
+  return canonicalLabels([...(labels ?? []).filter(l => !removed.has(fold(l))), ...add], labels ?? []);
+};
 
 /** Bloqué : lié par « Bloqué par » à un ticket qui n'est pas terminé. */
 export const isBlocked = (settings: ProjectSettings, tickets: Ticket[], t: Ticket) =>

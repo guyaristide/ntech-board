@@ -2,7 +2,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   DEFAULT_SETTINGS,
+  canonicalLabels,
   casesOf,
+  changeLabels,
   isBlocked,
   isReady,
   matchesWords,
@@ -32,6 +34,7 @@ const ticket = (id: string, patch: Partial<Ticket> = {}): Ticket => ({
   ready: [],
   assignee: '',
   links: [],
+  labels: [],
   description: [],
   comments: [],
   createdAt: '',
@@ -142,4 +145,19 @@ test('la recherche par mots trouve « IA » comme un mot, pas dans « initial »
   assert.ok(matchesWords('Sans recherche', '  '));
   assert.ok(!matchesWords('Contrat initial et commercial', 'ia'));
   assert.ok(!matchesWords('Portail › Assistant IA', 'ia paiement'));
+});
+
+test('une étiquette reprend l’écriture déjà connue du projet', () => {
+  assert.deepEqual(canonicalLabels([' ia ', 'IA', 'Nouveau  chantier', ''], ['IA', 'Référentiel']), [
+    'IA',
+    'Nouveau chantier',
+  ]);
+  assert.deepEqual(canonicalLabels(['referentiel'], ['Référentiel']), ['Référentiel']);
+});
+
+test('ajouter ou retirer une étiquette ne touche pas aux autres', () => {
+  assert.deepEqual(changeLabels(['IA', 'PMS'], ['CRUD'], []), ['IA', 'PMS', 'CRUD']);
+  assert.deepEqual(changeLabels(['IA', 'PMS'], [], ['ia']), ['PMS']);
+  assert.deepEqual(changeLabels(['IA'], ['ia'], []), ['IA']);
+  assert.deepEqual(changeLabels(undefined, ['IA'], []), ['IA']);
 });

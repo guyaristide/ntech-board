@@ -202,7 +202,7 @@ export function TicketRow({
         {ticket.id}
       </Link>
       <span className={styles.type}>{type?.name ?? ticket.type}</span>
-      <span className={styles.title}>
+      <span className={styles.title} data-labelled={ticket.labels.length > 0 || undefined}>
         <EditableText
           variant="inline"
           multiline={false}
@@ -211,6 +211,9 @@ export function TicketRow({
           placeholder="Sans titre"
           onChange={title => delivery.updateTicket(ticket.id, { title })}
         />
+        {ticket.labels.map(l => (
+          <Tag key={l} value={l} />
+        ))}
         {subtasks ? (
           <span className={styles.storyLink} title="Sous-tâches terminées">
             ↳ {subtasks}

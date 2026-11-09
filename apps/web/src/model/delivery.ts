@@ -1,4 +1,5 @@
 import { useShallow } from 'zustand/react/shallow';
+import { changeLabels } from '@board/shared';
 import type {
   Campaign,
   Release,
@@ -101,6 +102,21 @@ export const delivery = {
     const at = new Date().toISOString();
     ids.forEach(id => ops.local('ticket', id, (t: Ticket) => ({ ...t, ...patch, updatedAt: at })));
     const saved = await ops.send('ticket', 'bulk', () => api.patch<Ticket[]>('/tickets', { ids, patch }));
+    saved.forEach(t => ops.replace('ticket', t.id, t));
+  },
+  /** Ajoute et retire des étiquettes sur plusieurs tickets, sans toucher aux autres. */
+  labelTickets: async (ids: string[], addLabels: string[], removeLabels: string[]) => {
+    const at = new Date().toISOString();
+    ids.forEach(id =>
+      ops.local('ticket', id, (t: Ticket) => ({
+        ...t,
+        labels: changeLabels(t.labels, addLabels, removeLabels),
+        updatedAt: at,
+      })),
+    );
+    const saved = await ops.send('ticket', 'bulk', () =>
+      api.patch<Ticket[]>('/tickets', { ids, addLabels, removeLabels }),
+    );
     saved.forEach(t => ops.replace('ticket', t.id, t));
   },
   deleteTickets: async (ids: string[]) => {
