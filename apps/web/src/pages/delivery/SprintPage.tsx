@@ -295,7 +295,7 @@ export function SprintPage() {
               : `${items.length + carried.length} tickets`}
           </span>
         </div>
-        <TicketFilters filters={filters} tickets={[...items, ...carried]} />
+        <TicketFilters filters={filters} tickets={[...items, ...carried]} others={['q', 'responsable']} />
         {(['todo', 'doing', 'done'] as const).map(cat => {
           const list = shown.filter(
             t =>

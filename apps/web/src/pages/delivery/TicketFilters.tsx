@@ -8,13 +8,16 @@ import { FILTER_LABEL, valuesOf } from '../backlog/filters';
 import { ManageLabels } from './Labels';
 
 /** Les étiquettes du ticket, puis les axes du cadrage qu'il hérite de son US. */
-const KEYS = ['etiquette', 'epic', 'platform', 'module'] as const;
+const KEYS = ['etiquette', 'epic', 'platform', 'module', 'actor', 'priority', 'workshop'] as const;
 type Key = (typeof KEYS)[number];
 const LABEL: Record<Key, string> = {
   etiquette: 'Étiquette',
   epic: FILTER_LABEL.epic,
   platform: FILTER_LABEL.platform,
   module: FILTER_LABEL.module,
+  actor: FILTER_LABEL.actor,
+  priority: FILTER_LABEL.priority,
+  workshop: FILTER_LABEL.workshop,
 };
 
 /** Filtres des tickets par leur US, conservés dans l'adresse comme ceux du backlog du cadrage. */
@@ -46,7 +49,15 @@ export function useTicketFilters() {
     mutate(next);
     setParams(next, { replace: true });
   };
-  return { chosen, valuesFor, matches, search, update, active: KEYS.some(k => chosen(k).length) };
+  return {
+    chosen,
+    valuesFor,
+    matches,
+    search,
+    update,
+    has: (k: string) => params.has(k),
+    active: KEYS.some(k => chosen(k).length),
+  };
 }
 
 type Filters = ReturnType<typeof useTicketFilters>;
@@ -55,7 +66,16 @@ type Filters = ReturnType<typeof useTicketFilters>;
  * Une puce par axe : les valeurs sont celles du projet, rien n'est propre à l'un d'eux. `tickets` : ceux que laissent la version et la recherche. Un axe que le projet
  * ne renseigne pas n'apparaît pas, sauf s'il est déjà filtré par l'adresse.
  */
-export function TicketFilters({ filters, tickets }: { filters: Filters; tickets: Ticket[] }) {
+export function TicketFilters({
+  filters,
+  tickets,
+  others = [],
+}: {
+  filters: Filters;
+  tickets: Ticket[];
+  /** Filtres propres à l'écran : « Réinitialiser » les efface aussi. */
+  others?: string[];
+}) {
   const epics = useWorkspace(s => s.epics);
   const settings = useWorkspace(s => s.settings);
   const optionsOf = (k: Key) => {
@@ -78,7 +98,8 @@ export function TicketFilters({ filters, tickets }: { filters: Filters; tickets:
       p.delete('etiquette');
       [...new Set(kept.map(v => (v === from ? to : v)))].forEach(v => p.append('etiquette', v));
     });
-  if (!usable.length) return null;
+  const othersOn = others.some(k => filters.has(k));
+  if (!usable.length && !othersOn) return null;
   return (
     <div className={backlog.filters}>
       {usable.map(k => (
@@ -97,11 +118,11 @@ export function TicketFilters({ filters, tickets }: { filters: Filters; tickets:
           tone={k === 'etiquette' ? v => labelTone(settings, v) : undefined}
         />
       ))}
-      {filters.active ? (
+      {filters.active || othersOn ? (
         <button
           type="button"
           className={page.ghost}
-          onClick={() => filters.update(p => KEYS.forEach(k => p.delete(k)))}
+          onClick={() => filters.update(p => [...KEYS, ...others].forEach(k => p.delete(k)))}
         >
           Réinitialiser les filtres
         </button>
