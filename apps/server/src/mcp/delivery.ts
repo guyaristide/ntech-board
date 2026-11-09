@@ -18,6 +18,7 @@ import {
   type WorkspaceData,
 } from '@board/shared';
 import { z } from 'zod';
+import { labelsOf } from '@board/shared';
 import { lines, list, matches, pick, tool, type Ctx } from './context';
 
 /** Outils de lecture de la partie Réalisation : tickets, sprints, pilotage, recette. */
@@ -86,6 +87,27 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
       return lines(
         `${rows.length} ticket(s)${rows.length > a.limite ? `, ${a.limite} premiers` : ''}`,
         list(rows.slice(0, a.limite), t => row(ws, t)),
+      );
+    },
+  );
+
+  tool(
+    server,
+    'etiquettes',
+    {
+      title: 'Lister les étiquettes',
+      description: 'Étiquettes de tickets du projet, avec leur nombre de tickets et leur couleur choisie.',
+      input: {},
+    },
+    async () => {
+      const ws = await ctx.workspace();
+      const known = labelsOf(ws.tickets);
+      if (!known.length) return 'Aucune étiquette dans ce projet.';
+      return lines(
+        ...known.map(l => {
+          const count = ws.tickets.filter(t => (t.labels ?? []).includes(l)).length;
+          return `${l} · ${count} ticket(s) · ${ws.settings.delivery.labelColors[l] ?? 'couleur automatique'}`;
+        }),
       );
     },
   );

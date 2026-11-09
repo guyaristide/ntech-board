@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { matchesWords } from '@board/shared';
+import { matchesWords, type Tone } from '@board/shared';
 import { Popover } from '../../ui/Popover';
 import { Tag } from '../../ui/Tag';
 import styles from './Backlog.module.css';
@@ -14,12 +14,15 @@ export function FilterButton({
   selected,
   onChange,
   render = v => v,
+  tone,
 }: {
   label: string;
   options: { value: string; count: number }[];
   selected: string[];
   onChange: (values: string[]) => void;
   render?: (v: string) => string;
+  /** Couleur d'une valeur, si le projet l'a choisie ; sinon elle se déduit de la valeur. */
+  tone?: (v: string) => Tone;
 }) {
   const [open, setOpen] = useState(false);
   const [term, setTerm] = useState('');
@@ -78,7 +81,9 @@ export function FilterButton({
                   checked={selected.includes(o.value)}
                   onChange={() => toggle(o.value)}
                 />
-                <Tag value={o.value}>{render(o.value)}</Tag>
+                <Tag value={o.value} tone={o.value ? tone?.(o.value) : undefined}>
+                  {render(o.value)}
+                </Tag>
                 <span className={styles.filterCount}>{o.count}</span>
               </label>
             </li>

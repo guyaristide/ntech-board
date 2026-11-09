@@ -1,4 +1,5 @@
 import type { Party, ProjectSettings } from './parties';
+import { toneOf } from './options';
 import { fold } from './stories';
 import type { Block, Comment } from './types';
 
@@ -124,6 +125,17 @@ export const canonicalLabels = (wanted: string[], known: string[]) => {
   }
   return [...out.values()];
 };
+
+/** Renomme une étiquette ; si le ticket portait déjà la nouvelle, il n'en garde qu'une. */
+export const renameLabel = (labels: string[] | undefined, from: string, to: string) =>
+  canonicalLabels(
+    (labels ?? []).map(l => (l === from ? to : l)),
+    [to],
+  );
+
+/** Couleur d'une étiquette : celle choisie dans le projet, sinon une couleur stable tirée du nom. */
+export const labelTone = (settings: ProjectSettings, label: string) =>
+  settings.delivery.labelColors[label] ?? toneOf(label);
 
 /** Ajoute et retire des étiquettes, sans toucher aux autres. */
 export const changeLabels = (labels: string[] | undefined, add: string[], remove: string[]) => {

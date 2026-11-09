@@ -6,6 +6,7 @@ import page from '../Page.module.css';
 import { useTicketColumns } from './exports';
 import { useMyParties } from './fields';
 import { DeliveryGate, sprintOrder, TicketRow } from './parts';
+import { TicketFilters, useTicketFilters } from './TicketFilters';
 import styles from './Delivery.module.css';
 
 /**
@@ -15,7 +16,9 @@ import styles from './Delivery.module.css';
 export function MyTickets() {
   const { settings, sprints, tickets } = useDelivery();
   const mine = useMyParties();
-  const list = tickets.filter(t => mine.includes(t.assignee));
+  const filters = useTicketFilters();
+  const all = tickets.filter(t => mine.includes(t.assignee));
+  const list = all.filter(t => filters.matches(t));
   const open = list.filter(t => !isDone(settings, t));
   const groups = [
     ...[...sprints]
@@ -58,8 +61,15 @@ export function MyTickets() {
               {done.length > 1 ? 's' : ''}.
             </p>
             <p className={page.actions}>
-              <ExportButton name="mes-tickets" rows={exported} columns={columns} noun="tickets" />
+              <ExportButton
+                name="mes-tickets"
+                rows={exported}
+                columns={columns}
+                filtered={filters.active}
+                noun="tickets"
+              />
             </p>
+            <TicketFilters filters={filters} tickets={all} />
           </>
         )}
         {groups.map(g => (

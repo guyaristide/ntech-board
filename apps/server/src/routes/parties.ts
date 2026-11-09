@@ -64,7 +64,8 @@ partyRoutes.patch('/settings', requireRole('admin'), async c => {
   const next: ProjectSettings = {
     ...current,
     ...patch,
-    delivery: { ...current.delivery, ...patch.delivery },
+    // Les couleurs d'étiquettes ont leur propre route : un écran de réglages ouvert avant ne les écrase pas.
+    delivery: { ...current.delivery, ...patch.delivery, labelColors: current.delivery.labelColors },
     files: { ...current.files, ...patch.files },
     mcp: { ...current.mcp, ...patch.mcp },
   };

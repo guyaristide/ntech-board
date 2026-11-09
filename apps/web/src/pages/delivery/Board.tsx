@@ -17,7 +17,9 @@ import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
 import { useTicketColumns } from './exports';
 import { assigneeName, useMyParties } from './fields';
+import { LabelTag } from './Labels';
 import { DeliveryGate, period, sprintOrder, SprintTag } from './parts';
+import { TicketFilters, useTicketFilters } from './TicketFilters';
 import styles from './Delivery.module.css';
 import k from './Tickets.module.css';
 
@@ -61,6 +63,9 @@ function Card({ ticket, onDrop }: { ticket: Ticket; onDrop: (e: DragEvent) => vo
           <span>{amount(ticket.estimate, settings)}</span>
         ) : null}
         {blocked ? <Tag value="Bloqué" tone="red" /> : null}
+        {ticket.labels.map(l => (
+          <LabelTag key={l} label={l} />
+        ))}
       </span>
       {ticket.assignee ? <span className={k.assignee}>{assigneeName(parties, ticket.assignee)}</span> : null}
     </div>
@@ -130,13 +135,15 @@ export function Board() {
     else next.delete(key);
     setParams(next);
   };
+  const filters = useTicketFilters();
   const inSprint = tickets.filter(t => t.sprint === sprintId);
   const shown = inSprint.filter(
     t =>
       (!who ||
         (who === 'moi' ? mine.includes(t.assignee) : who === 'aucun' ? !t.assignee : t.assignee === who)) &&
       (!type || t.type === type) &&
-      (!blockedOnly || isBlocked(settings, tickets, t)),
+      (!blockedOnly || isBlocked(settings, tickets, t)) &&
+      filters.matches(t),
   );
   const assignees = [...new Set(inSprint.map(t => t.assignee).filter(Boolean))];
   const columns = useTicketColumns();
@@ -226,10 +233,11 @@ export function Board() {
             name={sprint ? `tableau-${sprint.name.toLowerCase().replace(/\s+/g, '-')}` : 'tableau'}
             rows={exported}
             columns={columns}
-            filtered={!!(who || type || blockedOnly)}
+            filtered={!!(who || type || blockedOnly || filters.active)}
             noun="tickets"
           />
         </div>
+        <TicketFilters filters={filters} tickets={inSprint} />
         {sprint ? (
           <div className={k.board}>
             {settings.delivery.workflow.map(step => (

@@ -1,10 +1,11 @@
 import { useSearchParams } from 'react-router-dom';
-import { matchesWords, targetLabel, type Ticket } from '@board/shared';
+import { labelTone, matchesWords, targetLabel, type Ticket } from '@board/shared';
 import { useWorkspace } from '../../model/store';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { FilterButton } from '../backlog/FilterButton';
 import { FILTER_LABEL, valuesOf } from '../backlog/filters';
+import { ManageLabels } from './Labels';
 
 /** Les étiquettes du ticket, puis les axes du cadrage qu'il hérite de son US. */
 const KEYS = ['etiquette', 'epic', 'platform', 'module'] as const;
@@ -56,6 +57,7 @@ type Filters = ReturnType<typeof useTicketFilters>;
  */
 export function TicketFilters({ filters, tickets }: { filters: Filters; tickets: Ticket[] }) {
   const epics = useWorkspace(s => s.epics);
+  const settings = useWorkspace(s => s.settings);
   const optionsOf = (k: Key) => {
     const counts = new Map<string, number>();
     // Les compteurs tiennent compte des autres filtres, comme dans le cadrage.
@@ -68,6 +70,14 @@ export function TicketFilters({ filters, tickets }: { filters: Filters; tickets:
       .sort((a, b) => (order.length ? order.indexOf(a.value) - order.indexOf(b.value) : b.count - a.count));
   };
   const usable = KEYS.filter(k => filters.chosen(k).length || optionsOf(k).some(o => o.value));
+  // Après un renommage, un filtre posé sur l'ancien nom suit le nouveau.
+  const renamed = (from: string, to: string) =>
+    filters.update(p => {
+      const kept = p.getAll('etiquette');
+      if (!kept.includes(from)) return;
+      p.delete('etiquette');
+      [...new Set(kept.map(v => (v === from ? to : v)))].forEach(v => p.append('etiquette', v));
+    });
   if (!usable.length) return null;
   return (
     <div className={backlog.filters}>
@@ -84,6 +94,7 @@ export function TicketFilters({ filters, tickets }: { filters: Filters; tickets:
             })
           }
           render={k === 'epic' ? v => `${v} ${epics.find(e => e.id === v)?.title ?? ''}`.trim() : undefined}
+          tone={k === 'etiquette' ? v => labelTone(settings, v) : undefined}
         />
       ))}
       {filters.active ? (
@@ -95,6 +106,7 @@ export function TicketFilters({ filters, tickets }: { filters: Filters; tickets:
           Réinitialiser les filtres
         </button>
       ) : null}
+      <ManageLabels onRenamed={renamed} />
     </div>
   );
 }

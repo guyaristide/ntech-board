@@ -1,12 +1,14 @@
 import { useShallow } from 'zustand/react/shallow';
-import { changeLabels } from '@board/shared';
+import { changeLabels, withSettingsDefaults } from '@board/shared';
 import type {
   Campaign,
+  ProjectSettings,
   Release,
   Sprint,
   TestStatus,
   Ticket,
   TicketLinkType,
+  Tone,
   VerdictStatus,
 } from '@board/shared';
 export { byRank, rankAt } from '@board/shared';
@@ -118,6 +120,22 @@ export const delivery = {
       api.patch<Ticket[]>('/tickets', { ids, addLabels, removeLabels }),
     );
     saved.forEach(t => ops.replace('ticket', t.id, t));
+  },
+  /** Renomme ou fusionne une étiquette sur tout le projet ; renvoie le nom retenu. */
+  renameLabel: async (from: string, to: string) => {
+    const saved = await ops.send('ticket', 'bulk', () =>
+      api.post<{ to: string; tickets: Ticket[]; settings: ProjectSettings }>('/labels/rename', { from, to }),
+    );
+    saved.tickets.forEach(t => ops.replace('ticket', t.id, t));
+    useWorkspace.setState({ settings: withSettingsDefaults(saved.settings) });
+    return saved.to;
+  },
+  /** Choisit la couleur d'une étiquette ; `null` revient à la couleur automatique. */
+  colorLabel: async (label: string, tone: Tone | null) => {
+    const settings = await ops.send('ticket', 'bulk', () =>
+      api.post<ProjectSettings>('/labels/color', { label, tone }),
+    );
+    useWorkspace.setState({ settings: withSettingsDefaults(settings) });
   },
   deleteTickets: async (ids: string[]) => {
     const { deleted } = await ops.send('ticket', 'bulk', () =>

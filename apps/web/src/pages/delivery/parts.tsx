@@ -6,6 +6,7 @@ import { useCanEdit, useSeesDelivery, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
 import { Popover } from '../../ui/Popover';
 import { Tag } from '../../ui/Tag';
+import { LabelTag } from './Labels';
 import page from '../Page.module.css';
 import styles from './Delivery.module.css';
 
@@ -212,7 +213,7 @@ export function TicketRow({
           onChange={title => delivery.updateTicket(ticket.id, { title })}
         />
         {ticket.labels.map(l => (
-          <Tag key={l} value={l} />
+          <LabelTag key={l} label={l} />
         ))}
         {subtasks ? (
           <span className={styles.storyLink} title="Sous-tâches terminées">

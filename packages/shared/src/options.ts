@@ -209,6 +209,7 @@ export const SCENARIO_LABEL: Record<Scenario, string> = {
   exigence: 'Exigence',
 };
 
+export const TONES = ['gray', 'brown', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red'] as const;
 const PALETTE: Tone[] = ['blue', 'green', 'purple', 'orange', 'pink', 'brown', 'yellow', 'red'];
 /** Couleur stable pour une valeur libre (acteur, atelier). */
 export const toneOf = (value: string): Tone => {

@@ -1,3 +1,4 @@
+import type { Tone } from './options';
 import { DEFAULT_FILE_SETTINGS, type FileSettings } from './files';
 import type { Role } from './api';
 import type { Block, Diligence, Phase, Risk, Workshop } from './types';
@@ -93,6 +94,8 @@ export interface DeliverySettings {
   ticketTypes: TicketType[];
   /** Critères qu'un ticket doit remplir pour entrer dans un sprint (« prêt »). */
   readiness: TicketType[];
+  /** Couleurs choisies pour les étiquettes de tickets ; les autres ont une couleur automatique. */
+  labelColors: Record<string, Tone>;
   /**
    * Qui voit la partie : les rôles cités, les membres rattachés aux organisations citées, et les
    * membres autorisés un par un ; un membre exclu ne la voit pas. Les administrateurs la voient toujours.
@@ -136,6 +139,7 @@ export const DEFAULT_SETTINGS: ProjectSettings = {
     key: '',
     sprintWeeks: 2,
     estimation: 'points',
+    labelColors: {},
     workflow: [
       { id: 'todo', name: 'À faire', category: 'todo' },
       { id: 'doing', name: 'En cours', category: 'doing' },
@@ -188,6 +192,7 @@ export const settingsTemplate = (from: ProjectSettings): ProjectSettings => {
     delivery: {
       ...s.delivery,
       key: '',
+      labelColors: {},
       visibility: { ...s.delivery.visibility, organizations: [], allow: [], deny: [] },
     },
   };

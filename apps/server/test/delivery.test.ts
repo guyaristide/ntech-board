@@ -7,6 +7,8 @@ import {
   changeLabels,
   isBlocked,
   isReady,
+  labelTone,
+  renameLabel,
   matchesWords,
   newParty,
   partiesOfUser,
@@ -160,4 +162,20 @@ test('ajouter ou retirer une étiquette ne touche pas aux autres', () => {
   assert.deepEqual(changeLabels(['IA', 'PMS'], [], ['ia']), ['PMS']);
   assert.deepEqual(changeLabels(['IA'], ['ia'], []), ['IA']);
   assert.deepEqual(changeLabels(undefined, ['IA'], []), ['IA']);
+});
+
+test('renommer une étiquette vers une existante n’en garde qu’une', () => {
+  assert.deepEqual(renameLabel(['IA', 'PMS'], 'IA', 'Assistant'), ['Assistant', 'PMS']);
+  assert.deepEqual(renameLabel(['IA', 'PMS'], 'PMS', 'IA'), ['IA']);
+  assert.deepEqual(renameLabel(['ia'], 'ia', 'IA'), ['IA']);
+  assert.deepEqual(renameLabel(undefined, 'IA', 'X'), []);
+});
+
+test('une étiquette prend la couleur choisie, sinon une couleur stable', () => {
+  const settings = {
+    ...DEFAULT_SETTINGS,
+    delivery: { ...DEFAULT_SETTINGS.delivery, labelColors: { IA: 'red' as const } },
+  };
+  assert.equal(labelTone(settings, 'IA'), 'red');
+  assert.equal(labelTone(settings, 'PMS'), labelTone(DEFAULT_SETTINGS, 'PMS'));
 });

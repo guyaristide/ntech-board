@@ -1,6 +1,14 @@
 import { randomUUID } from 'node:crypto';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { PRIORITIES, SCENARIOS, STATUSES, type Story, type Ticket, type WorkspaceData } from '@board/shared';
+import {
+  PRIORITIES,
+  SCENARIOS,
+  STATUSES,
+  TONES,
+  type Story,
+  type Ticket,
+  type WorkspaceData,
+} from '@board/shared';
 import { z } from 'zod';
 import { ApiFailure, lines, matches, pick, tool, type Ctx } from './context';
 
@@ -366,6 +374,46 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
         if (!changed.length) return 'Aucun champ à modifier.';
         const saved = await ctx.api<Ticket[]>('PATCH', '/tickets', { ids, patch, addLabels, removeLabels });
         return `${saved.length} ticket(s) modifié(s) : ${changed.join(', ')}.`;
+      },
+    );
+
+    tool(
+      server,
+      'renommer_etiquette',
+      {
+        title: 'Renommer une étiquette',
+        description:
+          'Renomme une étiquette sur tous les tickets, sa couleur suit. Vers une étiquette qui existe déjà, les deux fusionnent.',
+        input: { etiquette: z.string().min(1).max(40), nouveau_nom: z.string().min(1).max(40) },
+        write: true,
+      },
+      async a => {
+        const saved = await ctx.api<{ to: string; tickets: Ticket[] }>('POST', '/labels/rename', {
+          from: a.etiquette,
+          to: a.nouveau_nom,
+        });
+        return `Étiquette « ${a.etiquette} » renommée « ${saved.to} » sur ${saved.tickets.length} ticket(s).`;
+      },
+    );
+
+    tool(
+      server,
+      'colorer_etiquette',
+      {
+        title: 'Choisir la couleur d’une étiquette',
+        description: 'Fixe la couleur d’une étiquette dans le projet ; « automatique » revient au défaut.',
+        input: {
+          etiquette: z.string().min(1).max(40),
+          couleur: z.enum(['automatique', ...TONES]),
+        },
+        write: true,
+      },
+      async a => {
+        await ctx.api('POST', '/labels/color', {
+          label: a.etiquette,
+          tone: a.couleur === 'automatique' ? null : a.couleur,
+        });
+        return `Couleur de « ${a.etiquette} » : ${a.couleur}.`;
       },
     );
 

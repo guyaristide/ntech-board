@@ -507,6 +507,38 @@ a.card:hover {
   color: var(--danger);
 }
 
+.labelManage {
+  position: relative;
+  margin-left: auto;
+}
+
+.labelLines {
+  margin: 0;
+  padding: 4px 8px;
+  list-style: none;
+}
+
+.labelLine {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 112px 24px;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+}
+
+.labelLine > span:first-child {
+  overflow: hidden;
+  justify-self: start;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.labelLine input,
+.labelLine select {
+  width: 100%;
+}
+
 .foldAll {
   display: flex;
   justify-content: flex-end;

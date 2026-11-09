@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import {
   ACTION_NATURES,
+  TONES,
   FILE_CATEGORY_KEYS,
   MAX_FILE_MB,
   type FileCategory,
@@ -260,6 +261,7 @@ export const SettingsPatch = z
           .refine(w => w.some(s => s.category === 'done'), 'Une étape « Terminé » au moins.'),
         ticketTypes: z.array(ticketType).min(1).max(15),
         readiness: z.array(ticketType).max(15),
+        labelColors: z.record(z.string().max(40), z.enum(TONES)),
         visibility: z.object({
           roles: z.array(z.enum(ROLES)),
           organizations: z.array(z.string().max(40)).max(100),
