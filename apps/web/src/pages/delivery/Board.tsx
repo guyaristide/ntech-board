@@ -75,7 +75,7 @@ function Card({ ticket, onDrop }: { ticket: Ticket; onDrop: (e: DragEvent) => vo
 }
 
 /** Colonne d'une étape : déposer une carte change son étape (et son rang si déposée sur une carte). */
-function Column({ step, tickets }: { step: WorkflowStep; tickets: Ticket[] }) {
+export function Column({ step, tickets }: { step: WorkflowStep; tickets: Ticket[] }) {
   const { settings } = useDelivery();
   const canEdit = useCanEdit();
   const [over, setOver] = useState(false);

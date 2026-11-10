@@ -37,6 +37,8 @@ const ticket = (id: string, patch: Partial<Ticket> = {}): Ticket => ({
   assignee: '',
   links: [],
   labels: [],
+  start: null,
+  due: null,
   description: [],
   comments: [],
   createdAt: '',

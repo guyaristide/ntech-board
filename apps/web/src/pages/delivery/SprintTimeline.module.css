@@ -1,0 +1,205 @@
+/* Timeline d'un sprint : une ligne par ticket, une colonne par jour. */
+.scroller {
+  margin-top: 12px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.grid {
+  --label: 260px;
+  --day: 34px;
+  position: relative;
+  min-width: calc(var(--label) + var(--days) * var(--day));
+}
+.row {
+  display: flex;
+  min-height: 34px;
+  border-bottom: 1px solid var(--line);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.row[data-head] {
+  font-size: 11px;
+}
+.label {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex: 0 0 var(--label);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 4px 8px;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.label a {
+  overflow: hidden;
+  color: var(--text);
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.label a:hover {
+  text-decoration: underline;
+}
+.scale {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(var(--days), minmax(0, 1fr));
+}
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0;
+  color: var(--text-faint);
+  line-height: 1.25;
+}
+.day strong {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+.day[data-off] {
+  opacity: 0.5;
+}
+.day[data-today] strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+.body {
+  position: relative;
+}
+.columns {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: var(--label);
+  display: grid;
+  grid-template-columns: repeat(var(--days), minmax(0, 1fr));
+  pointer-events: none;
+}
+.columns > span {
+  border-right: 1px solid var(--line);
+}
+.columns > span[data-weekend] {
+  background: var(--bg-subtle);
+}
+.columns > span[data-off] {
+  background: var(--bg-sidebar);
+}
+.today {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+.track {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 34px;
+}
+.track[data-editable] {
+  cursor: copy;
+}
+.track[data-editable]:hover {
+  background: var(--bg-hover);
+}
+.bar {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  min-width: 8px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: var(--tag-gray);
+  color: var(--tag-gray-text);
+  font-size: 12px;
+  touch-action: none;
+  user-select: none;
+}
+.bar[data-category='doing'] {
+  background: var(--tag-blue);
+  color: var(--tag-blue-text);
+}
+.bar[data-category='done'] {
+  background: var(--tag-green);
+  color: var(--tag-green-text);
+}
+.bar:has(.handle) {
+  cursor: grab;
+}
+.bar[data-dragging] {
+  cursor: grabbing;
+  box-shadow: var(--shadow-pop);
+}
+.barText {
+  flex: 1;
+  min-width: 0;
+  padding: 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+}
+/* Barre d'un ou deux jours : le titre s'écrit à côté. */
+.bar[data-short] {
+  overflow: visible;
+}
+.bar[data-short] .barText {
+  position: absolute;
+  max-width: 220px;
+  color: var(--text-muted);
+}
+.bar[data-short='right'] .barText {
+  left: 100%;
+}
+.bar[data-short='left'] .barText {
+  right: 100%;
+  text-align: right;
+}
+.handle {
+  flex: none;
+  align-self: stretch;
+  width: 8px;
+  cursor: ew-resize;
+}
+.handle:hover {
+  background: color-mix(in srgb, currentColor 20%, transparent);
+}
+.group {
+  position: sticky;
+  left: 0;
+  width: fit-content;
+  margin: 0;
+  padding: 10px 8px 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  .grid {
+    --label: 130px;
+    --day: 30px;
+  }
+}
+
+@media (pointer: coarse) {
+  .handle {
+    width: 14px;
+  }
+}

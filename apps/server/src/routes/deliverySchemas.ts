@@ -54,6 +54,8 @@ export const TicketPatch = z
     assignee: id,
     parent: id,
     labels,
+    start: day,
+    due: day,
     description: blocks,
   })
   .partial()

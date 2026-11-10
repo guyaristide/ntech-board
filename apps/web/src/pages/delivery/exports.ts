@@ -45,6 +45,8 @@ export function useTicketColumns(): Column<Ticket>[] {
     ['Sprint', t => sprints.find(s => s.id === t.sprint)?.name ?? ''],
     ['Version', t => releases.find(r => r.id === t.release)?.name ?? ''],
     ['Étiquettes', t => t.labels.join(', ')],
+    ['Début', t => day(t.start)],
+    ['Échéance', t => day(t.due)],
     ['US', t => t.story],
     ['Intitulé de l’US', t => stories.find(s => s.id === t.story)?.title ?? ''],
     ['Ticket parent', t => t.parent],

@@ -258,6 +258,8 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
     responsable?: string;
     description?: string;
     etiquettes?: string[];
+    debut?: string | null;
+    echeance?: string | null;
   }) => {
     const ws = await ctx.workspace();
     const d = ws.settings.delivery;
@@ -277,6 +279,8 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
       patch.release = a.version === '' ? '' : resolve(ws.releases, a.version, 'Version');
     if (a.responsable !== undefined) patch.assignee = party(ws, a.responsable);
     if (a.etiquettes !== undefined) patch.labels = a.etiquettes;
+    if (a.debut !== undefined) patch.start = a.debut || null;
+    if (a.echeance !== undefined) patch.due = a.echeance || null;
     if (a.description !== undefined) patch.description = a.description ? [block(a.description)] : [];
     return patch;
   };
@@ -296,6 +300,18 @@ export function registerDeliveryWrite(server: McpServer, ctx: Ctx, editor: boole
       .max(20)
       .optional()
       .describe('Remplace toutes les étiquettes du ticket ; une liste vide les retire'),
+    debut: z.iso
+      .date()
+      .or(z.literal(''))
+      .nullable()
+      .optional()
+      .describe('Date de début AAAA-MM-JJ ; vide pour retirer'),
+    echeance: z.iso
+      .date()
+      .or(z.literal(''))
+      .nullable()
+      .optional()
+      .describe('Échéance AAAA-MM-JJ ; vide pour retirer'),
   };
 
   if (editor) {

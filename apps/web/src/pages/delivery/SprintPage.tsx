@@ -12,7 +12,8 @@ import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { assigneeName } from './fields';
 import { useTicketColumns } from './exports';
-import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag, TicketRow } from './parts';
+import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag } from './parts';
+import { SPRINT_VIEWS, SprintKanban, SprintList, SprintTimeline, type SprintView } from './SprintViews';
 import { TicketFilters, useTicketFilters } from './TicketFilters';
 import styles from './Delivery.module.css';
 
@@ -32,6 +33,7 @@ export function SprintPage() {
   const [params] = useSearchParams();
   const q = params.get('q') ?? '';
   const who = params.get('responsable') ?? '';
+  const view = (SPRINT_VIEWS.find(([v]) => v === params.get('vue'))?.[0] ?? 'liste') as SprintView;
   if (!sprint)
     return (
       <DeliveryGate>
@@ -266,6 +268,20 @@ export function SprintPage() {
         </div>
 
         <div className={backlog.toolbar}>
+          <div className={backlog.views} role="tablist" aria-label="Affichage">
+            {SPRINT_VIEWS.map(([v, label]) => (
+              <button
+                key={v}
+                type="button"
+                role="tab"
+                aria-selected={view === v}
+                className={backlog.view}
+                onClick={() => put('vue', v === 'liste' ? '' : v)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           <input
             className={backlog.search}
             style={{ marginLeft: 0 }}
@@ -296,34 +312,14 @@ export function SprintPage() {
           </span>
         </div>
         <TicketFilters filters={filters} tickets={[...items, ...carried]} others={['q', 'responsable']} />
-        {(['todo', 'doing', 'done'] as const).map(cat => {
-          const list = shown.filter(
-            t =>
-              settings.delivery.workflow.find(s => s.id === t.status)?.category === cat ||
-              (cat === 'todo' && !settings.delivery.workflow.some(s => s.id === t.status)),
-          );
-          return (
-            <section key={cat}>
-              <h2 className={page.h2}>
-                {STEP_CATEGORY_LABEL[cat]} ({list.length})
-              </h2>
-              <div className={styles.rows}>
-                {list.map(t => (
-                  <TicketRow key={t.id} ticket={t} />
-                ))}
-              </div>
-            </section>
-          );
-        })}
-        {shownCarried.length ? (
-          <section>
-            <h2 className={page.h2}>Reportés à la clôture ({shownCarried.length})</h2>
-            <div className={styles.rows}>
-              {shownCarried.map(t => (
-                <TicketRow key={t.id} ticket={t} />
-              ))}
-            </div>
-          </section>
+        {view === 'kanban' ? <SprintKanban tickets={shown} /> : null}
+        {view === 'timeline' ? <SprintTimeline sprint={sprint} tickets={shown} /> : null}
+        {view === 'liste' ? <SprintList tickets={shown} carried={shownCarried} /> : null}
+        {view !== 'liste' && shownCarried.length ? (
+          <p className={page.faint}>
+            {shownCarried.length} ticket{shownCarried.length > 1 ? 's' : ''} reporté
+            {shownCarried.length > 1 ? 's' : ''} à la clôture : voir la vue Liste.
+          </p>
         ) : null}
 
         <h2 className={page.h2}>Revue de sprint</h2>

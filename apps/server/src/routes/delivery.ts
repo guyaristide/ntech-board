@@ -1,4 +1,4 @@
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import {
   isDone,
   load,
@@ -270,11 +270,19 @@ export const blankTicket = (settings: ProjectSettings, id: string, rank: number)
   assignee: '',
   links: [],
   labels: [],
+  start: null,
+  due: null,
   description: [],
   comments: [],
   createdAt: now(),
   updatedAt: now(),
 });
+
+/** Échéance au plus tôt le jour du début. */
+const datesInOrder = (t: { start?: string | null; due?: string | null }) =>
+  !t.start || !t.due || t.start <= t.due;
+const badDates = (c: Context) =>
+  c.json({ error: 'invalid', message: 'L’échéance ne peut pas précéder le début.' }, 400);
 
 /** Ticket « US » : type story s'il existe, sinon le premier type des réglages. */
 const storyType = (settings: ProjectSettings) =>
@@ -288,6 +296,7 @@ deliveryRoutes.post('/tickets', ...write, async c => {
   const existing = await all<Ticket>(project, 'ticket');
   let rank = existing.reduce((m, t) => Math.max(m, t.rank), 0);
   if (input.patch?.labels) input.patch.labels = canonicalLabels(input.patch.labels, labelsOf(existing));
+  if (input.patch && !datesInOrder(input.patch)) return badDates(c);
   const base = (id: string) => blankTicket(settings, id, ++rank);
   const pick = (ids: string[]) => nextId(ids, `${keyOf(settings, slug)}-`, 1);
   if (!('stories' in input)) {
@@ -340,6 +349,11 @@ deliveryRoutes.patch('/tickets/:id', ...write, async c => {
   if (patch.labels) patch.labels = await canonical(project, patch.labels);
   if (patch.parent && !(await getEntity(project, 'ticket', patch.parent)))
     return c.json({ error: 'not_found' }, 404);
+  if (patch.start !== undefined || patch.due !== undefined) {
+    const current = await getEntity(project, 'ticket', c.req.param('id'));
+    if (!current) return c.json({ error: 'not_found' }, 404);
+    if (!datesInOrder({ ...withTicketDefaults(current), ...patch })) return badDates(c);
+  }
   return c.json(
     await mutate(
       project,

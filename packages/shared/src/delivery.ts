@@ -94,17 +94,22 @@ export interface Ticket {
   links: TicketLink[];
   /** Étiquettes libres du projet : un chantier, un thème, une équipe… */
   labels: string[];
+  /** Dates prévues (AAAA-MM-JJ), facultatives : la timeline du sprint les affiche. */
+  start: string | null;
+  due: string | null;
   description: Block[];
   comments: Comment[];
   createdAt: string;
   updatedAt: string;
 }
 
-/** Ticket complété des champs apparus depuis sa création (liaisons, étiquettes). */
+/** Ticket complété des champs apparus depuis sa création (liaisons, étiquettes, dates). */
 export const withTicketDefaults = (t: Ticket): Ticket => ({
   ...t,
   links: t.links ?? [],
   labels: t.labels ?? [],
+  start: t.start ?? null,
+  due: t.due ?? null,
 });
 
 /** Étiquettes utilisées dans le projet, triées. */

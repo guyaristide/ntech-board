@@ -29,7 +29,8 @@ const row = (ws: WorkspaceData, t: Ticket) => {
   const step = stepOf(ws.settings, t.status)?.name ?? t.status;
   const est = t.estimate === null ? '' : ` · ${amount(t.estimate, ws.settings)}`;
   const labels = t.labels?.length ? ` · ${t.labels.map(l => `#${l}`).join(' ')}` : '';
-  return `${t.id} · [${t.type} · ${step} · ${sprint}${est}] ${t.title}${t.assignee ? ` · ${party(ws, t.assignee)}` : ''}${isBlocked(ws.settings, ws.tickets, t) ? ' · BLOQUÉ' : ''}${labels}`;
+  const dates = t.start || t.due ? ` · ${t.start ?? '?'} → ${t.due ?? '?'}` : '';
+  return `${t.id} · [${t.type} · ${step} · ${sprint}${est}] ${t.title}${t.assignee ? ` · ${party(ws, t.assignee)}` : ''}${isBlocked(ws.settings, ws.tickets, t) ? ' · BLOQUÉ' : ''}${dates}${labels}`;
 };
 
 export function registerDelivery(server: McpServer, ctx: Ctx) {

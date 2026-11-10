@@ -133,6 +133,28 @@ export function TicketPage() {
         sprint => set({ sprint }),
       ),
     ],
+    [
+      'Dates',
+      <span className={styles.dates}>
+        <input
+          type="date"
+          value={ticket.start ?? ''}
+          max={ticket.due ?? undefined}
+          disabled={!canEdit}
+          aria-label="Début"
+          onChange={e => set({ start: e.target.value || null })}
+        />
+        →
+        <input
+          type="date"
+          value={ticket.due ?? ''}
+          min={ticket.start ?? undefined}
+          disabled={!canEdit}
+          aria-label="Échéance"
+          onChange={e => set({ due: e.target.value || null })}
+        />
+      </span>,
+    ],
     ...(story
       ? ([
           [
