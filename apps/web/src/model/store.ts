@@ -43,8 +43,15 @@ interface State extends WorkspaceData {
   duplicateStory: (id: string) => Promise<string>;
   commentStory: (id: string, text: string) => Promise<void>;
   updateEpic: (id: string, patch: Partial<Omit<Epic, 'id'>>) => void;
-  updateWorkshop: (id: string, patch: Partial<Omit<Workshop, 'id' | 'sessions' | 'agenda' | 'comments'>>) => void;
-  updateSession: (workshop: string, code: string, patch: Partial<Omit<Session, 'code' | 'questions'>>) => void;
+  updateWorkshop: (
+    id: string,
+    patch: Partial<Omit<Workshop, 'id' | 'sessions' | 'agenda' | 'comments'>>,
+  ) => void;
+  updateSession: (
+    workshop: string,
+    code: string,
+    patch: Partial<Omit<Session, 'code' | 'questions'>>,
+  ) => void;
   updateQuestion: (workshop: string, code: string, questionId: string, patch: Partial<Question>) => void;
   addQuestion: (workshop: string, code: string, text: string) => Promise<void>;
   commentWorkshop: (id: string, text: string) => Promise<void>;
@@ -245,6 +252,8 @@ export const useWorkspace = create<State>((set, get) => {
           sprints: data.sprints ?? [],
           tickets: (data.tickets ?? []).map(withTicketDefaults),
           campaigns: data.campaigns ?? [],
+          sources: data.sources ?? [],
+          proposals: data.proposals ?? [],
           settings: withSettingsDefaults(data.settings),
         });
       } catch (e) {
@@ -484,7 +493,11 @@ export const useIsAdmin = () => useWorkspace(s => s.session?.role === 'admin');
 /** Vrai si l'utilisateur voit la partie Réalisation, selon les réglages du projet. */
 export const useSeesDelivery = () =>
   useWorkspace(s =>
-    canSeeDelivery(s.settings, { role: s.session?.role ?? null, userId: s.session?.user?.id ?? null }, s.parties),
+    canSeeDelivery(
+      s.settings,
+      { role: s.session?.role ?? null, userId: s.session?.user?.id ?? null },
+      s.parties,
+    ),
   );
 
 // Écritures en attente : envoyées immédiatement si l'onglet se ferme.

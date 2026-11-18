@@ -69,6 +69,22 @@ export function ReferenceCard({ reference, showSessions }: { reference: Referenc
           })}
         </p>
       ) : null}
+      {reference.sources?.length ? (
+        <details className={styles.sources}>
+          <summary>
+            {reference.sources.length} échange{reference.sources.length > 1 ? 's' : ''} à l’origine de la
+            fiche
+          </summary>
+          <ul>
+            {reference.sources.map(s => (
+              <li key={`${s.source}:${s.at}`}>
+                <span className={styles.code}>{s.source}</span> « {s.quote} »{' '}
+                <span className={styles.sourceDate}>{new Date(s.at).toLocaleDateString('fr-FR')}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ) : null}
       <AttachmentsFold kind="reference" id={reference.id} />
     </article>
   );

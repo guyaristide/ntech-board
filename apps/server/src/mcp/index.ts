@@ -1,3 +1,4 @@
+import { registerSources } from './sources';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
 import { Hono } from 'hono';
@@ -93,6 +94,7 @@ export function mcpRoutes(fetchApi: (req: Request) => Promise<Response>) {
     if (role !== 'viewer') {
       registerEntities(server, ctx);
       registerActions(server, ctx);
+      registerSources(server, ctx);
       if (ctx.delivery) registerDeliveryActions(server, ctx);
     }
     if (role === 'admin') registerAdmin(server, ctx);

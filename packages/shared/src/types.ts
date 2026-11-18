@@ -161,6 +161,15 @@ export interface Reference {
   where: string;
   gaps: string;
   sessions: string[];
+  /** Échanges qui ont nourri la fiche (propositions acceptées), du plus ancien au plus récent. */
+  sources?: ReferenceSource[];
+}
+
+/** Provenance d'une Référence : l'échange, la citation retenue, la date d'acceptation. */
+export interface ReferenceSource {
+  source: string;
+  quote: string;
+  at: string;
 }
 
 export type DiligenceKind = 'Livrable' | 'Étude' | 'Arbitrage' | 'Fourniture';

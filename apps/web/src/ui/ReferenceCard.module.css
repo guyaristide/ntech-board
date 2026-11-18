@@ -75,3 +75,23 @@
   font-size: 12px;
   text-decoration: none;
 }
+
+/* Échanges qui ont nourri la fiche (propositions acceptées dans « À relire »). */
+.sources {
+  margin: 8px 0 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.sources summary {
+  cursor: pointer;
+}
+.sources ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+.sources li + li {
+  margin-top: 4px;
+}
+.sourceDate {
+  color: var(--text-faint);
+}

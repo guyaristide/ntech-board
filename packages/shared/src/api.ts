@@ -1,4 +1,5 @@
 import type { Attachment } from './files';
+import type { Proposal, SourceItem } from './sources';
 import type { Campaign, Release, Sprint, Ticket } from './delivery';
 import type { Party, ProjectSettings } from './parties';
 import type { Diligence, Epic, Phase, Reference, Risk, Story, Workshop } from './types';
@@ -60,6 +61,9 @@ export interface WorkspaceData {
   tickets: Ticket[];
   campaigns: Campaign[];
   attachments: Attachment[];
+  /** Échanges reçus et propositions à relire : vides pour les lecteurs. */
+  sources: SourceItem[];
+  proposals: Proposal[];
 }
 
 export type EntityKind =
@@ -75,7 +79,9 @@ export type EntityKind =
   | 'ticket'
   | 'campaign'
   | 'reference'
-  | 'attachment';
+  | 'attachment'
+  | 'source'
+  | 'proposal';
 export const ENTITY_KINDS: EntityKind[] = [
   'story',
   'epic',
@@ -90,6 +96,8 @@ export const ENTITY_KINDS: EntityKind[] = [
   'campaign',
   'reference',
   'attachment',
+  'source',
+  'proposal',
 ];
 export type EntityOf<K extends EntityKind> = K extends 'story'
   ? Story
@@ -115,7 +123,11 @@ export type EntityOf<K extends EntityKind> = K extends 'story'
                       ? Reference
                       : K extends 'attachment'
                         ? Attachment
-                        : Campaign;
+                        : K extends 'source'
+                          ? SourceItem
+                          : K extends 'proposal'
+                            ? Proposal
+                            : Campaign;
 
 export interface PresenceEntry {
   userId: string;
@@ -144,6 +156,8 @@ export type ServerEvent =
         | Campaign
         | Reference
         | Attachment
+        | SourceItem
+        | Proposal
         | null;
       by: string | null;
     }

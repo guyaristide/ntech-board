@@ -1,0 +1,173 @@
+/* À relire : échanges déposés et propositions de l'IA. */
+.code {
+  color: var(--text-faint);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.error {
+  margin: 4px 0;
+  color: var(--danger);
+  font-size: 13px;
+}
+
+/* Dépôt */
+.deposit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 14px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-subtle);
+}
+.deposit label {
+  display: flex;
+  flex: 1 1 220px;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.deposit :is(input, textarea),
+.editor :is(input, textarea),
+.reason {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.deposit textarea {
+  resize: vertical;
+  font-family: var(--mono);
+  font-size: 13px;
+}
+.depositRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+.depositFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0;
+}
+.depositFoot label {
+  flex: none;
+  cursor: pointer;
+}
+
+/* Échange */
+.source {
+  margin: 22px 0;
+}
+.sourceHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Proposition */
+.proposal {
+  margin: 10px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg-card);
+}
+.proposal[data-status='accepted'],
+.proposal[data-status='rejected'] {
+  opacity: 0.75;
+}
+.proposalHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+.proposalHead strong {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+.rationale {
+  margin: 6px 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.change {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 4px 12px;
+  margin: 8px 0;
+  font-size: 14px;
+}
+.changeLabel {
+  grid-row: span 2;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.before {
+  color: var(--text-faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
+}
+.after {
+  padding-left: 8px;
+  border-left: 3px solid var(--ok);
+}
+.lines {
+  margin: 0;
+  padding-left: 18px;
+}
+.quote {
+  margin: 10px 0 8px;
+  padding: 6px 10px;
+  border-left: 3px solid var(--line-strong);
+  background: var(--callout);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-style: italic;
+  white-space: pre-wrap;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.reason {
+  flex: 1 1 240px;
+  width: auto;
+}
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0;
+}
+.editor label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 720px) {
+  .change {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .changeLabel {
+    grid-row: auto;
+  }
+}

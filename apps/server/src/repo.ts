@@ -5,7 +5,9 @@ import {
   type EntityKind,
   type EntityOf,
   type Phase,
+  type Proposal,
   type Reference,
+  type SourceItem,
   type Risk,
   type Story,
   type Workshop,
@@ -61,6 +63,8 @@ export async function getWorkspace(projectId: string, planning: string | null): 
     tickets: of<Ticket>('ticket'),
     campaigns: of<Campaign>('campaign'),
     attachments: of<Attachment>('attachment'),
+    sources: of<SourceItem>('source'),
+    proposals: of<Proposal>('proposal'),
   };
 }
 

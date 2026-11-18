@@ -103,6 +103,11 @@ export async function listen(
     const event: ServerEvent = { type: 'entity', kind: n.kind, id: n.id, data, by: n.by };
     // Pièce jointe : elle suit la visibilité de l'élément qui la porte.
     const owner = n.kind === 'attachment' && data ? (data as Attachment).owner.kind : n.kind;
+    // Échanges bruts et propositions : seulement aux éditeurs.
+    if (owner === 'source' || owner === 'proposal') {
+      for (const c of clients.values()) if (c.projectId === n.projectId && c.role !== 'viewer') c.send(event);
+      return;
+    }
     if (!isDeliveryKind(owner)) return broadcast(n.projectId, event);
     // Partie Réalisation : seulement aux membres qui la voient (évalué une fois par membre).
     const allowed = new Map<string, boolean>();

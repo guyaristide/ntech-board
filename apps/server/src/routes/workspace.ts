@@ -81,6 +81,8 @@ workspaceRoutes.get('/workspace', read, async c => {
       campaigns: [],
       attachments: data.attachments.filter(a => !isDeliveryKind(a.owner.kind)),
     });
+  // Échanges bruts et propositions non validées : réservés aux éditeurs.
+  if (c.get('role') === 'viewer') Object.assign(data, { sources: [], proposals: [] });
   return c.json(data);
 });
 
@@ -242,6 +244,8 @@ workspaceRoutes.get('/history/:kind/:id', read, async c => {
   if (!ENTITY_KINDS.includes(kind as EntityKind)) return c.json({ error: 'invalid' }, 400);
   if (isDeliveryKind(kind) && !(await seesDelivery(c.get('project').id, c.get('role'), c.get('user')!.id)))
     return c.json({ error: 'delivery_hidden' }, 403);
+  if ((kind === 'source' || kind === 'proposal') && c.get('role') === 'viewer')
+    return c.json({ error: 'forbidden' }, 403);
   return c.json(await history(c.get('project').id, kind as EntityKind, c.req.param('id')));
 });
 

@@ -1,3 +1,4 @@
+import { Inbox } from './pages/sources/Inbox';
 import { useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { BRAND } from './brand';
@@ -70,6 +71,7 @@ export function App() {
             <Route path="programme" element={<Programme />} />
             <Route path="atelier/:id" element={<WorkshopPage />} />
             <Route path="references" element={<References />} />
+            <Route path="a-relire" element={<Inbox />} />
             <Route path="raci" element={<RaciPage />} />
             <Route path="risques" element={<Risks />} />
             <Route path="risque/:id" element={<RiskPage />} />

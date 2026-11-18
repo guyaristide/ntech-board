@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { canUseMcp, programmeOrder, diligenceOpen, partiesOfUser, ROLE_LABEL, stepOf } from '@board/shared';
 import { BRAND } from '../brand';
 import { exportCsv, exportJson } from '../model/exporters';
-import { useIsAdmin, useSeesDelivery, useWorkspace, type SaveState } from '../model/store';
+import { useCanEdit, useIsAdmin, useSeesDelivery, useWorkspace, type SaveState } from '../model/store';
 import { Avatar } from './Presence';
 import styles from './Sidebar.module.css';
 
@@ -29,6 +29,7 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
   const admin = useIsAdmin();
   const mcp = canUseMcp(ws.settings, ws.session?.role ?? null);
   const delivery = useSeesDelivery();
+  const canEdit = useCanEdit();
   const myParties = partiesOfUser(ws.parties, ws.session?.user?.id ?? null);
   const mine = ws.tickets.filter(
     t => myParties.includes(t.assignee) && stepOf(ws.settings, t.status)?.category !== 'done',
@@ -93,6 +94,14 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
           <span className={styles.icon}>§</span> Références{' '}
           <span className={styles.count}>{ws.references.length || ''}</span>
         </NavLink>
+        {canEdit ? (
+          <NavLink to="/a-relire" className={link}>
+            <span className={styles.icon}>⇣</span> À relire{' '}
+            <span className={styles.count} title="Propositions tirées des échanges, à relire">
+              {ws.proposals.filter(p => p.status === 'pending').length || ''}
+            </span>
+          </NavLink>
+        ) : null}
         {delivery ? (
           <>
             <span className={styles.section}>Réalisation</span>
