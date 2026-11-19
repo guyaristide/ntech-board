@@ -61,11 +61,10 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `SESSION_DAYS` | `30` | non |
 | `LOGIN_TOKEN_MINUTES` | `20` | non |
 | `COOKIE_SECURE` | `auto` : cookies `Secure` en HTTPS, d'après `X-Forwarded-Proto` | non |
-| `SECRETS_KEY` | Clé de chiffrement des clés de stockage (Cloudinary, MinIO, S3) saisies dans les réglages, par exemple `openssl rand -base64 32`. Sans elle, les pièces jointes restent sur le serveur (volume `board-storage`). **Ne plus la changer ensuite** : les clés déjà enregistrées deviendraient illisibles, il faudrait les ressaisir | non, mais nécessaire pour Cloudinary, MinIO ou S3 |
-| `ANTHROPIC_API_KEY` | Clé de l’API Claude pour l’écran « À relire » : les échanges déposés (réunions, fils Slack, comptes rendus) y sont analysés et transformés en propositions de Références. Sans elle, les échanges sont reçus mais pas analysés | non |
-| `AI_MODEL`, `AI_EFFORT` | Modèle Claude et niveau d’effort de l’analyse (`low`, `medium`, `high`, `xhigh`, `max`). Par défaut `claude-opus-5-5` et `medium` | non |
+| `SECRETS_KEY` | Clé de chiffrement des clés de stockage (Cloudinary, MinIO, S3) et de la clé Claude saisies dans les réglages, par exemple `openssl rand -base64 32`. Sans elle, les pièces jointes restent sur le serveur (volume `board-storage`). **Ne plus la changer ensuite** : les clés déjà enregistrées deviendraient illisibles, il faudrait les ressaisir | non, mais nécessaire pour Cloudinary, MinIO, S3 et l’analyse par Claude |
+| `AI_MODEL`, `AI_EFFORT` | Modèle Claude et niveau d’effort de l’analyse des échanges (écran « À relire »), communs à tous les projets (`low`, `medium`, `high`, `xhigh`, `max`) ; la clé Claude, elle, est saisie par chaque projet dans ses Réglages et chiffrée avec `SECRETS_KEY`. Par défaut `claude-opus-5-5` et `medium` | non |
 
-Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD`, `SECRETS_KEY` et `ANTHROPIC_API_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
+Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD` et `SECRETS_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
 
 ### Paramètres SMTP (Brevo)
 

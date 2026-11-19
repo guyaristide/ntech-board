@@ -27,8 +27,8 @@ services:
       COOKIE_SECURE: ${COOKIE_SECURE:-auto}
       # Chiffre les clés des stockages de fichiers (Cloudinary, MinIO, S3). Ne plus la changer ensuite.
       SECRETS_KEY: ${SECRETS_KEY:-}
-      # Analyse des échanges par Claude (écran « À relire ») ; sans clé, les échanges ne sont pas analysés.
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      # Analyse des échanges par Claude (écran « À relire ») : la clé est saisie par chaque projet dans
+      # ses Réglages (chiffrée avec SECRETS_KEY) ; ici, le modèle et l'effort communs à la plateforme.
       AI_MODEL: ${AI_MODEL:-claude-opus-5-5}
       AI_EFFORT: ${AI_EFFORT:-medium}
     volumes:

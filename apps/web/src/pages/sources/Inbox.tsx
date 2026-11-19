@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   pendingProposals,
   SOURCE_ORIGIN_LABEL,
@@ -6,9 +6,10 @@ import {
   type Proposal,
   type SourceItem,
 } from '@board/shared';
+import { Link } from 'react-router-dom';
 import { ApiError } from '../../model/api';
-import { sources } from '../../model/sources';
-import { useCanEdit, useWorkspace } from '../../model/store';
+import { aiKey, sources } from '../../model/sources';
+import { useCanEdit, useIsAdmin, useWorkspace } from '../../model/store';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
@@ -117,6 +118,15 @@ export function Inbox() {
   const [all, setAll] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [note, setNote] = useState('');
+  const [hasKey, setHasKey] = useState(true);
+  const admin = useIsAdmin();
+  useEffect(() => {
+    if (canEdit)
+      aiKey.status().then(
+        s => setHasKey(s.configured),
+        () => {},
+      );
+  }, [canEdit]);
   const pending = pendingProposals(ws.proposals);
   const shown = all ? ws.proposals : pending;
   const list = [...ws.sources].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
@@ -161,6 +171,17 @@ export function Inbox() {
         Les échanges du projet (réunions, fils de discussion, comptes rendus) analysés par l’IA. Chaque
         proposition cite le passage qui la justifie ; rien n’entre dans les Références sans votre accord.
       </p>
+      {!hasKey ? (
+        <p className={styles.notice}>
+          Ce projet n’a pas de clé Claude : les échanges déposés sont gardés mais pas analysés.{' '}
+          {admin ? (
+            <Link to="/reglages">Renseigner la clé dans les Réglages du projet</Link>
+          ) : (
+            'Un administrateur du projet doit la renseigner dans les Réglages'
+          )}
+          , puis « Relancer l’analyse ».
+        </p>
+      ) : null}
       <div className={backlog.toolbar}>
         <button
           type="button"

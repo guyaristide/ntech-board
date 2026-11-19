@@ -30,3 +30,20 @@ export const sources = {
   acceptMany: (ids: string[]) => api.post<{ done: number }>('/proposals/accept', { ids }),
   rejectMany: (ids: string[], reason = '') => api.post('/proposals/reject', { ids, reason }),
 };
+
+export interface AiState {
+  configured: boolean;
+  hint: string;
+  updatedBy: string;
+  updatedAt: string | null;
+  canEncrypt: boolean;
+  model: string;
+}
+
+/** Clé Claude du projet : état pour les éditeurs, saisie et vérification pour les administrateurs. */
+export const aiKey = {
+  status: () => api.get<AiState>('/ai'),
+  save: (key: string) => api.put<AiState>('/ai/key', { key }),
+  test: () => api.post<{ ok: boolean; message?: string }>('/ai/key/test', {}),
+  remove: () => api.delete('/ai/key'),
+};

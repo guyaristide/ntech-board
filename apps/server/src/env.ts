@@ -47,11 +47,10 @@ export const env = {
   secretsKey: process.env.SECRETS_KEY ?? '',
   webDist: process.env.WEB_DIST ?? '',
   /**
-   * Analyse des échanges par Claude (boîte « À relire »). Sans clé, les échanges sont reçus mais pas
-   * analysés. Le modèle et l'effort se règlent ici, sans changer le code.
+   * Analyse des échanges par Claude (écran « À relire »). La clé est propre à chaque projet (Réglages
+   * du projet, chiffrée avec SECRETS_KEY) ; le modèle et l'effort se règlent ici pour la plateforme.
    */
   ai: {
-    key: process.env.ANTHROPIC_API_KEY ?? '',
     model: process.env.AI_MODEL || 'claude-opus-5-5',
     effort: (process.env.AI_EFFORT || 'medium') as 'low' | 'medium' | 'high' | 'xhigh' | 'max',
   },

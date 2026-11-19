@@ -16,6 +16,7 @@ import page from '../Page.module.css';
 import styles from './Parties.module.css';
 import { EditableList } from './EditableList';
 import { SettingsCadrage } from './SettingsCadrage';
+import { SettingsAi } from './SettingsAi';
 import { SettingsFiles } from './SettingsFiles';
 
 const slug = (s: string) =>
@@ -245,6 +246,7 @@ export function Settings() {
 
       <SettingsCadrage draft={draft} setDraft={setDraft} />
       <SettingsFiles draft={draft} setDraft={setDraft} />
+      <SettingsAi />
 
       <p className={styles.saveBar}>
         {dirty ? <span className={page.faint}>Modifications non enregistrées</span> : null}

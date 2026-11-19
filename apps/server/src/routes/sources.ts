@@ -2,9 +2,9 @@ import { Hono, type Context } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { z } from 'zod';
 import { applyProposal, nextCode, type Proposal, type Reference, type SourceItem } from '@board/shared';
-import { AiUnavailable, extract } from '../ai/extract';
+import { explain, extract } from '../ai/extract';
+import { aiKey, aiKeyStatus, AiUnavailable } from '../ai/keys';
 import { requireRole, type AppEnv } from '../auth';
-import { env } from '../env';
 import { fail, log } from '../log';
 import {
   createEntity,
@@ -66,6 +66,9 @@ sourceRoutes.onError((err, c) => {
   return c.json({ error: 'server_error' }, 500);
 });
 
+const NO_KEY =
+  'Analyse indisponible : aucune clé Claude n’est enregistrée pour ce projet (Réglages du projet).';
+
 /** Projets dont une analyse tourne : une seule à la fois par échange. */
 const running = new Set<string>();
 
@@ -86,7 +89,7 @@ export async function analyze(projectId: string, userId: string, sourceId: strin
     for (const p of own.filter(p => p.status === 'pending'))
       await deleteEntity(projectId, userId, 'proposal', p.id);
     const references = await all<Reference>(projectId, 'reference');
-    const found = await extract(await getSettings(projectId), references, source);
+    const found = await extract(await aiKey(projectId), await getSettings(projectId), references, source);
     // Ce qu'un éditeur a déjà tranché pour cet échange (même fiche, même citation) n'est pas reproposé.
     const decided = new Set(own.filter(p => p.status !== 'pending').map(p => `${p.target}|${p.quote}`));
     const drafts = found.drafts.filter(d => !decided.has(`${d.target}|${d.quote}`));
@@ -112,8 +115,7 @@ export async function analyze(projectId: string, userId: string, sourceId: strin
     log('sources', `${sourceId} analysé : ${drafts.length} proposition(s) retenue(s) sur ${proposed}.`);
     await status({ status: 'done', error: '' });
   } catch (e) {
-    const message =
-      e instanceof AiUnavailable || e instanceof Error ? e.message : 'Analyse impossible, réessayez.';
+    const message = explain(e);
     if (!(e instanceof AiUnavailable)) fail('sources', `analyse de ${sourceId}`, e);
     await status({ status: 'error', error: message }).catch(() => {});
   } finally {
@@ -133,6 +135,7 @@ sourceRoutes.post('/sources', editor, bodyLimit({ maxSize: 2 * 1024 * 1024 }), a
       400,
     );
   const { project, user } = who(c);
+  const { configured } = await aiKeyStatus(project);
   const source = await createEntity(
     project,
     user.id,
@@ -142,12 +145,12 @@ sourceRoutes.post('/sources', editor, bodyLimit({ maxSize: 2 * 1024 * 1024 }), a
       id,
       ...input,
       status: 'pending',
-      error: env.ai.key ? '' : 'Analyse indisponible : ANTHROPIC_API_KEY n’est pas configurée.',
+      error: configured ? '' : NO_KEY,
       createdAt: now(),
       createdBy: user.name || user.email,
     }),
   );
-  if (env.ai.key) void analyze(project, user.id, source.id);
+  if (configured) void analyze(project, user.id, source.id);
   return c.json(source, 201);
 });
 
@@ -155,11 +158,8 @@ sourceRoutes.post('/sources/:id/analyze', editor, async c => {
   const { project, user } = who(c);
   const source = await getEntity(project, 'source', c.req.param('id'));
   if (!source) return c.json({ error: 'not_found' }, 404);
-  if (!env.ai.key)
-    return c.json(
-      { error: 'ai_unavailable', message: 'ANTHROPIC_API_KEY n’est pas configurée sur le serveur.' },
-      503,
-    );
+  if (!(await aiKeyStatus(project)).configured)
+    return c.json({ error: 'ai_unavailable', message: NO_KEY }, 503);
   void analyze(project, user.id, source.id);
   return c.json({ ok: true }, 202);
 });

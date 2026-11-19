@@ -166,7 +166,7 @@ Une fiche alimentée par un échange affiche ses sources sous son contenu, avec 
 | --- | --- | --- |
 | Relecture | Systématique, ou automatique au-delà d'un seuil de confiance | Systématique au départ |
 | Périmètre initial | Références seules, ou aussi décisions et diligences | Références seules, élargir à l'étape 3 |
-| Clé Claude | Une par client, ou une de la plateforme refacturée | À trancher selon le modèle commercial |
+| Clé Claude | Une par client, saisie dans les Réglages du projet et chiffrée | Tranché : une clé par projet |
 | Ordre des sources | — | Dépôt manuel, puis Fireflies, puis Slack, puis Plaud |
 | Conservation du texte brut | 30, 90 jours ou illimité | 90 jours, réglable par projet |
 

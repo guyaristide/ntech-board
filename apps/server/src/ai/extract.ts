@@ -55,13 +55,40 @@ Règles :
 - Écris en français, dans le ton sobre des fiches existantes.
 - Aucune proposition n'est une réponse valable si l'échange n'apporte rien.`;
 
-export class AiUnavailable extends Error {}
-
-let client: Anthropic | null = null;
-const anthropic = () => {
-  if (!env.ai.key) throw new AiUnavailable('Analyse indisponible : ANTHROPIC_API_KEY n’est pas configurée.');
-  return (client ??= new Anthropic({ apiKey: env.ai.key }));
+/** Un client par clé : chaque projet appelle Claude avec sa propre clé. */
+const clients = new Map<string, Anthropic>();
+const anthropic = (apiKey: string) => {
+  let client = clients.get(apiKey);
+  if (!client) clients.set(apiKey, (client = new Anthropic({ apiKey })));
+  return client;
 };
+
+/** Vérifie qu'une clé est acceptée et donne accès au modèle configuré, sans consommer de jetons. */
+export async function checkKey(apiKey: string) {
+  try {
+    await anthropic(apiKey).models.retrieve(env.ai.model);
+    return { ok: true as const };
+  } catch (e) {
+    clients.delete(apiKey);
+    return { ok: false as const, message: explain(e) };
+  }
+}
+
+/** Message lisible pour une erreur de l'API Claude. */
+export function explain(e: unknown) {
+  if (e instanceof Anthropic.AuthenticationError)
+    return 'Clé Claude refusée par Anthropic : vérifiez-la ou remplacez-la.';
+  if (e instanceof Anthropic.PermissionDeniedError)
+    return 'Cette clé Claude n’a pas accès à ce service : vérifiez ses droits dans la console Anthropic.';
+  if (e instanceof Anthropic.NotFoundError)
+    return `Le modèle ${env.ai.model} n’est pas accessible avec cette clé.`;
+  if (e instanceof Anthropic.RateLimitError)
+    return 'Limite ou crédit Anthropic atteint pour cette clé : réessayez plus tard ou vérifiez le compte.';
+  if (e instanceof Anthropic.APIConnectionError) return 'Anthropic injoignable, réessayez dans un moment.';
+  if (e instanceof Anthropic.APIError && e.status === 400 && /credit/i.test(e.message))
+    return 'Crédit Anthropic épuisé pour cette clé : rechargez le compte.';
+  return e instanceof Error ? e.message : 'Analyse impossible, réessayez.';
+}
 
 const context = (settings: ProjectSettings, references: Reference[], source: SourceItem) =>
   [
@@ -109,8 +136,13 @@ export function keep(raw: Raw[], references: Reference[], text: string): Draft[]
 }
 
 /** Appelle Claude et renvoie les propositions retenues ; lève une erreur lisible en cas d'échec. */
-export async function extract(settings: ProjectSettings, references: Reference[], source: SourceItem) {
-  const response = await anthropic().beta.messages.parse({
+export async function extract(
+  apiKey: string,
+  settings: ProjectSettings,
+  references: Reference[],
+  source: SourceItem,
+) {
+  const response = await anthropic(apiKey).beta.messages.parse({
     model: env.ai.model,
     max_tokens: 16000,
     betas: ['server-side-fallback-2026-07-01'],

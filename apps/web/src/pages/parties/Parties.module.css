@@ -59,6 +59,7 @@
   font-size: 14px;
 }
 .fields input[type='text'],
+.fields input[type='password'],
 .fields input[type='number'],
 .fields select {
   max-width: 100%;

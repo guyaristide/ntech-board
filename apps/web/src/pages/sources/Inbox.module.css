@@ -10,6 +10,14 @@
   font-size: 13px;
 }
 
+.notice {
+  margin: 8px 0 12px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--warn) 14%, transparent);
+  font-size: 14px;
+}
+
 /* Dépôt */
 .deposit {
   display: flex;
