@@ -1,0 +1,16 @@
+/* Tickets reportés d'un sprint clos sans avoir été terminés : signalés en orange. */
+.row {
+  background: color-mix(in oklab, var(--tag-orange) 35%, transparent);
+  box-shadow: inset 3px 0 0 color-mix(in oklab, var(--tag-orange-text) 35%, var(--tag-orange));
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 6px;
+  border-radius: var(--radius);
+  background: var(--tag-orange);
+  color: var(--tag-orange-text);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}

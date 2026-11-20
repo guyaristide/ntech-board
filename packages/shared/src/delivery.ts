@@ -194,6 +194,17 @@ export function parentStep(settings: ProjectSettings, children: Pick<Ticket, 'st
 export const isDone = (settings: ProjectSettings, t: Ticket) =>
   stepOf(settings, t.status)?.category === 'done';
 
+/**
+ * Sprints clos d'où un ticket a été reporté (non terminé à leur clôture), du plus ancien au plus
+ * récent. Vide pour un ticket terminé depuis : le report n'est plus à signaler.
+ */
+export function carriedFrom(settings: ProjectSettings, sprints: Sprint[], t: Ticket): Sprint[] {
+  if (isDone(settings, t)) return [];
+  return sprints
+    .filter(s => s.status === 'closed' && s.carried.includes(t.id))
+    .sort((a, b) => (a.closedAt ?? '').localeCompare(b.closedAt ?? ''));
+}
+
 /** Ticket prêt : tous les critères cochés, et estimé si le projet estime. */
 export const isReady = (settings: ProjectSettings, t: Ticket) =>
   settings.delivery.readiness.every(c => t.ready.includes(c.id)) &&

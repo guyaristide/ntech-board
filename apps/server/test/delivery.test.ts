@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import {
   DEFAULT_SETTINGS,
   canonicalLabels,
+  carriedFrom,
   casesOf,
   changeLabels,
   isBlocked,
@@ -192,4 +193,21 @@ test('un ticket à sous-tâches prend l’étape de la moins avancée', () => {
   // Étape inconnue (supprimée des réglages) : comptée comme la première.
   assert.equal(parentStep(DEFAULT_SETTINGS, [sub('ancienne'), sub('done')]), 'todo');
   assert.equal(parentStep(DEFAULT_SETTINGS, []), null);
+});
+
+test("carriedFrom : sprints clos d'où un ticket non terminé a été reporté, du plus ancien au plus récent", () => {
+  const sp = (id: string, status: Sprint['status'], closedAt: string | null, carried: string[]) =>
+    ({ id, name: id, status, closedAt, carried }) as Sprint;
+  const sprints = [
+    sp('SP-02', 'closed', '2026-11-06', ['T-1']),
+    sp('SP-01', 'closed', '2026-10-23', ['T-1', 'T-2']),
+    sp('SP-03', 'active', null, []),
+  ];
+  assert.deepEqual(
+    carriedFrom(DEFAULT_SETTINGS, sprints, ticket('T-1')).map(s => s.id),
+    ['SP-01', 'SP-02'],
+  );
+  assert.deepEqual(carriedFrom(DEFAULT_SETTINGS, sprints, ticket('T-3')), []);
+  // Terminé depuis : plus rien à signaler.
+  assert.deepEqual(carriedFrom(DEFAULT_SETTINGS, sprints, ticket('T-2', { status: 'done' })), []);
 });

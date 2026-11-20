@@ -1,6 +1,14 @@
 import { useState, type DragEvent, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { amount, isReady, SPRINT_STATUS_LABEL, stepOf, type Sprint, type Ticket } from '@board/shared';
+import {
+  amount,
+  carriedFrom,
+  isReady,
+  SPRINT_STATUS_LABEL,
+  stepOf,
+  type Sprint,
+  type Ticket,
+} from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit, useSeesDelivery, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
@@ -8,6 +16,7 @@ import { Popover } from '../../ui/Popover';
 import { Tag } from '../../ui/Tag';
 import { LabelTag } from './Labels';
 import page from '../Page.module.css';
+import warn from './Carried.module.css';
 import styles from './Delivery.module.css';
 
 /** « lun. 19 oct. » */
@@ -141,6 +150,21 @@ export function Estimate({ ticket }: { ticket: Ticket }) {
   );
 }
 
+/** Ticket reporté d'un ou plusieurs sprints clos sans avoir été terminé : à traiter en priorité. */
+export function CarriedTag({ from }: { from: Sprint[] }) {
+  const last = from[from.length - 1];
+  const names = from.map(s => s.name).join(', ');
+  return (
+    <span
+      className={warn.tag}
+      role="note"
+      title={`Non terminé à la clôture de ${names} : reporté ${from.length > 1 ? `${from.length} fois` : 'une fois'}.`}
+    >
+      ⚠ Reporté{from.length > 1 ? ` ×${from.length}` : ''} · {last.name}
+    </span>
+  );
+}
+
 /** Ligne de ticket : déplaçable, champs modifiables sur place. */
 export function TicketRow({
   ticket,
@@ -167,9 +191,10 @@ export function TicketRow({
   const story = ticket.story ? ws.stories.find(s => s.id === ticket.story) : undefined;
   const type = settings.delivery.ticketTypes.find(t => t.id === ticket.type);
   const step = stepOf(settings, ticket.status);
+  const carried = carriedFrom(settings, sprints, ticket);
   return (
     <div
-      className={styles.row}
+      className={carried.length ? `${styles.row} ${warn.row}` : styles.row}
       data-over={over || undefined}
       data-done={step?.category === 'done' || undefined}
       data-selected={selected || undefined}
@@ -212,6 +237,7 @@ export function TicketRow({
           placeholder="Sans titre"
           onChange={title => delivery.updateTicket(ticket.id, { title })}
         />
+        {carried.length ? <CarriedTag from={carried} /> : null}
         {ticket.labels.map(l => (
           <LabelTag key={l} label={l} />
         ))}

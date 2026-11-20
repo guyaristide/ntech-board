@@ -1,7 +1,7 @@
 import { useState, type DragEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { NavList } from '../../ui/ListNav';
-import { isReady, load, type Sprint, type Ticket } from '@board/shared';
+import { carriedFrom, isReady, load, type Sprint, type Ticket } from '@board/shared';
 import { byRank, delivery, rankAt, useDelivery } from '../../model/delivery';
 import { useCanEdit } from '../../model/store';
 import { ExportButton } from '../../ui/ExportButton';
@@ -12,6 +12,7 @@ import { ImportStories } from './ImportStories';
 import { TicketBulkBar } from './TicketBulkBar';
 import { TicketFilters, useTicketFilters } from './TicketFilters';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag, TicketRow } from './parts';
+import warn from './Carried.module.css';
 import styles from './Delivery.module.css';
 
 const DRAG = 'application/x-ticket';
@@ -52,7 +53,7 @@ function Lane({
   onFold: () => void;
 }) {
   const canEdit = useCanEdit();
-  const { settings } = useDelivery();
+  const { settings, sprints } = useDelivery();
   const [over, setOver] = useState(false);
   const list = [...tickets].sort(byRank);
   const sprintId = sprint?.id ?? '';
@@ -66,6 +67,7 @@ function Lane({
   const { total, unestimated } = load(list);
   const ready = list.filter(t => isReady(settings, t)).length;
   const picked = list.filter(t => selected.has(t.id)).length;
+  const carried = list.filter(t => carriedFrom(settings, sprints, t).length).length;
   return (
     <section
       className={styles.lane}
@@ -123,6 +125,11 @@ function Lane({
             </span>
           </>
         )}
+        {carried ? (
+          <span className={warn.tag} title="Non terminés à la clôture d'un sprint précédent">
+            ⚠ {carried} reporté{carried > 1 ? 's' : ''}
+          </span>
+        ) : null}
         {folded && picked ? (
           <span className={page.faint}>
             {picked} sélectionné{picked > 1 ? 's' : ''}
