@@ -121,9 +121,12 @@ export const useWorkspace = create<State>((set, get) => {
       const data = normalize(kind, received);
       const list = s[KEY[kind]] as { id: string }[];
       if (data === null) return { [KEY[kind]]: list.filter(x => x.id !== id) } as Partial<State>;
-      const exists = list.some(x => x.id === id);
+      // L'identifiant porté par l'entité fait foi : une même entité n'apparaît jamais deux fois, quel
+      // que soit l'ordre d'arrivée de la réponse du serveur et de l'événement temps réel.
+      const key = (data as { id?: string }).id || id;
+      const exists = list.some(x => x.id === key);
       return {
-        [KEY[kind]]: exists ? list.map(x => (x.id === id ? data : x)) : [...list, data],
+        [KEY[kind]]: exists ? list.map(x => (x.id === key ? data : x)) : [...list, data],
       } as Partial<State>;
     });
 
@@ -153,7 +156,9 @@ export const useWorkspace = create<State>((set, get) => {
     try {
       const result = await call();
       inflight.set(entity, (inflight.get(entity) ?? 1) - 1);
-      if (!busy(entity) && result && typeof result === 'object' && 'id' in result) replace(kind, id, result);
+      // Création (id « new ») : l'entité est rangée sous son vrai identifiant, rendu par le serveur.
+      if (!busy(entity) && result && typeof result === 'object' && 'id' in result)
+        replace(kind, id === 'new' ? String(result.id) : id, result);
       if (get().save === 'error' || get().save === 'offline') set({ save: 'saved' });
       settle();
       return result;
