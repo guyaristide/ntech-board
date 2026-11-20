@@ -41,7 +41,10 @@ export interface Attachment {
 /** Plafond absolu d'un fichier ; les réglages peuvent le baisser, pas le dépasser. */
 export const MAX_FILE_MB = 5;
 
-/** Familles de fichiers acceptées, par extension. Ni HTML, ni SVG, ni exécutables. */
+/**
+ * Familles de fichiers acceptées, par extension. Ni HTML, ni SVG, ni exécutables binaires. Les fichiers
+ * techniques sont toujours servis en texte brut ou en téléchargement : jamais interprétés par le navigateur.
+ */
 export const FILE_CATEGORIES = {
   images: {
     label: 'Images et captures',
@@ -50,23 +53,108 @@ export const FILE_CATEGORIES = {
   pdf: { label: 'PDF', ext: ['pdf'] },
   office: {
     label: 'Bureautique (Word, Excel, PowerPoint, CSV, texte)',
+    ext: ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods', 'odp', 'csv', 'txt', 'md', 'rtf'],
+  },
+  code: {
+    label: 'Fichiers techniques (JSON, YAML, XML, SQL, logs, configuration, code)',
     ext: [
-      'doc',
-      'docx',
-      'xls',
-      'xlsx',
-      'ppt',
-      'pptx',
-      'odt',
-      'ods',
-      'odp',
-      'csv',
-      'txt',
-      'md',
-      'rtf',
+      // Données et configuration
       'json',
+      'jsonc',
+      'json5',
+      'ndjson',
+      'geojson',
+      'yml',
+      'yaml',
       'xml',
+      'xsd',
+      'xsl',
+      'wsdl',
+      'toml',
+      'ini',
+      'cfg',
+      'conf',
+      'properties',
+      'env',
+      'example',
+      'sample',
+      'plist',
+      'har',
+      'lock',
+      // Requêtes, schémas, échanges
+      'sql',
+      'graphql',
+      'gql',
+      'proto',
+      'avsc',
+      'prisma',
+      'http',
+      'rest',
+      'postman',
+      // Journaux et différences
+      'log',
+      'out',
+      'trace',
+      'diff',
+      'patch',
+      // Code et scripts (téléchargés en texte, jamais exécutés ni affichés comme page)
+      'js',
+      'mjs',
+      'cjs',
+      'ts',
+      'tsx',
+      'jsx',
+      'vue',
+      'svelte',
+      'css',
+      'scss',
+      'less',
+      'py',
+      'rb',
+      'php',
+      'java',
+      'kt',
+      'kts',
+      'scala',
+      'go',
+      'rs',
+      'c',
+      'h',
+      'cpp',
+      'hpp',
+      'cs',
+      'swift',
+      'dart',
+      'lua',
+      'r',
+      'pl',
+      'ex',
+      'exs',
+      'erl',
+      'sh',
+      'bash',
+      'zsh',
+      'fish',
+      'ps1',
+      'psm1',
+      'gradle',
+      'tf',
+      'tfvars',
+      'hcl',
+      'nix',
+      'dockerfile',
+      'mk',
+      'cmake',
+      'bicep',
+      // Certificats publics et clés publiques
+      'pem',
+      'crt',
+      'cer',
+      'pub',
+      'csr',
     ],
+    /** Fichiers techniques usuels sans extension. */
+    names: ['dockerfile', 'makefile', 'procfile', 'jenkinsfile', 'gemfile', 'vagrantfile', 'caddyfile'],
   },
   video: { label: 'Vidéos', ext: ['mp4', 'mov', 'webm', 'm4v', 'avi', 'mkv'] },
   audio: { label: 'Audio', ext: ['mp3', 'wav', 'm4a', 'ogg', 'aac', 'flac', 'opus', 'weba'] },
@@ -77,9 +165,16 @@ export const FILE_CATEGORY_KEYS = Object.keys(FILE_CATEGORIES) as FileCategory[]
 
 export const extensionOf = (name: string) => (name.match(/\.([a-z0-9]{1,8})$/i)?.[1] ?? '').toLowerCase();
 
-export const categoryOf = (name: string): FileCategory | null =>
-  FILE_CATEGORY_KEYS.find(c => (FILE_CATEGORIES[c].ext as readonly string[]).includes(extensionOf(name))) ??
-  null;
+const TECH_NAMES: readonly string[] = FILE_CATEGORIES.code.names;
+
+export const categoryOf = (name: string): FileCategory | null => {
+  const base = (name.split(/[\\/]/).pop() ?? '').toLowerCase();
+  if (TECH_NAMES.includes(base) || /^\.[a-z0-9_-]+(rc|ignore|config|attributes)$/.test(base)) return 'code';
+  return (
+    FILE_CATEGORY_KEYS.find(c => (FILE_CATEGORIES[c].ext as readonly string[]).includes(extensionOf(name))) ??
+    null
+  );
+};
 
 /** Rangement des fichiers dans le stockage. */
 export type FolderStrategy = 'element' | 'type' | 'date' | 'flat' | 'custom';

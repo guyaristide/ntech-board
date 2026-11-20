@@ -39,6 +39,28 @@ test('noms de fichiers sûrs et familles acceptées', () => {
   assert.equal(categoryOf('budget.xlsx'), 'office');
   assert.equal(categoryOf('logo.svg'), null);
   assert.equal(categoryOf('page.html'), null);
+  assert.equal(categoryOf('app.exe'), null);
+});
+
+test('fichiers techniques : données, configuration, journaux, code, fichiers usuels sans extension', () => {
+  for (const name of [
+    'docker-compose.yml',
+    'openapi.YAML',
+    'reponse.json',
+    'flux.xml',
+    'schema.sql',
+    'serveur.log',
+    'correctif.patch',
+    'index.ts',
+    'deploy.sh',
+    '.env.example',
+    'Dockerfile',
+    'Makefile',
+    '.gitignore',
+    '.eslintrc',
+  ])
+    assert.equal(categoryOf(name), 'code', name);
+  assert.equal(categoryOf('notes.md'), 'office');
 });
 
 test('un nouveau projet garde le stockage local', () => {

@@ -17,6 +17,7 @@ const ICON: Record<FileCategory, string> = {
   images: '🖼️',
   pdf: '📕',
   office: '📄',
+  code: '🧾',
   video: '🎬',
   audio: '🎵',
   archives: '🗜️',
@@ -52,7 +53,11 @@ export function Attachments({ kind, id }: { kind: AttachableKind; id: string }) 
   const [over, setOver] = useState(false);
   const [viewing, setViewing] = useState<Attachment | null>(null);
   const input = useRef<HTMLInputElement>(null);
-  const accept = settings.categories.flatMap(c => FILE_CATEGORIES[c].ext.map(e => `.${e}`)).join(',');
+  // Les fichiers techniques sans extension (Dockerfile, .gitignore…) ne s'expriment pas en filtre :
+  // dans ce cas le sélecteur montre tout, et le type est vérifié à l'envoi.
+  const accept = settings.categories.includes('code')
+    ? undefined
+    : settings.categories.flatMap(c => FILE_CATEGORIES[c].ext.map(e => `.${e}`)).join(',');
 
   const patch = (key: string, p: Partial<Pending>) =>
     setPending(list => list.map(x => (x.key === key ? { ...x, ...p } : x)));

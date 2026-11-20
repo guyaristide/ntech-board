@@ -41,6 +41,8 @@ function mimeOf(name: string, declared: string) {
     audio: /^audio\//,
   };
   if (cat && family[cat]) return family[cat].test(declared) ? declared : 'application/octet-stream';
+  // Fichier technique : texte brut, quel que soit le type annoncé (un .js ou un .xml n'est jamais interprété).
+  if (cat === 'code') return 'text/plain; charset=utf-8';
   return declared && !/html|svg|javascript|xml/.test(declared) ? declared : 'application/octet-stream';
 }
 
