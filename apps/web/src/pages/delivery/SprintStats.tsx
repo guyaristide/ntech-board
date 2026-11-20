@@ -27,8 +27,14 @@ const pct = (part: number, total: number) => (total ? Math.round((part / total) 
  * Teinte d'une étape : une seule couleur, de la plus claire (première étape) à la plus franche
  * (dernière) — les étapes sont ordonnées. Mêlée au fond, elle suit le thème clair ou sombre.
  */
-const stepColor = (i: number, n: number) =>
-  `color-mix(in oklab, var(--accent) ${n > 1 ? Math.round(45 + (55 * i) / (n - 1)) : 100}%, var(--bg))`;
+const stepColor = (i: number, n: number) => {
+  const t = n > 1 ? i / (n - 1) : 1;
+  // Première moitié : du bleu clair au bleu ; seconde : du bleu au noir (la couleur du texte, claire
+  // en thème sombre). La dernière étape (Terminé) est en noir.
+  return t <= 0.5
+    ? `color-mix(in oklab, var(--accent) ${Math.round(45 + 110 * t)}%, var(--bg))`
+    : `color-mix(in oklab, var(--text) ${Math.round((t - 0.5) * 200)}%, var(--accent))`;
+};
 
 type Measure = 'tickets' | 'estimate';
 
@@ -51,7 +57,7 @@ export function SprintStats({
 }) {
   const parties = useWorkspace(s => s.parties);
   const counting = byCount(settings);
-  const [measure, setMeasure] = useState<Measure>(counting ? 'tickets' : 'estimate');
+  const [measure, setMeasure] = useState<Measure>('tickets');
   const m: Measure = counting ? 'tickets' : measure;
   const unit = m === 'tickets' ? 'tickets' : UNIT[settings.delivery.estimation];
   const size = (list: Ticket[]) =>
@@ -98,8 +104,8 @@ export function SprintStats({
         <div className={styles.measure} role="group" aria-label="Mesure">
           {(
             [
-              ['estimate', `Estimation (${UNIT[settings.delivery.estimation]})`],
               ['tickets', 'Nombre de tickets'],
+              ['estimate', `Estimation (${UNIT[settings.delivery.estimation]})`],
             ] as const
           ).map(([k, label]) => (
             <button key={k} type="button" data-on={m === k || undefined} onClick={() => setMeasure(k)}>
@@ -286,7 +292,7 @@ function Bars({
             ) : null}
             {r.total - (split ? r.done : 0) > 0 ? (
               <span
-                className={split ? styles.barRest : styles.barDone}
+                className={split ? styles.barRest : styles.barOne}
                 style={{ width: `${((r.total - (split ? r.done : 0)) / max) * 100}%` }}
               />
             ) : null}

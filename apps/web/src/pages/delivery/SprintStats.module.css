@@ -113,16 +113,19 @@
   height: 14px;
 }
 .barDone,
-.barRest {
+.barRest,
+.barOne {
   min-width: 3px;
   height: 100%;
   border-radius: 0 4px 4px 0;
 }
+/* Terminé en noir (couleur du texte), reste à faire en bleu ; une seule série : bleu. */
 .barDone {
-  background: var(--accent);
+  background: var(--text);
 }
-.barRest {
-  background: color-mix(in oklab, var(--accent) 40%, var(--bg));
+.barRest,
+.barOne {
+  background: var(--accent);
 }
 .barDone:has(+ .barRest) {
   border-radius: 0;
@@ -132,7 +135,10 @@
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-.restKey span[data-k='rest']::before {
+.restKey span::before {
   height: 8px;
-  background: color-mix(in oklab, var(--accent) 40%, var(--bg));
+  background: var(--text);
+}
+.restKey span[data-k='rest']::before {
+  background: var(--accent);
 }
