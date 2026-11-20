@@ -55,7 +55,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
         type: z.string().optional(),
         etiquette: z.string().optional().describe('Étiquette portée par le ticket'),
         non_termines: z.boolean().default(false),
-        reportes: z
+        carried: z
           .boolean()
           .default(false)
           .describe('Seulement les tickets reportés d’un sprint clos et toujours pas terminés'),
@@ -92,7 +92,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
             (who === undefined || who.includes(t.assignee)) &&
             (!a.etiquette || (t.labels ?? []).some(l => matches(a.etiquette, l))) &&
             (!a.non_termines || !isDone(ws.settings, t)) &&
-            (!a.reportes || carriedFrom(ws.settings, ws.sprints, t).length > 0) &&
+            (!a.carried || carriedFrom(ws.settings, ws.sprints, t).length > 0) &&
             matches(a.texte, t.id, t.title, ...t.description.map(b => b.text)),
         );
       return lines(
