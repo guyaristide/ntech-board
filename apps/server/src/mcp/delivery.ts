@@ -3,6 +3,7 @@ import {
   amount,
   burndown,
   byCount,
+  carriedFrom,
   casesOf,
   CAMPAIGN_MODE_LABEL,
   forecast,
@@ -30,7 +31,11 @@ const row = (ws: WorkspaceData, t: Ticket) => {
   const est = t.estimate === null ? '' : ` · ${amount(t.estimate, ws.settings)}`;
   const labels = t.labels?.length ? ` · ${t.labels.map(l => `#${l}`).join(' ')}` : '';
   const dates = t.start || t.due ? ` · ${t.start ?? '?'} → ${t.due ?? '?'}` : '';
-  return `${t.id} · [${t.type} · ${step} · ${sprint}${est}] ${t.title}${t.assignee ? ` · ${party(ws, t.assignee)}` : ''}${isBlocked(ws.settings, ws.tickets, t) ? ' · BLOQUÉ' : ''}${dates}${labels}`;
+  const from = carriedFrom(ws.settings, ws.sprints, t);
+  const carried = from.length
+    ? ` · REPORTÉ${from.length > 1 ? ` ×${from.length}` : ''} (de ${from.map(x => x.name).join(', ')})`
+    : '';
+  return `${t.id} · [${t.type} · ${step} · ${sprint}${est}] ${t.title}${t.assignee ? ` · ${party(ws, t.assignee)}` : ''}${isBlocked(ws.settings, ws.tickets, t) ? ' · BLOQUÉ' : ''}${carried}${dates}${labels}`;
 };
 
 export function registerDelivery(server: McpServer, ctx: Ctx) {
@@ -40,7 +45,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
     {
       title: 'Lister les tickets',
       description:
-        'Tickets de réalisation, triés par priorité, avec filtres. Étapes, types, sprints et responsables s’indiquent par identifiant ou par nom.',
+        'Tickets de réalisation, triés par priorité, avec filtres. Un ticket non terminé à la clôture d’un sprint est marqué REPORTÉ (×n s’il l’a été plusieurs fois). Étapes, types, sprints et responsables s’indiquent par identifiant ou par nom.',
       input: {
         texte: z.string().optional(),
         sprint: z.string().optional().describe('« actif », « backlog », ou identifiant / nom de sprint'),
@@ -50,6 +55,10 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
         type: z.string().optional(),
         etiquette: z.string().optional().describe('Étiquette portée par le ticket'),
         non_termines: z.boolean().default(false),
+        reportes: z
+          .boolean()
+          .default(false)
+          .describe('Seulement les tickets reportés d’un sprint clos et toujours pas terminés'),
         limite: z.number().int().min(1).max(300).default(60),
       },
     },
@@ -83,6 +92,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
             (who === undefined || who.includes(t.assignee)) &&
             (!a.etiquette || (t.labels ?? []).some(l => matches(a.etiquette, l))) &&
             (!a.non_termines || !isDone(ws.settings, t)) &&
+            (!a.reportes || carriedFrom(ws.settings, ws.sprints, t).length > 0) &&
             matches(a.texte, t.id, t.title, ...t.description.map(b => b.text)),
         );
       return lines(
@@ -156,14 +166,16 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
     {
       title: 'Sprints',
       description:
-        'Sprints du projet (prévus, en cours, clos) : dates, objectif, capacité, charge, vélocité.',
+        'Sprints du projet (prévus, en cours, clos) : dates, objectif, capacité, charge, vélocité, tickets reportés (de sprints précédents, ou à la clôture).',
     },
     async () => {
       const ws = await ctx.workspace();
       return list(ws.sprints, s => {
         const own = ws.tickets.filter(t => t.sprint === s.id);
         const load = own.reduce((n, t) => n + (t.estimate ?? 0), 0);
-        return `- ${s.id} · ${s.name} · ${SPRINT_STATUS_LABEL[s.status]} · ${s.start ?? '?'} → ${s.end ?? '?'} · ${own.length} tickets, ${amount(load, ws.settings)}${s.capacity ? ` / ${amount(s.capacity, ws.settings)}` : ''}${s.velocity !== null ? ` · livré ${amount(s.velocity, ws.settings)}` : ''}${s.goal ? ` · objectif : ${s.goal}` : ''}`;
+        const inherited = own.filter(t => carriedFrom(ws.settings, ws.sprints, t).length).length;
+        const flags = `${inherited ? ` · ${inherited} reporté(s) d’un sprint précédent` : ''}${s.carried.length ? ` · ${s.carried.length} reporté(s) à la clôture` : ''}`;
+        return `- ${s.id} · ${s.name} · ${SPRINT_STATUS_LABEL[s.status]} · ${s.start ?? '?'} → ${s.end ?? '?'} · ${own.length} tickets, ${amount(load, ws.settings)}${s.capacity ? ` / ${amount(s.capacity, ws.settings)}` : ''}${s.velocity !== null ? ` · livré ${amount(s.velocity, ws.settings)}` : ''}${flags}${s.goal ? ` · objectif : ${s.goal}` : ''}`;
       });
     },
   );
@@ -174,7 +186,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
     {
       title: 'Pilotage',
       description:
-        'Où en est la réalisation : sprint en cours et burndown, vélocité, avancement et prévision de fin de chaque version, tickets bloqués.',
+        'Où en est la réalisation : sprint en cours et burndown, vélocité, avancement et prévision de fin de chaque version, tickets bloqués, tickets reportés.',
     },
     async () => {
       const ws = await ctx.workspace();
@@ -187,6 +199,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
       const last = b?.points.filter(p => p.remaining !== null).at(-1);
       const v = velocity(ws.sprints, count);
       const blocked = ws.tickets.filter(t => !isDone(s, t) && isBlocked(s, ws.tickets, t));
+      const carried = ws.tickets.filter(t => carriedFrom(s, ws.sprints, t).length);
       return lines(
         active
           ? `## ${active.name} (${active.start} → ${active.end})\nReste à faire : ${last ? unit(last.remaining!) : '—'} sur un périmètre de ${last ? unit(last.scope!) : '—'} ; rythme idéal ce jour : ${b && last ? unit(Math.round(b.points.find(p => p.day === last.day)!.ideal * 10) / 10) : '—'}.`
@@ -206,6 +219,8 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
         ),
         `\n## Tickets bloqués : ${blocked.length}`,
         list(blocked, t => `- ${row(ws, t)}`, '—'),
+        `\n## Tickets reportés d’un sprint clos, toujours pas terminés : ${carried.length}`,
+        list(carried, t => `- ${row(ws, t)}`, '—'),
       );
     },
   );
