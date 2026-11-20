@@ -1,3 +1,4 @@
+import type { Context } from 'hono';
 import { z } from 'zod';
 import { RELEASE_STATUSES, TICKET_LINK_TYPES } from '@board/shared';
 import { blocks } from './schemas';
@@ -112,3 +113,9 @@ export const SprintReplan = z
     capacity: amount.optional(),
   })
   .strict();
+
+/** Dates d'un ticket : l'échéance ne précède pas le début (vérifié ici, zod `.refine` casse `.pick`). */
+export const datesInOrder = (t: { start?: string | null; due?: string | null }) =>
+  !t.start || !t.due || t.start <= t.due;
+export const badDates = (c: Context) =>
+  c.json({ error: 'invalid', message: 'L’échéance ne peut pas précéder le début.' }, 400);

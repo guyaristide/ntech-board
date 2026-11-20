@@ -7,6 +7,7 @@ import {
   changeLabels,
   isBlocked,
   isReady,
+  parentStep,
   labelTone,
   renameLabel,
   matchesWords,
@@ -180,4 +181,15 @@ test('une étiquette prend la couleur choisie, sinon une couleur stable', () => 
   };
   assert.equal(labelTone(settings, 'IA'), 'red');
   assert.equal(labelTone(settings, 'PMS'), labelTone(DEFAULT_SETTINGS, 'PMS'));
+});
+
+test('un ticket à sous-tâches prend l’étape de la moins avancée', () => {
+  // Flux par défaut : todo, doing, review, testing (recette), done.
+  const sub = (status: string) => ({ status });
+  assert.equal(parentStep(DEFAULT_SETTINGS, [sub('testing'), sub('done')]), 'testing');
+  assert.equal(parentStep(DEFAULT_SETTINGS, [sub('done'), sub('done')]), 'done');
+  assert.equal(parentStep(DEFAULT_SETTINGS, [sub('review'), sub('todo'), sub('done')]), 'todo');
+  // Étape inconnue (supprimée des réglages) : comptée comme la première.
+  assert.equal(parentStep(DEFAULT_SETTINGS, [sub('ancienne'), sub('done')]), 'todo');
+  assert.equal(parentStep(DEFAULT_SETTINGS, []), null);
 });

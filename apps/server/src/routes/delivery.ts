@@ -1,4 +1,4 @@
-import { Hono, type Context } from 'hono';
+import { Hono } from 'hono';
 import {
   isDone,
   load,
@@ -20,6 +20,7 @@ import { pool } from '../db';
 import { fail } from '../log';
 import { closeDay, sprintDays } from '../pilotage';
 import {
+  all,
   createEntity,
   createMany,
   deleteEntity,
@@ -32,6 +33,8 @@ import {
   NotFound,
 } from '../repo';
 import {
+  badDates,
+  datesInOrder,
   ReleaseCreate,
   ReleasePatch,
   SprintClose,
@@ -43,6 +46,9 @@ import {
   TicketLinkBody,
   TicketPatch,
 } from './deliverySchemas';
+
+export { all };
+import { rollUpParents } from '../rollup';
 import { CommentBody } from './schemas';
 import { body, comment } from './workspace';
 
@@ -67,14 +73,6 @@ const who = (c: Ctx) => ({
   slug: (c.get('project') as { slug: string }).slug,
   user: c.get('user') as { id: string; name: string; email: string },
 });
-
-export async function all<T>(projectId: string, kind: string): Promise<T[]> {
-  const { rows } = await pool.query<{ data: T }>(
-    'SELECT data FROM entities WHERE project_id = $1 AND kind = $2 ORDER BY position',
-    [projectId, kind],
-  );
-  return rows.map(r => r.data);
-}
 
 /** Préfixe des clés de tickets : celui des réglages, sinon tiré de l'identifiant du projet. */
 export const keyOf = (settings: ProjectSettings, slug: string) =>
@@ -279,11 +277,6 @@ export const blankTicket = (settings: ProjectSettings, id: string, rank: number)
 });
 
 /** Échéance au plus tôt le jour du début. */
-const datesInOrder = (t: { start?: string | null; due?: string | null }) =>
-  !t.start || !t.due || t.start <= t.due;
-const badDates = (c: Context) =>
-  c.json({ error: 'invalid', message: 'L’échéance ne peut pas précéder le début.' }, 400);
-
 /** Ticket « US » : type story s'il existe, sinon le premier type des réglages. */
 const storyType = (settings: ProjectSettings) =>
   settings.delivery.ticketTypes.find(t => t.id === 'story')?.id ?? settings.delivery.ticketTypes[0].id;
@@ -354,17 +347,18 @@ deliveryRoutes.patch('/tickets/:id', ...write, async c => {
     if (!current) return c.json({ error: 'not_found' }, 404);
     if (!datesInOrder({ ...withTicketDefaults(current), ...patch })) return badDates(c);
   }
-  return c.json(
-    await mutate(
-      project,
-      'ticket',
-      c.req.param('id'),
-      user.id,
-      'update',
-      t => ({ ...t, ...patch, updatedAt: now() }),
-      patch,
-    ),
+  const ticket = await mutate(
+    project,
+    'ticket',
+    c.req.param('id'),
+    user.id,
+    'update',
+    t => ({ ...t, ...patch, updatedAt: now() }),
+    patch,
   );
+  // Étape d'une sous-tâche changée : son parent suit la moins avancée de ses sous-tâches.
+  if (patch.status && ticket.parent) await rollUpParents(project, user.id, [ticket.parent]);
+  return c.json(ticket);
 });
 
 /** Supprime un ticket ; ses liaisons disparaissent des autres tickets, ses sous-tâches n'ont plus de parent. */
@@ -416,6 +410,12 @@ deliveryRoutes.patch('/tickets', ...write, async c => {
       ...(remove.length ? { removeLabels: remove } : {}),
     },
   );
+  if (patch.status)
+    await rollUpParents(
+      project,
+      user.id,
+      tickets.map(t => t.parent ?? ''),
+    );
   return c.json(tickets);
 });
 

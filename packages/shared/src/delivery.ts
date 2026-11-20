@@ -180,6 +180,17 @@ export const amount = (n: number, settings: ProjectSettings) =>
 /** Catégorie d'une étape : à faire, en cours, terminé (première étape si l'identifiant est inconnu). */
 export const stepOf = (settings: ProjectSettings, status: string) =>
   settings.delivery.workflow.find(s => s.id === status) ?? settings.delivery.workflow[0];
+/**
+ * Étape d'un ticket qui a des sous-tâches : celle de la sous-tâche la moins avancée, dans l'ordre du
+ * flux du projet (une sous-tâche en Recette et une Terminée : le ticket est en Recette). Sans
+ * sous-tâche, null : l'étape du ticket se règle à la main.
+ */
+export function parentStep(settings: ProjectSettings, children: Pick<Ticket, 'status'>[]) {
+  const order = settings.delivery.workflow.map(s => s.id);
+  if (!children.length || !order.length) return null;
+  const rank = (status: string) => Math.max(0, order.indexOf(status));
+  return order[Math.min(...children.map(c => rank(c.status)))];
+}
 export const isDone = (settings: ProjectSettings, t: Ticket) =>
   stepOf(settings, t.status)?.category === 'done';
 

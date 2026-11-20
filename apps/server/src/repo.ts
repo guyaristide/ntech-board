@@ -68,6 +68,14 @@ export async function getWorkspace(projectId: string, planning: string | null): 
   };
 }
 
+export async function all<T>(projectId: string, kind: string): Promise<T[]> {
+  const { rows } = await pool.query<{ data: T }>(
+    'SELECT data FROM entities WHERE project_id = $1 AND kind = $2 ORDER BY position',
+    [projectId, kind],
+  );
+  return rows.map(r => r.data);
+}
+
 export class NotFound extends Error {}
 
 /** Réglages du projet, complétés des valeurs par défaut. */
