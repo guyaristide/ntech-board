@@ -1,0 +1,40 @@
+/* Précédent / Suivant d'une fiche, dans l'ordre de la liste d'origine. */
+.pager {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 2px 1px 4px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.from {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-muted);
+}
+.pager button {
+  min-width: 26px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  line-height: 22px;
+  cursor: pointer;
+}
+.pager button:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+.pager button:disabled {
+  color: var(--text-faint);
+  cursor: default;
+}
+.count {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}

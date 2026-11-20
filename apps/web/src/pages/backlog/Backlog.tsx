@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { NavList } from '../../ui/ListNav';
 import { versionsOf, SCENARIO_LABEL } from '@board/shared';
 import { delivery } from '../../model/delivery';
 import { exportCsv } from '../../model/exporters';
@@ -248,17 +249,19 @@ export function Backlog() {
         </p>
       ) : null}
 
-      {view === 'table' ? (
-        <StoryTable
-          stories={rows}
-          selected={selected}
-          onSelect={select}
-          sort={sort}
-          onSort={key => setSort(s => ({ key, dir: s.key === key ? (-s.dir as 1 | -1) : 1 }))}
-        />
-      ) : (
-        <StoryBoard stories={rows} />
-      )}
+      <NavList label={filtered ? 'Backlog des US (filtré)' : 'Backlog des US'}>
+        {view === 'table' ? (
+          <StoryTable
+            stories={rows}
+            selected={selected}
+            onSelect={select}
+            sort={sort}
+            onSort={key => setSort(s => ({ key, dir: s.key === key ? (-s.dir as 1 | -1) : 1 }))}
+          />
+        ) : (
+          <StoryBoard stories={rows} />
+        )}
+      </NavList>
     </div>
   );
 }
@@ -267,9 +270,12 @@ export function Backlog() {
 export function StoryList({
   stories,
   exportName,
+  label,
 }: {
   stories: Parameters<typeof StoryTable>[0]['stories'];
   exportName?: string;
+  /** Nom de la liste pour Précédent / Suivant depuis une US (« Épique E01 »). */
+  label: string;
 }) {
   const [sort, setSort] = useState<{ key: SortKey; dir: 1 | -1 }>({ key: 'id', dir: 1 });
   const sorted = sortStories(stories, sort.key, sort.dir);
@@ -282,12 +288,14 @@ export function StoryList({
           </button>
         </p>
       ) : null}
-      <StoryTable
-        compact
-        stories={sorted}
-        sort={sort}
-        onSort={key => setSort(s => ({ key, dir: s.key === key ? (-s.dir as 1 | -1) : 1 }))}
-      />
+      <NavList label={label}>
+        <StoryTable
+          compact
+          stories={sorted}
+          sort={sort}
+          onSort={key => setSort(s => ({ key, dir: s.key === key ? (-s.dir as 1 | -1) : 1 }))}
+        />
+      </NavList>
     </>
   );
 }

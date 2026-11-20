@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { NavList } from '../../ui/ListNav';
 import { byRank, isDone } from '@board/shared';
 import { useDelivery } from '../../model/delivery';
 import { ExportButton } from '../../ui/ExportButton';
@@ -72,25 +73,27 @@ export function MyTickets() {
             <TicketFilters filters={filters} tickets={all} />
           </>
         )}
-        {groups.map(g => (
-          <section key={g.key} className={styles.lane}>
-            <header className={styles.laneHead}>
-              <span className={styles.laneTitle}>{g.title}</span>
-              <span className={page.faint}>{g.items.length}</span>
-            </header>
-            {g.items.sort(byRank).map(t => (
-              <TicketRow key={t.id} ticket={t} />
-            ))}
-          </section>
-        ))}
-        {done.length ? (
-          <details className={styles.lane}>
-            <summary className={styles.laneHead}>Terminés ({done.length})</summary>
-            {done.sort(byRank).map(t => (
-              <TicketRow key={t.id} ticket={t} />
-            ))}
-          </details>
-        ) : null}
+        <NavList label="Mes tickets">
+          {groups.map(g => (
+            <section key={g.key} className={styles.lane}>
+              <header className={styles.laneHead}>
+                <span className={styles.laneTitle}>{g.title}</span>
+                <span className={page.faint}>{g.items.length}</span>
+              </header>
+              {g.items.sort(byRank).map(t => (
+                <TicketRow key={t.id} ticket={t} />
+              ))}
+            </section>
+          ))}
+          {done.length ? (
+            <details className={styles.lane}>
+              <summary className={styles.laneHead}>Terminés ({done.length})</summary>
+              {done.sort(byRank).map(t => (
+                <TicketRow key={t.id} ticket={t} />
+              ))}
+            </details>
+          ) : null}
+        </NavList>
       </div>
     </DeliveryGate>
   );

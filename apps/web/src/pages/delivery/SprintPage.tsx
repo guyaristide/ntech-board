@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { Attachments } from '../../ui/Attachments';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { NavList } from '../../ui/ListNav';
 import { amount, isDone, progress, workdaysLeft, STEP_CATEGORY_LABEL } from '@board/shared';
 import { ApiError } from '../../model/api';
 import { byRank, delivery, useDelivery } from '../../model/delivery';
@@ -312,9 +313,11 @@ export function SprintPage() {
           </span>
         </div>
         <TicketFilters filters={filters} tickets={[...items, ...carried]} others={['q', 'responsable']} />
-        {view === 'kanban' ? <SprintKanban tickets={shown} /> : null}
-        {view === 'timeline' ? <SprintTimeline sprint={sprint} tickets={shown} /> : null}
-        {view === 'liste' ? <SprintList tickets={shown} carried={shownCarried} /> : null}
+        <NavList label={sprint.name || sprint.id}>
+          {view === 'kanban' ? <SprintKanban tickets={shown} /> : null}
+          {view === 'timeline' ? <SprintTimeline sprint={sprint} tickets={shown} /> : null}
+          {view === 'liste' ? <SprintList tickets={shown} carried={shownCarried} /> : null}
+        </NavList>
         {view !== 'liste' && shownCarried.length ? (
           <p className={page.faint}>
             {shownCarried.length} ticket{shownCarried.length > 1 ? 's' : ''} reporté

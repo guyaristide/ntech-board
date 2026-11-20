@@ -1,13 +1,14 @@
 import { type ReactNode } from 'react';
 import { Attachments } from '../../ui/Attachments';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { isBlocked, stepOf } from '@board/shared';
+import { byRank, isBlocked, stepOf } from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
 import { Comments } from '../../ui/Comments';
 import { EditableText } from '../../ui/EditableText';
 import { History } from '../../ui/History';
+import { Pager } from '../../ui/ListNav';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
 import { AssigneeSelect, useMyParties } from './fields';
@@ -39,6 +40,22 @@ export function TicketPage() {
   const step = stepOf(settings, ticket.status);
   const blocked = isBlocked(settings, tickets, ticket);
   const me = mine[0];
+  // Sans liste d'origine : les sous-tâches du même parent, sinon le sprint du ticket, sinon le backlog.
+  const naturalOrder = () => {
+    const sprint = sprints.find(s => s.id === ticket.sprint);
+    const same = parent
+      ? tickets.filter(t => t.parent === parent.id)
+      : tickets.filter(t => !t.parent && (sprint ? t.sprint === sprint.id : !t.sprint));
+    return {
+      ids: [...same].sort(byRank).map(t => t.id),
+      label: parent ? parent.id : sprint ? sprint.name || sprint.id : 'Backlog de réalisation',
+      from: parent
+        ? `/realisation/ticket/${parent.id}`
+        : sprint
+          ? `/realisation/sprint/${sprint.id}`
+          : '/realisation',
+    };
+  };
   const select = (
     value: string,
     label: string,
@@ -189,8 +206,14 @@ export function TicketPage() {
             </>
           ) : null}{' '}
           / <span>{ticket.id}</span>
-          {canEdit ? (
-            <span className={page.actions}>
+          <span className={page.actions}>
+            <Pager
+              kind="ticket"
+              id={ticket.id}
+              known={x => tickets.some(t => t.id === x)}
+              fallback={naturalOrder()}
+            />
+            {canEdit ? (
               <button
                 type="button"
                 className={`${page.ghost} ${page.danger}`}
@@ -207,8 +230,8 @@ export function TicketPage() {
               >
                 Supprimer
               </button>
-            </span>
-          ) : null}
+            ) : null}
+          </span>
         </nav>
         <p className={page.kicker}>
           {ticket.id} · {settings.delivery.ticketTypes.find(t => t.id === ticket.type)?.name ?? ticket.type}

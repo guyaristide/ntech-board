@@ -1,5 +1,6 @@
 import { useState, type DragEvent } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { NavList } from '../../ui/ListNav';
 import {
   amount,
   byRank,
@@ -308,15 +309,17 @@ export function Board() {
           others={['q', 'responsable', 'type', 'bloques', 'version', 'pret', 'non_estimes']}
         />
         {sprint ? (
-          <div className={k.board}>
-            {settings.delivery.workflow.map(step => (
-              <Column
-                key={step.id}
-                step={step}
-                tickets={shown.filter(t => stepOf(settings, t.status)?.id === step.id)}
-              />
-            ))}
-          </div>
+          <NavList label={`Tableau · ${sprint.name || sprint.id}`}>
+            <div className={k.board}>
+              {settings.delivery.workflow.map(step => (
+                <Column
+                  key={step.id}
+                  step={step}
+                  tickets={shown.filter(t => stepOf(settings, t.status)?.id === step.id)}
+                />
+              ))}
+            </div>
+          </NavList>
         ) : null}
       </div>
     </DeliveryGate>

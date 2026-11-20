@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { captureListClick } from './ListNav';
 import { PageViewers, usePresenceBeacon } from './Presence';
 import { QuickFind } from './QuickFind';
 import { Sidebar } from './Sidebar';
@@ -11,6 +12,7 @@ export function Layout() {
   const [search, setSearch] = useState(false);
   const [menu, setMenu] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   usePresenceBeacon();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -38,7 +40,7 @@ export function Layout() {
         aria-label="Fermer le menu"
         onClick={() => setMenu(false)}
       />
-      <main id="main" className={styles.main}>
+      <main id="main" className={styles.main} onClickCapture={e => captureListClick(e, navigate)}>
         <button
           type="button"
           className={styles.burger}

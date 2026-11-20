@@ -5,6 +5,7 @@ import { storyMarkdown } from '../model/exporters';
 import { actorsOf, PRIORITIES, SCENARIO_LABEL, SCENARIOS, STATUSES, versionsOf } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../model/store';
 import { History } from '../ui/History';
+import { Pager } from '../ui/ListNav';
 import type { Story } from '@board/shared';
 import { BlockEditor } from '../ui/BlockEditor';
 import { Checklist } from '../ui/Checklist';
@@ -49,7 +50,6 @@ export function StoryPage() {
   const set = (patch: Partial<Story>) => ws.updateStory(story.id, patch);
   const actors = actorsOf(ws.settings, ws.stories);
   const siblings = ws.stories.filter(s => s.epic === story.epic);
-  const pos = siblings.findIndex(s => s.id === story.id);
   const diligences = ws.diligences.filter(d => d.stories.includes(story.id));
   // Un commentaire repris s'ajoute à la suite de la description, sans remplacer ce qui y est.
   const pick = (text: string) =>
@@ -156,26 +156,16 @@ export function StoryPage() {
         <Link to={`/epic/${story.epic}`}>{epic ? `${epic.id} ${epic.title}` : story.epic}</Link> /
         <span>{story.id}</span>
         <span className={page.actions}>
-          {pos > 0 ? (
-            <button
-              type="button"
-              className={page.ghost}
-              onClick={() => navigate(`/us/${siblings[pos - 1].id}`)}
-              title="US précédente"
-            >
-              ↑
-            </button>
-          ) : null}
-          {pos < siblings.length - 1 ? (
-            <button
-              type="button"
-              className={page.ghost}
-              onClick={() => navigate(`/us/${siblings[pos + 1].id}`)}
-              title="US suivante"
-            >
-              ↓
-            </button>
-          ) : null}
+          <Pager
+            kind="us"
+            id={story.id}
+            known={x => ws.stories.some(s => s.id === x)}
+            fallback={{
+              ids: siblings.map(s => s.id),
+              label: epic ? `Épique ${epic.id}` : 'l’épique',
+              from: `/epic/${story.epic}`,
+            }}
+          />
           <button type="button" className={page.ghost} onClick={copy}>
             {copied ? 'Copié' : 'Copier en Markdown'}
           </button>

@@ -1,5 +1,6 @@
 import { useState, type DragEvent } from 'react';
 import { Link } from 'react-router-dom';
+import { NavList } from '../../ui/ListNav';
 import { isReady, load, type Sprint, type Ticket } from '@board/shared';
 import { byRank, delivery, rankAt, useDelivery } from '../../model/delivery';
 import { useCanEdit } from '../../model/store';
@@ -312,10 +313,12 @@ export function DeliveryBacklog() {
             ▾ Tout déplier
           </button>
         </p>
-        {open.map(s => (
-          <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} {...laneProps(s.id)} />
-        ))}
-        <Lane sprint={null} tickets={unplanned} {...laneProps('backlog')} />
+        <NavList label="Backlog de réalisation">
+          {open.map(s => (
+            <Lane key={s.id} sprint={s} tickets={shown.filter(t => t.sprint === s.id)} {...laneProps(s.id)} />
+          ))}
+          <Lane sprint={null} tickets={unplanned} {...laneProps('backlog')} />
+        </NavList>
         {sprints.some(s => s.status === 'closed') ? (
           <p className={page.faint}>
             Les sprints clos et leurs tickets sont dans <Link to="/realisation/sprints">Sprints</Link>.
