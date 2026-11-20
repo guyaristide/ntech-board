@@ -1,0 +1,138 @@
+/* Statistiques d'un sprint : mesure, anneau par étape, barres par responsable et par type. */
+.stats {
+  margin-top: 8px;
+}
+.title {
+  margin: 4px 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.measure {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.measure button {
+  padding: 3px 10px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.measure button[data-on] {
+  background: var(--bg-active);
+  color: var(--text);
+}
+
+/* Anneau */
+.donut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin: 0;
+}
+.donut svg {
+  width: 180px;
+  max-width: 50%;
+  height: auto;
+  flex: none;
+}
+.donut figcaption {
+  flex: 1 1 180px;
+}
+.slice {
+  stroke: var(--bg);
+  stroke-width: 2;
+  transition: opacity 0.12s;
+}
+.slice[data-dim],
+.legendTable tr[data-dim] {
+  opacity: 0.35;
+}
+.center {
+  fill: var(--text);
+  font-size: 26px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.centerLabel {
+  fill: var(--text-muted);
+  font-size: 12px;
+}
+.legendTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.legendTable td {
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 2px;
+  vertical-align: -1px;
+}
+.num {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Barres */
+.bars {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+.barRow {
+  display: grid;
+  grid-template-columns: minmax(80px, 34%) 1fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.barLabel {
+  overflow: hidden;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.barTrack {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+}
+.barDone,
+.barRest {
+  min-width: 3px;
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+}
+.barDone {
+  background: var(--accent);
+}
+.barRest {
+  background: color-mix(in oklab, var(--accent) 40%, var(--bg));
+}
+.barDone:has(+ .barRest) {
+  border-radius: 0;
+}
+.barValue {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.restKey span[data-k='rest']::before {
+  height: 8px;
+  background: color-mix(in oklab, var(--accent) 40%, var(--bg));
+}

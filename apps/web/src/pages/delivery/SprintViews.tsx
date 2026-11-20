@@ -11,11 +11,12 @@ import styles from './Delivery.module.css';
 import k from './Tickets.module.css';
 import tl from './SprintTimeline.module.css';
 
-export type SprintView = 'liste' | 'kanban' | 'timeline';
+export type SprintView = 'liste' | 'kanban' | 'timeline' | 'stats';
 export const SPRINT_VIEWS: [SprintView, string][] = [
   ['liste', '☰ Liste'],
   ['kanban', '▥ Kanban'],
   ['timeline', '▤ Timeline'],
+  ['stats', '◔ Statistiques'],
 ];
 
 /** Liste : les tickets par catégorie d'étape (à faire, en cours, terminé), puis les reportés. */

@@ -14,6 +14,7 @@ import backlog from '../backlog/Backlog.module.css';
 import { assigneeName } from './fields';
 import { useTicketColumns } from './exports';
 import { DeliveryGate, LoadBar, period, sprintOrder, SprintTag } from './parts';
+import { SprintStats } from './SprintStats';
 import { SPRINT_VIEWS, SprintKanban, SprintList, SprintTimeline, type SprintView } from './SprintViews';
 import { TicketFilters, useTicketFilters } from './TicketFilters';
 import styles from './Delivery.module.css';
@@ -317,6 +318,15 @@ export function SprintPage() {
           {view === 'kanban' ? <SprintKanban tickets={shown} /> : null}
           {view === 'timeline' ? <SprintTimeline sprint={sprint} tickets={shown} /> : null}
           {view === 'liste' ? <SprintList tickets={shown} carried={shownCarried} /> : null}
+          {view === 'stats' ? (
+            <SprintStats
+              settings={settings}
+              sprint={sprint}
+              tickets={shown}
+              all={items}
+              allTickets={tickets}
+            />
+          ) : null}
         </NavList>
         {view !== 'liste' && shownCarried.length ? (
           <p className={page.faint}>
