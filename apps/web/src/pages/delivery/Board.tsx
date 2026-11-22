@@ -16,6 +16,7 @@ import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { ExportButton } from '../../ui/ExportButton';
 import { Tag } from '../../ui/Tag';
+import { ThreadButton } from '../../ui/ThreadButton';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { useTicketColumns } from './exports';
@@ -69,6 +70,12 @@ function Card({ ticket, onDrop }: { ticket: Ticket; onDrop: (e: DragEvent) => vo
         {ticket.labels.map(l => (
           <LabelTag key={l} label={l} />
         ))}
+        <ThreadButton
+          kind="ticket"
+          id={ticket.id}
+          title={`${ticket.id} ${ticket.title}`}
+          href={`/realisation/ticket/${ticket.id}`}
+        />
       </span>
       {ticket.assignee ? <span className={k.assignee}>{assigneeName(parties, ticket.assignee)}</span> : null}
     </div>

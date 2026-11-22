@@ -11,7 +11,7 @@ import {
 import { ApiError } from '../model/api';
 import { deleteAttachment, fileUrl, uploadFile } from '../model/files';
 import { useCanEdit, useWorkspace } from '../model/store';
-import { ThreadButton } from './ThreadDrawer';
+import { ThreadButton } from './ThreadButton';
 import styles from './Attachments.module.css';
 
 const ICON: Record<FileCategory, string> = {

@@ -5,7 +5,7 @@ import { useSeesDelivery, useWorkspace } from '../../model/store';
 import type { Story } from '@board/shared';
 import { PropertySelect } from '../../ui/PropertySelect';
 import { Tag } from '../../ui/Tag';
-import { ThreadButton } from '../../ui/ThreadDrawer';
+import { ThreadButton } from '../../ui/ThreadButton';
 import type { SortKey } from './filters';
 import styles from './Backlog.module.css';
 

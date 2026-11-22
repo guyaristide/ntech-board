@@ -200,3 +200,13 @@
   background: var(--bg-hover);
   color: var(--accent);
 }
+
+/* Titres du tiroir quand il montre aussi les pièces jointes. */
+.drawerTitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.drawerTitle:not(:first-child) {
+  margin-top: 20px;
+}

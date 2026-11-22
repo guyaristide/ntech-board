@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AttachmentsFold } from './Attachments';
-import { ThreadButton } from './ThreadDrawer';
+import { ThreadButton } from './ThreadButton';
 import type { Reference } from '@board/shared';
 import styles from './ReferenceCard.module.css';
 

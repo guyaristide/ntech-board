@@ -6,6 +6,7 @@ import { useCanEdit, useIsAdmin, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
 import { ExportButton, type Column } from '../../ui/ExportButton';
 import { PropertySelect } from '../../ui/PropertySelect';
+import { ThreadButton } from '../../ui/ThreadButton';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { Mentions } from './Mentions';
@@ -173,15 +174,18 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
             ],
             ['Tenu par', 190, p => <PartyRef party={p} field="holder" of="person" label="Tenu par" />],
           ];
+  // Largeur minimale : colonnes fixes, plus de quoi lire les colonnes libres (sinon elles s'écrasent).
+  const minWidth = 70 + 200 + 88 + (canEdit ? 40 : 0) + columns.reduce((n, [, w]) => n + (w ?? 240), 0);
   return (
     <div className={backlog.tableWrap}>
-      <table className={backlog.table}>
+      <table className={backlog.table} style={{ minWidth }}>
         <colgroup>
           <col style={{ width: 70 }} />
           {columns.map(([title, w]) => (
             <col key={title} style={w ? { width: w } : undefined} />
           ))}
           <col style={{ width: 200 }} />
+          <col style={{ width: 88 }} />
           {canEdit ? <col style={{ width: 40 }} /> : null}
         </colgroup>
         <thead>
@@ -191,6 +195,7 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
               <th key={title}>{title}</th>
             ))}
             <th title="Autres écritures reconnues comme ce nom">Alias</th>
+            <th title="Pièces jointes et discussion">Échanges</th>
             {canEdit ? <th /> : null}
           </tr>
         </thead>
@@ -207,6 +212,9 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
               <td>
                 <Aliases party={p} />
               </td>
+              <td>
+                <ThreadButton kind="party" id={p.id} title={`${p.id} ${p.name}`} files always />
+              </td>
               {canEdit ? (
                 <td>
                   <Remove party={p} />
@@ -216,7 +224,7 @@ function PartyTable({ type, members }: { type: PartyType; members: Member[] | nu
           ))}
           {!rows.length ? (
             <tr>
-              <td colSpan={columns.length + 3} className={backlog.empty}>
+              <td colSpan={columns.length + 4} className={backlog.empty}>
                 Aucune {PARTY_LABEL[type].toLowerCase()} pour le moment.
               </td>
             </tr>

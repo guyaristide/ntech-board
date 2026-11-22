@@ -1,18 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { commentCount } from '@board/shared';
-import { useWorkspace } from '../model/store';
-import { useThreadDrawer, type ThreadTarget } from '../model/threadDrawer';
+import type { AttachableKind } from '@board/shared';
+import { useThreadDrawer } from '../model/threadDrawer';
+import { Attachments } from './Attachments';
 import { Thread } from './Thread';
 import drawer from './StoryDrawer.module.css';
 import styles from './Thread.module.css';
 
 /**
  * Tiroir latéral d'un fil de discussion : ouvert depuis une liste ou une pièce jointe, il garde la
- * page visible. Échap ou un clic à côté le ferme ; changer de page aussi.
+ * page visible. Échap ou un clic à côté le ferme ; changer de page aussi. Avec `files`, les pièces
+ * jointes de l'élément s'affichent au-dessus (éléments sans fiche, comme les parties prenantes).
  */
 export function ThreadDrawer() {
-  const { target, close } = useThreadDrawer();
+  const { target, previous, back, close } = useThreadDrawer();
   const location = useLocation();
   const panel = useRef<HTMLDivElement>(null);
   useEffect(() => close(), [location.pathname, close]);
@@ -39,6 +40,17 @@ export function ThreadDrawer() {
         tabIndex={-1}
       >
         <header className={drawer.head}>
+          {previous.length ? (
+            <button
+              type="button"
+              className={drawer.icon}
+              onClick={back}
+              aria-label={`Revenir à ${previous.at(-1)!.title}`}
+              title={`Revenir à ${previous.at(-1)!.title}`}
+            >
+              ←
+            </button>
+          ) : null}
           <span className={drawer.headTitle} title={target.title}>
             💬 {target.title}
           </span>
@@ -52,36 +64,16 @@ export function ThreadDrawer() {
           </button>
         </header>
         <div className={drawer.body}>
-          <Thread kind={target.kind} id={target.id} autoFocus />
+          {target.files ? (
+            <>
+              <h3 className={styles.drawerTitle}>Pièces jointes</h3>
+              <Attachments kind={target.kind as AttachableKind} id={target.id} />
+              <h3 className={styles.drawerTitle}>Discussion</h3>
+            </>
+          ) : null}
+          <Thread kind={target.kind} id={target.id} autoFocus={!target.files} />
         </div>
       </div>
     </>
-  );
-}
-
-/** « 💬 3 » : nombre de messages d'un élément ; ouvre son fil dans le tiroir. */
-export function ThreadButton({
-  always,
-  labelled,
-  ...target
-}: ThreadTarget & { always?: boolean; labelled?: boolean }) {
-  const count = useWorkspace(s => commentCount(s.comments, target.kind, target.id));
-  const open = useThreadDrawer(s => s.open);
-  if (!count && !always) return null;
-  return (
-    <button
-      type="button"
-      className={styles.open}
-      data-count={count || undefined}
-      title={count ? `Discussion : ${count} message${count > 1 ? 's' : ''}` : 'Ouvrir une discussion'}
-      aria-label={`Discussion sur ${target.title}${count ? ` (${count} message${count > 1 ? 's' : ''})` : ''}`}
-      onClick={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        open(target);
-      }}
-    >
-      💬{labelled ? ` Discussion${count ? ` (${count})` : ''}` : count ? ` ${count}` : ''}
-    </button>
   );
 }

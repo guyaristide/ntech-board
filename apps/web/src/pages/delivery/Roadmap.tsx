@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AttachmentsFold } from '../../ui/Attachments';
-import { ThreadButton } from '../../ui/ThreadDrawer';
+import { ThreadButton } from '../../ui/ThreadButton';
 import { Link } from 'react-router-dom';
 import {
   amount,
