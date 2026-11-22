@@ -26,6 +26,7 @@ import { sourceRoutes } from './routes/sources';
 import { pdfRoutes } from './routes/pdf';
 import { programmeRoutes } from './routes/programme';
 import { workspaceRoutes } from './routes/workspace';
+import { findProject, projectSlug } from './tenancy';
 
 const here = dirname(fileURLToPath(import.meta.url));
 /** Front construit (apps/web/dist), servi par le même processus en production. */
@@ -93,6 +94,37 @@ export function createApp() {
     const index = readFileSync(join(webDist, 'index.html'), 'utf8');
     app.use('/assets/*', serveStatic({ root: relative(process.cwd(), webDist) }));
     app.use('/brand/*', serveStatic({ root: relative(process.cwd(), webDist) }));
+    // Service worker : toujours revérifié, pour qu'une nouvelle version s'installe sans attendre.
+    const worker = readFileSync(join(webDist, 'sw.js'), 'utf8');
+    app.get('/sw.js', c =>
+      c.body(worker, 200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-cache' }),
+    );
+    // Manifeste de l'application installable : au nom du projet servi sur cet hôte.
+    app.get('/manifest.webmanifest', async c => {
+      const slug = projectSlug(c.req.header('x-forwarded-host') ?? c.req.header('host'));
+      const project = slug ? await findProject(slug) : null;
+      const name = project?.title ?? 'NTECH Board';
+      return c.body(
+        JSON.stringify({
+          name: project ? `${name} · NTECH Board` : name,
+          short_name: name.slice(0, 24),
+          description: 'Cadrage, backlog, sprints et suivi de projet.',
+          lang: 'fr',
+          start_url: '/',
+          scope: '/',
+          display: 'standalone',
+          background_color: '#ffffff',
+          theme_color: '#ffffff',
+          icons: [
+            { src: '/brand/icon-192.png', sizes: '192x192', type: 'image/png' },
+            { src: '/brand/icon-512.png', sizes: '512x512', type: 'image/png' },
+            { src: '/brand/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          ],
+        }),
+        200,
+        { 'Content-Type': 'application/manifest+json; charset=utf-8', 'Cache-Control': 'no-cache' },
+      );
+    });
     // Application monopage : toute autre URL renvoie index.html.
     app.get('*', c => c.html(index));
   }

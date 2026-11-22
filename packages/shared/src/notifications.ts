@@ -43,15 +43,19 @@ export const EMAIL_MODE_LABEL: Record<EmailMode, string> = {
 
 export interface NotificationPrefs {
   email: Record<NotificationGroup, EmailMode>;
+  /** Notification système (téléphone, ordinateur), famille par famille. */
+  push: Record<NotificationGroup, boolean>;
 }
 
 /** Par défaut : tout de suite pour ce qui me vise, en récapitulatif pour le reste. */
 export const DEFAULT_NOTIFICATION_PREFS: NotificationPrefs = {
   email: { mentions: 'instant', assigned: 'instant', following: 'digest', project: 'digest' },
+  push: { mentions: true, assigned: true, following: false, project: false },
 };
 
 export const withPrefDefaults = (p?: Partial<NotificationPrefs> | null): NotificationPrefs => ({
   email: { ...DEFAULT_NOTIFICATION_PREFS.email, ...p?.email },
+  push: { ...DEFAULT_NOTIFICATION_PREFS.push, ...p?.push },
 });
 
 export interface AppNotification {

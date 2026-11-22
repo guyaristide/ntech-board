@@ -36,6 +36,10 @@ services:
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-}
       NOTIFY_QUIET_MINUTES: ${NOTIFY_QUIET_MINUTES:-5}
       NOTIFY_DIGEST_HOUR: ${NOTIFY_DIGEST_HOUR:-8}
+      # Notifications système (Web Push) : paire de clés VAPID (npx web-push generate-vapid-keys).
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:contact@neiba-technologies.com}
     volumes:
       - board-storage:/app/storage
     depends_on:

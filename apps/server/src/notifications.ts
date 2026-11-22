@@ -1,5 +1,8 @@
 import {
   canSeeDelivery,
+  groupOf,
+  withPrefDefaults,
+  type NotificationPrefs,
   isDeliveryKind,
   type AppNotification,
   type FollowState,
@@ -10,6 +13,8 @@ import {
   type Role,
 } from '@board/shared';
 import { pool } from './db';
+import { pushEnabled, pushToUser } from './push';
+import { isOnline } from './realtime';
 import { getSettings } from './repo';
 
 /**
@@ -163,6 +168,14 @@ async function muted(projectId: string, kind: string, id: string): Promise<Set<s
   return new Set(rows.map(r => r.user_id));
 }
 
+async function wantsPush(projectId: string, userId: string, type: NotificationType) {
+  const { rows } = await pool.query<{ prefs: Partial<NotificationPrefs> }>(
+    'SELECT prefs FROM notification_prefs WHERE project_id = $1 AND user_id = $2',
+    [projectId, userId],
+  );
+  return withPrefDefaults(rows[0]?.prefs).push[groupOf(type)];
+}
+
 // --- Création -----------------------------------------------------------------------------
 
 const signal = (projectId: string, userId: string) =>
@@ -213,6 +226,7 @@ export async function notifyUsers(
       [projectId, m.userId, groupKey, COALESCE_MINUTES],
     );
     const open = rows[0];
+    let fresh = false;
     if (open && draft.change && open.data.from !== undefined && open.data.from === draft.change.to) {
       // Retour au point de départ : rien n'a changé pour la personne, la notification disparaît.
       await pool.query('DELETE FROM notifications WHERE id = $1', [open.id]);
@@ -231,6 +245,7 @@ export async function notifyUsers(
         ],
       );
     } else {
+      fresh = true;
       await pool.query(
         `INSERT INTO notifications (project_id, user_id, type, target_kind, target_id, group_key, title, body,
                                     path, actor_id, actor_name, data)
@@ -252,6 +267,20 @@ export async function notifyUsers(
       );
     }
     await signal(projectId, m.userId);
+    // Notification système : seulement pour une notification nouvelle (pas à chaque changement
+    // regroupé), si la personne la veut pour cette famille et n'a pas déjà le tableau ouvert.
+    if (
+      fresh &&
+      pushEnabled &&
+      !isOnline(projectId, m.userId) &&
+      (await wantsPush(projectId, m.userId, draft.type))
+    )
+      void pushToUser(projectId, m.userId, {
+        title: draft.title,
+        body: draft.body ?? '',
+        path: draft.path,
+        tag: groupKey,
+      });
   }
 }
 

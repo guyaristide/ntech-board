@@ -203,7 +203,7 @@
 }
 .pref select {
   flex: none;
-  width: 196px;
+  width: 176px;
   font-size: 13px;
 }
 .prefsNote {
@@ -211,4 +211,52 @@
   margin: 8px 0 0;
   color: var(--text-faint);
   font-size: 12px;
+}
+
+/* Cet appareil : installation et notifications système. */
+.device {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-subtle);
+  font-size: 13px;
+}
+.device strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+.device p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  margin-top: 6px;
+  padding: 2px 12px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 13px;
+  font-weight: 500;
+}
+.action:hover:not(:disabled) {
+  background: var(--ink-hover);
+}
+.action:disabled {
+  opacity: 0.5;
+}
+.prefPush {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-faint);
 }

@@ -61,6 +61,7 @@ export async function unsubscribe(token: string): Promise<string | null> {
   );
   if (!rows[0]) return null;
   await savePrefs(rows[0].project_id, rows[0].user_id, {
+    ...(await getPrefs(rows[0].project_id, rows[0].user_id)),
     email: { mentions: 'off', assigned: 'off', following: 'off', project: 'off' },
   });
   return rows[0].title;

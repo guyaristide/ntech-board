@@ -46,6 +46,15 @@ export const env = {
     /** Heure (du serveur) du récapitulatif quotidien et des rappels d'échéance. */
     digestHour: Number(process.env.NOTIFY_DIGEST_HOUR ?? 8),
   },
+  /**
+   * Notifications système (Web Push) : paire de clés VAPID, à créer une fois avec
+   * « npx web-push generate-vapid-keys ». Sans elles, pas de notifications système.
+   */
+  push: {
+    publicKey: process.env.VAPID_PUBLIC_KEY ?? '',
+    privateKey: process.env.VAPID_PRIVATE_KEY ?? '',
+    subject: process.env.VAPID_SUBJECT ?? 'mailto:contact@neiba-technologies.com',
+  },
   /** Cookies « Secure » : auto (selon X-Forwarded-Proto), true ou false. */
   cookieSecure: process.env.COOKIE_SECURE ?? 'auto',
   sessionDays: Number(process.env.SESSION_DAYS ?? 30),

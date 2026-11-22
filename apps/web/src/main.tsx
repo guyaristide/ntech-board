@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { startPwa } from './model/pwa';
 import './styles/global.css';
 
 // iOS agrandit la page dès qu'on touche un champ de moins de 16 px. « maximum-scale=1 » l'en empêche
@@ -12,6 +13,8 @@ if (
   document
     .querySelector('meta[name=viewport]')
     ?.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+
+startPwa();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

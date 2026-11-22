@@ -7,6 +7,7 @@ import { checkMail } from './mail';
 import { listProjects } from './projects';
 import { storageRoot } from './storage';
 import { startNotificationJobs } from './notificationMail';
+import { checkPush } from './push';
 import { listen } from './realtime';
 import { ensureStorage } from './storage';
 
@@ -15,6 +16,7 @@ ensureStorage();
 void checkMail();
 await listen();
 startNotificationJobs();
+checkPush();
 
 const server = serve({ fetch: createApp().fetch, port: env.port }, info =>
   log(

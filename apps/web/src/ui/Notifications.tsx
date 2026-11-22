@@ -12,6 +12,7 @@ import {
   type NotificationType,
 } from '@board/shared';
 import { follow, prefs as prefsApi, useNotifications } from '../model/notifications';
+import { isIos, usePwa } from '../model/pwa';
 import { Icon, type IconName } from './Icon';
 import drawer from './StoryDrawer.module.css';
 import styles from './Notifications.module.css';
@@ -189,16 +190,87 @@ const GROUP_HINT: Record<NotificationGroup, string> = {
   project: 'Sprint démarré ou clos, propositions à relire, nouveau membre, risque critique.',
 };
 
-/** Rythme des e-mails, famille par famille. Enregistré à chaque choix. */
+/** Cet appareil : installer l'application, recevoir les notifications système. */
+function Device() {
+  const { push, install, installed, refreshPush, enablePush, disablePush, promptInstall } = usePwa();
+  const [note, setNote] = useState('');
+  const [busy, setBusy] = useState(false);
+  useEffect(() => void refreshPush(), [refreshPush]);
+  const run = async (action: () => Promise<string | null | void>) => {
+    setBusy(true);
+    setNote('');
+    try {
+      setNote((await action()) ?? '');
+    } catch {
+      setNote('L’opération a échoué, réessayez.');
+    } finally {
+      setBusy(false);
+    }
+  };
+  const iosNeedsInstall = push === 'unsupported' && isIos() && !installed;
+  if (push === 'unsupported' && !iosNeedsInstall && !install && !installed) return null;
+  return (
+    <section className={styles.device} aria-label="Cet appareil">
+      <strong>Sur cet appareil</strong>
+      {push === 'on' ? (
+        <p>
+          Les notifications de l’appareil sont actives : vous êtes prévenu même quand le tableau est fermé.{' '}
+          <button type="button" className={styles.link} disabled={busy} onClick={() => void run(disablePush)}>
+            Désactiver
+          </button>
+        </p>
+      ) : push === 'off' ? (
+        <p>
+          Recevez une notification de l’appareil même quand le tableau est fermé.
+          <br />
+          <button
+            type="button"
+            className={styles.action}
+            disabled={busy}
+            onClick={() => void run(enablePush)}
+          >
+            Activer les notifications
+          </button>
+        </p>
+      ) : push === 'denied' ? (
+        <p>
+          Les notifications de ce site sont bloquées dans le navigateur : autorisez-les dans ses réglages pour
+          les recevoir ici.
+        </p>
+      ) : iosNeedsInstall ? (
+        <p>
+          Sur iPhone et iPad, les notifications demandent d’installer l’application : bouton Partager de
+          Safari, puis « Sur l’écran d’accueil ».
+        </p>
+      ) : push === 'disabled' ? (
+        <p>Les notifications de l’appareil ne sont pas activées sur ce serveur.</p>
+      ) : null}
+      {install && !installed ? (
+        <p>
+          Installez le tableau comme une application : son icône, sa fenêtre, un démarrage rapide.
+          <br />
+          <button type="button" className={styles.action} onClick={() => void promptInstall()}>
+            Installer l’application
+          </button>
+        </p>
+      ) : installed ? (
+        <p>L’application est installée sur cet appareil.</p>
+      ) : null}
+      {note ? <p role="status">{note}</p> : null}
+    </section>
+  );
+}
+
+/** Rythme des e-mails et notifications de l'appareil, famille par famille. Enregistré à chaque choix. */
 function Preferences() {
   const [value, setValue] = useState<NotificationPrefs | null>(null);
   const [note, setNote] = useState('');
+  const pushOn = usePwa(s => s.push === 'on');
   useEffect(() => {
     prefsApi.get().then(setValue, () => setNote('Préférences indisponibles, réessayez.'));
   }, []);
   if (!value) return <p className={styles.empty}>{note || 'Chargement…'}</p>;
-  const set = (group: NotificationGroup, mode: EmailMode) => {
-    const next = { ...value, email: { ...value.email, [group]: mode } };
+  const save = (next: NotificationPrefs) => {
     setValue(next);
     setNote('');
     prefsApi.save(next).then(
@@ -208,12 +280,14 @@ function Preferences() {
   };
   return (
     <div className={styles.prefs}>
+      <Device />
       <p className={styles.prefsLead}>
         Toutes les notifications s’affichent ici. Choisissez celles qui vous arrivent aussi par e-mail, et à
-        quel rythme. Une notification déjà lue dans le tableau n’est pas envoyée.
+        quel rythme{pushOn ? ', ou en notification de l’appareil (case à cocher)' : ''}. Une notification déjà
+        lue dans le tableau n’est pas envoyée par e-mail.
       </p>
       {(Object.keys(NOTIFICATION_GROUPS) as NotificationGroup[]).map(g => (
-        <label key={g} className={styles.pref}>
+        <div key={g} className={styles.pref}>
           <span className={styles.prefText}>
             <strong>{NOTIFICATION_GROUPS[g].label}</strong>
             <span>{GROUP_HINT[g]}</span>
@@ -221,7 +295,7 @@ function Preferences() {
           <select
             value={value.email[g]}
             aria-label={`E-mails : ${NOTIFICATION_GROUPS[g].label}`}
-            onChange={e => set(g, e.target.value as EmailMode)}
+            onChange={e => save({ ...value, email: { ...value.email, [g]: e.target.value as EmailMode } })}
           >
             {EMAIL_MODES.map(m => (
               <option key={m} value={m}>
@@ -229,7 +303,18 @@ function Preferences() {
               </option>
             ))}
           </select>
-        </label>
+          {pushOn ? (
+            <label className={styles.prefPush} title="Notification de l’appareil pour cette famille">
+              <input
+                type="checkbox"
+                checked={value.push[g]}
+                aria-label={`Notification de l’appareil : ${NOTIFICATION_GROUPS[g].label}`}
+                onChange={e => save({ ...value, push: { ...value.push, [g]: e.target.checked } })}
+              />
+              <Icon name="bell" size={14} />
+            </label>
+          ) : null}
+        </div>
       ))}
       <p className={styles.prefsNote} role="status">
         {note}

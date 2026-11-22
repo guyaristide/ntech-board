@@ -49,6 +49,10 @@ export function subscribe(client: Client) {
   };
 }
 
+/** La personne a le tableau ouvert (au moins un onglet connecté à cette instance). */
+export const isOnline = (projectId: string, userId: string) =>
+  [...clients.values()].some(c => c.projectId === projectId && c.user.id === userId);
+
 function broadcast(projectId: string, event: ServerEvent) {
   for (const c of clients.values()) if (c.projectId === projectId) c.send(event);
 }

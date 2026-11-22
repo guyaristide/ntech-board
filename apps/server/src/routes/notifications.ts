@@ -5,6 +5,8 @@ import { requireRole, type AppEnv } from '../auth';
 import { feed, followState, markRead, markTargetRead, people, setFollow } from '../notifications';
 import { getPrefs, savePrefs, unsubscribe } from '../notificationMail';
 import '../notificationRules';
+import { pushEnabled, subscribePush, unsubscribePush } from '../push';
+import { env } from '../env';
 import { body } from './workspace';
 
 /** Notifications de la personne connectée, suivi d'un élément, et annuaire des membres à mentionner. */
@@ -23,8 +25,14 @@ const ReadBody = z.union([
 ]);
 const FollowBody = z.object({ state: z.enum(['following', 'muted', 'none']) });
 const mode = z.enum(EMAIL_MODES);
+const flag = z.boolean();
 const PrefsBody = z.object({
   email: z.object({ mentions: mode, assigned: mode, following: mode, project: mode }),
+  push: z.object({ mentions: flag, assigned: flag, following: flag, project: flag }),
+});
+const PushBody = z.object({
+  endpoint: z.url().max(1000),
+  keys: z.object({ p256dh: z.string().min(10).max(300), auth: z.string().min(4).max(100) }),
 });
 
 notificationRoutes.get('/notifications', read, async c => {
@@ -88,4 +96,27 @@ notificationRoutes.on(['GET', 'POST'], '/notifications/unsubscribe', async c => 
     }</p></div></body></html>`,
     board ? 200 : 404,
   );
+});
+
+// --- Notifications système (Web Push) ---------------------------------------------------
+
+/** Clé publique à donner au navigateur pour s'abonner ; null si le serveur n'a pas de clés VAPID. */
+notificationRoutes.get('/push/key', read, c =>
+  c.json({ publicKey: pushEnabled ? env.push.publicKey : null }),
+);
+
+notificationRoutes.post('/push/subscriptions', read, async c => {
+  const input = await body(c.req, PushBody);
+  if (!input) return c.json({ error: 'invalid' }, 400);
+  if (!pushEnabled) return c.json({ error: 'push_disabled' }, 409);
+  const { project, user } = ids(c);
+  await subscribePush(project, user, input, c.req.header('user-agent') ?? '');
+  return c.json({ ok: true }, 201);
+});
+
+notificationRoutes.post('/push/subscriptions/remove', read, async c => {
+  const input = await body(c.req, z.object({ endpoint: z.url().max(1000) }));
+  if (!input) return c.json({ error: 'invalid' }, 400);
+  await unsubscribePush(ids(c).user, input.endpoint);
+  return c.json({ ok: true });
 });
