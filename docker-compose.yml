@@ -31,6 +31,11 @@ services:
       # ses Réglages (chiffrée avec SECRETS_KEY) ; ici, le modèle et l'effort communs à la plateforme.
       AI_MODEL: ${AI_MODEL:-claude-opus-5-5}
       AI_EFFORT: ${AI_EFFORT:-medium}
+      # Notifications par e-mail : adresse publique des liens (vide : PROJECT_HOSTS en https), temps de
+      # calme avant un e-mail immédiat, heure du récapitulatif quotidien.
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-}
+      NOTIFY_QUIET_MINUTES: ${NOTIFY_QUIET_MINUTES:-5}
+      NOTIFY_DIGEST_HOUR: ${NOTIFY_DIGEST_HOUR:-8}
     volumes:
       - board-storage:/app/storage
     depends_on:

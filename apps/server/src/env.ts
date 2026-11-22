@@ -35,6 +35,17 @@ export const env = {
   /** Projet servi quand l'hôte ne correspond à aucun modèle (instance dédiée, développement). */
   defaultProject: process.env.DEFAULT_PROJECT ?? '',
   superadmins: list(process.env.SUPERADMIN_EMAILS).map(e => e.toLowerCase()),
+  notify: {
+    /**
+     * Adresse publique d'un projet pour les liens des e-mails, {slug} étant le projet. Vide : le
+     * premier modèle de PROJECT_HOSTS, en https. En local : http://localhost:3000.
+     */
+    origin: process.env.PUBLIC_ORIGIN ?? '',
+    /** Temps de calme avant d'envoyer un e-mail « tout de suite » : absorbe les changements en rafale. */
+    quietMinutes: Number(process.env.NOTIFY_QUIET_MINUTES ?? 5),
+    /** Heure (du serveur) du récapitulatif quotidien et des rappels d'échéance. */
+    digestHour: Number(process.env.NOTIFY_DIGEST_HOUR ?? 8),
+  },
   /** Cookies « Secure » : auto (selon X-Forwarded-Proto), true ou false. */
   cookieSecure: process.env.COOKIE_SECURE ?? 'auto',
   sessionDays: Number(process.env.SESSION_DAYS ?? 30),

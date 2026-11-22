@@ -15,13 +15,14 @@ export const NOTIFICATION_TYPES = [
   'proposal',
   'member',
   'risk',
+  'due',
 ] as const;
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];
 
 /** Familles proposées dans les préférences. */
 export const NOTIFICATION_GROUPS = {
   mentions: { label: 'Mentions et réponses', types: ['mention', 'reply'] },
-  assigned: { label: 'Ce qui m’est attribué', types: ['assigned', 'status'] },
+  assigned: { label: 'Ce qui m’est attribué', types: ['assigned', 'status', 'due'] },
   following: { label: 'Ce que je suis', types: ['comment'] },
   project: { label: 'Vie du projet', types: ['sprint', 'proposal', 'member', 'risk'] },
 } as const satisfies Record<string, { label: string; types: readonly NotificationType[] }>;
@@ -30,6 +31,28 @@ export const groupOf = (type: NotificationType) =>
   (Object.keys(NOTIFICATION_GROUPS) as NotificationGroup[]).find(g =>
     (NOTIFICATION_GROUPS[g].types as readonly string[]).includes(type),
   )!;
+
+/** Rythme des e-mails : tout de suite, dans le récapitulatif quotidien, ou jamais. */
+export const EMAIL_MODES = ['instant', 'digest', 'off'] as const;
+export type EmailMode = (typeof EMAIL_MODES)[number];
+export const EMAIL_MODE_LABEL: Record<EmailMode, string> = {
+  instant: 'Tout de suite',
+  digest: 'Récapitulatif quotidien',
+  off: 'Jamais',
+};
+
+export interface NotificationPrefs {
+  email: Record<NotificationGroup, EmailMode>;
+}
+
+/** Par défaut : tout de suite pour ce qui me vise, en récapitulatif pour le reste. */
+export const DEFAULT_NOTIFICATION_PREFS: NotificationPrefs = {
+  email: { mentions: 'instant', assigned: 'instant', following: 'digest', project: 'digest' },
+};
+
+export const withPrefDefaults = (p?: Partial<NotificationPrefs> | null): NotificationPrefs => ({
+  email: { ...DEFAULT_NOTIFICATION_PREFS.email, ...p?.email },
+});
 
 export interface AppNotification {
   id: string;

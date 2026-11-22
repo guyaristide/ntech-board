@@ -33,6 +33,8 @@ export interface Draft {
    * regroupée revient à son point de départ, elle est retirée : il ne s'est finalement rien passé.
    */
   change?: { from: string; to: string };
+  /** Rappel à ne faire qu'une fois : ignoré si une notification du même sujet a déjà existé. */
+  once?: boolean;
   /** Texte d'une notification regroupée, d'après son état de départ (« depuis À faire »). */
   bodyFrom?: (from: string) => string;
 }
@@ -195,6 +197,13 @@ export async function notifyUsers(
   }
   const groupKey = draft.groupKey ?? `${draft.type}:${draft.target.kind}:${draft.target.id}`;
   for (const m of members) {
+    if (draft.once) {
+      const seen = await pool.query(
+        'SELECT 1 FROM notifications WHERE project_id = $1 AND user_id = $2 AND group_key = $3 LIMIT 1',
+        [projectId, m.userId, groupKey],
+      );
+      if (seen.rowCount) continue;
+    }
     // Une notification récente, non lue et pas encore envoyée sur le même sujet : on la met à jour.
     const { rows } = await pool.query<{ id: string; data: { from?: string } }>(
       `SELECT id, data FROM notifications

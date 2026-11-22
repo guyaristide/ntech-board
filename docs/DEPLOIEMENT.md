@@ -63,6 +63,8 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `COOKIE_SECURE` | `auto` : cookies `Secure` en HTTPS, d'après `X-Forwarded-Proto` | non |
 | `SECRETS_KEY` | Clé de chiffrement des clés de stockage (Cloudinary, MinIO, S3) et de la clé Claude saisies dans les réglages, par exemple `openssl rand -base64 32`. Sans elle, les pièces jointes restent sur le serveur (volume `board-storage`). **Ne plus la changer ensuite** : les clés déjà enregistrées deviendraient illisibles, il faudrait les ressaisir | non, mais nécessaire pour Cloudinary, MinIO, S3 et l’analyse par Claude |
 | `AI_MODEL`, `AI_EFFORT` | Modèle Claude et niveau d’effort de l’analyse des échanges (écran « À relire »), communs à tous les projets (`low`, `medium`, `high`, `xhigh`, `max`) ; la clé Claude, elle, est saisie par chaque projet dans ses Réglages et chiffrée avec `SECRETS_KEY`. Par défaut `claude-opus-5-5` et `medium` | non |
+| `PUBLIC_ORIGIN` | Adresse publique d’un projet dans les liens des e-mails de notification, `{slug}` étant le projet. Vide : le premier modèle de `PROJECT_HOSTS`, en https (`https://{slug}-board.neiba-technologies.com`). À renseigner seulement si l’adresse publique diffère | non |
+| `NOTIFY_QUIET_MINUTES`, `NOTIFY_DIGEST_HOUR` | Notifications par e-mail : minutes de calme avant d’envoyer un e-mail « tout de suite » (des changements en rafale n’en font qu’un ; 5 par défaut), et heure du serveur pour le récapitulatif quotidien et les rappels d’échéance (8 par défaut). Les e-mails partent par le même SMTP que les liens de connexion | non |
 
 Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD` et `SECRETS_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
 

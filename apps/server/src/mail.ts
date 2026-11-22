@@ -16,23 +16,25 @@ const transport = env.mail.host
     })
   : null;
 
-const esc = (s: string) =>
+export const esc = (s: string) =>
   s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
-const layout = (
+export const layout = (
   title: string,
   body: string,
   cta: { label: string; url: string },
   origin: string,
+  /** Pied de page propre au message (liens de préférences, désabonnement). */
+  footer = '',
 ) => `<!doctype html>
 <html lang="fr"><body style="margin:0;background:#f7f7f5;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#37352f">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:32px 16px">
 <table role="presentation" width="100%" style="max-width:520px;background:#fff;border-radius:8px;padding:32px" cellpadding="0" cellspacing="0">
 <tr><td><img src="${origin}/brand/neiba-technologies.png" alt="Neiba Technologies" width="120" style="display:block;margin-bottom:24px"></td></tr>
 <tr><td><h1 style="margin:0 0 12px;font-size:20px">${esc(title)}</h1>${body}
-<p style="margin:24px 0"><a href="${cta.url}" style="display:inline-block;padding:10px 18px;background:#2383e2;color:#fff;border-radius:4px;text-decoration:none;font-weight:600">${esc(cta.label)}</a></p>
+<p style="margin:24px 0"><a href="${cta.url}" style="display:inline-block;padding:10px 18px;background:#1c1b19;color:#fff;border-radius:6px;text-decoration:none;font-weight:600">${esc(cta.label)}</a></p>
 <p style="margin:0;color:#8a8984;font-size:12px">Si le bouton ne fonctionne pas, copiez ce lien : <br>${esc(cta.url)}</p></td></tr>
-</table><p style="color:#8a8984;font-size:12px;margin-top:16px">NTECH Board · un outil NTECH SARL</p>
+</table><p style="color:#8a8984;font-size:12px;margin-top:16px">${footer}NTECH Board · un outil NTECH SARL</p>
 </td></tr></table></body></html>`;
 
 /** Vérifie la connexion au relais SMTP au démarrage et l'écrit dans les logs (sans le mot de passe). */
@@ -51,13 +53,19 @@ export async function checkMail() {
   }
 }
 
-export async function sendMail(to: string, subject: string, html: string, text: string) {
+export async function sendMail(
+  to: string,
+  subject: string,
+  html: string,
+  text: string,
+  headers?: Record<string, string>,
+) {
   if (!transport) {
     log('mail', `(non envoyé, SMTP_HOST vide) à ${to} · ${subject}\n${text}`);
     return;
   }
   log('mail', `envoi à ${to} · ${subject}`);
-  const info = await transport.sendMail({ from: env.mail.from, to, subject, html, text });
+  const info = await transport.sendMail({ from: env.mail.from, to, subject, html, text, headers });
   log('mail', `Accepté par le relais pour ${to} : ${info.response} (id ${info.messageId})`);
 }
 

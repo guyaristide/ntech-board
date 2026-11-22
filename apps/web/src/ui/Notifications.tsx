@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import type { AppNotification, FollowState, NotificationType } from '@board/shared';
-import { follow, useNotifications } from '../model/notifications';
+import {
+  EMAIL_MODE_LABEL,
+  EMAIL_MODES,
+  NOTIFICATION_GROUPS,
+  type AppNotification,
+  type EmailMode,
+  type FollowState,
+  type NotificationGroup,
+  type NotificationPrefs,
+  type NotificationType,
+} from '@board/shared';
+import { follow, prefs as prefsApi, useNotifications } from '../model/notifications';
 import { Icon, type IconName } from './Icon';
 import drawer from './StoryDrawer.module.css';
 import styles from './Notifications.module.css';
@@ -16,6 +26,7 @@ const ICON: Record<NotificationType, IconName> = {
   proposal: 'inbox',
   member: 'users',
   risk: 'alert',
+  due: 'calendar',
 };
 
 /** « à l'instant », « il y a 12 min », « hier », puis la date. */
@@ -79,7 +90,7 @@ function Item({ n, onOpen }: { n: AppNotification; onOpen: () => void }) {
  */
 export function NotificationPanel() {
   const { items, unread, open, setOpen, load, read } = useNotifications();
-  const [only, setOnly] = useState<'unread' | 'all'>('unread');
+  const [only, setOnly] = useState<'unread' | 'all' | 'prefs'>('unread');
   const navigate = useNavigate();
   const location = useLocation();
   const panel = useRef<HTMLDivElement>(null);
@@ -134,6 +145,7 @@ export function NotificationPanel() {
             [
               ['unread', `Non lues${unread ? ` (${unread})` : ''}`],
               ['all', 'Toutes'],
+              ['prefs', 'Préférences'],
             ] as const
           ).map(([k, label]) => (
             <button
@@ -149,7 +161,9 @@ export function NotificationPanel() {
           ))}
         </div>
         <div className={styles.body}>
-          {shown.length ? (
+          {only === 'prefs' ? (
+            <Preferences />
+          ) : shown.length ? (
             <ul className={styles.list}>
               {shown.map(n => (
                 <Item key={n.id} n={n} onOpen={() => go(n)} />
@@ -165,6 +179,62 @@ export function NotificationPanel() {
         </div>
       </div>
     </>
+  );
+}
+
+const GROUP_HINT: Record<NotificationGroup, string> = {
+  mentions: 'On vous mentionne dans un fil, ou on répond à votre message.',
+  assigned: 'Un ticket vous est attribué, change d’étape, ou arrive à échéance.',
+  following: 'Un message sur un élément que vous suivez.',
+  project: 'Sprint démarré ou clos, propositions à relire, nouveau membre, risque critique.',
+};
+
+/** Rythme des e-mails, famille par famille. Enregistré à chaque choix. */
+function Preferences() {
+  const [value, setValue] = useState<NotificationPrefs | null>(null);
+  const [note, setNote] = useState('');
+  useEffect(() => {
+    prefsApi.get().then(setValue, () => setNote('Préférences indisponibles, réessayez.'));
+  }, []);
+  if (!value) return <p className={styles.empty}>{note || 'Chargement…'}</p>;
+  const set = (group: NotificationGroup, mode: EmailMode) => {
+    const next = { ...value, email: { ...value.email, [group]: mode } };
+    setValue(next);
+    setNote('');
+    prefsApi.save(next).then(
+      () => setNote('Préférences enregistrées.'),
+      () => setNote('Enregistrement impossible, réessayez.'),
+    );
+  };
+  return (
+    <div className={styles.prefs}>
+      <p className={styles.prefsLead}>
+        Toutes les notifications s’affichent ici. Choisissez celles qui vous arrivent aussi par e-mail, et à
+        quel rythme. Une notification déjà lue dans le tableau n’est pas envoyée.
+      </p>
+      {(Object.keys(NOTIFICATION_GROUPS) as NotificationGroup[]).map(g => (
+        <label key={g} className={styles.pref}>
+          <span className={styles.prefText}>
+            <strong>{NOTIFICATION_GROUPS[g].label}</strong>
+            <span>{GROUP_HINT[g]}</span>
+          </span>
+          <select
+            value={value.email[g]}
+            aria-label={`E-mails : ${NOTIFICATION_GROUPS[g].label}`}
+            onChange={e => set(g, e.target.value as EmailMode)}
+          >
+            {EMAIL_MODES.map(m => (
+              <option key={m} value={m}>
+                {EMAIL_MODE_LABEL[m]}
+              </option>
+            ))}
+          </select>
+        </label>
+      ))}
+      <p className={styles.prefsNote} role="status">
+        {note}
+      </p>
+    </div>
   );
 }
 

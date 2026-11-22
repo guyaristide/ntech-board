@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import type { AppNotification, FollowState, NotificationFeed, Person } from '@board/shared';
+import type {
+  AppNotification,
+  FollowState,
+  NotificationFeed,
+  NotificationPrefs,
+  Person,
+} from '@board/shared';
 import { api } from './api';
 
 /**
@@ -37,6 +43,11 @@ export const useNotifications = create<State>((set, get) => {
     read: what => api.post<NotificationFeed>('/notifications/read', what).then(apply, () => undefined),
   };
 });
+
+export const prefs = {
+  get: () => api.get<NotificationPrefs>('/notifications/prefs'),
+  save: (value: NotificationPrefs) => api.put<NotificationPrefs>('/notifications/prefs', value),
+};
 
 export const follow = {
   get: (kind: string, id: string) =>
