@@ -39,16 +39,23 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 14px;
-  border-radius: 6px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
   box-shadow:
     0 0 0 1px var(--line),
-    0 1px 2px rgba(15, 15, 15, 0.05);
+    var(--shadow-card);
   text-decoration: none;
+  transition:
+    box-shadow var(--dur) var(--ease),
+    transform var(--dur) var(--ease);
 }
 
 a.card:hover {
-  background: var(--bg-subtle);
+  box-shadow:
+    0 0 0 1px var(--line-strong),
+    0 4px 14px rgba(15, 15, 15, 0.08);
+  transform: translateY(-1px);
 }
 
 .card strong {
@@ -66,28 +73,30 @@ a.card:hover {
   font-size: 28px;
   font-weight: 700;
   line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
 .bar {
   display: flex;
   height: 8px;
   margin-top: 6px;
-  border-radius: 4px;
+  border-radius: 999px;
   overflow: hidden;
   background: var(--bg-active);
 }
 
 .bar span[data-tone='blue'] {
-  background: #4a90d9;
+  background: var(--accent);
 }
 .bar span[data-tone='orange'] {
-  background: #e8833a;
+  background: var(--warn);
 }
 .bar span[data-tone='green'] {
-  background: #2f9e6a;
+  background: var(--ok);
 }
 .bar span[data-tone='red'] {
-  background: #d44c47;
+  background: var(--ko);
 }
 .bar span[data-tone='gray'] {
   background: transparent;
@@ -129,9 +138,8 @@ a.card:hover {
   background:
     linear-gradient(to right, var(--bg) 30%, transparent) left / 32px 100% no-repeat local,
     linear-gradient(to left, var(--bg) 30%, transparent) right / 32px 100% no-repeat local,
-    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.14), transparent) left / 12px 100% no-repeat
-      scroll,
-    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.14), transparent) right / 12px 100% no-repeat
+    radial-gradient(farthest-side at 0 50%, var(--line-strong), transparent) left / 12px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--line-strong), transparent) right / 12px 100% no-repeat
       scroll;
 }
 

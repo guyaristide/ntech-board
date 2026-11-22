@@ -229,7 +229,7 @@ export function DeliveryBacklog() {
     <DeliveryGate>
       <div className={`${page.page} ${page.wide}`}>
         <span className={page.icon} aria-hidden="true">
-          🗂️
+          📦
         </span>
         <h1 className={page.h1}>Backlog de réalisation</h1>
         <p className={page.lead}>

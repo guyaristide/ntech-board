@@ -8,12 +8,6 @@
   border-collapse: collapse;
 }
 
-.table th {
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 500;
-}
-
 /* Téléphone : la date de dernière connexion est masquée, l'action « Retirer » reste visible. */
 @media (max-width: 720px) {
   .table {
@@ -34,9 +28,11 @@
 }
 
 .table th {
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 400;
+  border-bottom-color: var(--line-strong);
+  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .member {

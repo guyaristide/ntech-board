@@ -4,7 +4,7 @@
   inset: 0;
   z-index: 70;
   border: 0;
-  background: rgba(15, 15, 15, 0.25);
+  background: var(--scrim);
   cursor: default;
 }
 .drawer {
@@ -81,6 +81,10 @@
   color: var(--text-muted);
   font-family: var(--mono);
   font-size: 12px;
+}
+.tab:hover {
+  border-color: color-mix(in oklab, var(--text) 30%, transparent);
+  color: var(--text);
 }
 .tab[data-on] {
   border-color: var(--accent-line);

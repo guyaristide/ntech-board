@@ -123,9 +123,8 @@ a.kpi:hover {
   background:
     linear-gradient(to right, var(--bg) 30%, transparent) left / 32px 100% no-repeat local,
     linear-gradient(to left, var(--bg) 30%, transparent) right / 32px 100% no-repeat local,
-    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.14), transparent) left / 12px 100% no-repeat
-      scroll,
-    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.14), transparent) right / 12px 100% no-repeat
+    radial-gradient(farthest-side at 0 50%, var(--line-strong), transparent) left / 12px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--line-strong), transparent) right / 12px 100% no-repeat
       scroll;
 }
 .table {
@@ -168,7 +167,7 @@ a.kpi:hover {
   height: 6px;
   min-width: 60px;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 999px;
   background: var(--bg-active);
 }
 .meter > span:first-child > span {
@@ -199,6 +198,10 @@ a.kpi:hover {
   background: none;
   color: var(--text-muted);
   font-size: 13px;
+}
+.tab:hover {
+  border-color: color-mix(in oklab, var(--text) 30%, transparent);
+  color: var(--text);
 }
 .tab[data-on] {
   border-color: var(--accent-line);

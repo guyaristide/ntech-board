@@ -46,10 +46,11 @@
 
 .h1 {
   margin: 0 0 6px;
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
 }
 
 /* Toute la largeur de la page, comme le titre ; pas de mot seul en dernière ligne. */
@@ -57,7 +58,8 @@
   margin: 0 0 18px;
   text-wrap: pretty;
   color: var(--text-muted);
-  font-size: 16px;
+  font-size: 15px;
+  line-height: 1.55;
 }
 
 .props {
@@ -83,6 +85,7 @@
   width: 16px;
   color: var(--text-faint);
   text-align: center;
+  font-variant-emoji: text;
 }
 
 .propValue {
@@ -115,15 +118,18 @@
 }
 
 .h2 {
-  margin: 30px 0 8px;
-  font-size: 20px;
+  margin: 32px 0 10px;
+  font-size: 19px;
   font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.012em;
 }
 
 .h3 {
-  margin: 20px 0 6px;
-  font-size: 16px;
+  margin: 22px 0 6px;
+  font-size: 15px;
   font-weight: 600;
+  letter-spacing: -0.006em;
 }
 
 .story {
@@ -157,13 +163,21 @@
   margin-left: auto;
 }
 
+/* Boutons : une même hauteur (28 px), pour s'aligner entre eux et avec les champs compacts. */
 .ghost {
-  padding: 3px 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 2px 8px;
   border: 0;
   border-radius: var(--radius);
   background: none;
   color: var(--text-muted);
   font-size: 13px;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .ghost:hover {
@@ -186,35 +200,63 @@
 .outline {
   display: inline-flex;
   align-items: center;
-  padding: 3px 10px;
+  justify-content: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 2px 10px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
   background: var(--bg);
+  box-shadow: var(--shadow-card);
   color: var(--text);
   font-size: 13px;
+  font-weight: 500;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .outline:hover:not(:disabled) {
-  background: var(--bg-hover);
+  border-color: color-mix(in oklab, var(--text) 32%, transparent);
+  background: var(--bg-subtle);
+}
+
+.outline:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+  cursor: default;
 }
 
 .danger:hover {
   color: var(--danger);
 }
 
+/* Action principale : à l'encre NTECH (le noir du logo), le bleu restant aux liens et à la sélection. */
 .primary {
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 28px;
+  padding: 2px 12px;
   border: 0;
   border-radius: var(--radius);
-  background: var(--accent-fill);
-  color: #fff;
-  font-size: 14px;
+  background: var(--ink);
+  box-shadow: var(--shadow-card);
+  color: var(--on-ink);
+  font-size: 13px;
   font-weight: 500;
+  letter-spacing: 0.002em;
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 .primary:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background: var(--ink-hover);
+}
+
+.primary:active:not(:disabled),
+.outline:active:not(:disabled) {
+  transform: translateY(0.5px);
 }
 
 /* Écran tactile : des cibles d'au moins 36 px. */
@@ -288,9 +330,14 @@
   align-items: flex-start;
   gap: 6px;
   margin: 16px 0;
-  padding: 16px 18px;
-  border-radius: 8px;
-  background: var(--callout);
+  padding: 18px 20px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  /* Trame de points du logo NTECH, en fond des états vides. */
+  background:
+    linear-gradient(to right, var(--bg-subtle) 35%, transparent),
+    var(--dots) 0 0 / 16px 16px,
+    var(--bg-subtle);
   color: var(--text-muted);
   font-size: 14px;
 }
@@ -302,6 +349,14 @@
 
 .emptyState p {
   margin: 0 0 4px;
+}
+
+/* Dès que le menu devient un tiroir (900 px), le haut de page laisse la place à son bouton. */
+@media (max-width: 900px) {
+  .page,
+  .wide {
+    padding-top: 56px;
+  }
 }
 
 @media (max-width: 720px) {

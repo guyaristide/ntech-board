@@ -103,6 +103,10 @@
   color: var(--text-muted);
   font-size: 13px;
 }
+.filter:hover {
+  border-color: color-mix(in oklab, var(--text) 30%, transparent);
+  color: var(--text);
+}
 .filter[data-on] {
   border-color: var(--accent-line);
   background: var(--accent-soft);

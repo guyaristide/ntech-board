@@ -160,7 +160,7 @@
   max-width: 240px;
   height: 6px;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 999px;
   background: var(--line);
 }
 

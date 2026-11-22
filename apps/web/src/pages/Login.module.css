@@ -5,13 +5,17 @@
   justify-content: center;
   min-height: 100%;
   padding: 32px 16px;
-  background: var(--bg-sidebar);
+  /* Trame de points du logo NTECH, estompée vers les bords. */
+  background:
+    radial-gradient(ellipse at center, transparent 30%, var(--bg-sidebar) 78%),
+    var(--dots) 0 0 / 18px 18px,
+    var(--bg-sidebar);
 }
 
 .card {
   width: min(420px, 100%);
-  padding: 32px;
-  border-radius: 10px;
+  padding: 36px 32px 32px;
+  border-radius: 14px;
   background: var(--bg);
   box-shadow: var(--shadow-pop);
 }
@@ -31,11 +35,15 @@
 .title {
   margin: 4px 0 4px;
   font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-align: center;
 }
 
 .subtitle {
   margin: 0 0 20px;
   color: var(--text-muted);
+  text-align: center;
 }
 
 .form {
@@ -69,9 +77,13 @@
   padding: 9px 12px;
   border: 0;
   border-radius: var(--radius);
-  background: var(--accent-fill);
-  color: #fff;
+  background: var(--ink);
+  color: var(--on-ink);
   font-weight: 600;
+}
+
+.form button:hover:not(:disabled) {
+  background: var(--ink-hover);
 }
 
 .form button:disabled {

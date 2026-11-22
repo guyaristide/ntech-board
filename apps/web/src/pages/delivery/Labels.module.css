@@ -1,0 +1,68 @@
+/* Étiquettes des tickets : saisie sur la fiche, gestion (renommer, colorer) du projet. */
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.labelInput {
+  width: 170px;
+  min-width: 0;
+}
+
+.labelRemove {
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: var(--text-faint);
+}
+
+.labelRemove:hover {
+  color: var(--danger);
+}
+
+.labelManage {
+  position: relative;
+  margin-left: auto;
+}
+
+.labelLines {
+  margin: 0;
+  padding: 4px 8px;
+  list-style: none;
+}
+
+.labelLine {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) 112px 24px;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+}
+
+.labelLine > span:first-child {
+  overflow: hidden;
+  justify-self: start;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.labelLine input,
+.labelLine select {
+  width: 100%;
+}
+
+.foldAll {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin: 0 0 6px;
+}
+@media (pointer: coarse) {
+  .fold {
+    width: 36px;
+    height: 36px;
+  }
+}

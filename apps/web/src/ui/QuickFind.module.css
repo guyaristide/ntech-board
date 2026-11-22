@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   padding: 12vh 16px 16px;
-  background: rgba(15, 15, 15, 0.45);
+  background: var(--scrim);
 }
 
 .dialog {
@@ -13,10 +13,17 @@
   flex-direction: column;
   width: min(640px, 100%);
   max-height: 70vh;
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--bg);
   box-shadow: var(--shadow-pop);
   overflow: hidden;
+  animation: rise 0.16s var(--ease);
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
 }
 
 .input {

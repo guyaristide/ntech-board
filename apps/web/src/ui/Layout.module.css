@@ -45,7 +45,7 @@
     inset: 0;
     z-index: 55;
     border: 0;
-    background: rgba(15, 15, 15, 0.35);
+    background: var(--scrim);
   }
 
   .burger {

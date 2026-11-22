@@ -6,7 +6,10 @@ import { useCanEdit } from '../../model/store';
 import { Popover } from '../../ui/Popover';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
-import styles from './Delivery.module.css';
+import base from './Delivery.module.css';
+import own from './Labels.module.css';
+
+const styles = { ...base, ...own };
 
 const TONE_NAME: Record<Tone, string> = {
   gray: 'Gris',
