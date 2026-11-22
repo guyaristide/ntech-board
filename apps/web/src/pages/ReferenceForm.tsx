@@ -3,6 +3,7 @@ import type { Reference } from '@board/shared';
 import { programme } from '../model/programme';
 import page from './Page.module.css';
 import styles from './workshop/Workshop.module.css';
+import { confirmDialog } from '../ui/Confirm';
 
 const lines = (v: string) =>
   v
@@ -20,7 +21,10 @@ export function ReferenceForm({ reference: r, onClose }: { reference: Reference;
   const set = (patch: Parameters<typeof programme.updateReference>[1]) =>
     programme.updateReference(r.id, patch);
   const remove = async () => {
-    if (!confirm(`Supprimer la fiche ${r.id} ? Les séquences qui la citent ne la citeront plus.`)) return;
+    if (
+      !(await confirmDialog(`Supprimer la fiche ${r.id} ? Les séquences qui la citent ne la citeront plus.`))
+    )
+      return;
     await programme.deleteReference(r.id);
   };
   return (

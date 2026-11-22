@@ -126,6 +126,13 @@
   }
 }
 
+/* Téléphone : la colonne des champs d'une fiche est plus étroite. */
+@media (max-width: 720px) {
+  :root {
+    --field-w: 228px;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

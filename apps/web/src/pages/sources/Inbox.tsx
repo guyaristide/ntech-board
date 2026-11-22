@@ -16,6 +16,7 @@ import backlog from '../backlog/Backlog.module.css';
 import { Deposit } from './Deposit';
 import { ProposalCard } from './ProposalCard';
 import styles from './Inbox.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const STATUS_TONE = { pending: 'gray', analyzing: 'blue', done: 'green', error: 'red' } as const;
 
@@ -76,10 +77,10 @@ function SourceBlock({
             <button
               type="button"
               className={`${page.ghost} ${page.danger}`}
-              onClick={() =>
-                confirm(
+              onClick={async () =>
+                (await confirmDialog(
                   `Supprimer ${source.id} et ses propositions à relire ? Les fiches déjà acceptées gardent leur citation.`,
-                ) && void act(() => sources.remove(source.id))
+                )) && void act(() => sources.remove(source.id))
               }
             >
               Supprimer
@@ -138,6 +139,23 @@ export function Inbox() {
       return next;
     });
   const bulk = async (accept: boolean) => {
+    const n = chosen.length;
+    const ok = await confirmDialog(
+      accept
+        ? {
+            title: `Accepter ${n} proposition${n > 1 ? 's' : ''} ?`,
+            message:
+              'Les fiches Références visées sont mises à jour tout de suite, avec la citation de l’échange.',
+            confirmLabel: 'Accepter',
+          }
+        : {
+            title: `Rejeter ${n} proposition${n > 1 ? 's' : ''} ?`,
+            message: 'Elles quittent la liste à relire ; les fiches Références ne changent pas.',
+            confirmLabel: 'Rejeter',
+            danger: true,
+          },
+    );
+    if (!ok) return;
     setNote(accept ? 'Acceptation en cours…' : 'Rejet en cours…');
     try {
       if (accept) {

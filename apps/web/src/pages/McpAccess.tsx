@@ -4,6 +4,7 @@ import { canUseMcp } from '@board/shared';
 import { useCanEdit, useSeesDelivery, useWorkspace } from '../model/store';
 import page from './Page.module.css';
 import styles from './McpAccess.module.css';
+import { confirmDialog } from '../ui/Confirm';
 
 interface Token {
   id: string;
@@ -105,7 +106,8 @@ export function McpAccess() {
     }
   };
   const revoke = async (t: Token) => {
-    if (!confirm(`Révoquer « ${t.name} » ? Les assistants qui l’utilisent perdront l’accès.`)) return;
+    if (!(await confirmDialog(`Révoquer « ${t.name} » ? Les assistants qui l’utilisent perdront l’accès.`)))
+      return;
     await api.delete(`/tokens/${t.id}`);
     void load();
   };

@@ -10,6 +10,7 @@ import { assigneeName } from './fields';
 import { LabelInput } from './Labels';
 import { sprintOrder } from './parts';
 import styles from './Delivery.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 type Field = 'release' | 'sprint' | 'status' | 'assignee' | 'type';
 const LABEL: Record<Field, string> = {
@@ -60,7 +61,7 @@ export function TicketBulkBar({
     }
   };
   const remove = async () => {
-    if (!confirm(`Supprimer ${n} ? Les US du cadrage ne sont pas supprimées.`)) return;
+    if (!(await confirmDialog(`Supprimer ${n} ? Les US du cadrage ne sont pas supprimées.`))) return;
     try {
       await delivery.deleteTickets(ids);
       onClear();

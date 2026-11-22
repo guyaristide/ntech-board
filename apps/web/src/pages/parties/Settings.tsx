@@ -21,6 +21,7 @@ import { SettingsAi } from './SettingsAi';
 import { SettingsFiles } from './SettingsFiles';
 import { SettingsProject } from './SettingsProject';
 import { SettingsTemplate } from '../SettingsTemplate';
+import { confirmDialog } from '../../ui/Confirm';
 
 /** Rubriques des réglages : une à la fois à l'écran, choisie dans le menu (et gardée dans l'adresse). */
 const TABS = [
@@ -84,7 +85,45 @@ export function Settings() {
       .map(k => TAB_OF[k] ?? 'scoping'),
   );
   const orgs = ws.parties.filter(p => p.type === 'organization');
+  /** Changements qui touchent des tickets existants ou masquent une partie du tableau. */
+  const risks = () => {
+    const before = ws.settings.delivery;
+    const used = (key: 'status' | 'type', id: string) => ws.tickets.filter(t => t[key] === id).length;
+    const gone = <T extends { id: string; name: string }>(old: T[], next: T[], key: 'status' | 'type') =>
+      old
+        .filter(x => !next.some(y => y.id === x.id))
+        .map(x => ({ name: x.name, n: used(key, x.id) }))
+        .filter(x => x.n);
+    return [
+      ...(before.enabled && !d.enabled
+        ? ['La partie Réalisation est désactivée : sprints, tickets et recette ne seront plus visibles.']
+        : []),
+      ...gone(before.workflow, d.workflow, 'status').map(
+        x =>
+          `L’étape « ${x.name} » est retirée alors que ${x.n} ticket(s) y sont : ils reviendront à la première étape.`,
+      ),
+      ...gone(before.ticketTypes, d.ticketTypes, 'type').map(
+        x => `Le type « ${x.name} » est retiré alors que ${x.n} ticket(s) le portent.`,
+      ),
+      ...(before.key !== d.key && ws.tickets.length
+        ? [
+            `La clé des tickets passe de ${before.key} à ${d.key} : les nouveaux tickets porteront la nouvelle clé.`,
+          ]
+        : []),
+    ];
+  };
   const save = async () => {
+    const warnings = risks();
+    if (
+      warnings.length &&
+      !(await confirmDialog({
+        title: 'Enregistrer ces réglages ?',
+        message: warnings.join('\n'),
+        confirmLabel: 'Enregistrer',
+        danger: true,
+      }))
+    )
+      return;
     setStatus('');
     try {
       await ws.updateSettings(draft);

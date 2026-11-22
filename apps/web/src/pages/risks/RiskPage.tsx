@@ -25,6 +25,7 @@ import { currentPhase } from '../raci/RaciPage';
 import { levelOf, scoreOf } from './riskView';
 import { dueLabel } from '../../model/due';
 import styles from './Risks.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const SCALE = ['1', '2', '3', '4', '5'];
 const cotationLabel = (c: Cotation) => {
@@ -311,8 +312,9 @@ export function RiskPage() {
                         className={`${page.ghost} ${page.danger}`}
                         aria-label="Supprimer l’action"
                         title="Supprimer l’action"
-                        onClick={() =>
-                          confirm('Supprimer cette action ?') && void ws.deleteRiskAction(risk.id, a.id)
+                        onClick={async () =>
+                          (await confirmDialog('Supprimer cette action ?')) &&
+                          void ws.deleteRiskAction(risk.id, a.id)
                         }
                       >
                         ×
@@ -412,8 +414,8 @@ export function RiskPage() {
           <button
             type="button"
             className={`${page.ghost} ${page.danger}`}
-            onClick={() =>
-              confirm(`Supprimer le risque ${risk.id} ?`) &&
+            onClick={async () =>
+              (await confirmDialog(`Supprimer le risque ${risk.id} ?`)) &&
               void ws.deleteRisk(risk.id).then(() => navigate('/risques'))
             }
           >

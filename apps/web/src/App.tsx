@@ -31,6 +31,7 @@ import { Risks } from './pages/risks/Risks';
 import { StoryPage } from './pages/StoryPage';
 import { WorkshopPage } from './pages/workshop/WorkshopPage';
 import { Layout } from './ui/Layout';
+import { ConfirmHost } from './ui/Confirm';
 
 export function App() {
   const phase = useWorkspace(s => s.phase);
@@ -56,6 +57,7 @@ export function App() {
     );
   return (
     <BrowserRouter>
+      <ConfirmHost />
       {phase === 'login' ? (
         <Routes>
           <Route path="*" element={<Login />} />

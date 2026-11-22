@@ -13,6 +13,7 @@ import { deleteAttachment, fileUrl, uploadFile } from '../model/files';
 import { useCanEdit, useWorkspace } from '../model/store';
 import { ThreadButton } from './ThreadButton';
 import styles from './Attachments.module.css';
+import { confirmDialog } from './Confirm';
 
 const ICON: Record<FileCategory, string> = {
   images: '🖼️',
@@ -102,7 +103,8 @@ export function Attachments({ kind, id }: { kind: AttachableKind; id: string }) 
     if (a.mime.startsWith('image/') && previewable(a.mime)) setViewing(a);
     else window.open(fileUrl(a, previewable(a.mime)), '_blank', 'noopener');
   };
-  const remove = (a: Attachment) => confirm(`Supprimer « ${a.name} » ?`) && void deleteAttachment(a.id);
+  const remove = async (a: Attachment) =>
+    (await confirmDialog(`Supprimer « ${a.name} » ?`)) && void deleteAttachment(a.id);
 
   if (!canEdit && !items.length) return <p className={styles.none}>Aucune pièce jointe.</p>;
 

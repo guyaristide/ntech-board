@@ -23,6 +23,7 @@ import { DeliveryGate, period, sprintOrder } from './parts';
 import { ReleaseSprints, SprintPlanner, type PlanMode } from './ReleaseSprints';
 import styles from './Delivery.module.css';
 import tl from './Timeline.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const time = (iso: string) => new Date(`${iso}T12:00:00`).getTime();
 
@@ -275,9 +276,10 @@ export function Roadmap() {
                   <button
                     type="button"
                     className={`${page.ghost} ${page.danger}`}
-                    onClick={() =>
-                      confirm(`Supprimer ${r.name} ? Ses tickets et sprints n’auront plus de version.`) &&
-                      void delivery.deleteRelease(r.id)
+                    onClick={async () =>
+                      (await confirmDialog(
+                        `Supprimer ${r.name} ? Ses tickets et sprints n’auront plus de version.`,
+                      )) && void delivery.deleteRelease(r.id)
                     }
                   >
                     Supprimer

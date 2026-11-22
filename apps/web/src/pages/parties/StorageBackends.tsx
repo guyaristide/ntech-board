@@ -11,6 +11,7 @@ import { storage, type BackendInput, type StorageState } from '../../model/files
 import page from '../Page.module.css';
 import base from './Parties.module.css';
 import own from './Storage.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const styles = { ...base, ...own };
 
@@ -122,7 +123,8 @@ export function StorageBackends({
     note(id, r.ok ? `Connexion réussie : fichier d’essai déposé, relu et supprimé.` : `Échec : ${r.message}`);
   };
   const remove = async (b: StorageBackendView) => {
-    if (!confirm(`Supprimer le stockage « ${b.name} » ? Ses clés seront effacées du tableau.`)) return;
+    if (!(await confirmDialog(`Supprimer le stockage « ${b.name} » ? Ses clés seront effacées du tableau.`)))
+      return;
     try {
       await storage.remove(b.id);
       await reload();

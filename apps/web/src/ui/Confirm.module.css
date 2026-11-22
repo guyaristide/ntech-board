@@ -1,0 +1,106 @@
+/* Boîte de confirmation : centrée, au-dessus de tout (tiroirs, menus, recherche). */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: var(--scrim);
+  animation: fade var(--dur) var(--ease);
+}
+.dialog {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 14px;
+  width: min(440px, 100%);
+  padding: 22px 22px 18px;
+  border-radius: 14px;
+  background: var(--bg);
+  box-shadow: var(--shadow-pop);
+  animation: rise 0.16s var(--ease);
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+}
+/* Pastille : à l'encre NTECH pour une question, rouge pour une action destructrice. */
+.mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-active);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+}
+.mark[data-danger] {
+  background: var(--tag-red);
+  color: var(--tag-red-text);
+}
+.text {
+  min-width: 0;
+  padding-top: 4px;
+}
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.008em;
+  overflow-wrap: anywhere;
+}
+.message {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  grid-column: 1 / -1;
+  margin-top: 18px;
+}
+.actions button {
+  min-height: 32px;
+  padding-inline: 14px;
+}
+.danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--ko);
+  box-shadow: var(--shadow-card);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+.danger:hover {
+  background: color-mix(in oklab, var(--ko) 86%, #000);
+}
+@media (max-width: 480px) {
+  .backdrop {
+    place-items: end center;
+  }
+  .actions {
+    flex-direction: column-reverse;
+  }
+  .actions button {
+    min-height: 40px;
+  }
+}

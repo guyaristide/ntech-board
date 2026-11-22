@@ -14,6 +14,7 @@ import page from '../Page.module.css';
 import { RaciMatrix } from './RaciMatrix';
 import { RaciSummary } from './RaciSummary';
 import styles from './Raci.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const slug = (s: string) =>
   s
@@ -248,8 +249,8 @@ export function RaciPage() {
                     <button
                       type="button"
                       className={`${page.ghost} ${page.danger}`}
-                      onClick={() =>
-                        confirm(`Retirer « ${a.name} » de la matrice de cette phase ?`) &&
+                      onClick={async () =>
+                        (await confirmDialog(`Retirer « ${a.name} » de la matrice de cette phase ?`)) &&
                         ws.updatePhase(phase.id, { actors: phase.actors.filter(x => x.id !== a.id) })
                       }
                     >
@@ -311,8 +312,8 @@ export function RaciPage() {
               <button
                 type="button"
                 className={`${page.ghost} ${page.danger}`}
-                onClick={() =>
-                  confirm(`Supprimer la phase « ${phase.title} » et sa matrice RACI ?`) &&
+                onClick={async () =>
+                  (await confirmDialog(`Supprimer la phase « ${phase.title} » et sa matrice RACI ?`)) &&
                   void ws.deletePhase(phase.id).then(() => go({}))
                 }
               >

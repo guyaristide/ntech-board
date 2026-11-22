@@ -6,6 +6,7 @@ import { Avatar } from '../ui/Presence';
 import { SideTabs, sideTabsPage, useSideTab, type SideTab } from '../ui/SideTabs';
 import page from './Page.module.css';
 import styles from './Admin.module.css';
+import { confirmDialog } from '../ui/Confirm';
 
 /** Rubriques de l'administration. */
 const TABS = [
@@ -61,8 +62,25 @@ export function Admin() {
       setInvite(i => ({ ...i, email: '', name: '' }));
     });
   };
-  const upload = (kind: 'planning' | 'stories' | 'raci' | 'risks' | 'cadrage', file: File | undefined) => {
+  const IMPORT_LABEL = {
+    planning: 'le planning des ateliers',
+    stories: 'le backlog des user stories',
+    raci: 'la matrice RACI',
+    risks: 'la matrice des risques',
+    cadrage: 'les compléments de cadrage',
+  } as const;
+  /** Un import part dès le fichier choisi : on le fait confirmer, fichier à l'appui. */
+  const upload = async (kind: keyof typeof IMPORT_LABEL, input: HTMLInputElement) => {
+    const file = input.files?.[0];
     if (!file) return;
+    const ok = await confirmDialog({
+      title: `Importer ${IMPORT_LABEL[kind]} ?`,
+      message: `Fichier : ${file.name}\nCe qui a été saisi dans l’outil est conservé ; le reste est mis à jour d’après ce fichier.`,
+      confirmLabel: 'Importer',
+    });
+    // Le champ est vidé dans tous les cas : le même fichier peut être choisi de nouveau.
+    input.value = '';
+    if (!ok) return;
     const form = new FormData();
     form.append('file', file);
     void run(kind, async () => {
@@ -125,15 +143,26 @@ export function Admin() {
                         <select
                           aria-label={`Rôle de ${m.email}`}
                           value={m.role}
-                          onChange={e =>
+                          onChange={async e => {
+                            const role = e.target.value as Role;
+                            const ok = await confirmDialog({
+                              title: `Passer ${m.name || m.email} de ${ROLE_LABEL[m.role]} à ${ROLE_LABEL[role]} ?`,
+                              message:
+                                role === 'admin'
+                                  ? 'Un administrateur gère les membres, les réglages et les imports.'
+                                  : m.role === 'admin'
+                                    ? 'Cette personne ne pourra plus gérer les membres, les réglages ni les imports.'
+                                    : role === 'viewer'
+                                      ? 'Un lecteur consulte le tableau sans pouvoir le modifier.'
+                                      : 'Un éditeur modifie le contenu du tableau.',
+                              confirmLabel: 'Changer le rôle',
+                              danger: m.role === 'admin',
+                            });
+                            if (!ok) return;
                             void run('role', async () =>
-                              setMembers(
-                                await api.patch<Member[]>(`/admin/members/${m.userId}`, {
-                                  role: e.target.value,
-                                }),
-                              ),
-                            )
-                          }
+                              setMembers(await api.patch<Member[]>(`/admin/members/${m.userId}`, { role })),
+                            );
+                          }}
                         >
                           {ROLES.map(r => (
                             <option key={r} value={r}>
@@ -147,8 +176,8 @@ export function Admin() {
                         <button
                           type="button"
                           className={`${page.ghost} ${page.danger}`}
-                          onClick={() =>
-                            confirm(`Retirer ${m.email} du projet ?`) &&
+                          onClick={async () =>
+                            (await confirmDialog(`Retirer ${m.email} du projet ?`)) &&
                             void run('remove', async () =>
                               setMembers(await api.delete<Member[]>(`/admin/members/${m.userId}`)),
                             )
@@ -216,7 +245,11 @@ export function Admin() {
                 <label className={styles.drop}>
                   <strong>Planning des ateliers</strong>
                   <span>Classeur Excel (.xlsx) : onglets Planning, Suivi des PV, Références CdC</span>
-                  <input type="file" accept=".xlsx" onChange={e => upload('planning', e.target.files?.[0])} />
+                  <input
+                    type="file"
+                    accept=".xlsx"
+                    onChange={e => void upload('planning', e.currentTarget)}
+                  />
                   {session?.project.planning ? <small>Actuel : {session.project.planning}</small> : null}
                 </label>
                 <label className={styles.drop}>
@@ -225,7 +258,7 @@ export function Admin() {
                   <input
                     type="file"
                     accept=".json,application/json"
-                    onChange={e => upload('stories', e.target.files?.[0])}
+                    onChange={e => void upload('stories', e.currentTarget)}
                   />
                 </label>
                 <label className={styles.drop}>
@@ -236,7 +269,7 @@ export function Admin() {
                   <input
                     type="file"
                     accept=".xlsx,.json,application/json"
-                    onChange={e => upload('raci', e.target.files?.[0])}
+                    onChange={e => void upload('raci', e.currentTarget)}
                   />
                 </label>
                 <label className={styles.drop}>
@@ -248,7 +281,7 @@ export function Admin() {
                   <input
                     type="file"
                     accept=".xlsx,.json,application/json"
-                    onChange={e => upload('risks', e.target.files?.[0])}
+                    onChange={e => void upload('risks', e.currentTarget)}
                   />
                 </label>
                 <label className={styles.drop}>
@@ -261,7 +294,7 @@ export function Admin() {
                   <input
                     type="file"
                     accept=".json,application/json"
-                    onChange={e => upload('cadrage', e.target.files?.[0])}
+                    onChange={e => void upload('cadrage', e.currentTarget)}
                   />
                 </label>
               </div>

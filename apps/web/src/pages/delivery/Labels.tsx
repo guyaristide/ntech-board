@@ -8,6 +8,7 @@ import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
 import base from './Delivery.module.css';
 import own from './Labels.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const styles = { ...base, ...own };
 
@@ -120,7 +121,15 @@ function LabelLine({
     type(label);
     if (!to || to === label) return;
     const other = known.find(l => l !== label && fold(l) === fold(to));
-    if (other && !confirm(`« ${other} » existe déjà. Fusionner « ${label} » avec elle ?`)) return;
+    if (
+      other &&
+      !(await confirmDialog({
+        title: `Fusionner « ${label} » avec « ${other} » ?`,
+        message: `L’étiquette « ${other} » existe déjà : les tickets de « ${label} » la porteront à la place.`,
+        confirmLabel: 'Fusionner',
+      }))
+    )
+      return;
     setName(to);
     try {
       onRenamed(label, await delivery.renameLabel(label, to));

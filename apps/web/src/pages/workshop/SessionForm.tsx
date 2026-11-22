@@ -3,6 +3,7 @@ import { programme } from '../../model/programme';
 import { useWorkspace } from '../../model/store';
 import page from '../Page.module.css';
 import styles from './Workshop.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 /** Modification d'une séquence : intitulé, horaires, porteur, contenu, résultat attendu, renvoi au CdC. */
 export function SessionForm({
@@ -19,7 +20,11 @@ export function SessionForm({
     ws.updateSession(workshop, session.code, patch);
   const remove = async () => {
     const n = session.questions.length;
-    if (!confirm(`Supprimer la séquence ${session.code}${n ? ` et ses ${n} point(s) à trancher` : ''} ?`))
+    if (
+      !(await confirmDialog(
+        `Supprimer la séquence ${session.code}${n ? ` et ses ${n} point(s) à trancher` : ''} ?`,
+      ))
+    )
       return;
     await programme.deleteSession(workshop, session.code);
   };

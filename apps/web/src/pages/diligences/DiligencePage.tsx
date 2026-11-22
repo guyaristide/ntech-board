@@ -14,6 +14,7 @@ import page from '../Page.module.css';
 import relations from '../../ui/Relations.module.css';
 import { partiesOf } from './Diligences';
 import styles from './Diligences.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 /** Identifiants rattachés (ateliers, risques) : étiquettes cliquables, retirables, ajout par liste. */
 function IdChips({
@@ -184,7 +185,7 @@ export function DiligencePage() {
               type="button"
               className={`${page.ghost} ${page.danger}`}
               onClick={async () => {
-                if (confirm(`Supprimer la diligence ${d.id} ?`)) {
+                if (await confirmDialog(`Supprimer la diligence ${d.id} ?`)) {
                   await ws.deleteDiligence(d.id);
                   navigate('/diligences');
                 }

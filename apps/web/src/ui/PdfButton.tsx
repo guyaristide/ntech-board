@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import page from '../pages/Page.module.css';
+import { noticeDialog } from './Confirm';
 
 /**
  * Télécharge un PDF construit par le serveur (`/api/pdf/…`). Le nom du fichier vient de la réponse ;
@@ -15,8 +16,7 @@ export function PdfButton({ path, title, children }: { path: string; title?: str
         const data = await res.json().catch(() => null);
         throw new Error(data?.message ?? 'Le PDF n’a pas pu être généré.');
       }
-      const name =
-        res.headers.get('content-disposition')?.match(/filename="([^"]+)"/)?.[1] ?? 'document.pdf';
+      const name = res.headers.get('content-disposition')?.match(/filename="([^"]+)"/)?.[1] ?? 'document.pdf';
       const url = URL.createObjectURL(await res.blob());
       const a = Object.assign(document.createElement('a'), { href: url, download: name });
       document.body.append(a);
@@ -24,13 +24,19 @@ export function PdfButton({ path, title, children }: { path: string; title?: str
       a.remove();
       setTimeout(() => URL.revokeObjectURL(url), 10_000);
     } catch (e) {
-      alert(e instanceof Error ? e.message : String(e));
+      void noticeDialog('Le PDF n’a pas pu être produit.', e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(false);
     }
   };
   return (
-    <button type="button" className={page.ghost} title={title} disabled={busy} onClick={() => void download()}>
+    <button
+      type="button"
+      className={page.ghost}
+      title={title}
+      disabled={busy}
+      onClick={() => void download()}
+    >
       {busy ? 'Génération…' : children}
     </button>
   );

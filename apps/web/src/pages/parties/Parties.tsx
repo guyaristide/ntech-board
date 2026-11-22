@@ -11,6 +11,7 @@ import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { Mentions } from './Mentions';
 import styles from './Parties.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 type Tab = PartyType | 'reprise';
 const TABS: [Tab, string][] = [
@@ -94,10 +95,10 @@ function Remove({ party }: { party: Party }) {
       className={`${page.ghost} ${page.danger}`}
       title="Supprimer"
       aria-label={`Supprimer ${party.name || party.id}`}
-      onClick={() =>
-        confirm(
+      onClick={async () =>
+        (await confirmDialog(
           `Supprimer « ${party.name || party.id} » du référentiel ?${used ? ` ${used} fiche(s) y sont rattachées.` : ''} Les textes déjà saisis ailleurs ne changent pas.`,
-        ) && void ws.deleteParty(party.id)
+        )) && void ws.deleteParty(party.id)
       }
     >
       ✕

@@ -5,6 +5,7 @@ import { EditableText } from '../../ui/EditableText';
 import backlog from '../backlog/Backlog.module.css';
 import page from '../Page.module.css';
 import styles from './Raci.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const CYCLE: RaciValue[] = ['', 'R', 'A', 'A/R', 'C', 'I'];
 const KEYS: Record<string, RaciValue> = { r: 'R', a: 'A', c: 'C', i: 'I', '/': 'A/R' };
@@ -132,8 +133,8 @@ export function RaciMatrix({ phase, compare }: { phase: Phase; compare: Phase | 
                         className={`${page.ghost} ${page.danger}`}
                         title="Supprimer la ligne"
                         aria-label="Supprimer la ligne"
-                        onClick={() =>
-                          confirm(`Supprimer la ligne « ${row.activity || row.id} » ?`) &&
+                        onClick={async () =>
+                          (await confirmDialog(`Supprimer la ligne « ${row.activity || row.id} » ?`)) &&
                           void ws.deleteRaciRow(phase.id, row.id)
                         }
                       >

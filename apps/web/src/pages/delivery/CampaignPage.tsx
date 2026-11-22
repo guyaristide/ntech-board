@@ -21,6 +21,7 @@ import { assigneeName } from './fields';
 import { DeliveryGate } from './parts';
 import { StatusTag, StoryBlock, TestBar, useRecetteRights } from './RecetteParts';
 import styles from './Recette.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 /**
  * Fiche d'une campagne de recette : version, mode, statut, dates, signataires, périmètre ; puis les
@@ -88,7 +89,9 @@ export function CampaignPage() {
                 className={`${page.ghost} ${page.danger}`}
                 onClick={async () => {
                   if (
-                    !confirm(`Supprimer ${campaign.name} et ses résultats ? Les bugs ouverts sont conservés.`)
+                    !(await confirmDialog(
+                      `Supprimer ${campaign.name} et ses résultats ? Les bugs ouverts sont conservés.`,
+                    ))
                   )
                     return;
                   await delivery.deleteCampaign(campaign.id);

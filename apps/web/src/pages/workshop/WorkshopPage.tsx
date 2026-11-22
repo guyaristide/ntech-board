@@ -15,6 +15,7 @@ import page from '../Page.module.css';
 import overview from '../Overview.module.css';
 import { Agenda, Deadlines } from './WorkshopEdit';
 import styles from './Workshop.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 export const longDate = (iso: string | null) =>
   iso
@@ -57,9 +58,9 @@ export function WorkshopPage() {
       ? ` Les ${linked} US, épiques et diligences qui y renvoient n’y renverront plus.`
       : '';
     if (
-      !confirm(
+      !(await confirmDialog(
         `Supprimer l’atelier ${w.id}, ses ${w.sessions.length} séquence(s) et ses points à trancher ?${detail}`,
-      )
+      ))
     )
       return;
     await programme.deleteWorkshop(w.id);

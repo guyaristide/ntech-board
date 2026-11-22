@@ -19,6 +19,7 @@ import { SprintStats } from './SprintStats';
 import { SPRINT_VIEWS, SprintKanban, SprintList, SprintTimeline, type SprintView } from './SprintViews';
 import { TicketFilters, useTicketFilters } from './TicketFilters';
 import styles from './Delivery.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 /** Fiche d'un sprint : objectif, dates, capacité, tickets par étape, revue et rétrospective, clôture. */
 export function SprintPage() {
@@ -110,7 +111,17 @@ export function SprintPage() {
                   <button
                     type="button"
                     className={page.primary}
-                    onClick={() => void run(() => delivery.startSprint(sprint.id))}
+                    onClick={async () => {
+                      if (
+                        await confirmDialog({
+                          title: `Démarrer ${sprint.name} ?`,
+                          message:
+                            'Il devient le sprint en cours : son burndown commence, et il s’affiche sur le tableau du sprint.',
+                          confirmLabel: 'Démarrer',
+                        })
+                      )
+                        void run(() => delivery.startSprint(sprint.id));
+                    }}
                   >
                     Démarrer le sprint
                   </button>
@@ -124,7 +135,10 @@ export function SprintPage() {
                   type="button"
                   className={`${page.ghost} ${page.danger}`}
                   onClick={async () => {
-                    if (!confirm(`Supprimer ${sprint.name} ? Ses tickets retournent au backlog.`)) return;
+                    if (
+                      !(await confirmDialog(`Supprimer ${sprint.name} ? Ses tickets retournent au backlog.`))
+                    )
+                      return;
                     await delivery.deleteSprint(sprint.id);
                     navigate('/realisation/sprints');
                   }}

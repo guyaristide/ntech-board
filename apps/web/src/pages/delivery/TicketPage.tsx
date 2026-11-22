@@ -16,6 +16,7 @@ import { TicketLabels } from './Labels';
 import { DeliveryGate, Estimate, Ready, sprintOrder } from './parts';
 import { Subtasks, TicketLinks } from './TicketRelations';
 import styles from './Delivery.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 /** Fiche d'un ticket : propriétés, description, sous-tâches, liaisons, commentaires, historique. */
 export function TicketPage() {
@@ -219,9 +220,9 @@ export function TicketPage() {
                 className={`${page.ghost} ${page.danger}`}
                 onClick={async () => {
                   if (
-                    !confirm(
+                    !(await confirmDialog(
                       `Supprimer le ticket ${ticket.id} ?${story ? ` L’US ${story.id} n’est pas supprimée.` : ''}`,
-                    )
+                    ))
                   )
                     return;
                   await delivery.deleteTicket(ticket.id);

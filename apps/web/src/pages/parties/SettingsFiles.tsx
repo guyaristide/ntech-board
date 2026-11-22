@@ -17,6 +17,7 @@ import page from '../Page.module.css';
 import { providerLabel, StorageBackends } from './StorageBackends';
 import base from './Parties.module.css';
 import own from './Storage.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const styles = { ...base, ...own };
 
@@ -92,7 +93,17 @@ export function SettingsFiles({ draft, setDraft }: Props) {
                   type="button"
                   className={page.ghost}
                   disabled={!!moving && moving.endsWith('…')}
-                  onClick={() => void migrate()}
+                  onClick={async () => {
+                    if (
+                      await confirmDialog({
+                        title: `Transférer ${elsewhere} fichier(s) vers le stockage actif ?`,
+                        message:
+                          'Chaque fichier est copié dans le stockage actif, puis supprimé de son stockage d’origine. Le transfert peut prendre un moment.',
+                        confirmLabel: 'Transférer',
+                      })
+                    )
+                      void migrate();
+                  }}
                 >
                   Les transférer vers le stockage actif
                 </button>

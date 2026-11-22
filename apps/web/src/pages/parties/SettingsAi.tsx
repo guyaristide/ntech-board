@@ -4,6 +4,7 @@ import { aiKey, type AiState } from '../../model/sources';
 import page from '../Page.module.css';
 import base from './Parties.module.css';
 import own from './Storage.module.css';
+import { confirmDialog } from '../../ui/Confirm';
 
 const styles = { ...base, ...own };
 
@@ -41,8 +42,10 @@ export function SettingsAi() {
       const r = await aiKey.test();
       return r.ok ? 'La clé fonctionne.' : (r.message ?? 'La clé ne fonctionne pas.');
     });
-  const remove = () =>
-    confirm('Retirer la clé Claude du projet ? Les échanges déposés ensuite ne seront plus analysés.') &&
+  const remove = async () =>
+    (await confirmDialog(
+      'Retirer la clé Claude du projet ? Les échanges déposés ensuite ne seront plus analysés.',
+    )) &&
     void run(async () => {
       await aiKey.remove();
       await reload();

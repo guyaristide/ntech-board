@@ -17,6 +17,7 @@ import { DiligenceRefs } from './diligences/Diligences';
 import { StoryDelivery } from './delivery/StoryDelivery';
 import { StoryLinks } from './StoryLinks';
 import page from './Page.module.css';
+import { confirmDialog } from '../ui/Confirm';
 
 const updated = (iso: string) =>
   new Date(iso).toLocaleString('fr-FR', {
@@ -182,7 +183,7 @@ export function StoryPage() {
                 type="button"
                 className={`${page.ghost} ${page.danger}`}
                 onClick={async () => {
-                  if (confirm(`Supprimer ${story.id} ?`)) {
+                  if (await confirmDialog(`Supprimer ${story.id} ?`)) {
                     await ws.deleteStory(story.id);
                     navigate(`/epic/${story.epic}`);
                   }

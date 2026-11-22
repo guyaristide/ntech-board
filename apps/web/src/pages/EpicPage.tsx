@@ -12,6 +12,7 @@ import { Tag } from '../ui/Tag';
 import { StoryList } from './backlog/Backlog';
 import page from './Page.module.css';
 import styles from './Overview.module.css';
+import { confirmDialog, noticeDialog } from '../ui/Confirm';
 
 /** Page d'une épique (cas d'usage du CDC) : résumé, points à cadrer, US rattachées, notes. */
 export function EpicPage() {
@@ -35,12 +36,15 @@ export function EpicPage() {
   const set = (patch: Parameters<typeof ws.updateEpic>[1]) => ws.updateEpic(epic.id, patch);
   const free = programmeOrder(ws.workshops).filter(w => !epic.workshops.includes(w.id));
   const remove = async () => {
-    if (!confirm(`Supprimer l’épique ${epic.id} ?`)) return;
+    if (!(await confirmDialog(`Supprimer l’épique ${epic.id} ?`))) return;
     try {
       await programme.deleteEpic(epic.id);
       navigate('/backlog');
     } catch (e) {
-      alert(e instanceof ApiError ? (e.message ?? e.code) : 'Suppression impossible.');
+      void noticeDialog(
+        'Suppression impossible.',
+        e instanceof ApiError ? (e.message ?? e.code) : 'Erreur réseau, réessayez.',
+      );
     }
   };
   return (

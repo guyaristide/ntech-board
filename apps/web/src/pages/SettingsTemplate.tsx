@@ -3,6 +3,7 @@ import { api, ApiError } from '../model/api';
 import { useWorkspace } from '../model/store';
 import page from './Page.module.css';
 import styles from './Admin.module.css';
+import { confirmDialog } from '../ui/Confirm';
 
 /**
  * Reprendre les réglages d'un autre projet : versions, acteurs, document de référence, périmètres
@@ -18,7 +19,11 @@ export function SettingsTemplate() {
   if (!projects.length) return null;
   const copy = async () => {
     const source = projects.find(p => p.slug === from);
-    if (!source || !confirm(`Remplacer les réglages de ce tableau par ceux de « ${source.title} » ?`)) return;
+    if (
+      !source ||
+      !(await confirmDialog(`Remplacer les réglages de ce tableau par ceux de « ${source.title} » ?`))
+    )
+      return;
     try {
       await api.post('/admin/settings/copy', { from });
       await useWorkspace.getState().init();
