@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Attachments } from '../../ui/Attachments';
+import { ThreadSection } from '../../ui/Thread';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   CAMPAIGN_MODE_LABEL,
@@ -290,6 +291,7 @@ export function CampaignPage() {
         ) : null}
         <h2 className={page.h2}>Pièces jointes</h2>
         <Attachments kind="campaign" id={campaign.id} />
+        <ThreadSection kind="campaign" id={campaign.id} />
       </div>
     </DeliveryGate>
   );

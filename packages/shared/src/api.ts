@@ -1,5 +1,6 @@
 import type { Attachment } from './files';
 import type { Proposal, SourceItem } from './sources';
+import type { ThreadComment } from './threads';
 import type { Campaign, Release, Sprint, Ticket } from './delivery';
 import type { Party, ProjectSettings } from './parties';
 import type { Diligence, Epic, Phase, Reference, Risk, Story, Workshop } from './types';
@@ -61,6 +62,8 @@ export interface WorkspaceData {
   tickets: Ticket[];
   campaigns: Campaign[];
   attachments: Attachment[];
+  /** Messages des fils de discussion, sur tous les éléments. */
+  comments: ThreadComment[];
   /** Échanges reçus et propositions à relire : vides pour les lecteurs. */
   sources: SourceItem[];
   proposals: Proposal[];
@@ -81,7 +84,8 @@ export type EntityKind =
   | 'reference'
   | 'attachment'
   | 'source'
-  | 'proposal';
+  | 'proposal'
+  | 'comment';
 export const ENTITY_KINDS: EntityKind[] = [
   'story',
   'epic',
@@ -98,6 +102,7 @@ export const ENTITY_KINDS: EntityKind[] = [
   'attachment',
   'source',
   'proposal',
+  'comment',
 ];
 export type EntityOf<K extends EntityKind> = K extends 'story'
   ? Story
@@ -127,7 +132,9 @@ export type EntityOf<K extends EntityKind> = K extends 'story'
                           ? SourceItem
                           : K extends 'proposal'
                             ? Proposal
-                            : Campaign;
+                            : K extends 'comment'
+                              ? ThreadComment
+                              : Campaign;
 
 export interface PresenceEntry {
   userId: string;
@@ -158,6 +165,7 @@ export type ServerEvent =
         | Attachment
         | SourceItem
         | Proposal
+        | ThreadComment
         | null;
       by: string | null;
     }

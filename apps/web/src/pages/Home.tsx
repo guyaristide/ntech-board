@@ -19,8 +19,9 @@ export function Home() {
   const nextWorkshop = ws.workshops.find(w => w.date && w.date >= today) ?? ws.workshops[0];
   const questions = ws.workshops.flatMap(w => w.sessions.flatMap(s => s.questions));
   const open = questions.filter(q => q.status === 'Ouvert').length;
+  const discussed = new Set(ws.comments.filter(c => c.target.kind === 'story').map(c => c.target.id));
   const enriched = ws.stories.filter(
-    s => s.body.length || s.comments.length || s.updatedAt !== s.createdAt,
+    s => s.body.length || discussed.has(s.id) || s.updatedAt !== s.createdAt,
   ).length;
   const toDo = ws.diligences.filter(d => diligenceOpen(d.status));
   const platforms = [...new Set(ws.stories.flatMap(s => s.targets.map(t => t.platform)))].sort((a, b) =>

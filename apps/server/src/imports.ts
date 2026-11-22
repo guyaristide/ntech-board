@@ -99,7 +99,24 @@ export async function importPlanning(
         [projectId],
       )
     ).rows.map(r => r.data);
-    const { workshops, orphaned, custom } = mergePlanning(previous, planning);
+    const discussed = new Set(
+      (
+        await c.query<{ id: string }>(
+          `SELECT DISTINCT data->'target'->>'id' AS id FROM entities
+            WHERE project_id = $1 AND kind = 'comment' AND data->'target'->>'kind' = 'workshop'`,
+          [projectId],
+        )
+      ).rows.map(r => r.id),
+    );
+    const { workshops, orphaned, custom } = mergePlanning(previous, planning, discussed);
+    // Atelier gardé sous « ancien-… » : son fil de discussion le suit.
+    for (const w of workshops.filter(w => w.id.startsWith('ancien-') && !previous.some(p => p.id === w.id)))
+      await c.query(
+        `UPDATE entities SET data = jsonb_set(data, '{target,id}', to_jsonb($3::text))
+          WHERE project_id = $1 AND kind = 'comment'
+            AND data->'target'->>'kind' = 'workshop' AND data->'target'->>'id' = $2`,
+        [projectId, w.id.slice('ancien-'.length), w.id],
+      );
     // Les fiches du cahier des charges créées ou modifiées dans l'outil (révision > 0) restent en place.
     await c.query(
       `DELETE FROM entities WHERE project_id = $1 AND (kind = 'workshop' OR (kind = 'reference' AND revision = 0))`,

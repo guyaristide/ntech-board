@@ -59,7 +59,6 @@ export const StoryPatch = z
 export const StoryLinkBody = z.object({ story: z.string().min(1).max(40), type: z.enum(LINK_TYPES) });
 
 export const CreateStory = z.object({ epic: text(40).min(1), patch: StoryPatch.optional() });
-export const CommentBody = z.object({ text: z.string().trim().min(1).max(5000) });
 export const QuestionPatch = z
   .object({ text: text(1000), answer: text(5000), status: z.enum(QUESTION_STATUSES) })
   .partial()

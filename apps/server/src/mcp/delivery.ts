@@ -21,6 +21,7 @@ import {
 import { z } from 'zod';
 import { labelsOf } from '@board/shared';
 import { lines, list, matches, pick, tool, type Ctx } from './context';
+import { threadText } from './threads';
 
 /** Outils de lecture de la partie Réalisation : tickets, sprints, pilotage, recette. */
 
@@ -153,9 +154,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
               .join('\n')}`
           : '',
         t.links.length ? `\n## Liaisons\n${t.links.map(l => `- ${l.type} ${l.ticket}`).join('\n')}` : '',
-        t.comments.length
-          ? `\n## Commentaires\n${t.comments.map(c => `- ${c.author}, ${c.at.slice(0, 10)} : ${c.text}`).join('\n')}`
-          : '',
+        threadText(ws, 'ticket', t.id) ? `\n## Discussion\n${threadText(ws, 'ticket', t.id)}` : '',
       );
     },
   );

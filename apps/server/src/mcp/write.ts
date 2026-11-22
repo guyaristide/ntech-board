@@ -17,14 +17,6 @@ import { ApiFailure, lines, matches, pick, tool, type Ctx } from './context';
  * membre.
  */
 
-const COMMENT_PATH = {
-  us: 'stories',
-  ticket: 'tickets',
-  risque: 'risks',
-  diligence: 'diligences',
-  atelier: 'workshops',
-  phase: 'phases',
-} as const;
 const block = (text: string) => ({ id: randomUUID().slice(0, 8), type: 'p' as const, text });
 
 /** Partie prenante par identifiant, nom, sigle ou alias ; vide pour retirer. */
@@ -71,28 +63,6 @@ const storyExtraPatch = (a: {
 });
 
 export function registerWrite(server: McpServer, ctx: Ctx) {
-  tool(
-    server,
-    'commenter',
-    {
-      title: 'Commenter',
-      description:
-        'Ajoute un commentaire, signé de votre nom, sur une US, un ticket, un risque, une diligence, un atelier ou une phase.',
-      input: {
-        cible: z.enum(['us', 'ticket', 'risque', 'diligence', 'atelier', 'phase']),
-        id: z.string(),
-        texte: z.string().min(1).max(5000),
-      },
-      write: true,
-    },
-    async a => {
-      await ctx.api('POST', `/${COMMENT_PATH[a.cible]}/${encodeURIComponent(a.id)}/comments`, {
-        text: a.texte,
-      });
-      return `Commentaire ajouté sur ${a.cible} ${a.id}.`;
-    },
-  );
-
   tool(
     server,
     'modifier_us',

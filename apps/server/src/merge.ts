@@ -85,7 +85,8 @@ export function carrySession(next: Session, prev: Session | undefined): Session 
   return { ...next, questions: [...questions, ...kept], notes: prev.notes };
 }
 
-const enriched = (w: Workshop) =>
+const enriched = (w: Workshop, discussed: Set<string>) =>
+  discussed.has(w.id) ||
   w.notes.length > 0 ||
   w.comments.length > 0 ||
   w.sessions.some(s => s.notes.length || s.questions.some(q => q.answer || q.custom));
@@ -95,27 +96,31 @@ const enriched = (w: Workshop) =>
  * enrichissements conservés quand l'atelier (ou la séquence) garde son intitulé ; un atelier enrichi
  * qui disparaît est gardé sous « ancien-Jx ». Un atelier géré dans l'outil (créé ou restructuré ici)
  * est conservé tel quel, et l'atelier du classeur qui porte le même identifiant est ignoré.
+ * `discussed` : ateliers qui ont un fil de discussion (enrichis eux aussi).
  */
-export function mergePlanning(previous: Workshop[], planning: RawPlanning) {
+export function mergePlanning(previous: Workshop[], planning: RawPlanning, discussed = new Set<string>()) {
   const custom = previous.filter(p => p.custom && !p.id.startsWith('ancien-'));
   const owned = new Set(custom.map(p => p.id));
   const prevSessions = new Map(previous.flatMap(w => w.sessions.map(s => [norm(s.title), s] as const)));
-  const workshops = planning.workshops.filter(w => !owned.has(w.id)).map(workshopFromRaw).map(w => {
-    const prev = previous.find(p => p.id === w.id && norm(p.title) === norm(w.title));
-    return {
-      ...w,
-      notes: prev?.notes ?? [],
-      comments: prev?.comments ?? [],
-      pvStatus: prev?.pvStatus ?? w.pvStatus,
-      sessions: w.sessions.map(s =>
-        carrySession(s, prev?.sessions.find(p => p.code === s.code) ?? prevSessions.get(norm(s.title))),
-      ),
-    };
-  });
+  const workshops = planning.workshops
+    .filter(w => !owned.has(w.id))
+    .map(workshopFromRaw)
+    .map(w => {
+      const prev = previous.find(p => p.id === w.id && norm(p.title) === norm(w.title));
+      return {
+        ...w,
+        notes: prev?.notes ?? [],
+        comments: prev?.comments ?? [],
+        pvStatus: prev?.pvStatus ?? w.pvStatus,
+        sessions: w.sessions.map(s =>
+          carrySession(s, prev?.sessions.find(p => p.code === s.code) ?? prevSessions.get(norm(s.title))),
+        ),
+      };
+    });
   const orphaned = previous
     .filter(p => !p.id.startsWith('ancien-') && !owned.has(p.id))
     .filter(p => !workshops.some(w => w.id === p.id && norm(w.title) === norm(p.title)))
-    .filter(enriched)
+    .filter(p => enriched(p, discussed))
     .map(p => ({ ...p, id: `ancien-${p.id}`, phase: 'Ancienne version du planning' }));
   const archived = previous.filter(p => p.id.startsWith('ancien-') && !orphaned.some(o => o.id === p.id));
   return {

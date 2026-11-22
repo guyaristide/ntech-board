@@ -27,6 +27,7 @@ export const EMPTY: WorkspaceData = {
   attachments: [],
   sources: [],
   proposals: [],
+  comments: [],
 };
 export const KEY: Record<
   EntityKind,
@@ -45,6 +46,7 @@ export const KEY: Record<
   | 'attachments'
   | 'sources'
   | 'proposals'
+  | 'comments'
 > = {
   story: 'stories',
   epic: 'epics',
@@ -61,6 +63,7 @@ export const KEY: Record<
   attachment: 'attachments',
   source: 'sources',
   proposal: 'proposals',
+  comment: 'comments',
 };
 
 /** Contenu reçu du serveur, complété des champs apparus depuis (US enregistrées avant le 17/10/2026). */

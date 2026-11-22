@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AttachmentsFold } from './Attachments';
+import { ThreadButton } from './ThreadDrawer';
 import type { Reference } from '@board/shared';
 import styles from './ReferenceCard.module.css';
 
@@ -86,6 +87,13 @@ export function ReferenceCard({ reference, showSessions }: { reference: Referenc
         </details>
       ) : null}
       <AttachmentsFold kind="reference" id={reference.id} />
+      <ThreadButton
+        kind="reference"
+        id={reference.id}
+        title={`${reference.id} ${reference.subject}`}
+        always
+        labelled
+      />
     </article>
   );
 }

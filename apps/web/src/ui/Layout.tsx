@@ -5,6 +5,7 @@ import { PageViewers, usePresenceBeacon } from './Presence';
 import { QuickFind } from './QuickFind';
 import { Sidebar } from './Sidebar';
 import { StoryDrawer } from './StoryDrawer';
+import { ThreadDrawer } from './ThreadDrawer';
 import styles from './Layout.module.css';
 
 /** Coquille de l'application : barre latérale, contenu, recherche rapide. */
@@ -54,6 +55,7 @@ export function Layout() {
       </main>
       {search ? <QuickFind onClose={() => setSearch(false)} /> : null}
       <StoryDrawer />
+      <ThreadDrawer />
     </div>
   );
 }

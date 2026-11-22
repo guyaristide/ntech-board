@@ -5,6 +5,7 @@ import { useSeesDelivery, useWorkspace } from '../../model/store';
 import type { Story } from '@board/shared';
 import { PropertySelect } from '../../ui/PropertySelect';
 import { Tag } from '../../ui/Tag';
+import { ThreadButton } from '../../ui/ThreadDrawer';
 import type { SortKey } from './filters';
 import styles from './Backlog.module.css';
 
@@ -106,11 +107,12 @@ export function StoryTable({
                 <Link to={`/us/${s.id}`} className={styles.titleLink}>
                   {s.title || 'Sans titre'}
                 </Link>
-                {s.comments.length || s.body.length ? (
-                  <span className={styles.badge} title="Enrichie : notes ou commentaires">
-                    ✎ {s.comments.length || ''}
+                {s.body.length ? (
+                  <span className={styles.badge} title="Enrichie : notes">
+                    ✎
                   </span>
                 ) : null}
+                <ThreadButton kind="story" id={s.id} title={`${s.id} ${s.title}`} href={`/us/${s.id}`} />
                 {s.links.length ? (
                   <button
                     type="button"

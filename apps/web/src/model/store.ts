@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { canSeeDelivery, withSettingsDefaults, withStoryDefaults, withTicketDefaults } from '@board/shared';
 import { EMPTY, KEY, normalize } from './entities';
 import type {
-  Comment,
   Diligence,
   Epic,
   EntityKind,
@@ -41,7 +40,6 @@ interface State extends WorkspaceData {
   createStory: (epic: string, patch?: Partial<Story>) => Promise<string>;
   deleteStory: (id: string) => Promise<void>;
   duplicateStory: (id: string) => Promise<string>;
-  commentStory: (id: string, text: string) => Promise<void>;
   updateEpic: (id: string, patch: Partial<Omit<Epic, 'id'>>) => void;
   updateWorkshop: (
     id: string,
@@ -54,14 +52,12 @@ interface State extends WorkspaceData {
   ) => void;
   updateQuestion: (workshop: string, code: string, questionId: string, patch: Partial<Question>) => void;
   addQuestion: (workshop: string, code: string, text: string) => Promise<void>;
-  commentWorkshop: (id: string, text: string) => Promise<void>;
   createPhase: (title: string, copyFrom?: string) => Promise<string>;
   updatePhase: (id: string, patch: Partial<Omit<ProjectPhase, 'id' | 'raci' | 'comments'>>) => void;
   deletePhase: (id: string) => Promise<void>;
   addRaciRow: (phase: string, after?: string) => Promise<void>;
   updateRaciRow: (phase: string, row: string, patch: Partial<RaciRow>) => void;
   deleteRaciRow: (phase: string, row: string) => Promise<void>;
-  commentPhase: (id: string, text: string) => Promise<void>;
   createRisk: (prefix: string) => Promise<string>;
   updateRisk: (id: string, patch: Partial<Omit<Risk, 'id' | 'actions' | 'reviews' | 'comments'>>) => void;
   deleteRisk: (id: string) => Promise<void>;
@@ -69,13 +65,11 @@ interface State extends WorkspaceData {
   addRiskAction: (id: string) => Promise<void>;
   updateRiskAction: (id: string, action: string, patch: Partial<RiskAction>) => void;
   deleteRiskAction: (id: string, action: string) => Promise<void>;
-  commentRisk: (id: string, text: string) => Promise<void>;
   linkStories: (id: string, other: string, type: LinkType) => Promise<void>;
   unlinkStories: (id: string, other: string) => Promise<void>;
   createDiligence: (patch?: Partial<Diligence>) => Promise<string>;
   updateDiligence: (id: string, patch: Partial<Omit<Diligence, 'id' | 'comments'>>) => void;
   deleteDiligence: (id: string) => Promise<void>;
-  commentDiligence: (id: string, text: string) => Promise<void>;
   createParty: (type: PartyType, patch?: Partial<Party>) => Promise<string>;
   updateParty: (id: string, patch: Partial<Omit<Party, 'id' | 'type'>>) => void;
   deleteParty: (id: string) => Promise<void>;
@@ -210,13 +204,6 @@ export const useWorkspace = create<State>((set, get) => {
     };
   };
 
-  const comment = (author: string, text: string): Comment => ({
-    id: 'local',
-    author,
-    at: new Date().toISOString(),
-    text,
-  });
-  const me = () => get().session?.user?.name || get().session?.user?.email || '';
   const onSession = (w: Workshop, code: string, change: (s: Session) => Session): Workshop => ({
     ...w,
     sessions: w.sessions.map(s => (s.code === code ? change(s) : s)),
@@ -299,11 +286,6 @@ export const useWorkspace = create<State>((set, get) => {
       return story.id;
     },
 
-    commentStory: async (id, text) => {
-      local('story', id, (s: Story) => ({ ...s, comments: [...s.comments, comment(me(), text)] }));
-      await send('story', id, () => api.post<Story>(`/stories/${id}/comments`, { text }));
-    },
-
     updateEpic: (id, patch) => {
       local('epic', id, (e: Epic) => ({ ...e, ...patch }));
       defer(`epic:${id}`, 'epic', id, patch, p => api.patch(`/epics/${id}`, p));
@@ -337,11 +319,6 @@ export const useWorkspace = create<State>((set, get) => {
       await send('workshop', workshop, () =>
         api.post<Workshop>(`/workshops/${workshop}/sessions/${encodeURIComponent(code)}/questions`, { text }),
       );
-    },
-
-    commentWorkshop: async (id, text) => {
-      local('workshop', id, (w: Workshop) => ({ ...w, comments: [...w.comments, comment(me(), text)] }));
-      await send('workshop', id, () => api.post<Workshop>(`/workshops/${id}/comments`, { text }));
     },
 
     createPhase: async (title, copyFrom) => {
@@ -380,11 +357,6 @@ export const useWorkspace = create<State>((set, get) => {
     deleteRaciRow: async (phase, row) => {
       local('phase', phase, (p: ProjectPhase) => ({ ...p, raci: p.raci.filter(r => r.id !== row) }));
       await send('phase', phase, () => api.delete<ProjectPhase>(`/phases/${phase}/raci/${row}`));
-    },
-
-    commentPhase: async (id, text) => {
-      local('phase', id, (p: ProjectPhase) => ({ ...p, comments: [...p.comments, comment(me(), text)] }));
-      await send('phase', id, () => api.post<ProjectPhase>(`/phases/${id}/comments`, { text }));
     },
 
     createRisk: async prefix => {
@@ -426,11 +398,6 @@ export const useWorkspace = create<State>((set, get) => {
       await send('risk', id, () => api.delete<Risk>(`/risks/${id}/actions/${action}`));
     },
 
-    commentRisk: async (id, text) => {
-      local('risk', id, (r: Risk) => ({ ...r, comments: [...r.comments, comment(me(), text)] }));
-      await send('risk', id, () => api.post<Risk>(`/risks/${id}/comments`, { text }));
-    },
-
     // L'autre US reçoit la liaison inverse par le flux temps réel, comme chez les autres membres.
     linkStories: async (id, other, type) => {
       await send('story', id, () => api.post<Story>(`/stories/${id}/links`, { story: other, type }));
@@ -455,11 +422,6 @@ export const useWorkspace = create<State>((set, get) => {
     deleteDiligence: async id => {
       await send('diligence', id, () => api.delete(`/diligences/${id}`));
       replace('diligence', id, null);
-    },
-
-    commentDiligence: async (id, text) => {
-      local('diligence', id, (d: Diligence) => ({ ...d, comments: [...d.comments, comment(me(), text)] }));
-      await send('diligence', id, () => api.post<Diligence>(`/diligences/${id}/comments`, { text }));
     },
 
     createParty: async (type, patch) => {

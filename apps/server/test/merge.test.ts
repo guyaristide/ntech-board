@@ -95,6 +95,18 @@ test('un atelier enrichi qui change de sujet est archivé, pas perdu', () => {
   assert.equal(workshops[0].notes.length, 0);
 });
 
+test('un atelier qui a un fil de discussion est archivé comme un atelier enrichi', () => {
+  const before = workshopFromRaw(raw('J5', 'Billetterie', []));
+  const next = planning(raw('J5', 'Hébergement', []));
+  assert.equal(mergePlanning([before], next).orphaned, 0);
+  const { workshops, orphaned } = mergePlanning([before], next, new Set(['J5']));
+  assert.equal(orphaned, 1);
+  assert.deepEqual(
+    workshops.map(w => w.id),
+    ['J5', 'ancien-J5'],
+  );
+});
+
 test('un point retiré du planning et non traité disparaît', () => {
   const before = workshopFromRaw(raw('J1', 'Cadrage', ['Ancien point']));
   const next = workshopFromRaw(raw('J1', 'Cadrage', []));

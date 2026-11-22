@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { partyNames, PHASE_STATUSES, raciCheck, type Phase, type RaciRow } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
-import { Comments } from '../../ui/Comments';
+import { ThreadSection } from '../../ui/Thread';
 import { EditableText } from '../../ui/EditableText';
 import { ExportButton, type Column } from '../../ui/ExportButton';
 import { History } from '../../ui/History';
@@ -304,9 +304,8 @@ export function RaciPage() {
           />
           <h2 className={page.h2}>Pièces jointes</h2>
           <Attachments kind="phase" id={phase.id} />
-          <h2 className={page.h2}>Commentaires</h2>
-          <Comments items={phase.comments} onAdd={text => void ws.commentPhase(phase.id, text)} />
-          <History kind="phase" id={phase.id} stamp={`${phase.raci.length}-${phase.comments.length}`} />
+          <ThreadSection kind="phase" id={phase.id} />
+          <History kind="phase" id={phase.id} stamp={`${phase.raci.length}`} />
           {canEdit ? (
             <p>
               <button

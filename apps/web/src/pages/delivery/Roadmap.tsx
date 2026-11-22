@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AttachmentsFold } from '../../ui/Attachments';
+import { ThreadButton } from '../../ui/ThreadDrawer';
 import { Link } from 'react-router-dom';
 import {
   amount,
@@ -265,6 +266,7 @@ export function Roadmap() {
                 </span>
                 <ReleaseSprints release={r} onPlan={mode => openPlanner(r.id, mode)} />
                 <AttachmentsFold kind="release" id={r.id} />
+                <ThreadButton kind="release" id={r.id} title={r.name} always labelled />
                 <span className={page.faint}>
                   {p.doneCount}/{p.count} tickets terminés
                   {p.total ? ` · ${amount(p.done, settings)} sur ${amount(p.total, settings)}` : ''}

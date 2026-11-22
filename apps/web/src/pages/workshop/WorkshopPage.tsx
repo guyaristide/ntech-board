@@ -6,7 +6,7 @@ import { useCanEdit, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
 import type { Workshop } from '@board/shared';
 import { BlockEditor } from '../../ui/BlockEditor';
-import { Comments } from '../../ui/Comments';
+import { ThreadSection } from '../../ui/Thread';
 import { PropertySelect } from '../../ui/PropertySelect';
 import { Tag } from '../../ui/Tag';
 import { StoryList } from '../backlog/Backlog';
@@ -296,8 +296,7 @@ export function WorkshopPage() {
       />
       <h2 className={page.h2}>Pièces jointes</h2>
       <Attachments kind="workshop" id={w.id} />
-      <h2 className={page.h2}>Commentaires</h2>
-      <Comments items={w.comments} onAdd={text => void ws.commentWorkshop(w.id, text)} />
+      <ThreadSection kind="workshop" id={w.id} />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Attachments } from '../ui/Attachments';
+import { ThreadSection } from '../ui/Thread';
 import { programmeOrder, STATUSES, versionsOf } from '@board/shared';
 import { ApiError } from '../model/api';
 import { programme } from '../model/programme';
@@ -212,6 +213,7 @@ export function EpicPage() {
 
       <h2 className={page.h2}>Pièces jointes</h2>
       <Attachments kind="epic" id={epic.id} />
+      <ThreadSection kind="epic" id={epic.id} />
     </div>
   );
 }

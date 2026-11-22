@@ -9,7 +9,7 @@ import { Pager } from '../ui/ListNav';
 import type { Story } from '@board/shared';
 import { BlockEditor } from '../ui/BlockEditor';
 import { Checklist } from '../ui/Checklist';
-import { Comments } from '../ui/Comments';
+import { ThreadSection } from '../ui/Thread';
 import { EditableText } from '../ui/EditableText';
 import { PropertySelect } from '../ui/PropertySelect';
 import { TargetsField } from '../ui/TargetsField';
@@ -225,17 +225,17 @@ export function StoryPage() {
       <EditableText
         value={story.description}
         label="Description de l’US"
-        placeholder="Ce que fait la fonctionnalité, ses règles, ce qui a été décidé en atelier. Les commentaires peuvent y être repris."
+        placeholder="Ce que fait la fonctionnalité, ses règles, ce qui a été décidé en atelier. Les messages de la discussion peuvent y être repris."
         onChange={description => set({ description })}
       />
 
       <h3 className={page.h3}>Pièces jointes</h3>
       <Attachments kind="story" id={story.id} />
-      <h3 className={page.h3}>Commentaires{story.comments.length ? ` (${story.comments.length})` : ''}</h3>
-      <Comments
-        items={story.comments}
-        onAdd={text => void ws.commentStory(story.id, text)}
-        onPick={c => pick(c.text)}
+      <ThreadSection
+        kind="story"
+        id={story.id}
+        level="h3"
+        onPick={pick}
         pickLabel="Reprendre dans la description"
       />
 

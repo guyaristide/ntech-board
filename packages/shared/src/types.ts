@@ -7,6 +7,10 @@ export interface Block {
   checked?: boolean;
 }
 
+/**
+ * Ancien commentaire, rangé dans l'élément. Repris dans les fils de discussion (`ThreadComment`,
+ * migration 013) : les listes `comments` des éléments restent vides, ne plus les utiliser.
+ */
 export interface Comment {
   id: string;
   author: string;

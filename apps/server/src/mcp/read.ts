@@ -10,6 +10,7 @@ import {
 } from '@board/shared';
 import { z } from 'zod';
 import { lines, list, matches, tool, type Ctx } from './context';
+import { threadText } from './threads';
 
 /** Outils de lecture du cadrage : projet, US, épiques, ateliers, points à trancher, risques, diligences, parties. */
 
@@ -220,9 +221,7 @@ export function registerRead(server: McpServer, ctx: Ctx) {
           ? `\n## Liaisons\n${s.links.map(l => `- ${l.type} ${l.story}`).join('\n')}`
           : '',
         s.source ? `\nSource : ${s.source}` : '',
-        s.comments.length
-          ? `\n## Commentaires\n${s.comments.map(c => `- ${c.author}, ${c.at.slice(0, 10)} : ${c.text}`).join('\n')}`
-          : '',
+        threadText(ws, 'story', s.id) ? `\n## Discussion\n${threadText(ws, 'story', s.id)}` : '',
         ctx.delivery && tickets.length
           ? `\n## Tickets\n${tickets.map(t => `- ${t.id} · ${t.status} · ${t.title}`).join('\n')}`
           : '',

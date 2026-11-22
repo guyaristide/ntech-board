@@ -14,6 +14,7 @@ import { useCanEdit, useSeesDelivery, useWorkspace } from '../../model/store';
 import { EditableText } from '../../ui/EditableText';
 import { Popover } from '../../ui/Popover';
 import { Tag } from '../../ui/Tag';
+import { ThreadButton } from '../../ui/ThreadDrawer';
 import { LabelTag } from './Labels';
 import page from '../Page.module.css';
 import warn from './Carried.module.css';
@@ -241,6 +242,12 @@ export function TicketRow({
         {ticket.labels.map(l => (
           <LabelTag key={l} label={l} />
         ))}
+        <ThreadButton
+          kind="ticket"
+          id={ticket.id}
+          title={`${ticket.id} ${ticket.title}`}
+          href={`/realisation/ticket/${ticket.id}`}
+        />
         {subtasks ? (
           <span className={styles.storyLink} title="Sous-tâches terminées">
             ↳ {subtasks}

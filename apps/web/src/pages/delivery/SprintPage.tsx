@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Attachments } from '../../ui/Attachments';
+import { ThreadSection } from '../../ui/Thread';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { NavList } from '../../ui/ListNav';
 import { amount, isDone, progress, workdaysLeft, STEP_CATEGORY_LABEL } from '@board/shared';
@@ -349,6 +350,7 @@ export function SprintPage() {
         />
         <h2 className={page.h2}>Pièces jointes</h2>
         <Attachments kind="sprint" id={sprint.id} />
+        <ThreadSection kind="sprint" id={sprint.id} />
       </div>
     </DeliveryGate>
   );

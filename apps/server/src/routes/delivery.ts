@@ -49,8 +49,7 @@ import {
 
 export { all };
 import { rollUpParents } from '../rollup';
-import { CommentBody } from './schemas';
-import { body, comment } from './workspace';
+import { body } from './workspace';
 
 /** Partie Réalisation : versions, sprints et tickets. Réservée aux membres qui la voient. */
 export const deliveryRoutes = new Hono<AppEnv>();
@@ -484,16 +483,4 @@ deliveryRoutes.delete('/tickets/:id/links/:other', ...write, async c => {
     },
   );
   return c.json(ticket);
-});
-
-deliveryRoutes.post('/tickets/:id/comments', ...write, async c => {
-  const input = await body(c.req, CommentBody);
-  if (!input) return c.json({ error: 'invalid' }, 400);
-  const { project, user } = who(c);
-  return c.json(
-    await mutate(project, 'ticket', c.req.param('id'), user.id, 'comment', t => ({
-      ...t,
-      comments: [...t.comments, comment(user, input.text)],
-    })),
-  );
 });

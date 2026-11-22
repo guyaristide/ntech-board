@@ -13,7 +13,7 @@ import {
 } from '@board/shared';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
-import { Comments } from '../../ui/Comments';
+import { ThreadSection } from '../../ui/Thread';
 import { EditableText } from '../../ui/EditableText';
 import { History } from '../../ui/History';
 import { PropertySelect } from '../../ui/PropertySelect';
@@ -400,8 +400,7 @@ export function RiskPage() {
       />
       <h2 className={page.h2}>Pièces jointes</h2>
       <Attachments kind="risk" id={risk.id} />
-      <h2 className={page.h2}>Commentaires</h2>
-      <Comments items={risk.comments} onAdd={text => void ws.commentRisk(risk.id, text)} />
+      <ThreadSection kind="risk" id={risk.id} />
       <p className={page.faint}>Source : {risk.source}</p>
       <History
         kind="risk"

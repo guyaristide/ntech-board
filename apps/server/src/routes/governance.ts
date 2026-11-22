@@ -13,7 +13,6 @@ import { uid } from '../merge';
 import { createEntity, deleteEntity, getEntity, getSettings, mutate, nextId, NotFound } from '../repo';
 import { all } from './delivery';
 import {
-  CommentBody,
   DiligenceCreate,
   DiligencePatch,
   PhaseCreate,
@@ -25,7 +24,7 @@ import {
   RiskPatch,
   RiskReviewCreate,
 } from './schemas';
-import { body, comment } from './workspace';
+import { body } from './workspace';
 
 /** Gouvernance du projet : phases et leur matrice RACI, risques, diligences issues des ateliers. */
 export const governanceRoutes = new Hono<AppEnv>();
@@ -134,18 +133,6 @@ governanceRoutes.delete('/phases/:id/raci/:row', write, async c => {
       if (!p.raci.some(r => r.id === rowId)) throw new NotFound(`ligne RACI ${rowId}`);
       return { ...p, raci: p.raci.filter(r => r.id !== rowId) };
     }),
-  );
-});
-
-governanceRoutes.post('/phases/:id/comments', write, async c => {
-  const input = await body(c.req, CommentBody);
-  if (!input) return c.json({ error: 'invalid' }, 400);
-  const user = ids(c).user;
-  return c.json(
-    await onPhase(c, c.req.param('id'), 'comment', p => ({
-      ...p,
-      comments: [...p.comments, comment(user, input.text)],
-    })),
   );
 });
 
@@ -281,18 +268,6 @@ governanceRoutes.delete('/risks/:id/actions/:action', write, async c => {
   );
 });
 
-governanceRoutes.post('/risks/:id/comments', write, async c => {
-  const input = await body(c.req, CommentBody);
-  if (!input) return c.json({ error: 'invalid' }, 400);
-  const user = ids(c).user;
-  return c.json(
-    await onRisk(c, c.req.param('id'), 'comment', r => ({
-      ...r,
-      comments: [...r.comments, comment(user, input.text)],
-    })),
-  );
-});
-
 // --- Diligences -------------------------------------------------------------------------
 
 const onDiligence = (
@@ -344,16 +319,4 @@ governanceRoutes.patch('/diligences/:id', write, async c => {
 governanceRoutes.delete('/diligences/:id', write, async c => {
   await deleteEntity(ids(c).project, ids(c).user.id, 'diligence', c.req.param('id'));
   return c.json({ ok: true });
-});
-
-governanceRoutes.post('/diligences/:id/comments', write, async c => {
-  const input = await body(c.req, CommentBody);
-  if (!input) return c.json({ error: 'invalid' }, 400);
-  const user = ids(c).user;
-  return c.json(
-    await onDiligence(c, c.req.param('id'), 'comment', d => ({
-      ...d,
-      comments: [...d.comments, comment(user, input.text)],
-    })),
-  );
 });

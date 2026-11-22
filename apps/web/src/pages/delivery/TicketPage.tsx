@@ -5,7 +5,7 @@ import { byRank, isBlocked, stepOf } from '@board/shared';
 import { delivery, useDelivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { BlockEditor } from '../../ui/BlockEditor';
-import { Comments } from '../../ui/Comments';
+import { ThreadSection } from '../../ui/Thread';
 import { EditableText } from '../../ui/EditableText';
 import { History } from '../../ui/History';
 import { Pager } from '../../ui/ListNav';
@@ -269,17 +269,7 @@ export function TicketPage() {
 
         <h2 className={page.h2}>Pièces jointes</h2>
         <Attachments kind="ticket" id={ticket.id} />
-        <h2 className={page.h2}>Commentaires</h2>
-        <Comments
-          items={ticket.comments}
-          onAdd={text =>
-            void delivery.commentTicket(
-              ticket.id,
-              text,
-              ws.session?.user?.name || ws.session?.user?.email || '',
-            )
-          }
-        />
+        <ThreadSection kind="ticket" id={ticket.id} />
         <History kind="ticket" id={ticket.id} stamp={ticket.updatedAt} />
       </div>
     </DeliveryGate>

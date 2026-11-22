@@ -19,6 +19,7 @@ import {
   type Ticket,
   type Attachment,
   type Campaign,
+  type ThreadComment,
 } from '@board/shared';
 import { pool, tx, type Tx } from './db';
 
@@ -65,6 +66,7 @@ export async function getWorkspace(projectId: string, planning: string | null): 
     attachments: of<Attachment>('attachment'),
     sources: of<SourceItem>('source'),
     proposals: of<Proposal>('proposal'),
+    comments: of<ThreadComment>('comment'),
   };
 }
 

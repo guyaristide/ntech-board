@@ -10,10 +10,8 @@ import {
   LINK_INVERSE,
   putLink,
   withStoryDefaults,
-  type Comment,
   type EntityKind,
   type ServerEvent,
-  type Story,
   type Workshop,
 } from '@board/shared';
 import { seesDelivery } from '../access';
@@ -32,8 +30,8 @@ import {
 import { setPresence, subscribe } from '../realtime';
 import { fail, log } from '../log';
 import { uid } from '../merge';
+import { withoutDelivery } from '../threads';
 import {
-  CommentBody,
   CreateStory,
   PresenceBody,
   QuestionCreate,
@@ -56,13 +54,6 @@ export async function body<S extends z.ZodType>(
   return parsed.success ? parsed.data : null;
 }
 
-export const comment = (user: User, text: string): Comment => ({
-  id: uid(),
-  author: user.name || user.email,
-  at: new Date().toISOString(),
-  text,
-});
-
 workspaceRoutes.onError((err, c) => {
   if (err instanceof NotFound) return c.json({ error: 'not_found' }, 404);
   fail('erreur', `${c.req.method} ${new URL(c.req.url).pathname}`, err);
@@ -80,6 +71,7 @@ workspaceRoutes.get('/workspace', read, async c => {
       tickets: [],
       campaigns: [],
       attachments: data.attachments.filter(a => !isDeliveryKind(a.owner.kind)),
+      comments: withoutDelivery(data.comments, data.attachments),
     });
   // Échanges bruts et propositions non validées : réservés aux éditeurs.
   if (c.get('role') === 'viewer') Object.assign(data, { sources: [], proposals: [] });
@@ -221,24 +213,6 @@ workspaceRoutes.delete('/stories/:id/links/:other', write, async c => {
   return c.json(story);
 });
 
-workspaceRoutes.post('/stories/:id/comments', write, async c => {
-  const input = await body(c.req, CommentBody);
-  if (!input) return c.json({ error: 'invalid' }, 400);
-  const user = c.get('user')!;
-  const story = await mutate(
-    c.get('project').id,
-    'story',
-    c.req.param('id'),
-    user.id,
-    'comment',
-    (s: Story) => ({
-      ...s,
-      comments: [...s.comments, comment(user, input.text)],
-    }),
-  );
-  return c.json(story);
-});
-
 workspaceRoutes.get('/history/:kind/:id', read, async c => {
   const kind = c.req.param('kind');
   if (!ENTITY_KINDS.includes(kind as EntityKind)) return c.json({ error: 'invalid' }, 400);
@@ -312,18 +286,6 @@ workspaceRoutes.post('/workshops/:id/sessions/:code/questions', write, async c =
         ],
       })),
     ),
-  );
-});
-
-workspaceRoutes.post('/workshops/:id/comments', write, async c => {
-  const input = await body(c.req, CommentBody);
-  if (!input) return c.json({ error: 'invalid' }, 400);
-  const user = c.get('user')!;
-  return c.json(
-    await onWorkshop(c, c.req.param('id'), 'comment', w => ({
-      ...w,
-      comments: [...w.comments, comment(user, input.text)],
-    })),
   );
 });
 

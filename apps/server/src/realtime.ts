@@ -6,11 +6,13 @@ import {
   type PresenceEntry,
   type Role,
   type ServerEvent,
+  type ThreadComment,
 } from '@board/shared';
 import { seesDelivery } from './access';
 import { env } from './env';
 import { scheduleDay } from './pilotage';
 import { getEntity } from './repo';
+import { ownerKind } from './threads';
 
 /**
  * Temps réel : chaque écriture émet NOTIFY board_events (dans la transaction, donc après validation).
@@ -102,7 +104,13 @@ export async function listen(
     const data = await getEntity(n.projectId, n.kind, n.id);
     const event: ServerEvent = { type: 'entity', kind: n.kind, id: n.id, data, by: n.by };
     // Pièce jointe : elle suit la visibilité de l'élément qui la porte.
-    const owner = n.kind === 'attachment' && data ? (data as Attachment).owner.kind : n.kind;
+    // Message d'un fil : il suit l'élément visé (ou celui qui porte la pièce jointe visée).
+    const owner =
+      n.kind === 'attachment' && data
+        ? (data as Attachment).owner.kind
+        : n.kind === 'comment' && data
+          ? await ownerKind(n.projectId, (data as ThreadComment).target)
+          : n.kind;
     // Échanges bruts et propositions : seulement aux éditeurs.
     if (owner === 'source' || owner === 'proposal') {
       for (const c of clients.values()) if (c.projectId === n.projectId && c.role !== 'viewer') c.send(event);

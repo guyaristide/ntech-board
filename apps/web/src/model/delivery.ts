@@ -154,13 +154,6 @@ export const delivery = {
     ops.local('ticket', id, (t: Ticket) => ({ ...t, links: t.links.filter(l => l.ticket !== other) }));
     await ops.send('ticket', id, () => api.delete<Ticket>(`/tickets/${id}/links/${other}`));
   },
-  commentTicket: async (id: string, text: string, author: string) => {
-    ops.local('ticket', id, (t: Ticket) => ({
-      ...t,
-      comments: [...t.comments, { id: 'local', author, at: new Date().toISOString(), text }],
-    }));
-    await ops.send('ticket', id, () => api.post<Ticket>(`/tickets/${id}/comments`, { text }));
-  },
 
   createCampaign: async (patch?: Editable<Campaign>) => {
     const x = await ops.send('campaign', 'new', () => api.post<Campaign>('/campaigns', { patch }));
