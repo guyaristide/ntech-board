@@ -2,7 +2,11 @@ import type {
   ImportReport,
   Member,
   PlatformAdmin,
+  PlatformAudit,
+  PlatformEvent,
   PlatformOverview,
+  PlatformProjectDetail,
+  PlatformStatus,
   PlatformUser,
   Role,
 } from '@board/shared';
@@ -36,6 +40,31 @@ export const platform = {
       `/platform/projects/${encodeURIComponent(slug)}`,
       { confirm },
     ),
+
+  detail: (slug: string) => api.get<PlatformProjectDetail>(`/platform/projects/${encodeURIComponent(slug)}`),
+  events: (slug: string) => api.get<PlatformEvent[]>(`/platform/projects/${encodeURIComponent(slug)}/events`),
+  closeSession: (slug: string, id: string) =>
+    api.delete<{ closed: number }>(`/platform/projects/${encodeURIComponent(slug)}/sessions/${id}`),
+  revokeToken: (slug: string, id: string) =>
+    api.delete<{ revoked: number }>(`/platform/projects/${encodeURIComponent(slug)}/tokens/${id}`),
+  setDelivery: (slug: string, delivery: boolean) =>
+    api.patch<{ ok: true }>(`/platform/projects/${encodeURIComponent(slug)}/settings`, { delivery }),
+  duplicate: (slug: string, input: { slug: string; title: string; admin: string; content: boolean }) =>
+    api.post<{ slug: string; url: string; copied: string }>(
+      `/platform/projects/${encodeURIComponent(slug)}/duplicate`,
+      input,
+    ),
+  updateProject: (slug: string, patch: { title?: string; subtitle?: string }) =>
+    api.patch<{ ok: true }>(`${admin(slug)}/project`, patch),
+  copySettings: (slug: string, from: string) => api.post<unknown>(`${admin(slug)}/settings/copy`, { from }),
+  renameMember: (slug: string, userId: string, name: string) =>
+    api.patch<Member[]>(`${admin(slug)}/members/${userId}`, { name }),
+
+  status: () => api.get<PlatformStatus>('/platform/status'),
+  audit: () => api.get<PlatformAudit[]>('/platform/audit'),
+  verifyMail: () => api.post<{ ok: boolean; message: string }>('/platform/status/mail/verify'),
+  testMail: (to?: string) =>
+    api.post<{ ok: boolean; message: string }>('/platform/status/mail/test', to ? { to } : {}),
 
   members: (slug: string) => api.get<Member[]>(`${admin(slug)}/members`),
   addMember: (slug: string, input: { email: string; name: string; role: Role; notify: boolean }) =>

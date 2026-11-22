@@ -49,6 +49,17 @@ export function subscribe(client: Client) {
   };
 }
 
+/** Membres connectés en ce moment à un projet (ou à tous), d'après les flux temps réel de cette instance. */
+export function onlineNow(projectId?: string) {
+  const users = new Map<string, { email: string; name: string }>();
+  for (const c of clients.values())
+    if (!projectId || c.projectId === projectId) users.set(`${c.projectId}:${c.user.id}`, c.user);
+  return {
+    tabs: [...clients.values()].filter(c => !projectId || c.projectId === projectId).length,
+    users: [...users.values()],
+  };
+}
+
 /** La personne a le tableau ouvert (au moins un onglet connecté à cette instance). */
 export const isOnline = (projectId: string, userId: string) =>
   [...clients.values()].some(c => c.projectId === projectId && c.user.id === userId);

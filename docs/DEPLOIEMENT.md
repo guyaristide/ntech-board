@@ -101,10 +101,17 @@ Sans `SMTP_HOST`, aucun e-mail ne part : le lien de connexion s'affiche dans la 
 
 ### Console de la plateforme
 
-La console est l'espace au-dessus de tous les projets, réservé aux super-administrateurs : liste des
-projets et de leur activité, création d'un projet, ouverture d'un projet sans se reconnecter, membres,
-imports et exports, changement d'adresse, fermeture des sessions, suppression, comptes, état des
-services. Elle est servie par la même application, sur un hôte qui ne correspond à aucun projet.
+La console est l'espace au-dessus de tous les projets, réservé aux super-administrateurs. Elle est
+servie par la même application, sur un hôte qui ne correspond à aucun projet. On y trouve :
+
+- **Projets** : la liste et l'activité de chacun, la création, l'ouverture sans se reconnecter, et une
+  page par projet (vue d'ensemble chiffrée, membres, sessions et jetons MCP, réglages, export, imports,
+  restauration, duplication, journal des modifications, changement d'adresse, suppression) ;
+- **Comptes** : tous les utilisateurs, leurs projets et leurs rôles ;
+- **Super-administrateurs** : qui accède à la console ;
+- **État** : services (test de la connexion SMTP, e-mail d'essai), exécution, base de données (tables,
+  migrations), activité, files d'attente, configuration lue au démarrage, sans aucun secret ;
+- **Journal** : chaque action faite depuis la console, avec son auteur.
 
 **Mise en service**
 
@@ -137,8 +144,11 @@ Un super-administrateur est administrateur de fait de tous les projets ; désign
 - **Supprimer un projet** est définitif : contenu, membres, réglages, historique, fichiers. La console
   demande de saisir l'adresse du projet. Téléchargez l'export complet avant ; il se restaure dans un
   projet vide (Gérer, Données, « Restaurer un export complet »).
-- Toutes les actions de la console sont tracées dans les logs de `app`, catégorie `[console]`, avec
-  l'adresse de qui les a faites.
+- Toutes les actions de la console sont tracées : dans son onglet Journal (table `platform_audit`),
+  et dans les logs de `app`, catégorie `[console]`, avec l'adresse de qui les a faites.
+- **Dupliquer un projet** copie les réglages et, au choix, le contenu ; pas les membres, les fichiers
+  joints, les discussions ni l'historique.
+- L'état affiche la version déployée si la variable `SOURCE_COMMIT` est fournie (Coolify la donne).
 
 ### Notifications système (clés VAPID)
 

@@ -53,6 +53,31 @@ export async function checkMail() {
   }
 }
 
+/** Teste la connexion au relais SMTP, à la demande (console de la plateforme). */
+export async function verifyMail(): Promise<{ ok: boolean; message: string }> {
+  if (!transport) return { ok: false, message: 'SMTP_HOST est vide : aucun e-mail ne part.' };
+  try {
+    await transport.verify();
+    return { ok: true, message: `Connexion à ${env.mail.host}:${env.mail.port} vérifiée.` };
+  } catch (e) {
+    return { ok: false, message: (e as Error).message };
+  }
+}
+
+/** E-mail d'essai, pour vérifier la remise de bout en bout. */
+export const sendTestMail = (to: string, origin: string) =>
+  sendMail(
+    to,
+    'E-mail d’essai · NTECH Board',
+    layout(
+      'E-mail d’essai',
+      '<p style="margin:0;line-height:1.5">Si vous lisez ce message, l’envoi des e-mails de NTECH Board fonctionne.</p>',
+      { label: 'Ouvrir la console', url: origin },
+      origin,
+    ),
+    `E-mail d’essai de NTECH Board : l’envoi fonctionne.\n${origin}`,
+  );
+
 export async function sendMail(
   to: string,
   subject: string,

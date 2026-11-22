@@ -31,6 +31,7 @@ import { addMember, createProject, ensureUser, settingsFrom } from '../projects'
 import { pushEnabled } from '../push';
 import { findProject, forgetProject } from '../tenancy';
 import { adminRoutes } from './admin';
+import { audit, registerPlatformDetail } from './platformDetail';
 
 /**
  * Console de la plateforme, servie sur un hôte sans projet (boards.neiba-technologies.com) et
@@ -233,6 +234,7 @@ platformApi.post('/platform/projects', async c => {
     await pool.query('UPDATE projects SET settings = $2 WHERE id = $1', [id, await settingsFrom(from)]);
   await addMember(id, admin, 'admin', '', c.get('user')!.id);
   log('console', `${c.get('user')!.email} crée le projet « ${slug} » (administrateur ${admin}).`);
+  await audit(c, 'Projet créé', slug, `administrateur ${admin}${from ? `, réglages de ${from}` : ''}`);
   return c.json({ slug, url: originFor(slug) }, 201);
 });
 
@@ -251,6 +253,7 @@ platformApi.post('/platform/projects/:slug/open', async c => {
     `INSERT INTO login_tokens (token_hash, user_id, project_id, expires_at) VALUES ($1, $2, $3, now() + interval '2 minutes')`,
     [hash(token), c.get('user')!.id, p.id],
   );
+  await audit(c, 'Projet ouvert', p.slug);
   return c.json({ url: `${originFor(p.slug)}/api/auth/callback?token=${token}` });
 });
 
@@ -271,6 +274,7 @@ platformApi.patch('/platform/projects/:slug', async c => {
   forgetProject(p.slug);
   forgetProject(next);
   log('console', `${c.get('user')!.email} change l’adresse du projet « ${p.slug} » en « ${next} ».`);
+  await audit(c, 'Adresse du projet changée', p.slug, `devient ${next}`);
   return c.json({ slug: next, url: originFor(next) });
 });
 
@@ -280,6 +284,7 @@ platformApi.post('/platform/projects/:slug/sessions/revoke', async c => {
   if (!p) return c.json({ error: 'not_found' }, 404);
   const { rowCount } = await pool.query('DELETE FROM sessions WHERE project_id = $1', [p.id]);
   log('console', `${c.get('user')!.email} ferme ${rowCount} session(s) du projet « ${p.slug} ».`);
+  await audit(c, 'Sessions du projet fermées', p.slug, `${rowCount} session(s)`);
   return c.json({ closed: rowCount ?? 0 });
 });
 
@@ -311,6 +316,7 @@ platformApi.delete('/platform/projects/:slug', async c => {
     'console',
     `${c.get('user')!.email} supprime le projet « ${p.slug} » (${files.rowCount} fichier(s), ${lost} non retiré(s) du stockage).`,
   );
+  await audit(c, 'Projet supprimé', p.slug, `${files.rowCount} fichier(s)`);
   return c.json({ deleted: p.slug, files: files.rowCount ?? 0, filesLeft: lost });
 });
 
@@ -320,6 +326,11 @@ platformApi.use('/platform/projects/:slug/admin/*', async (c, next) => {
   if (!p) return c.json({ error: 'not_found' }, 404);
   c.set('project', p);
   await next();
+  // Toute écriture faite dans l'administration du projet est tracée (membres, imports, réglages).
+  if (c.req.method !== 'GET' && c.res.status < 400) {
+    const what = new URL(c.req.url).pathname.split('/admin/')[1] ?? '';
+    await audit(c, `Administration : ${c.req.method} ${what}`, p.slug);
+  }
 });
 platformApi.route('/platform/projects/:slug/admin', adminRoutes);
 
@@ -371,6 +382,7 @@ platformApi.post('/platform/admins', async c => {
   ]);
   await refreshSuperadmins();
   log('console', `${c.get('user')!.email} désigne ${email} super-administrateur.`);
+  await audit(c, 'Super-administrateur désigné', email);
   return c.json(await admins(), 201);
 });
 
@@ -393,7 +405,10 @@ platformApi.delete('/platform/admins/:email', async c => {
   );
   await refreshSuperadmins();
   log('console', `${c.get('user')!.email} retire ${email} des super-administrateurs.`);
+  await audit(c, 'Super-administrateur retiré', email);
   return c.json(await admins());
 });
+
+registerPlatformDetail(platformApi);
 
 platformApi.all('*', c => c.json({ error: 'not_found' }, 404));

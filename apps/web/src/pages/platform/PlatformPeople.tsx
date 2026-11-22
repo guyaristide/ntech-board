@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  fileSize,
-  ROLE_LABEL,
-  type PlatformAdmin,
-  type PlatformHealth,
-  type PlatformUser,
-  type Role,
-} from '@board/shared';
+import { ROLE_LABEL, type PlatformAdmin, type PlatformUser, type Role } from '@board/shared';
 import { platform } from '../../model/platform';
 import { confirmDialog } from '../../ui/Confirm';
 import page from '../Page.module.css';
@@ -187,64 +180,6 @@ export function PlatformAdmins({ me }: { me: string }) {
           {note}
         </p>
       ) : null}
-    </section>
-  );
-}
-
-/** État des services de la plateforme : ce qui est configuré, ce qui manque, la version déployée. */
-export function PlatformHealthView({ health }: { health: PlatformHealth }) {
-  const rows: [string, boolean | null, string][] = [
-    [
-      'E-mails',
-      health.mail,
-      health.mail
-        ? 'Les liens de connexion et les notifications partent par SMTP.'
-        : 'SMTP_HOST est vide : aucun e-mail ne part, les liens sont écrits dans les logs.',
-    ],
-    [
-      'Notifications système',
-      health.push,
-      health.push
-        ? 'Clés VAPID présentes : les appareils peuvent s’abonner.'
-        : 'Clés VAPID absentes : pas de notifications système (voir docs/DEPLOIEMENT.md).',
-    ],
-    [
-      'Chiffrement des secrets',
-      health.secrets,
-      health.secrets
-        ? 'SECRETS_KEY présente : clés de stockage et clé Claude peuvent être enregistrées.'
-        : 'SECRETS_KEY absente : stockages externes et analyse par Claude indisponibles.',
-    ],
-    ['Version déployée', null, health.version || 'Inconnue (variable SOURCE_COMMIT non fournie)'],
-    [
-      'Serveur',
-      null,
-      `Node ${health.node} · démarré le ${new Date(health.startedAt).toLocaleString('fr-FR')}`,
-    ],
-    ['Base de données', null, fileSize(health.databaseBytes)],
-    ['Adresses des projets', null, health.hosts.join(', ')],
-  ];
-  return (
-    <section>
-      <h2 className={page.h2}>État de la plateforme</h2>
-      <ul className={styles.health}>
-        {rows.map(([label, ok, text]) => (
-          <li key={label}>
-            <span
-              className={styles.dot}
-              data-state={ok === null ? 'info' : ok ? 'ok' : 'warn'}
-              aria-hidden="true"
-            />
-            <span className={styles.memberText}>
-              <strong>
-                {label}
-                {ok === null ? '' : ok ? ' : en service' : ' : à configurer'}
-              </strong>
-              <small>{text}</small>
-            </span>
-          </li>
-        ))}
-      </ul>
     </section>
   );
 }
