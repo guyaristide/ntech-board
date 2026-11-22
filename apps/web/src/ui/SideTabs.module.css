@@ -1,5 +1,5 @@
-/* Réglages du projet : un menu de rubriques à gauche, la rubrique choisie à droite. */
-.settings {
+/* Pages à rubriques (réglages, administration) : un menu à gauche, la rubrique choisie à droite. */
+.page {
   max-width: 1060px;
 }
 .layout {

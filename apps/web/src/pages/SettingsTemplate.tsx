@@ -28,7 +28,7 @@ export function SettingsTemplate() {
     }
   };
   return (
-    <>
+    <section>
       <h2 className={page.h2}>Réglages d’un autre projet</h2>
       <p className={page.faint}>
         Pour démarrer un tableau sur le modèle d’un autre : versions, acteurs, document de référence,
@@ -49,6 +49,6 @@ export function SettingsTemplate() {
         </button>
         {status ? <span className={page.faint}>{status}</span> : null}
       </div>
-    </>
+    </section>
   );
 }

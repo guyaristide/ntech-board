@@ -76,23 +76,6 @@
   font-size: 13px;
 }
 
-.projectForm {
-  display: grid;
-  gap: 10px;
-  max-width: 520px;
-}
-
-.projectForm label {
-  display: grid;
-  gap: 4px;
-  color: var(--text-muted);
-  font-size: 13px;
-}
-
-.projectForm button {
-  justify-self: start;
-}
-
 .imports {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
