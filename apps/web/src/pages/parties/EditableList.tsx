@@ -77,7 +77,8 @@ export function EditableList<T extends { id: string; name: string }>({
           aria-label="Ajouter"
           onChange={e => setDraft(e.target.value)}
         />
-        <button type="submit" className={page.ghost}>
+        {extra ? <span className={styles.listSpacer} /> : null}
+        <button type="submit" className={page.outline}>
           Ajouter
         </button>
       </form>

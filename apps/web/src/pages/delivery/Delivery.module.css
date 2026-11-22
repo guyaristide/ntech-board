@@ -242,9 +242,14 @@ a.laneTitle:hover {
 .readyRoot {
   position: relative;
 }
+/* Champ d'une fiche (estimation, critères « prêt ») : à la largeur commune des propriétés. */
 .narrow {
   display: inline-block;
-  width: 110px;
+  width: var(--field-w);
+  max-width: 100%;
+}
+.narrow .estimate {
+  text-align: left;
 }
 .ready {
   width: 100%;

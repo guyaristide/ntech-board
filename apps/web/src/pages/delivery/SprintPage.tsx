@@ -230,7 +230,7 @@ export function SprintPage() {
                 <span className={styles.dates}>
                   <input
                     className={styles.estimate}
-                    style={{ width: 90 }}
+                    style={{ width: 'calc((var(--field-w) - 26px) / 2)', textAlign: 'left' }}
                     type="number"
                     min={0}
                     disabled={!canEdit}

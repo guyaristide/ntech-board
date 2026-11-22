@@ -46,34 +46,50 @@
 .section {
   margin-bottom: 28px;
 }
+/*
+ * Formulaire de réglages : le libellé au-dessus du champ, et tous les champs à la même largeur
+ * (--form-w), comme les listes modifiables. Un seul bord gauche, un seul bord droit.
+ */
 .fields {
   display: grid;
-  grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
-  gap: 10px 16px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 5px;
   align-items: start;
+  max-width: var(--form-w);
   margin: 8px 0 4px;
 }
-.fields > label {
-  padding-top: 5px;
-  color: var(--text-muted);
-  font-size: 14px;
+.fields > :nth-child(odd) {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+}
+.fields > :nth-child(odd):not(:first-child) {
+  margin-top: 14px;
 }
 .fields input[type='text'],
 .fields input[type='password'],
 .fields input[type='number'],
 .fields select {
   max-width: 100%;
-  padding: 4px 8px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--bg);
-  color: var(--text);
-  font: inherit;
 }
+.fields :is(input[type='text'], input[type='password'], input:not([type]), select) {
+  width: 100%;
+}
+/* Cases à cocher : en colonnes régulières plutôt qu'au fil de la ligne. */
 .checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 6px 14px;
+}
+/* Une seule case, posée directement sur son libellé : case puis texte, sur une ligne. */
+label.checks {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 14px;
+  align-items: center;
+  gap: 6px;
+}
+/* Une case seule prend toute la largeur : son libellé ne revient pas à la ligne. */
+.checks > :only-child {
+  grid-column: 1 / -1;
 }
 .checks label {
   display: inline-flex;
@@ -85,16 +101,33 @@
   gap: 6px;
   margin: 6px 0;
 }
+.list {
+  max-width: var(--form-w);
+}
+/* Lignes d'une liste : le libellé prend la place libre, les commandes ont une largeur fixe. */
 .listRow {
   display: flex;
-  flex-wrap: wrap;
   gap: 6px;
   align-items: center;
 }
 .listRow input[type='text'] {
-  flex: 1 1 220px;
+  flex: 1 1 0;
   min-width: 0;
-  max-width: 340px;
+}
+.listRow > select,
+.listRow > input.prefix,
+.listSpacer {
+  flex: none;
+  width: 124px;
+}
+.listRow > button {
+  flex: none;
+  min-width: 28px;
+  padding-inline: 4px;
+}
+/* « Ajouter » occupe la place des trois commandes d'une ligne : les champs restent alignés. */
+.listRow > button[type='submit'] {
+  width: 96px;
 }
 /* Enregistrement toujours à portée quand des réglages ont changé. */
 .saveBar {
@@ -123,17 +156,6 @@
   font-size: 13px;
 }
 
-@media (max-width: 720px) {
-  .fields {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 4px;
-  }
-  .fields > label {
-    margin-top: 8px;
-  }
-}
 .listRow .prefix {
-  flex: none;
-  width: 80px;
   font-family: var(--mono);
 }
