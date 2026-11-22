@@ -1,7 +1,8 @@
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import { z } from 'zod';
 import { ROLE_LABEL, ROLES, type WorkspaceData } from '@board/shared';
-import { originOf, requireRole, type AppEnv } from '../auth';
+import { isPlatformHost, originOf, requireRole, type AppEnv } from '../auth';
+import { originFor } from '../notificationMail';
 import {
   importCadrage,
   importSnapshot,
@@ -32,6 +33,12 @@ import { notifyNewMember } from '../notificationRules';
 
 /** Administration d'un projet : membres, invitations, imports, export. */
 export const adminRoutes = new Hono<AppEnv>();
+
+/** Adresse du tableau dans un e-mail : depuis la console, c'est celle du projet, pas celle de la console. */
+const boardOrigin = (c: Context<AppEnv>) =>
+  isPlatformHost(c.req.header('x-forwarded-host') ?? c.req.header('host'))
+    ? originFor(c.get('project').slug)
+    : originOf(c);
 adminRoutes.use('*', requireRole('admin'));
 
 adminRoutes.get('/members', async c => c.json(await listMembers(c.get('project').id)));
@@ -78,8 +85,8 @@ adminRoutes.post('/members', async c => {
         p.title,
         user.name || user.email,
         ROLE_LABEL[input.data.role],
-        originOf(c),
-        originOf(c),
+        boardOrigin(c),
+        boardOrigin(c),
       );
     } catch (e) {
       console.error(`Invitation non envoyée (${input.data.email}) : ${(e as Error).message}`);

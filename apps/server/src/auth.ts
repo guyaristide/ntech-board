@@ -29,7 +29,20 @@ export type AppEnv = {
 
 export const hash = (token: string) => createHash('sha256').update(token).digest('hex');
 export const newToken = () => randomBytes(32).toString('base64url');
-export const isSuperadmin = (email: string) => env.superadmins.includes(email.toLowerCase());
+/**
+ * Super-administrateurs : ceux de SUPERADMIN_EMAILS (configuration du serveur, intouchables) et ceux
+ * désignés dans la console (table platform_admins), gardés en mémoire et relus toutes les 30 secondes.
+ */
+let designated = new Set<string>();
+export async function refreshSuperadmins() {
+  const { rows } = await pool.query<{ email: string }>('SELECT email FROM platform_admins');
+  designated = new Set(rows.map(r => r.email));
+}
+export const isSuperadmin = (email: string) =>
+  env.superadmins.includes(email.toLowerCase()) || designated.has(email.toLowerCase());
+/** Hôte de la console de la plateforme (port ignoré). */
+export const isPlatformHost = (host: string | undefined) =>
+  env.platformHosts.includes((host ?? '').split(':')[0].toLowerCase());
 
 /** Origine publique de la requête, derrière le proxy de Coolify (Traefik). */
 export function originOf(c: Context) {
@@ -43,7 +56,7 @@ const secure = (c: Context) =>
   env.cookieSecure === 'auto' ? originOf(c).startsWith('https') : env.cookieSecure === 'true';
 
 /** Ouvre une session pour l'utilisateur sur le projet et pose le cookie (HttpOnly, propre au sous-domaine). */
-export async function openSession(c: Context, userId: string, projectId: string) {
+export async function openSession(c: Context, userId: string, projectId: string | null) {
   const token = newToken();
   await pool.query(
     `INSERT INTO sessions (id_hash, user_id, project_id, expires_at) VALUES ($1, $2, $3, now() + make_interval(days => $4))`,

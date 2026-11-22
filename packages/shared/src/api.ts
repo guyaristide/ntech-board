@@ -34,6 +34,8 @@ export interface SessionInfo {
   role: Role | null;
   /** Administrateur de la plateforme (NTECH SARL) : admin de tous les projets. */
   superadmin: boolean;
+  /** Console de la plateforme (hôte sans projet), réservée aux super-administrateurs. */
+  platform?: boolean;
 }
 
 export interface Member {

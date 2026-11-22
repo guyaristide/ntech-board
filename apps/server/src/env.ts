@@ -35,6 +35,14 @@ export const env = {
   /** Projet servi quand l'hôte ne correspond à aucun modèle (instance dédiée, développement). */
   defaultProject: process.env.DEFAULT_PROJECT ?? '',
   superadmins: list(process.env.SUPERADMIN_EMAILS).map(e => e.toLowerCase()),
+  /**
+   * Hôtes de la console de la plateforme (super-administrateurs), sans projet :
+   * « boards.neiba-technologies.com ». « boards.localhost » sert au développement.
+   */
+  platformHosts: [
+    ...list(process.env.PLATFORM_HOST ?? 'boards.neiba-technologies.com').map(h => h.toLowerCase()),
+    'boards.localhost',
+  ],
   notify: {
     /**
      * Adresse publique d'un projet pour les liens des e-mails, {slug} étant le projet. Vide : le

@@ -6,6 +6,7 @@ import {
   isDeliveryComment,
   mentionsIn,
   pathOf,
+  SLUG_PATTERN,
   threadOf,
   type Attachment,
   type ThreadComment,
@@ -105,4 +106,10 @@ test('fil résolu : ses messages ne comptent plus parmi les messages en cours', 
       ['b', false],
     ],
   );
+});
+
+test('adresse d’un projet : minuscules, chiffres et tirets, comme un sous-domaine', () => {
+  for (const ok of ['etourisme', 'pfo-immo', 'projet-2026', 'abc']) assert.ok(SLUG_PATTERN.test(ok), ok);
+  for (const ko of ['ab', '-abc', 'abc-', 'Abc', 'a b', 'été', 'a_b', 'x'.repeat(41)])
+    assert.ok(!SLUG_PATTERN.test(ko), ko);
 });

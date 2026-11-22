@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { Hono } from 'hono';
 import { secureHeaders } from 'hono/secure-headers';
-import { context, guardTokenDeletions, sameOrigin, type AppEnv } from './auth';
+import { context, guardTokenDeletions, isPlatformHost, sameOrigin, type AppEnv } from './auth';
 import { pool } from './db';
 import { env } from './env';
 import { accessLog, fail } from './log';
@@ -27,6 +27,7 @@ import { pdfRoutes } from './routes/pdf';
 import { programmeRoutes } from './routes/programme';
 import { workspaceRoutes } from './routes/workspace';
 import { findProject, projectSlug } from './tenancy';
+import { platformApi } from './routes/platform';
 
 const here = dirname(fileURLToPath(import.meta.url));
 /** Front construit (apps/web/dist), servi par le même processus en production. */
@@ -56,6 +57,12 @@ export function createApp() {
 
   // Journal de toutes les requêtes /api, y compris les routes inconnues.
   app.use('/api/*', accessLog);
+
+  // Hôte de la console (boards.…) : sans projet, il a ses propres routes, réservées aux super-administrateurs.
+  app.use('/api/*', async (c, next) => {
+    if (!isPlatformHost(c.req.header('x-forwarded-host') ?? c.req.header('host'))) return next();
+    return platformApi.fetch(c.req.raw);
+  });
 
   const api = new Hono<AppEnv>();
   api.use('*', context, sameOrigin, guardTokenDeletions);

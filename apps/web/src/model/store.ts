@@ -25,7 +25,7 @@ import type {
 import { api, ApiError, clientId } from './api';
 import { useNotifications } from './notifications';
 
-export type Phase = 'loading' | 'login' | 'ready' | 'notfound' | 'error';
+export type Phase = 'loading' | 'login' | 'ready' | 'platform' | 'notfound' | 'error';
 export type SaveState = 'saved' | 'saving' | 'error' | 'offline';
 
 interface State extends WorkspaceData {
@@ -225,6 +225,8 @@ export const useWorkspace = create<State>((set, get) => {
         const session = await api.get<SessionInfo>('/session');
         set({ session });
         if (!session.user) return set({ phase: 'login' });
+        // Hôte de la console : pas de projet à charger, l'écran des super-administrateurs.
+        if (session.platform) return set({ phase: 'platform' });
         await get().load();
         connect();
         set({ phase: 'ready' });

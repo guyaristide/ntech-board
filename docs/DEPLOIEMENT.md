@@ -63,6 +63,7 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `COOKIE_SECURE` | `auto` : cookies `Secure` en HTTPS, d'après `X-Forwarded-Proto` | non |
 | `SECRETS_KEY` | Clé de chiffrement des clés de stockage (Cloudinary, MinIO, S3) et de la clé Claude saisies dans les réglages, par exemple `openssl rand -base64 32`. Sans elle, les pièces jointes restent sur le serveur (volume `board-storage`). **Ne plus la changer ensuite** : les clés déjà enregistrées deviendraient illisibles, il faudrait les ressaisir | non, mais nécessaire pour Cloudinary, MinIO, S3 et l’analyse par Claude |
 | `AI_MODEL`, `AI_EFFORT` | Modèle Claude et niveau d’effort de l’analyse des échanges (écran « À relire »), communs à tous les projets (`low`, `medium`, `high`, `xhigh`, `max`) ; la clé Claude, elle, est saisie par chaque projet dans ses Réglages et chiffrée avec `SECRETS_KEY`. Par défaut `claude-opus-5-5` et `medium` | non |
+| `PLATFORM_HOST` | Hôte de la console de la plateforme, réservée aux super-administrateurs (voir « Console de la plateforme »). Par défaut `boards.neiba-technologies.com` | non |
 | `PUBLIC_ORIGIN` | Adresse publique d’un projet dans les liens des e-mails de notification, `{slug}` étant le projet. Vide : le premier modèle de `PROJECT_HOSTS`, en https (`https://{slug}-board.neiba-technologies.com`). À renseigner seulement si l’adresse publique diffère | non |
 | `NOTIFY_QUIET_MINUTES`, `NOTIFY_DIGEST_HOUR` | Notifications par e-mail : minutes de calme avant d’envoyer un e-mail « tout de suite » (des changements en rafale n’en font qu’un ; 5 par défaut), et heure du serveur pour le récapitulatif quotidien et les rappels d’échéance (8 par défaut). Les e-mails partent par le même SMTP que les liens de connexion | non |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Notifications système (téléphone, ordinateur), même tableau fermé. Créez la paire une fois avec `npx web-push generate-vapid-keys` ; `VAPID_SUBJECT` est une adresse de contact (`mailto:…`). Sans elles, les notifications restent dans le tableau et par e-mail. **Ne plus changer la paire ensuite** : les abonnements des appareils deviendraient invalides | non, mais nécessaire pour les notifications système |
@@ -97,6 +98,47 @@ SMTP_FROM=NTECH Board <contact@neiba-technologies.com>
 Sans `SMTP_HOST`, aucun e-mail ne part : le lien de connexion s'affiche dans la console du serveur.
 
 **Vérifier.** Demandez un lien depuis la page de connexion. Si l'envoi échoue, la page affiche « L'envoi a échoué, réessayez dans un instant ». Les logs du service **app** contiennent alors la cause, sur une ligne `Envoi du lien de connexion impossible (...)`. Une réponse `535 Authentication failed` signale un mauvais `SMTP_USER` ou une mauvaise clé.
+
+### Console de la plateforme
+
+La console est l'espace au-dessus de tous les projets, réservé aux super-administrateurs : liste des
+projets et de leur activité, création d'un projet, ouverture d'un projet sans se reconnecter, membres,
+imports et exports, changement d'adresse, fermeture des sessions, suppression, comptes, état des
+services. Elle est servie par la même application, sur un hôte qui ne correspond à aucun projet.
+
+**Mise en service**
+
+1. **DNS** : un enregistrement pour `boards.neiba-technologies.com` vers le serveur (inutile si un
+   enregistrement générique `*.neiba-technologies.com` existe déjà).
+2. **Coolify** : ajoutez `https://boards.neiba-technologies.com` aux domaines de la ressource `app`,
+   à côté des domaines des projets (section 4), puis redéployez pour obtenir le certificat.
+3. **Variable** `PLATFORM_HOST` : à renseigner seulement si l'hôte diffère de la valeur par défaut.
+4. **Accès** : ouvrez `https://boards.neiba-technologies.com` et demandez un lien de connexion avec une
+   adresse de `SUPERADMIN_EMAILS`. Toute autre adresse est ignorée, sans message d'erreur (les logs,
+   eux, le disent : catégorie `[console]`).
+
+**Qui est super-administrateur**
+
+- Les adresses de `SUPERADMIN_EMAILS` : définies dans Coolify, elles ne se retirent pas depuis la
+  console. Gardez-en au moins une que vous contrôlez.
+- Celles désignées dans la console (rubrique Super-administrateurs) : ajoutables et retirables par
+  n'importe quel super-administrateur. Retirer quelqu'un ferme ses sessions de console tout de suite.
+
+Un super-administrateur est administrateur de fait de tous les projets ; désignez-en peu.
+
+**À savoir**
+
+- La session de la console est distincte de celle des projets : une session de projet n'ouvre pas la
+  console, et inversement. « Ouvrir » un projet depuis la console crée un lien d'entrée à usage unique,
+  valable deux minutes.
+- **Changer l'adresse d'un projet** change son sous-domaine : ajoutez le nouveau domaine dans Coolify
+  (et le DNS) avant, retirez l'ancien après. Les membres sont déconnectés et doivent réactiver leurs
+  notifications système.
+- **Supprimer un projet** est définitif : contenu, membres, réglages, historique, fichiers. La console
+  demande de saisir l'adresse du projet. Téléchargez l'export complet avant ; il se restaure dans un
+  projet vide (Gérer, Données, « Restaurer un export complet »).
+- Toutes les actions de la console sont tracées dans les logs de `app`, catégorie `[console]`, avec
+  l'adresse de qui les a faites.
 
 ### Notifications système (clés VAPID)
 

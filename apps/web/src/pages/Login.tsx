@@ -8,6 +8,7 @@ import styles from './Login.module.css';
 /** Connexion par lien envoyé par e-mail (pas de mot de passe). */
 export function Login() {
   const project = useWorkspace(s => s.session?.project);
+  const platform = useWorkspace(s => !!s.session?.platform);
   const [params] = useSearchParams();
   const [email, setEmail] = useState('');
   const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
@@ -63,7 +64,9 @@ export function Login() {
               <p className={styles.error}>L’envoi a échoué, réessayez dans un instant.</p>
             ) : null}
             <p className={styles.hint}>
-              Accès sur invitation. Contactez l’administrateur du projet si vous n’en avez pas.
+              {platform
+                ? 'Console réservée aux super-administrateurs de la plateforme.'
+                : 'Accès sur invitation. Contactez l’administrateur du projet si vous n’en avez pas.'}
             </p>
           </form>
         )}

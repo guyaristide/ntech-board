@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server';
 import { createApp } from './app';
 import { migrate, pool } from './db';
+import { refreshSuperadmins } from './auth';
 import { env } from './env';
 import { log, warn } from './log';
 import { checkMail } from './mail';
@@ -15,6 +16,8 @@ await migrate();
 ensureStorage();
 void checkMail();
 await listen();
+await refreshSuperadmins();
+setInterval(() => void refreshSuperadmins().catch(() => undefined), 30_000).unref();
 startNotificationJobs();
 checkPush();
 

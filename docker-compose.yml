@@ -16,6 +16,8 @@ services:
       PROJECT_HOSTS: ${PROJECT_HOSTS:-}
       DEFAULT_PROJECT: ${DEFAULT_PROJECT:-}
       SUPERADMIN_EMAILS: ${SUPERADMIN_EMAILS:?Définir SUPERADMIN_EMAILS}
+      # Hôte de la console de la plateforme (super-administrateurs), sans projet.
+      PLATFORM_HOST: ${PLATFORM_HOST:-boards.neiba-technologies.com}
       SMTP_HOST: ${SMTP_HOST-smtp-relay.brevo.com}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_SECURE: ${SMTP_SECURE:-false}
