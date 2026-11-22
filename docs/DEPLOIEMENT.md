@@ -67,7 +67,7 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `NOTIFY_QUIET_MINUTES`, `NOTIFY_DIGEST_HOUR` | Notifications par e-mail : minutes de calme avant d’envoyer un e-mail « tout de suite » (des changements en rafale n’en font qu’un ; 5 par défaut), et heure du serveur pour le récapitulatif quotidien et les rappels d’échéance (8 par défaut). Les e-mails partent par le même SMTP que les liens de connexion | non |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Notifications système (téléphone, ordinateur), même tableau fermé. Créez la paire une fois avec `npx web-push generate-vapid-keys` ; `VAPID_SUBJECT` est une adresse de contact (`mailto:…`). Sans elles, les notifications restent dans le tableau et par e-mail. **Ne plus changer la paire ensuite** : les abonnements des appareils deviendraient invalides | non, mais nécessaire pour les notifications système |
 
-Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD` et `SECRETS_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
+Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD`, `SECRETS_KEY` et `VAPID_PRIVATE_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
 
 ### Paramètres SMTP (Brevo)
 
@@ -97,6 +97,80 @@ SMTP_FROM=NTECH Board <contact@neiba-technologies.com>
 Sans `SMTP_HOST`, aucun e-mail ne part : le lien de connexion s'affiche dans la console du serveur.
 
 **Vérifier.** Demandez un lien depuis la page de connexion. Si l'envoi échoue, la page affiche « L'envoi a échoué, réessayez dans un instant ». Les logs du service **app** contiennent alors la cause, sur une ligne `Envoi du lien de connexion impossible (...)`. Une réponse `535 Authentication failed` signale un mauvais `SMTP_USER` ou une mauvaise clé.
+
+### Notifications système (clés VAPID)
+
+Les notifications système s'affichent sur le téléphone ou l'ordinateur même quand le tableau est fermé.
+Le navigateur n'accepte de s'y abonner que si le serveur prouve son identité avec une paire de clés,
+dite VAPID : une clé publique, donnée aux navigateurs, et une clé privée, qui signe chaque envoi. Sans
+cette paire, tout le reste fonctionne (notifications dans le tableau et par e-mail) ; seules les
+notifications système sont absentes, et le bouton « Activer les notifications » n'apparaît pas.
+
+**1. Créer la paire, une seule fois pour la plateforme.** Sur un poste où Node.js est installé :
+
+```bash
+npx web-push generate-vapid-keys
+```
+
+ou, sans rien installer, dans le conteneur de l'application déjà déployée (terminal Coolify de `app`) :
+
+```bash
+node node_modules/web-push/src/cli.js generate-vapid-keys
+```
+
+La commande affiche les deux clés :
+
+```
+=======================================
+Public Key:
+BEl62iUYgUivxIkv69yViEuiBIa-Ib9-SkvMeAtA3LFgDzkrxZJjSgSnfckjBJuBkr3qBUYIHBQFLXYp5Nksh8U
+
+Private Key:
+UUxI4O8-FbRouAevSmBQ6o18hgE4nSG3qwvJTfKc-ls
+=======================================
+```
+
+(Ces valeurs sont un exemple : n'utilisez que celles que la commande vous donne.)
+
+**2. Les renseigner dans Coolify**, onglet **Environment Variables** de la ressource :
+
+| Variable | Valeur |
+|---|---|
+| `VAPID_PUBLIC_KEY` | la ligne sous `Public Key:` (87 caractères, commence en général par `B`) |
+| `VAPID_PRIVATE_KEY` | la ligne sous `Private Key:` (43 caractères), à marquer comme secret |
+| `VAPID_SUBJECT` | une adresse de contact, sous la forme `mailto:contact@neiba-technologies.com` ; les services de push s'en servent pour joindre l'exploitant en cas de problème |
+
+Copiez chaque clé sur une seule ligne, sans espace ni guillemets.
+
+**3. Redéployer**, puis vérifier dans les logs de `app` la ligne :
+
+```
+[push] Notifications système actives (clés VAPID présentes).
+```
+
+Si vous lisez « inactives : VAPID_PUBLIC_KEY et VAPID_PRIVATE_KEY non renseignées », l'une des deux
+variables est vide ou mal nommée.
+
+**4. Côté utilisateur**, chacun active les notifications sur chacun de ses appareils : cloche du menu,
+onglet **Préférences**, **Activer les notifications**, puis accepter la demande du navigateur. Les cases
+à cocher choisissent ensuite les familles de notifications voulues sur l'appareil.
+
+À savoir :
+
+- **La même paire sert à tous les projets** de la plateforme : elle se crée une fois, pas par projet.
+- **Ne changez plus la paire une fois en service.** Les abonnements des appareils sont liés à la clé
+  publique : avec une nouvelle paire, plus aucune notification système n'arrive, et chaque personne doit
+  désactiver puis réactiver les notifications sur chaque appareil. Gardez une copie des deux clés avec
+  vos autres secrets (gestionnaire de mots de passe) : elles ne sont affichées qu'à la création.
+- **La clé privée ne se partage pas** : qui la détient peut envoyer des notifications au nom du tableau.
+- **HTTPS est obligatoire** (c'est le cas derrière Coolify) ; en local, `http://localhost` est accepté.
+- **iPhone et iPad** : les notifications système demandent iOS 16.4 ou plus, et d'installer d'abord le
+  tableau sur l'écran d'accueil (Safari, bouton Partager, « Sur l'écran d'accueil »), puis de les
+  activer depuis l'application installée.
+- **Anti-rafale** : une notification système ne part que pour une notification nouvelle, pas à chaque
+  changement regroupé, et pas si la personne a déjà le tableau ouvert.
+- Un appareil dont l'abonnement a expiré (navigateur réinitialisé, autorisation retirée) est retiré
+  automatiquement au premier envoi refusé.
 
 ## 4. Domaines
 

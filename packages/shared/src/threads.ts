@@ -27,6 +27,9 @@ export interface ThreadComment {
   editedAt: string | null;
   /** Membres mentionnés (@Nom) : ils sont prévenus. Absent des messages antérieurs aux mentions. */
   mentions?: string[];
+  /** Fil réglé (message de tête seulement) : date et nom de qui l'a marqué résolu. */
+  resolvedAt?: string | null;
+  resolvedBy?: string;
   /** Supprimé alors qu'il avait des réponses : gardé pour ne pas les orpheliner, sans texte. */
   deleted: boolean;
 }
@@ -54,9 +57,18 @@ export function threadOf(comments: ThreadComment[], kind: string, id: string): T
     .filter(e => !e.comment.deleted || e.replies.length);
 }
 
-/** Nombre de messages visibles d'un élément (réponses comprises). */
-export const commentCount = (comments: ThreadComment[], kind: string, id: string) =>
-  comments.filter(c => on(c, kind, id) && !c.deleted).length;
+/** Fil réglé : son message de tête est marqué résolu. */
+export const isResolved = (e: ThreadEntry) => !!e.comment.resolvedAt;
+
+/**
+ * Nombre de messages en cours d'un élément (réponses comprises) : ceux des fils résolus ne comptent
+ * plus, la question est réglée.
+ */
+export function commentCount(comments: ThreadComment[], kind: string, id: string) {
+  const mine = comments.filter(c => on(c, kind, id) && !c.deleted);
+  const settled = new Set(mine.filter(c => !c.replyTo && c.resolvedAt).map(c => c.id));
+  return mine.filter(c => !settled.has(c.id) && !settled.has(c.replyTo)).length;
+}
 
 /**
  * Type d'élément qui décide de la visibilité d'un message : celui qu'il vise, ou, pour une pièce

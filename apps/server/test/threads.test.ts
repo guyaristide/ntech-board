@@ -89,3 +89,20 @@ test('notifications : adresse d’un élément et famille d’un type', () => {
   assert.equal(groupOf('status'), 'assigned');
   assert.equal(groupOf('sprint'), 'project');
 });
+
+test('fil résolu : ses messages ne comptent plus parmi les messages en cours', () => {
+  const comments = [
+    msg('a', '2026-11-20T09:00', { resolvedAt: '2026-11-21T10:00', resolvedBy: 'Awa' }),
+    msg('a1', '2026-11-20T09:30', { replyTo: 'a' }),
+    msg('b', '2026-11-20T10:00'),
+    msg('b1', '2026-11-20T10:30', { replyTo: 'b' }),
+  ];
+  assert.equal(commentCount(comments, 'story', 'US-1'), 2);
+  assert.deepEqual(
+    threadOf(comments, 'story', 'US-1').map(e => [e.comment.id, !!e.comment.resolvedAt]),
+    [
+      ['a', true],
+      ['b', false],
+    ],
+  );
+});

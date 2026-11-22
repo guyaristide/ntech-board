@@ -60,6 +60,14 @@ export async function postComment(input: {
       throw new ThreadError('not_found', 'Message introuvable dans ce fil.', 404);
     // Un seul niveau de réponses : répondre à une réponse, c'est répondre au même message.
     replyTo = parent.replyTo || parent.id;
+    // Répondre à un fil résolu le rouvre : la question n'est plus réglée.
+    const head = parent.replyTo ? await getEntity(projectId, 'comment', parent.replyTo) : parent;
+    if (head?.resolvedAt)
+      await mutate(projectId, 'comment', head.id, user.id, 'reopen', x => ({
+        ...x,
+        resolvedAt: null,
+        resolvedBy: '',
+      }));
   }
   return createEntity(
     projectId,
@@ -90,6 +98,23 @@ export async function editComment(projectId: string, userId: string, id: string,
     ...x,
     text,
     editedAt: new Date().toISOString(),
+  }));
+}
+
+/** Marque un fil résolu, ou le rouvre. Se fait sur le message de tête ; tout éditeur le peut. */
+export async function resolveComment(
+  projectId: string,
+  user: { id: string; name: string; email: string },
+  id: string,
+  resolved: boolean,
+) {
+  const c = await getEntity(projectId, 'comment', id);
+  if (!c || c.deleted) throw new ThreadError('not_found', 'Message introuvable.', 404);
+  const head = c.replyTo || c.id;
+  return mutate(projectId, 'comment', head, user.id, resolved ? 'resolve' : 'reopen', x => ({
+    ...x,
+    resolvedAt: resolved ? new Date().toISOString() : null,
+    resolvedBy: resolved ? user.name || user.email : '',
   }));
 }
 

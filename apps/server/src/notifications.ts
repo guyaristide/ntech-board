@@ -1,5 +1,7 @@
 import {
   canSeeDelivery,
+  partyIndex,
+  splitMention,
   groupOf,
   withPrefDefaults,
   type NotificationPrefs,
@@ -91,6 +93,24 @@ export async function usersOfParty(projectId: string, partyId: string): Promise<
   const party = parties.find(p => p.id === partyId);
   const person = party?.type === 'role' ? parties.find(p => p.id === party.holder) : party;
   return person?.type === 'person' && person.userId ? [person.userId] : [];
+}
+
+/**
+ * Comptes désignés par un responsable écrit en toutes lettres (diligence, action de risque) : le
+ * texte est rapproché des parties prenantes par nom, sigle ou alias, entier puis morceau par morceau
+ * (« Awa Diallo et Lead Chef de projet »). Une organisation ne désigne personne en particulier.
+ */
+export async function usersOfText(projectId: string, text: string): Promise<string[]> {
+  if (!text.trim()) return [];
+  const parties = await persons(projectId);
+  const find = partyIndex(parties);
+  const whole = find(text);
+  const named = whole ? [whole] : splitMention(text).map(find);
+  const users = named.map(p => {
+    const person = p?.type === 'role' ? parties.find(x => x.id === p.holder) : p;
+    return person?.type === 'person' ? person.userId : null;
+  });
+  return [...new Set(users.filter((u): u is string => !!u))];
 }
 
 // --- Suivi --------------------------------------------------------------------------------

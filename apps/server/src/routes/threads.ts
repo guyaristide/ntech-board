@@ -12,6 +12,7 @@ import {
   isDeliveryTarget,
   postComment,
   removeComment,
+  resolveComment,
   ThreadError,
 } from '../threads';
 import { body } from './workspace';
@@ -36,7 +37,7 @@ const NewComment = z.object({
   replyTo: z.string().max(40).optional(),
   mentions: z.array(z.uuid()).max(30).optional(),
 });
-const EditComment = z.object({ text });
+const EditComment = z.union([z.object({ text }), z.object({ resolved: z.boolean() })]);
 
 type Ctx = { get: (k: 'project' | 'user' | 'role') => unknown };
 const who = (c: Ctx) => ({
@@ -74,6 +75,8 @@ threadRoutes.patch('/comments/:id', requireRole('editor'), async c => {
   const { project, user } = who(c);
   const existing = await getEntity(project.id, 'comment', c.req.param('id'));
   if (existing && !(await allowed(c, existing.target))) return c.json({ error: 'delivery_hidden' }, 403);
+  if ('resolved' in input)
+    return c.json(await resolveComment(project.id, user, c.req.param('id'), input.resolved));
   return c.json(await editComment(project.id, user.id, c.req.param('id'), input.text));
 });
 

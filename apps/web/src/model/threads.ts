@@ -15,6 +15,9 @@ export const threads = {
     ),
   edit: (id: string, text: string) =>
     ops.send('comment', id, () => api.patch<ThreadComment>(`/comments/${id}`, { text })),
+  /** Marque un fil résolu (ou le rouvre), par son message de tête. */
+  resolve: (id: string, resolved: boolean) =>
+    ops.send('comment', id, () => api.patch<ThreadComment>(`/comments/${id}`, { resolved })),
   remove: async (id: string) => {
     const { kept } = await ops.send('comment', id, () =>
       api.delete<{ kept: ThreadComment | null }>(`/comments/${id}`),

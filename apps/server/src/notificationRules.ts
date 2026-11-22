@@ -6,6 +6,7 @@ import {
   ROLE_LABEL,
   stepOf,
   type Attachment,
+  type Diligence,
   type EntityKind,
   type Risk,
   type Role,
@@ -14,7 +15,7 @@ import {
   type Ticket,
 } from '@board/shared';
 import { pool } from './db';
-import { allMembers, autoFollow, followers, notifyUsers, usersOfParty } from './notifications';
+import { allMembers, autoFollow, followers, notifyUsers, usersOfParty, usersOfText } from './notifications';
 import { getEntity, getSettings, onChange, type Change } from './repo';
 
 /**
@@ -163,6 +164,113 @@ async function onRisk(ch: Change<'risk'>) {
   });
 }
 
+/** Personnes nouvellement désignées par un responsable en texte libre : celles d'après, moins celles d'avant. */
+async function newlyNamed(projectId: string, before: string | undefined, after: string) {
+  if (!after.trim() || after === before) return [];
+  const old = new Set(before ? await usersOfText(projectId, before) : []);
+  return (await usersOfText(projectId, after)).filter(u => !old.has(u));
+}
+
+async function onDiligence(ch: Change<'diligence'>) {
+  const before = ch.before as Diligence | null;
+  const after: Diligence = ch.after;
+  const actor = await actorOf(ch.userId);
+  const target = { kind: 'diligence', id: after.id };
+  const label = labelOf('diligence', after as unknown as Record<string, unknown>, after.id);
+  const path = pathOf('diligence', after.id);
+  const assigned = await newlyNamed(ch.projectId, before?.owner, after.owner);
+  if (assigned.length) {
+    await notifyUsers(ch.projectId, actor, assigned, {
+      type: 'assigned',
+      target,
+      title: `${actor.name} vous a confié la diligence ${label}`,
+      body: after.due ? `Échéance : ${after.due}` : '',
+      path,
+    });
+    await autoFollow(ch.projectId, assigned, 'diligence', after.id, 'assignee');
+  }
+  if (before && before.status !== after.status) {
+    const users = [
+      ...(await usersOfText(ch.projectId, after.owner)),
+      ...(await followers(ch.projectId, 'diligence', after.id)),
+    ].filter(u => !assigned.includes(u));
+    await notifyUsers(ch.projectId, actor, users, {
+      type: 'status',
+      target,
+      title: `La diligence ${label} passe à « ${after.status} »`,
+      body: `${actor.name} · depuis « ${before.status} »`,
+      bodyFrom: from => `${actor.name} · depuis « ${from} »`,
+      path,
+      change: { from: before.status, to: after.status },
+    });
+  }
+}
+
+/** Risque : propriétaire, responsable d'action et responsable de chaque action du plan. */
+async function onRiskOwners(ch: Change<'risk'>) {
+  const before = ch.before as Risk | null;
+  const after: Risk = ch.after;
+  const actor = await actorOf(ch.userId);
+  const target = { kind: 'risk', id: after.id };
+  const label = labelOf('risk', after as unknown as Record<string, unknown>, after.id);
+  const path = pathOf('risk', after.id);
+  const tell = async (users: string[], title: string, body: string, key: string) => {
+    if (!users.length) return;
+    await notifyUsers(ch.projectId, actor, users, {
+      type: 'assigned',
+      target,
+      groupKey: `assigned:risk:${after.id}:${key}`,
+      title,
+      body,
+      path,
+    });
+    await autoFollow(ch.projectId, users, 'risk', after.id, 'assignee');
+  };
+  await tell(
+    await newlyNamed(ch.projectId, before?.owner, after.owner),
+    `${actor.name} vous a désigné propriétaire du risque ${label}`,
+    '',
+    'owner',
+  );
+  await tell(
+    await newlyNamed(ch.projectId, before?.actionOwner, after.actionOwner),
+    `${actor.name} vous a désigné responsable d’action du risque ${label}`,
+    '',
+    'actionOwner',
+  );
+  for (const action of after.actions) {
+    const was = before?.actions.find(a => a.id === action.id);
+    await tell(
+      await newlyNamed(ch.projectId, was?.owner, action.owner),
+      `${actor.name} vous a confié une action sur le risque ${label}`,
+      excerpt(action.text),
+      `action:${action.id}`,
+    );
+  }
+}
+
+/** Fil résolu : son auteur est prévenu (sauf s'il l'a résolu lui-même). */
+async function onResolved(ch: Change<'comment'>) {
+  const c: ThreadComment = ch.after;
+  if (!c.resolvedAt || ch.before?.resolvedAt || !c.author) return;
+  const actor = await actorOf(ch.userId);
+  const { label, path, visibility } = await place(ch.projectId, c.target.kind, c.target.id);
+  await notifyUsers(
+    ch.projectId,
+    actor,
+    [c.author],
+    {
+      type: 'reply',
+      target: c.target,
+      groupKey: `resolved:${c.id}`,
+      title: `${actor.name} a marqué votre fil résolu sur ${label}`,
+      body: excerpt(c.text),
+      path,
+    },
+    visibility,
+  );
+}
+
 /** Propositions tirées d'un échange : les éditeurs sont prévenus une fois, pas une fois par proposition. */
 async function onProposal(ch: Change<'proposal'>) {
   await notifyUsers(ch.projectId, await actorOf(null), await allMembers(ch.projectId, ['admin', 'editor']), {
@@ -192,8 +300,14 @@ onChange(async ch => {
   if (!ch.before && isThreadKind(ch.kind) && ch.kind !== 'attachment')
     await autoFollow(ch.projectId, [ch.userId], ch.kind, ch.id, 'author');
   if (ch.kind === 'comment' && !ch.before) return onComment(ch as Change<'comment'>);
+  if (ch.kind === 'comment') return onResolved(ch as Change<'comment'>);
+  if (ch.kind === 'diligence') return onDiligence(ch as Change<'diligence'>);
   if (ch.kind === 'ticket') return onTicket(ch as Change<'ticket'>);
   if (ch.kind === 'sprint' && ch.before) return onSprint(ch as Change<'sprint'>);
-  if (ch.kind === 'risk' && ch.before) return onRisk(ch as Change<'risk'>);
+  if (ch.kind === 'risk') {
+    await onRiskOwners(ch as Change<'risk'>);
+    if (ch.before) await onRisk(ch as Change<'risk'>);
+    return;
+  }
   if (ch.kind === 'proposal' && !ch.before) return onProposal(ch as Change<'proposal'>);
 });

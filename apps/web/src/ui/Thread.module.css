@@ -253,3 +253,37 @@
 .mentions button:hover {
   background: var(--bg-hover);
 }
+
+/* Fils résolus : repliés sous les fils en cours, en retrait visuel. */
+.resolved {
+  margin-top: 2px;
+}
+.resolved summary {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  list-style: none;
+}
+.resolved summary::-webkit-details-marker {
+  display: none;
+}
+.resolved summary:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.resolved[open] summary {
+  margin-bottom: 8px;
+}
+.list > li[data-resolved] {
+  padding-left: 10px;
+  border-left: 2px solid var(--ok);
+  opacity: 0.8;
+}
+.resolvedBy {
+  margin: 2px 0 0 34px;
+  color: var(--text-faint);
+  font-size: 12px;
+}

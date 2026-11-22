@@ -1,19 +1,22 @@
 import { randomBytes } from 'node:crypto';
 import {
+  diligenceOpen,
   groupOf,
   isDone,
   pathOf,
   withPrefDefaults,
   type EmailMode,
   type NotificationPrefs,
+  type Diligence,
   type NotificationType,
+  type Risk,
   type Ticket,
 } from '@board/shared';
 import { pool } from './db';
 import { env } from './env';
 import { fail, log } from './log';
 import { esc, layout, sendMail } from './mail';
-import { notifyUsers, usersOfParty } from './notifications';
+import { notifyUsers, usersOfParty, usersOfText } from './notifications';
 import { getSettings } from './repo';
 
 /**
@@ -219,6 +222,48 @@ export async function remindDueTickets() {
   }
 }
 
+/** Rappels d'échéance des diligences à mener et des actions de risque en cours, à leur responsable. */
+export async function remindDueOwners() {
+  const day = (offset: number) => new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
+  const when = (due: string) => (due === day(0) ? 'aujourd’hui' : due === day(1) ? 'demain' : null);
+  const system = { id: null, name: 'Le tableau' };
+  const diligences = await pool.query<{ project_id: string; data: Diligence }>(
+    `SELECT project_id, data FROM entities WHERE kind = 'diligence' AND data->>'due' = ANY($1)`,
+    [[day(0), day(1)]],
+  );
+  for (const { project_id, data: d } of diligences.rows) {
+    const at = when(d.due);
+    if (!at || !diligenceOpen(d.status)) continue;
+    await notifyUsers(project_id, system, await usersOfText(project_id, d.owner), {
+      type: 'due',
+      target: { kind: 'diligence', id: d.id },
+      groupKey: `due:diligence:${d.id}:${d.due}:${at}`,
+      once: true,
+      title: `La diligence ${d.id} · ${d.title} est à rendre ${at}`,
+      path: pathOf('diligence', d.id),
+    });
+  }
+  const risks = await pool.query<{ project_id: string; data: Risk }>(
+    `SELECT project_id, data FROM entities e WHERE kind = 'risk'
+        AND EXISTS (SELECT 1 FROM jsonb_array_elements(e.data->'actions') a WHERE a->>'due' = ANY($1))`,
+    [[day(0), day(1)]],
+  );
+  for (const { project_id, data: r } of risks.rows)
+    for (const a of r.actions) {
+      const at = when(a.due);
+      if (!at || a.status === 'Réalisée' || a.status === 'Abandonnée') continue;
+      await notifyUsers(project_id, system, await usersOfText(project_id, a.owner), {
+        type: 'due',
+        target: { kind: 'risk', id: r.id },
+        groupKey: `due:risk:${r.id}:${a.id}:${a.due}:${at}`,
+        once: true,
+        title: `Une action du risque ${r.id} · ${r.title} est à rendre ${at}`,
+        body: a.text,
+        path: pathOf('risk', r.id),
+      });
+    }
+}
+
 /** Vrai une seule fois par jour et par tâche, toutes instances confondues. */
 async function firstRunToday(name: string) {
   const { rowCount } = await pool.query(
@@ -233,6 +278,7 @@ async function tick() {
   await sendInstant();
   if (new Date().getHours() >= env.notify.digestHour && (await firstRunToday('notifications-daily'))) {
     await remindDueTickets();
+    await remindDueOwners();
     await sendDigests();
     log('notifications', 'Rappels d’échéance et récapitulatifs du jour envoyés.');
   }

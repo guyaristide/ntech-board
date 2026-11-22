@@ -29,7 +29,7 @@ const kind = z
   );
 
 const line = (c: ThreadComment, indent = '') =>
-  `${indent}- [${c.id}] ${c.authorName || 'Anonyme'}, ${c.at.slice(0, 16).replace('T', ' ')}${c.editedAt && !c.deleted ? ' (modifié)' : ''} : ${c.deleted ? '(message supprimé)' : c.text}`;
+  `${indent}- [${c.id}] ${c.authorName || 'Anonyme'}, ${c.at.slice(0, 16).replace('T', ' ')}${c.editedAt && !c.deleted ? ' (modifié)' : ''}${c.resolvedAt ? ' (fil résolu)' : ''} : ${c.deleted ? '(message supprimé)' : c.text}`;
 
 /** Fil d'un élément en texte, réponses en retrait ; vide s'il n'y a aucun message. */
 export function threadText(ws: WorkspaceData, k: string, id: string) {
@@ -75,6 +75,27 @@ export function registerThreads(server: McpServer, ctx: Ctx, canWrite: boolean) 
         text: a.texte,
       });
       return `Commentaire ajouté sur ${a.cible} ${a.id}.`;
+    },
+  );
+
+  tool(
+    server,
+    'resolve_thread',
+    {
+      title: 'Résoudre ou rouvrir un fil',
+      description:
+        'Marque un fil de discussion résolu (la question est réglée) ou le rouvre. Indiquez un message du fil : c’est le fil entier, message de tête et réponses, qui change d’état.',
+      input: {
+        comment_id: z.string().describe('Identifiant d’un message du fil (CM-…)'),
+        resolved: z.boolean().default(true),
+      },
+      write: true,
+    },
+    async a => {
+      const c = await ctx.api<ThreadComment>('PATCH', `/comments/${encodeURIComponent(a.comment_id)}`, {
+        resolved: a.resolved,
+      });
+      return `Fil ${c.id} ${c.resolvedAt ? 'résolu' : 'rouvert'}.`;
     },
   );
 

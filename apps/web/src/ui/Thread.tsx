@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState, type KeyboardEvent, type ReactNode } from 'react';
 import {
   commentCount,
+  isResolved,
   mentionsIn,
   threadOf,
   type Person,
   type ThreadComment,
+  type ThreadEntry,
   type ThreadKind,
 } from '@board/shared';
 import { ApiError } from '../model/api';
@@ -202,11 +204,16 @@ function Composer({
 function Message({
   comment,
   onReply,
+  onResolve,
+  resolveLabel = 'Résoudre',
   onPick,
   pickLabel,
 }: {
   comment: ThreadComment;
   onReply?: () => void;
+  /** Message de tête : marquer le fil résolu, ou le rouvrir. */
+  onResolve?: () => void;
+  resolveLabel?: string;
   onPick?: (text: string) => void;
   pickLabel?: string;
 }) {
@@ -273,6 +280,11 @@ function Message({
               </p>
             ) : !editing ? (
               <p className={styles.tools}>
+                {onResolve && canEdit ? (
+                  <button type="button" onClick={onResolve}>
+                    {resolveLabel}
+                  </button>
+                ) : null}
                 {onReply && canEdit ? (
                   <button type="button" onClick={onReply}>
                     Répondre
@@ -333,53 +345,72 @@ export function Thread({
   useEffect(() => {
     if (pending) void read({ target: { kind, id } });
   }, [pending, read, kind, id]);
+  const open = entries.filter(e => !isResolved(e));
+  const settled = entries.filter(isResolved);
+  /** Un fil : son message de tête, ses réponses, la réponse en cours de saisie. Résolu : en lecture, on peut le rouvrir. */
+  const entry = (e: ThreadEntry, done = false) => (
+    <li key={e.comment.id} data-resolved={done || undefined}>
+      <Message
+        comment={e.comment}
+        onReply={done ? undefined : () => setReplying(e.comment.id)}
+        onResolve={() => void threads.resolve(e.comment.id, !done)}
+        resolveLabel={done ? 'Rouvrir' : 'Résoudre'}
+        onPick={onPick}
+        pickLabel={pickLabel}
+      />
+      {e.replies.length || replying === e.comment.id ? (
+        <div className={styles.replies}>
+          {e.replies.map(r => (
+            <Message
+              key={r.id}
+              comment={r}
+              onReply={done ? undefined : () => setReplying(e.comment.id)}
+              onPick={onPick}
+              pickLabel={pickLabel}
+            />
+          ))}
+          {replying === e.comment.id && !done ? (
+            <Composer
+              placeholder={`Répondre à ${e.comment.authorName || 'ce message'}`}
+              submitLabel="Répondre"
+              autoFocus
+              onSubmit={async (text, mentions) => {
+                await threads.post(target, text, e.comment.id, mentions);
+                setReplying(null);
+              }}
+              onCancel={() => setReplying(null)}
+            />
+          ) : null}
+        </div>
+      ) : null}
+      {done && e.comment.resolvedAt ? (
+        <p className={styles.resolvedBy}>
+          Résolu{e.comment.resolvedBy ? ` par ${e.comment.resolvedBy}` : ''} · {when(e.comment.resolvedAt)}
+        </p>
+      ) : null}
+    </li>
+  );
   return (
     <section className={styles.thread} aria-label="Discussion">
-      {entries.length ? (
-        <ol className={styles.list}>
-          {entries.map(e => (
-            <li key={e.comment.id}>
-              <Message
-                comment={e.comment}
-                onReply={() => setReplying(e.comment.id)}
-                onPick={onPick}
-                pickLabel={pickLabel}
-              />
-              {e.replies.length || replying === e.comment.id ? (
-                <div className={styles.replies}>
-                  {e.replies.map(r => (
-                    <Message
-                      key={r.id}
-                      comment={r}
-                      onReply={() => setReplying(e.comment.id)}
-                      onPick={onPick}
-                      pickLabel={pickLabel}
-                    />
-                  ))}
-                  {replying === e.comment.id ? (
-                    <Composer
-                      placeholder={`Répondre à ${e.comment.authorName || 'ce message'}`}
-                      submitLabel="Répondre"
-                      autoFocus
-                      onSubmit={async (text, mentions) => {
-                        await threads.post(target, text, e.comment.id, mentions);
-                        setReplying(null);
-                      }}
-                      onCancel={() => setReplying(null)}
-                    />
-                  ) : null}
-                </div>
-              ) : null}
-            </li>
-          ))}
-        </ol>
+      {open.length ? (
+        <ol className={styles.list}>{open.map(e => entry(e))}</ol>
       ) : (
         <p className={styles.empty}>
-          {canEdit
-            ? 'Aucun message pour l’instant : posez une question, partagez une précision.'
-            : 'Aucun message.'}
+          {settled.length
+            ? 'Tout est réglé : aucun fil en cours.'
+            : canEdit
+              ? 'Aucun message pour l’instant : posez une question, partagez une précision.'
+              : 'Aucun message.'}
         </p>
       )}
+      {settled.length ? (
+        <details className={styles.resolved}>
+          <summary>
+            ✓ {settled.length} fil{settled.length > 1 ? 's' : ''} résolu{settled.length > 1 ? 's' : ''}
+          </summary>
+          <ol className={styles.list}>{settled.map(e => entry(e, true))}</ol>
+        </details>
+      ) : null}
       {canEdit ? (
         <Composer
           placeholder="Écrire un message…"
