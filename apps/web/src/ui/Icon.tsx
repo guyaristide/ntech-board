@@ -142,6 +142,11 @@ const PATHS = {
       <path d="M14.500 8 19 12l-4.500 4M19 12H9.500" />
     </>
   ),
+  folder: (
+    <>
+      <path d="M4 7a1 1 0 0 1 1-1h4.2l1.8 2H19a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />
+    </>
+  ),
   chevron: <path d="m9 6 6 6-6 6" />,
 } satisfies Record<string, ReactNode>;
 

@@ -1,0 +1,130 @@
+/* Réglages du projet : un menu de rubriques à gauche, la rubrique choisie à droite. */
+.settings {
+  max-width: 1060px;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 8px 40px;
+  align-items: start;
+  margin-top: 20px;
+}
+.nav {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-muted);
+  text-align: left;
+}
+.navItem svg {
+  flex: none;
+  color: var(--text-faint);
+}
+.navItem:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.navItem[aria-current] {
+  background: var(--bg-active);
+  color: var(--text);
+  font-weight: 500;
+}
+.navItem[aria-current] svg,
+.navItem:hover svg {
+  color: var(--text);
+}
+/* Repère à l'encre NTECH, comme la page courante du menu principal. */
+.navItem[aria-current]::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--ink);
+}
+.navText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+.navHint {
+  overflow: hidden;
+  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.navDot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--warn);
+}
+.panel {
+  min-width: 0;
+}
+/* La première section colle au haut de la rubrique ; les suivantes sont séparées par un filet. */
+.panel > section:first-child > h2:first-child,
+.panel > section:first-child h2 {
+  margin-top: 0;
+}
+.panel > section + section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.panel > section + section > h2:first-child {
+  margin-top: 0;
+}
+
+/* Écran étroit : les rubriques passent en onglets défilants au-dessus du contenu. */
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nav {
+    position: static;
+    flex-direction: row;
+    gap: 4px;
+    margin: 0 -16px;
+    padding: 0 16px 8px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--line);
+  }
+  .navItem {
+    flex: none;
+    width: auto;
+    padding: 6px 10px;
+  }
+  .navHint {
+    display: none;
+  }
+  .navItem[aria-current]::before {
+    inset: auto 10px 0 10px;
+    width: auto;
+    height: 3px;
+    border-radius: 3px 3px 0 0;
+  }
+}
+.panel > section {
+  margin-bottom: 0;
+}
