@@ -11,7 +11,7 @@ import {
 } from '@board/shared';
 import { ApiError } from '../model/api';
 import { useCanEdit, useIsAdmin, useWorkspace } from '../model/store';
-import { useNotifications } from '../model/notifications';
+import { useNotifications, usePersonName } from '../model/notifications';
 import { threads } from '../model/threads';
 import { FollowButton } from './Notifications';
 import { useAutosize } from './useAutosize';
@@ -229,7 +229,7 @@ function Message({
   }, [comment.mentions?.length, loadPeople]);
   const mentioned = people.filter(p => comment.mentions?.includes(p.userId)).map(p => p.name);
   const mine = !!me && comment.author === me;
-  const name = comment.authorName || 'Anonyme';
+  const name = usePersonName(comment.author, comment.authorName) || 'Anonyme';
   return (
     <article className={styles.message} data-deleted={comment.deleted || undefined}>
       <span className={styles.avatar} aria-hidden="true">

@@ -20,6 +20,7 @@ import {
   adminCount,
   listMembers,
   removeMember,
+  renameUser,
   setRole,
   settingsFrom,
   templateProjects,
@@ -92,11 +93,19 @@ adminRoutes.post('/members', async c => {
 });
 
 adminRoutes.patch('/members/:userId', async c => {
-  const input = z.object({ role: z.enum(ROLES) }).safeParse(await c.req.json().catch(() => null));
+  const input = z
+    .union([z.object({ role: z.enum(ROLES) }), z.object({ name: z.string().trim().min(1).max(120) })])
+    .safeParse(await c.req.json().catch(() => null));
   if (!input.success) return c.json({ error: 'invalid' }, 400);
   const p = c.get('project');
   const userId = c.req.param('userId');
   const members = await listMembers(p.id);
+  if (!members.some(m => m.userId === userId)) return c.json({ error: 'not_found' }, 404);
+  // Nom affiché : celui du compte, donc le même dans tous les projets dont la personne est membre.
+  if ('name' in input.data) {
+    await renameUser(userId, input.data.name);
+    return c.json(await listMembers(p.id));
+  }
   if (
     members.find(m => m.userId === userId)?.role === 'admin' &&
     input.data.role !== 'admin' &&

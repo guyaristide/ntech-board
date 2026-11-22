@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { ROLE_LABEL, ROLES, type ImportReport, type Member, type Role } from '@board/shared';
 import { api, ApiError } from '../model/api';
+import { useNotifications } from '../model/notifications';
 import { useIsAdmin, useWorkspace } from '../model/store';
 import { Avatar } from '../ui/Presence';
 import { SideTabs, sideTabsPage, useSideTab, type SideTab } from '../ui/SideTabs';
@@ -115,7 +116,8 @@ export function Admin() {
             <h2 className={page.h2}>Membres ({members.length})</h2>
             <p className={page.faint}>
               Administrateur : gère les membres et les imports. Éditeur : modifie les US et les ateliers.
-              Lecteur : consulte.
+              Lecteur : consulte. Le nom se modifie en cliquant dessus ; l’adresse e-mail, qui sert à se
+              connecter, ne change pas.
             </p>
             <div className={styles.tableWrap}>
               <table className={styles.table}>
@@ -134,8 +136,35 @@ export function Admin() {
                         <span className={styles.member}>
                           <Avatar name={m.name || m.email} />
                           <span>
-                            <strong>{m.name || m.email}</strong>
-                            {m.name ? <small>{m.email}</small> : null}
+                            <input
+                              key={m.name}
+                              className={styles.memberName}
+                              defaultValue={m.name}
+                              placeholder="Nom à afficher"
+                              aria-label={`Nom de ${m.email}`}
+                              title="Nom affiché dans le tableau ; il vaut pour tous les projets de cette personne"
+                              maxLength={120}
+                              onKeyDown={e => {
+                                if (e.key === 'Enter') e.currentTarget.blur();
+                                if (e.key === 'Escape') {
+                                  e.currentTarget.value = m.name;
+                                  e.currentTarget.blur();
+                                }
+                              }}
+                              onBlur={e => {
+                                const name = e.target.value.trim();
+                                if (!name || name === m.name) return void (e.target.value = m.name);
+                                void run('name', async () => {
+                                  setMembers(
+                                    await api.patch<Member[]>(`/admin/members/${m.userId}`, { name }),
+                                  );
+                                  await useNotifications.getState().reloadPeople();
+                                  // Son propre nom : le menu le reprend.
+                                  if (m.userId === session?.user?.id) await useWorkspace.getState().init();
+                                });
+                              }}
+                            />
+                            <small>{m.email}</small>
                           </span>
                         </span>
                       </td>

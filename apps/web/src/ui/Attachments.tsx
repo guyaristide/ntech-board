@@ -11,6 +11,7 @@ import {
 import { ApiError } from '../model/api';
 import { deleteAttachment, fileUrl, uploadFile } from '../model/files';
 import { useCanEdit, useWorkspace } from '../model/store';
+import { usePersonName } from '../model/notifications';
 import { ThreadButton } from './ThreadButton';
 import styles from './Attachments.module.css';
 import { confirmDialog } from './Confirm';
@@ -144,7 +145,7 @@ export function Attachments({ kind, id }: { kind: AttachableKind; id: string }) 
                   {a.name}
                 </button>
                 <span className={styles.sub}>
-                  {fileSize(a.size)} · {a.byName} · {when(a.at)}
+                  {fileSize(a.size)} · <PersonName userId={a.by} fallback={a.byName} /> · {when(a.at)}
                 </span>
               </span>
               <span className={styles.tools}>
@@ -242,6 +243,10 @@ function Lightbox({ file, onClose }: { file: Attachment; onClose: () => void }) 
     </div>
   );
 }
+
+const PersonName = ({ userId, fallback }: { userId: string; fallback: string }) => (
+  <>{usePersonName(userId, fallback)}</>
+);
 
 /** Pièces jointes repliées, pour les cartes (versions, références…) : « 📎 Pièces jointes (2) ». */
 export function AttachmentsFold({ kind, id }: { kind: AttachableKind; id: string }) {

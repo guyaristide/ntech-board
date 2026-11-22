@@ -106,6 +106,11 @@ export async function listMembers(projectId: string): Promise<Member[]> {
   return rows;
 }
 
+/** Nom affiché d'un compte (commun à tous ses projets). L'adresse e-mail, elle, ne change pas. */
+export async function renameUser(userId: string, name: string) {
+  await pool.query('UPDATE users SET name = $2 WHERE id = $1', [userId, name]);
+}
+
 export async function setRole(projectId: string, userId: string, role: Role) {
   await pool.query('UPDATE memberships SET role = $3 WHERE project_id = $1 AND user_id = $2', [
     projectId,
