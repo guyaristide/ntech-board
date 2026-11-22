@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   commentCount,
+  groupOf,
   isDeliveryComment,
+  mentionsIn,
+  pathOf,
   threadOf,
   type Attachment,
   type ThreadComment,
@@ -65,4 +68,24 @@ test('fil d’une pièce jointe : visible comme l’élément qui porte le fichi
   assert.equal(isDeliveryComment({ target: { kind: 'attachment', id: 'PJ-1' } }, files), true);
   assert.equal(isDeliveryComment({ target: { kind: 'attachment', id: 'PJ-2' } }, files), false);
   assert.equal(isDeliveryComment({ target: { kind: 'sprint', id: 'SP-1' } }, files), true);
+});
+
+test('mentions : « @Nom » d’un membre, le nom le plus long d’abord, sans doublon', () => {
+  const people = [
+    { userId: 'u1', name: 'Marc' },
+    { userId: 'u2', name: 'Marc Kouassi' },
+    { userId: 'u3', name: 'Awa Diallo' },
+  ];
+  assert.deepEqual(mentionsIn('@Marc Kouassi peux-tu voir avec @Awa Diallo ?', people).sort(), ['u2', 'u3']);
+  assert.deepEqual(mentionsIn('Merci @Marc, et encore @Marc.', people), ['u1']);
+  assert.deepEqual(mentionsIn('marc@exemple.com sans mention', people), []);
+});
+
+test('notifications : adresse d’un élément et famille d’un type', () => {
+  assert.equal(pathOf('ticket', 'ETO-12'), '/realisation/ticket/ETO-12');
+  assert.equal(pathOf('story', 'US-UC01-03'), '/us/US-UC01-03');
+  assert.equal(pathOf('phase', 'P 1'), '/raci?phase=P%201');
+  assert.equal(groupOf('reply'), 'mentions');
+  assert.equal(groupOf('status'), 'assigned');
+  assert.equal(groupOf('sprint'), 'project');
 });

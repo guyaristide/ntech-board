@@ -1,9 +1,10 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { MAX_COMMENT_LENGTH, THREAD_KINDS, type ThreadKind } from '@board/shared';
+import { MAX_COMMENT_LENGTH, mentionsIn, THREAD_KINDS, type ThreadKind } from '@board/shared';
 import { seesDelivery } from '../access';
 import { requireRole, type AppEnv } from '../auth';
 import { fail } from '../log';
+import { people } from '../notifications';
 import { getEntity } from '../repo';
 import {
   commentsOf,
@@ -29,7 +30,12 @@ const target = z.object({
   kind: z.enum(THREAD_KINDS as unknown as [ThreadKind, ...ThreadKind[]]),
   id: z.string().min(1).max(80),
 });
-const NewComment = z.object({ target, text, replyTo: z.string().max(40).optional() });
+const NewComment = z.object({
+  target,
+  text,
+  replyTo: z.string().max(40).optional(),
+  mentions: z.array(z.uuid()).max(30).optional(),
+});
 const EditComment = z.object({ text });
 
 type Ctx = { get: (k: 'project' | 'user' | 'role') => unknown };
@@ -57,7 +63,9 @@ threadRoutes.post('/comments', requireRole('editor'), async c => {
   if (!input) return c.json({ error: 'invalid' }, 400);
   if (!(await allowed(c, input.target))) return c.json({ error: 'delivery_hidden' }, 403);
   const { project, user } = who(c);
-  return c.json(await postComment({ projectId: project.id, user, ...input }), 201);
+  // Mentions choisies dans l'interface, et « @Nom » écrits tels quels (MCP, saisie libre).
+  const mentions = [...(input.mentions ?? []), ...mentionsIn(input.text, await people(project.id))];
+  return c.json(await postComment({ projectId: project.id, user, ...input, mentions }), 201);
 });
 
 threadRoutes.patch('/comments/:id', requireRole('editor'), async c => {

@@ -79,7 +79,7 @@ setInterval(() => {
 
 export interface Notification {
   projectId: string;
-  kind: EntityKind | 'reload';
+  kind: EntityKind | 'reload' | 'notification';
   id: string;
   by: string | null;
 }
@@ -98,6 +98,12 @@ export async function listen(
     const n = JSON.parse(msg.payload) as Notification;
     if (n.kind === 'reload') {
       broadcast(n.projectId, { type: 'reload', reason: n.id });
+      return;
+    }
+    // Notifications d'une personne (n.id) : seuls ses onglets sont prévenus, ils rechargent leur liste.
+    if (n.kind === 'notification') {
+      for (const c of clients.values())
+        if (c.projectId === n.projectId && c.user.id === n.id) c.send({ type: 'notification' });
       return;
     }
     if (n.kind === 'ticket' || n.kind === 'sprint') scheduleDay(n.projectId, log);

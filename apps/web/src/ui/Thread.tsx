@@ -1,11 +1,47 @@
-import { useMemo, useState, type KeyboardEvent } from 'react';
-import { commentCount, threadOf, type ThreadComment, type ThreadKind } from '@board/shared';
+import { useEffect, useMemo, useState, type KeyboardEvent, type ReactNode } from 'react';
+import {
+  commentCount,
+  mentionsIn,
+  threadOf,
+  type Person,
+  type ThreadComment,
+  type ThreadKind,
+} from '@board/shared';
 import { ApiError } from '../model/api';
 import { useCanEdit, useIsAdmin, useWorkspace } from '../model/store';
+import { useNotifications } from '../model/notifications';
 import { threads } from '../model/threads';
+import { FollowButton } from './Notifications';
 import { useAutosize } from './useAutosize';
 import page from '../pages/Page.module.css';
 import styles from './Thread.module.css';
+
+/** Texte d'un message, les mentions « @Nom » mises en valeur. */
+function withMentions(text: string, names: string[]): ReactNode {
+  const tokens = names
+    .filter(Boolean)
+    .map(n => `@${n}`)
+    .sort((a, b) => b.length - a.length);
+  if (!tokens.length) return text;
+  const out: ReactNode[] = [];
+  let rest = text;
+  for (let guard = 0; rest && guard < 200; guard++) {
+    const hit = tokens
+      .map(t => ({ t, i: rest.indexOf(t) }))
+      .filter(x => x.i >= 0)
+      .sort((a, b) => a.i - b.i)[0];
+    if (!hit) break;
+    if (hit.i) out.push(rest.slice(0, hit.i));
+    out.push(
+      <span key={out.length} className={styles.mention}>
+        {hit.t}
+      </span>,
+    );
+    rest = rest.slice(hit.i + hit.t.length);
+  }
+  if (rest) out.push(rest);
+  return out;
+}
 
 const when = (iso: string) =>
   new Date(iso).toLocaleString('fr-FR', {
@@ -28,20 +64,46 @@ function Composer({
   initial?: string;
   submitLabel?: string;
   autoFocus?: boolean;
-  onSubmit: (text: string) => Promise<unknown>;
+  onSubmit: (text: string, mentions: string[]) => Promise<unknown>;
   onCancel?: () => void;
 }) {
   const [text, setText] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const ref = useAutosize<HTMLTextAreaElement>(text);
+  const { people, loadPeople } = useNotifications();
+  // Mention en cours de saisie : « @ » suivi de lettres, juste avant le curseur.
+  const [query, setQuery] = useState<{ at: number; text: string } | null>(null);
+  const [active, setActive] = useState(0);
+  const matches = query
+    ? people.filter(p => p.name.toLowerCase().includes(query.text.toLowerCase())).slice(0, 6)
+    : [];
+  const track = (value: string, caret: number) => {
+    const m = /(^|\s)@([\p{L}\p{N}._'’ -]{0,30})$/u.exec(value.slice(0, caret));
+    setQuery(m ? { at: caret - m[2].length - 1, text: m[2] } : null);
+    setActive(0);
+    if (m) void loadPeople();
+  };
+  const pick = (p: Person) => {
+    if (!query) return;
+    const end = query.at + 1 + query.text.length;
+    const next = `${text.slice(0, query.at)}@${p.name} ${text.slice(end)}`;
+    setText(next);
+    setQuery(null);
+    requestAnimationFrame(() => {
+      const caret = query.at + p.name.length + 2;
+      ref.current?.focus();
+      ref.current?.setSelectionRange(caret, caret);
+    });
+  };
   const submit = async () => {
     if (!text.trim() || busy) return;
     setBusy(true);
     setError('');
     try {
-      await onSubmit(text.trim());
+      await onSubmit(text.trim(), mentionsIn(text, people));
       setText('');
+      setQuery(null);
     } catch (e) {
       setError(e instanceof ApiError ? (e.message ?? 'Envoi refusé.') : 'Erreur réseau, réessayez.');
     } finally {
@@ -49,6 +111,24 @@ function Composer({
     }
   };
   const onKey = (e: KeyboardEvent) => {
+    if (query && matches.length) {
+      // Liste des mentions ouverte : les flèches la parcourent, Entrée ou Tab choisit, Échap la ferme.
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActive(a => (a + (e.key === 'ArrowDown' ? 1 : matches.length - 1)) % matches.length);
+        return;
+      }
+      if (e.key === 'Enter' || e.key === 'Tab') {
+        e.preventDefault();
+        pick(matches[active]);
+        return;
+      }
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        setQuery(null);
+        return;
+      }
+    }
     if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       void submit();
@@ -67,9 +147,34 @@ function Composer({
         aria-label={placeholder}
         autoFocus={autoFocus}
         maxLength={5000}
-        onChange={e => setText(e.target.value)}
+        onChange={e => {
+          setText(e.target.value);
+          track(e.target.value, e.target.selectionStart);
+        }}
         onKeyDown={onKey}
+        onBlur={() => setTimeout(() => setQuery(null), 150)}
       />
+      {query && matches.length ? (
+        <ul className={styles.mentions} role="listbox" aria-label="Mentionner un membre">
+          {matches.map((p, i) => (
+            <li key={p.userId} role="option" aria-selected={i === active}>
+              <button
+                type="button"
+                data-active={i === active || undefined}
+                onMouseDown={e => {
+                  e.preventDefault();
+                  pick(p);
+                }}
+              >
+                <span className={styles.avatar} aria-hidden="true">
+                  {p.name.slice(0, 1).toUpperCase()}
+                </span>
+                {p.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
       <span className={styles.composerActions}>
         {onCancel ? (
           <button type="button" className={styles.ghost} onClick={onCancel}>
@@ -110,6 +215,12 @@ function Message({
   const isAdmin = useIsAdmin();
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const people = useNotifications(s => s.people);
+  const loadPeople = useNotifications(s => s.loadPeople);
+  useEffect(() => {
+    if (comment.mentions?.length) void loadPeople();
+  }, [comment.mentions?.length, loadPeople]);
+  const mentioned = people.filter(p => comment.mentions?.includes(p.userId)).map(p => p.name);
   const mine = !!me && comment.author === me;
   const name = comment.authorName || 'Anonyme';
   return (
@@ -144,7 +255,7 @@ function Message({
                 onCancel={() => setEditing(false)}
               />
             ) : (
-              <p className={styles.body}>{comment.text}</p>
+              <p className={styles.body}>{withMentions(comment.text, mentioned)}</p>
             )}
             {confirming ? (
               <p className={styles.confirm} role="alert">
@@ -214,6 +325,14 @@ export function Thread({
   const canEdit = useCanEdit();
   const [replying, setReplying] = useState<string | null>(null);
   const target = { kind, id };
+  // Lire le fil vaut lecture des notifications de cet élément.
+  const pending = useNotifications(s =>
+    s.items.some(n => !n.readAt && n.target.kind === kind && n.target.id === id),
+  );
+  const read = useNotifications(s => s.read);
+  useEffect(() => {
+    if (pending) void read({ target: { kind, id } });
+  }, [pending, read, kind, id]);
   return (
     <section className={styles.thread} aria-label="Discussion">
       {entries.length ? (
@@ -242,8 +361,8 @@ export function Thread({
                       placeholder={`Répondre à ${e.comment.authorName || 'ce message'}`}
                       submitLabel="Répondre"
                       autoFocus
-                      onSubmit={async text => {
-                        await threads.post(target, text, e.comment.id);
+                      onSubmit={async (text, mentions) => {
+                        await threads.post(target, text, e.comment.id, mentions);
                         setReplying(null);
                       }}
                       onCancel={() => setReplying(null)}
@@ -265,7 +384,7 @@ export function Thread({
         <Composer
           placeholder="Écrire un message…"
           autoFocus={autoFocus}
-          onSubmit={text => threads.post(target, text)}
+          onSubmit={(text, mentions) => threads.post(target, text, undefined, mentions)}
         />
       ) : null}
     </section>
@@ -289,7 +408,9 @@ export function ThreadSection({
   const Heading = level;
   return (
     <>
-      <Heading className={level === 'h2' ? page.h2 : page.h3}>Discussion{count ? ` (${count})` : ''}</Heading>
+      <Heading className={level === 'h2' ? page.h2 : page.h3}>
+        Discussion{count ? ` (${count})` : ''} <FollowButton kind={kind} id={id} />
+      </Heading>
       <Thread kind={kind} id={id} {...rest} />
     </>
   );

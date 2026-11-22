@@ -21,6 +21,7 @@ import { recetteRoutes } from './routes/recette';
 import { tokenRoutes } from './routes/tokens';
 import { aiRoutes } from './routes/ai';
 import { threadRoutes } from './routes/threads';
+import { notificationRoutes } from './routes/notifications';
 import { sourceRoutes } from './routes/sources';
 import { pdfRoutes } from './routes/pdf';
 import { programmeRoutes } from './routes/programme';
@@ -76,6 +77,7 @@ export function createApp() {
   api.route('/', sourceRoutes);
   api.route('/', aiRoutes);
   api.route('/', threadRoutes);
+  api.route('/', notificationRoutes);
   // Le serveur MCP rappelle l'API du tableau (mêmes contrôles), sans repasser par le réseau.
   api.route(
     '/',

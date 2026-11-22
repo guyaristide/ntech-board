@@ -27,6 +27,7 @@ import {
 } from '../projects';
 import { getSettings, getWorkspace, saveSettings } from '../repo';
 import { saveUpload } from '../storage';
+import { notifyNewMember } from '../notificationRules';
 
 /** Administration d'un projet : membres, invitations, imports, export. */
 export const adminRoutes = new Hono<AppEnv>();
@@ -66,6 +67,9 @@ adminRoutes.post('/members', async c => {
   const p = c.get('project');
   const user = c.get('user')!;
   await addMember(p.id, input.data.email, input.data.role, input.data.name, user.id);
+  await notifyNewMember(p.id, user.id, input.data.name || input.data.email, input.data.role).catch(
+    () => undefined,
+  );
   if (input.data.notify) {
     try {
       await sendInvitation(

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import type { AttachableKind } from '@board/shared';
 import { useThreadDrawer } from '../model/threadDrawer';
 import { Attachments } from './Attachments';
+import { FollowButton } from './Notifications';
 import { Thread } from './Thread';
 import drawer from './StoryDrawer.module.css';
 import styles from './Thread.module.css';
@@ -54,6 +55,7 @@ export function ThreadDrawer() {
           <span className={drawer.headTitle} title={target.title}>
             💬 {target.title}
           </span>
+          <FollowButton kind={target.kind} id={target.id} />
           {target.href ? (
             <Link to={target.href} className={drawer.open}>
               Ouvrir ↗

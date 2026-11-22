@@ -47,6 +47,8 @@ export async function postComment(input: {
   target: { kind: ThreadKind; id: string };
   text: string;
   replyTo?: string;
+  /** Membres mentionnés (identifiants de comptes) ; ceux qui ne sont pas du projet sont ignorés. */
+  mentions?: string[];
 }): Promise<ThreadComment> {
   const { projectId, user, target } = input;
   if (!(await getEntity(projectId, target.kind as EntityKind, target.id)))
@@ -73,6 +75,7 @@ export async function postComment(input: {
       text: input.text,
       at: new Date().toISOString(),
       editedAt: null,
+      ...(input.mentions?.length ? { mentions: [...new Set(input.mentions)] } : {}),
       deleted: false,
     }),
   );

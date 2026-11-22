@@ -23,6 +23,7 @@ import type {
   WorkspaceData,
 } from '@board/shared';
 import { api, ApiError, clientId } from './api';
+import { useNotifications } from './notifications';
 
 export type Phase = 'loading' | 'login' | 'ready' | 'notfound' | 'error';
 export type SaveState = 'saved' | 'saving' | 'error' | 'offline';
@@ -197,6 +198,7 @@ export const useWorkspace = create<State>((set, get) => {
       const event = JSON.parse(msg.data) as ServerEvent;
       if (event.type === 'presence') set({ presence: event.users });
       else if (event.type === 'reload') void get().load();
+      else if (event.type === 'notification') void useNotifications.getState().load();
       else if (!busy(`${event.kind}:${event.id}`)) replace(event.kind, event.id, event.data);
     };
     events.onerror = () => {

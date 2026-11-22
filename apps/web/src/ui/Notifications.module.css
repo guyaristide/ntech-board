@@ -1,0 +1,169 @@
+/* Notifications : pastille du menu, panneau latéral, bouton « Suivre ». */
+.badge {
+  min-width: 18px;
+  margin-left: auto;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 18px;
+  text-align: center;
+}
+.panel {
+  width: min(440px, 100vw);
+}
+.headTitle {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+}
+.link {
+  padding: 3px 8px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.link:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.link:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.tab {
+  padding: 3px 10px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.tab:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+.tab[aria-selected='true'] {
+  background: var(--bg-active);
+  color: var(--text);
+  font-weight: 500;
+}
+.body {
+  flex: 1;
+  overflow-y: auto;
+}
+.list {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+}
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: none;
+  color: var(--text-muted);
+  text-align: left;
+}
+.item:hover {
+  background: var(--bg-hover);
+}
+.item[data-unread] {
+  color: var(--text);
+}
+.itemIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-active);
+  color: var(--text-muted);
+}
+.item[data-unread] .itemIcon {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+.itemText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.itemTitle {
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.item[data-unread] .itemTitle {
+  font-weight: 500;
+}
+.itemBody {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.itemMeta {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.empty {
+  margin: 0;
+  padding: 40px 24px;
+  background: var(--dots) 0 0 / 16px 16px;
+  color: var(--text-faint);
+  font-size: 14px;
+  text-align: center;
+}
+.follow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 26px;
+  padding: 1px 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  vertical-align: middle;
+}
+.follow:hover {
+  border-color: color-mix(in oklab, var(--text) 30%, transparent);
+  color: var(--text);
+}
+.follow[aria-pressed='true'] {
+  border-color: transparent;
+  background: var(--ink);
+  color: var(--on-ink);
+}

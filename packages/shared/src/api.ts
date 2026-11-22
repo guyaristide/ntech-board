@@ -145,6 +145,8 @@ export interface PresenceEntry {
 
 /** Messages poussés par le serveur sur GET /api/events (Server-Sent Events). */
 export type ServerEvent =
+  /** Les notifications de la personne ont changé : à recharger. */
+  | { type: 'notification' }
   | {
       type: 'entity';
       kind: EntityKind;

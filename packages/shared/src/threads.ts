@@ -25,6 +25,8 @@ export interface ThreadComment {
   text: string;
   at: string;
   editedAt: string | null;
+  /** Membres mentionnés (@Nom) : ils sont prévenus. Absent des messages antérieurs aux mentions. */
+  mentions?: string[];
   /** Supprimé alors qu'il avait des réponses : gardé pour ne pas les orpheliner, sans texte. */
   deleted: boolean;
 }

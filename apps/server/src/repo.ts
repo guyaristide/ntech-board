@@ -107,6 +107,29 @@ export async function saveSettings(
   return settings;
 }
 
+/** Changement validé : l'entité avant (null à la création) et après, et qui l'a fait. */
+export interface Change<K extends EntityKind = EntityKind> {
+  projectId: string;
+  userId: string | null;
+  kind: K;
+  id: string;
+  action: string;
+  before: EntityOf<K> | null;
+  after: EntityOf<K>;
+}
+type ChangeHook = (change: Change) => Promise<void>;
+const changeHooks: ChangeHook[] = [];
+/** Action à mener après une création ou une modification validée (notifications…). */
+export const onChange = (hook: ChangeHook) => void changeHooks.push(hook);
+/** Prévient les abonnés, transaction validée ; une erreur chez eux n'annule pas l'écriture. */
+async function emit(changes: Change[]) {
+  for (const change of changes)
+    for (const hook of changeHooks)
+      await hook(change).catch(err =>
+        console.error(`Après ${change.action} de ${change.kind} ${change.id}`, err),
+      );
+}
+
 /**
  * Modifie une entité sous verrou de ligne (SELECT … FOR UPDATE) : deux personnes qui changent
  * des champs différents au même moment ne s'écrasent pas. Journalise et notifie.
@@ -120,13 +143,15 @@ export async function mutate<K extends EntityKind>(
   change: (data: EntityOf<K>) => EntityOf<K>,
   patch?: unknown,
 ): Promise<EntityOf<K>> {
-  return tx(async c => {
+  const changes: Change[] = [];
+  const result = await tx(async c => {
     const { rows } = await c.query<{ data: EntityOf<K> }>(
       'SELECT data FROM entities WHERE project_id = $1 AND kind = $2 AND id = $3 FOR UPDATE',
       [projectId, kind, id],
     );
     if (!rows[0]) throw new NotFound(`${kind} ${id}`);
     const data = change(rows[0].data);
+    changes.push({ projectId, userId, kind, id, action, before: rows[0].data, after: data });
     await c.query(
       `UPDATE entities SET data = $4, revision = revision + 1, updated_at = now(), updated_by = $5
         WHERE project_id = $1 AND kind = $2 AND id = $3`,
@@ -139,6 +164,8 @@ export async function mutate<K extends EntityKind>(
     await notify(c, projectId, kind, id, userId);
     return data;
   });
+  await emit(changes);
+  return result;
 }
 
 /**
@@ -155,7 +182,8 @@ export async function mutateMany<K extends EntityKind>(
   patch?: unknown,
 ): Promise<EntityOf<K>[]> {
   if (!ids.length) return [];
-  return tx(async c => {
+  const changes: Change[] = [];
+  const result = await tx(async c => {
     const { rows } = await c.query<{ id: string; data: EntityOf<K> }>(
       'SELECT id, data FROM entities WHERE project_id = $1 AND kind = $2 AND id = ANY($3) ORDER BY id FOR UPDATE',
       [projectId, kind, ids],
@@ -163,6 +191,7 @@ export async function mutateMany<K extends EntityKind>(
     const out: EntityOf<K>[] = [];
     for (const row of rows) {
       const data = change(row.data);
+      changes.push({ projectId, userId, kind, id: row.id, action, before: row.data, after: data });
       await c.query(
         `UPDATE entities SET data = $4, revision = revision + 1, updated_at = now(), updated_by = $5
           WHERE project_id = $1 AND kind = $2 AND id = $3`,
@@ -177,6 +206,8 @@ export async function mutateMany<K extends EntityKind>(
     }
     return out;
   });
+  await emit(changes);
+  return result;
 }
 
 /**
@@ -192,7 +223,8 @@ export async function mutatePair<K extends EntityKind>(
   change: (a: EntityOf<K>, b: EntityOf<K>) => [EntityOf<K>, EntityOf<K>],
   patch?: unknown,
 ): Promise<[EntityOf<K>, EntityOf<K>]> {
-  return tx(async c => {
+  const changes: Change[] = [];
+  const result = await tx(async c => {
     const { rows } = await c.query<{ id: string; data: EntityOf<K> }>(
       'SELECT id, data FROM entities WHERE project_id = $1 AND kind = $2 AND id = ANY($3) ORDER BY id FOR UPDATE',
       [projectId, kind, ids],
@@ -201,6 +233,7 @@ export async function mutatePair<K extends EntityKind>(
     if (!a || !b) throw new NotFound(`${kind} ${ids.join(', ')}`);
     const next = change(a, b);
     for (const [i, id] of ids.entries()) {
+      changes.push({ projectId, userId, kind, id, action, before: [a, b][i], after: next[i] });
       await c.query(
         `UPDATE entities SET data = $4, revision = revision + 1, updated_at = now(), updated_by = $5
           WHERE project_id = $1 AND kind = $2 AND id = $3`,
@@ -214,6 +247,8 @@ export async function mutatePair<K extends EntityKind>(
     }
     return next;
   });
+  await emit(changes);
+  return result;
 }
 
 /** Prochain identifiant libre d'une épique : US-UC01-07. */
@@ -239,7 +274,8 @@ export async function createEntity<K extends EntityKind>(
   pickId: (ids: string[]) => string,
   build: (id: string) => EntityOf<K>,
 ) {
-  return tx(async c => {
+  const changes: Change[] = [];
+  const result = await tx(async c => {
     await c.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`${kind}:${projectId}`]);
     const { rows } = await c.query<{ id: string; position: number }>(
       'SELECT id, position FROM entities WHERE project_id = $1 AND kind = $2',
@@ -257,8 +293,11 @@ export async function createEntity<K extends EntityKind>(
       [projectId, kind, id, userId],
     );
     await notify(c, projectId, kind, id, userId);
+    changes.push({ projectId, userId, kind, id, action: 'create', before: null, after: data });
     return data;
   });
+  await emit(changes);
+  return result;
 }
 
 /** Crée plusieurs entités du même type dans une seule transaction (US passées en réalisation). */
@@ -270,7 +309,8 @@ export async function createMany<K extends EntityKind>(
   builds: ((id: string) => EntityOf<K>)[],
 ) {
   if (!builds.length) return [];
-  return tx(async c => {
+  const changes: Change[] = [];
+  const result = await tx(async c => {
     await c.query('SELECT pg_advisory_xact_lock(hashtext($1))', [`${kind}:${projectId}`]);
     const { rows } = await c.query<{ id: string; position: number }>(
       'SELECT id, position FROM entities WHERE project_id = $1 AND kind = $2',
@@ -292,10 +332,13 @@ export async function createMany<K extends EntityKind>(
         [projectId, kind, id, userId],
       );
       await notify(c, projectId, kind, id, userId);
+      changes.push({ projectId, userId, kind, id, action: 'create', before: null, after: data });
       out.push(data);
     }
     return out;
   });
+  await emit(changes);
+  return result;
 }
 
 export const createStory = (projectId: string, userId: string, build: (id: string) => Story) =>

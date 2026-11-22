@@ -210,3 +210,46 @@
 .drawerTitle:not(:first-child) {
   margin-top: 20px;
 }
+
+/* Mentions : « @Nom » mis en valeur dans un message, et liste proposée pendant la saisie. */
+.mention {
+  padding: 0 3px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 500;
+}
+.composer {
+  position: relative;
+}
+.mentions {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  z-index: 5;
+  min-width: 220px;
+  max-width: 100%;
+  margin: 0;
+  padding: 4px;
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: var(--shadow-pop);
+  list-style: none;
+}
+.mentions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--text);
+  font-size: 13px;
+  text-align: left;
+}
+.mentions button[data-active],
+.mentions button:hover {
+  background: var(--bg-hover);
+}

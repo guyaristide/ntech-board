@@ -84,7 +84,7 @@ export function registerThreads(server: McpServer, ctx: Ctx, canWrite: boolean) 
     {
       title: 'Écrire dans un fil de discussion',
       description:
-        'Ajoute un message, signé de votre nom, au fil d’un élément ou d’une pièce jointe ; avec reply_to, répond à un message du fil.',
+        'Ajoute un message, signé de votre nom, au fil d’un élément ou d’une pièce jointe ; avec reply_to, répond à un message du fil. Écrire « @Prénom Nom » d’un membre du projet le mentionne : il est prévenu.',
       input: {
         kind,
         id: z.string(),

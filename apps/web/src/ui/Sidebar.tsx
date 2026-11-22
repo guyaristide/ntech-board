@@ -5,6 +5,7 @@ import { BRAND } from '../brand';
 import { exportCsv, exportJson } from '../model/exporters';
 import { useCanEdit, useIsAdmin, useSeesDelivery, useWorkspace, type SaveState } from '../model/store';
 import { Icon } from './Icon';
+import { NotificationBell } from './Notifications';
 import { Avatar } from './Presence';
 import styles from './Sidebar.module.css';
 
@@ -68,6 +69,7 @@ export function Sidebar({ onSearch, onNavigate }: { onSearch: () => void; onNavi
         </span>{' '}
         Rechercher <kbd>⌘K</kbd>
       </button>
+      <NotificationBell className={styles.link} iconClass={styles.icon} />
       <div onClick={onNavigate}>
         <NavLink to="/" end className={link}>
           <span className={styles.icon}>
