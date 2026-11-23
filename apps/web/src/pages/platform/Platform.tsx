@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link, Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { fileSize, type PlatformOverview, type PlatformProject } from '@board/shared';
 import { BRAND } from '../../brand';
 import { platform } from '../../model/platform';
 import { useWorkspace } from '../../model/store';
 import { noticeDialog } from '../../ui/Confirm';
 import { Icon } from '../../ui/Icon';
-import { SideTabs, sideTabsPage, useSideTab, type SideTab } from '../../ui/SideTabs';
+import { sideTabsPage, useSideTab, type SideTab } from '../../ui/SideTabs';
 import page from '../Page.module.css';
 import backlog from '../backlog/Backlog.module.css';
 import { day, message } from './format';
@@ -40,7 +40,10 @@ const since = (iso: string | null) => {
 export function Platform() {
   const user = useWorkspace(s => s.session?.user);
   const logout = useWorkspace(s => s.logout);
-  const [tab, selectTab] = useSideTab<TabId>(TABS);
+  const [tab] = useSideTab<TabId>(TABS);
+  const location = useLocation();
+  // Dans la page d'un projet, c'est la rubrique Projets qui est active.
+  const section: TabId = location.pathname.startsWith('/projet/') ? 'projects' : tab;
   const [data, setData] = useState<PlatformOverview | null>(null);
   const [error, setError] = useState('');
   const [q, setQ] = useState('');
@@ -95,6 +98,20 @@ export function Platform() {
       <header className={styles.top}>
         <img src={BRAND.logo} alt={BRAND.publisher} className={styles.logo} />
         <span className={styles.badge}>Console</span>
+        {/* Rubriques de la console : toujours à portée, y compris depuis la page d'un projet. */}
+        <nav className={styles.topNav} aria-label="Rubriques de la console">
+          {TABS.map(t => (
+            <Link
+              key={t.id}
+              to={t.id === 'projects' ? '/' : `/?tab=${t.id}`}
+              aria-current={section === t.id ? 'page' : undefined}
+              title={t.hint}
+            >
+              <Icon name={t.icon} size={15} />
+              {t.label}
+            </Link>
+          ))}
+        </nav>
         <span className={styles.who}>
           {user?.name || user?.email}
           <button type="button" className={page.ghost} onClick={() => void logout()}>
@@ -119,7 +136,7 @@ export function Platform() {
                     {error}
                   </p>
                 ) : null}
-                <SideTabs tabs={TABS} current={tab} onSelect={selectTab} label="Rubriques de la console">
+                <div className={styles.home}>
                   {tab === 'projects' ? (
                     <section>
                       <div className={styles.kpis}>
@@ -221,7 +238,7 @@ export function Platform() {
                   {tab === 'admins' ? <PlatformAdmins me={user?.email ?? ''} /> : null}
                   {tab === 'health' ? <PlatformStatusView /> : null}
                   {tab === 'journal' ? <PlatformJournal /> : null}
-                </SideTabs>
+                </div>
               </>
             }
           />

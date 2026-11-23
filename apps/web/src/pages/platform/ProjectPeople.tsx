@@ -121,7 +121,7 @@ export function ProjectMembers({ project, onChanged }: { project: PlatformProjec
       </div>
       <h3 className={styles.h3}>Ajouter un membre</h3>
       <form
-        className={styles.invite}
+        className={styles.memberForm}
         onSubmit={e => {
           e.preventDefault();
           void run(
@@ -130,42 +130,50 @@ export function ProjectMembers({ project, onChanged }: { project: PlatformProjec
           ).then(() => setInvite(i => ({ ...i, email: '', name: '' })));
         }}
       >
-        <input
-          type="email"
-          required
-          value={invite.email}
-          placeholder="Adresse e-mail"
-          aria-label="Adresse e-mail"
-          onChange={e => setInvite(i => ({ ...i, email: e.target.value }))}
-        />
-        <input
-          value={invite.name}
-          placeholder="Nom (facultatif)"
-          aria-label="Nom"
-          onChange={e => setInvite(i => ({ ...i, name: e.target.value }))}
-        />
-        <select
-          value={invite.role}
-          aria-label="Rôle"
-          onChange={e => setInvite(i => ({ ...i, role: e.target.value as Role }))}
-        >
-          {ROLES.map(r => (
-            <option key={r} value={r}>
-              {ROLE_LABEL[r]}
-            </option>
-          ))}
-        </select>
-        <label className={styles.check}>
+        <label className={styles.field}>
+          Adresse e-mail
           <input
-            type="checkbox"
-            checked={invite.notify}
-            onChange={e => setInvite(i => ({ ...i, notify: e.target.checked }))}
+            type="email"
+            required
+            value={invite.email}
+            placeholder="prenom.nom@exemple.com"
+            onChange={e => setInvite(i => ({ ...i, email: e.target.value }))}
           />
-          Envoyer l’invitation par e-mail
         </label>
-        <button type="submit" className={page.primary} disabled={busy}>
-          Ajouter
-        </button>
+        <label className={styles.field}>
+          Nom
+          <input
+            value={invite.name}
+            placeholder="Facultatif"
+            onChange={e => setInvite(i => ({ ...i, name: e.target.value }))}
+          />
+        </label>
+        <label className={styles.field}>
+          Rôle
+          <select
+            value={invite.role}
+            onChange={e => setInvite(i => ({ ...i, role: e.target.value as Role }))}
+          >
+            {ROLES.map(r => (
+              <option key={r} value={r}>
+                {ROLE_LABEL[r]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className={styles.memberFormEnd}>
+          <label className={styles.check}>
+            <input
+              type="checkbox"
+              checked={invite.notify}
+              onChange={e => setInvite(i => ({ ...i, notify: e.target.checked }))}
+            />
+            Envoyer l’invitation par e-mail
+          </label>
+          <button type="submit" className={page.primary} disabled={busy}>
+            Ajouter le membre
+          </button>
+        </p>
       </form>
       {note ? (
         <p className={styles.note} role="status">
