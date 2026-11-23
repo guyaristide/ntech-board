@@ -31,6 +31,8 @@ import { addMember, createProject, ensureUser, settingsFrom } from '../projects'
 import { pushEnabled } from '../push';
 import { findProject, forgetProject } from '../tenancy';
 import { adminRoutes } from './admin';
+import { registerPlatformBackups } from './backups';
+import { createBackup } from '../backups';
 import { audit, registerPlatformDetail } from './platformDetail';
 
 /**
@@ -301,6 +303,19 @@ platformApi.delete('/platform/projects/:slug', async c => {
       { error: 'confirm_mismatch', message: 'Le nom saisi ne correspond pas à l’adresse du projet.' },
       400,
     );
+  // Filet de sécurité : le contenu du projet reste restaurable depuis la console (Sauvegardes).
+  try {
+    await createBackup(p, 'before-delete', c.get('user')!.id);
+  } catch (err) {
+    fail('console', `Sauvegarde de « ${p.slug} » avant suppression impossible`, err);
+    return c.json(
+      {
+        error: 'backup_failed',
+        message: 'Le projet n’a pas pu être sauvegardé avant suppression : rien n’a été supprimé.',
+      },
+      500,
+    );
+  }
   const files = await pool.query<{ data: Attachment }>(
     `SELECT data FROM entities WHERE project_id = $1 AND kind = 'attachment'`,
     [p.id],
@@ -410,5 +425,6 @@ platformApi.delete('/platform/admins/:email', async c => {
 });
 
 registerPlatformDetail(platformApi);
+registerPlatformBackups(platformApi);
 
 platformApi.all('*', c => c.json({ error: 'not_found' }, 404));

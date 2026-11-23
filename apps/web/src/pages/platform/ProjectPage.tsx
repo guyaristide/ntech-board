@@ -9,6 +9,7 @@ import { day, message } from './format';
 import { dateTime, Facts, Stat } from './parts';
 import { ProjectAccess, ProjectJournal, ProjectMembers } from './ProjectPeople';
 import { ProjectAdvanced, ProjectData, ProjectSettingsView } from './ProjectData';
+import { BackupsPanel } from '../../ui/BackupsPanel';
 import styles from './Platform.module.css';
 
 const TABS = [
@@ -17,6 +18,7 @@ const TABS = [
   { id: 'access', label: 'Accès', hint: 'Sessions et jetons MCP', icon: 'shield' },
   { id: 'settings', label: 'Réglages', hint: 'Configuration du projet', icon: 'sliders' },
   { id: 'data', label: 'Données', hint: 'Export, imports, copie', icon: 'download' },
+  { id: 'backups', label: 'Sauvegardes', hint: 'Automatiques, restauration', icon: 'folder' },
   { id: 'journal', label: 'Journal', hint: 'Dernières modifications', icon: 'list' },
   { id: 'advanced', label: 'Avancé', hint: 'Adresse, suppression', icon: 'alert' },
 ] as const satisfies readonly SideTab[];
@@ -240,6 +242,14 @@ export function ProjectPage({ projects }: { projects: PlatformProject[] }) {
         {tab === 'access' ? <ProjectAccess d={d} onChanged={reload} /> : null}
         {tab === 'settings' ? <ProjectSettingsView d={d} projects={projects} onChanged={reload} /> : null}
         {tab === 'data' ? <ProjectData project={p} onChanged={reload} /> : null}
+        {tab === 'backups' ? (
+          <BackupsPanel
+            base={`/platform/projects/${encodeURIComponent(p.slug)}/admin`}
+            slug={p.slug}
+            title={p.title}
+            onRestored={reload}
+          />
+        ) : null}
         {tab === 'journal' ? <ProjectJournal slug={p.slug} /> : null}
         {tab === 'advanced' ? (
           <ProjectAdvanced

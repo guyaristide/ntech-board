@@ -14,12 +14,14 @@ import { NewProject } from './NewProject';
 import { PlatformAdmins, PlatformUsers } from './PlatformPeople';
 import { PlatformJournal, PlatformStatusView } from './PlatformStatusView';
 import { ProjectPage } from './ProjectPage';
+import { PlatformBackups } from './PlatformBackups';
 import styles from './Platform.module.css';
 
 const TABS = [
   { id: 'projects', label: 'Projets', hint: 'Tous les tableaux', icon: 'layers' },
   { id: 'users', label: 'Comptes', hint: 'Utilisateurs et rôles', icon: 'users' },
   { id: 'admins', label: 'Super-administrateurs', hint: 'Accès à cette console', icon: 'shield' },
+  { id: 'backups', label: 'Sauvegardes', hint: 'Par projet, et projets supprimés', icon: 'folder' },
   { id: 'health', label: 'État', hint: 'Services, base, activité', icon: 'gauge' },
   { id: 'journal', label: 'Journal', hint: 'Actions de la console', icon: 'list' },
 ] as const satisfies readonly SideTab[];
@@ -236,6 +238,7 @@ export function Platform() {
                   ) : null}
                   {tab === 'users' ? <PlatformUsers /> : null}
                   {tab === 'admins' ? <PlatformAdmins me={user?.email ?? ''} /> : null}
+                  {tab === 'backups' ? <PlatformBackups me={user?.email ?? ''} /> : null}
                   {tab === 'health' ? <PlatformStatusView /> : null}
                   {tab === 'journal' ? <PlatformJournal /> : null}
                 </div>

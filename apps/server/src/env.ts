@@ -63,6 +63,20 @@ export const env = {
     privateKey: process.env.VAPID_PRIVATE_KEY ?? '',
     subject: process.env.VAPID_SUBJECT ?? 'mailto:contact@neiba-technologies.com',
   },
+  /**
+   * Sauvegardes automatiques des projets (STORAGE_DIR/backups/projects) : heure de la sauvegarde
+   * quotidienne, puis conservation (toutes pendant N jours, une par semaine, une par mois) ; les
+   * sauvegardes prises avant une restauration ou une suppression sont gardées `safetyDays` jours.
+   * BACKUP_HOUR=off les désactive.
+   */
+  backup: {
+    enabled: (process.env.BACKUP_HOUR ?? '').toLowerCase() !== 'off',
+    hour: Number(process.env.BACKUP_HOUR === 'off' ? 2 : (process.env.BACKUP_HOUR ?? 2)),
+    daily: Number(process.env.BACKUP_KEEP_DAILY ?? 14),
+    weekly: Number(process.env.BACKUP_KEEP_WEEKLY ?? 8),
+    monthly: Number(process.env.BACKUP_KEEP_MONTHLY ?? 12),
+    safetyDays: Number(process.env.BACKUP_KEEP_SAFETY_DAYS ?? 90),
+  },
   /** Cookies « Secure » : auto (selon X-Forwarded-Proto), true ou false. */
   cookieSecure: process.env.COOKIE_SECURE ?? 'auto',
   sessionDays: Number(process.env.SESSION_DAYS ?? 30),

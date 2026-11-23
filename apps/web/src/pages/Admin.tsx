@@ -7,12 +7,14 @@ import { Avatar } from '../ui/Presence';
 import { SideTabs, sideTabsPage, useSideTab, type SideTab } from '../ui/SideTabs';
 import page from './Page.module.css';
 import styles from './Admin.module.css';
+import { BackupsPanel } from '../ui/BackupsPanel';
 import { confirmDialog } from '../ui/Confirm';
 
 /** Rubriques de l'administration. */
 const TABS = [
   { id: 'members', label: 'Membres', hint: 'Invitations et rôles', icon: 'users' },
   { id: 'data', label: 'Données', hint: 'Imports et export', icon: 'download' },
+  { id: 'backups', label: 'Sauvegardes', hint: 'Automatiques, restauration', icon: 'folder' },
 ] as const satisfies readonly SideTab[];
 type TabId = (typeof TABS)[number]['id'];
 
@@ -101,8 +103,8 @@ export function Admin() {
       </span>
       <h1 className={page.h1}>Administration</h1>
       <p className={page.lead}>
-        Projet <code>{session?.project.slug}</code> : membres, imports et export. Le nom du tableau se règle
-        dans les Réglages du projet.
+        Projet <code>{session?.project.slug}</code> : membres, imports, export et sauvegardes. Le nom du
+        tableau se règle dans les Réglages du projet.
       </p>
       {error ? (
         <p className={styles.error} role="alert">
@@ -343,6 +345,9 @@ export function Admin() {
               </p>
             </section>
           </>
+        ) : null}
+        {tab === 'backups' && session ? (
+          <BackupsPanel slug={session.project.slug} title={session.project.title} />
         ) : null}
       </SideTabs>
     </div>

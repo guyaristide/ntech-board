@@ -6,11 +6,13 @@ import { env } from './env';
  * Stockage de fichiers (volume persistant monté sur STORAGE_DIR) :
  *   imports/<projet>/   fichiers importés, horodatés (planning .xlsx, backlog .json)
  *   backups/            sauvegardes de la base (scripts de deploy/)
+ *   backups/projects/   sauvegardes par projet, prises par l'application (voir backups.ts)
  */
 export const storageRoot = () => resolve(env.storageDir);
 
 export function ensureStorage() {
-  for (const dir of ['imports', 'backups']) mkdirSync(join(storageRoot(), dir), { recursive: true });
+  for (const dir of ['imports', 'backups', 'backups/projects'])
+    mkdirSync(join(storageRoot(), dir), { recursive: true });
 }
 
 export async function saveUpload(project: string, name: string, content: Buffer) {

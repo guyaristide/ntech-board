@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { create } from 'zustand';
 import page from '../pages/Page.module.css';
 import styles from './Confirm.module.css';
@@ -20,6 +20,8 @@ export interface ConfirmOptions {
   danger?: boolean;
   /** Simple information à acquitter : un seul bouton. */
   notice?: boolean;
+  /** Mot à recopier pour pouvoir confirmer (l'adresse du projet, par exemple) : actions irréversibles. */
+  typed?: string;
 }
 
 interface Pending extends ConfirmOptions {
@@ -70,6 +72,8 @@ export function ConfirmHost() {
   const pending = useConfirm(s => s.pending);
   const cancel = useRef<HTMLButtonElement>(null);
   const ok = useRef<HTMLButtonElement>(null);
+  const field = useRef<HTMLInputElement>(null);
+  const [typed, setTyped] = useState('');
   const close = (result: boolean) => {
     pending?.resolve(result);
     useConfirm.setState({ pending: null });
@@ -77,15 +81,18 @@ export function ConfirmHost() {
   useEffect(() => {
     if (!pending) return;
     const back = document.activeElement as HTMLElement | null;
+    setTyped('');
     // Action destructrice : le focus va sur « Annuler », pour qu'Entrée ne détruise rien par mégarde.
-    (pending.danger && !pending.notice ? cancel : ok).current?.focus();
+    (pending.typed ? field : pending.danger && !pending.notice ? cancel : ok).current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopPropagation();
         close(false);
       } else if (e.key === 'Tab') {
         // Le focus reste dans la boîte.
-        const items = [cancel.current, ok.current].filter(Boolean) as HTMLElement[];
+        const items = [field.current, cancel.current, ok.current].filter(
+          el => el && !(el as HTMLButtonElement).disabled,
+        ) as HTMLElement[];
         const i = items.indexOf(document.activeElement as HTMLElement);
         e.preventDefault();
         items[(i + (e.shiftKey ? items.length - 1 : 1)) % items.length]?.focus();
@@ -120,6 +127,21 @@ export function ConfirmHost() {
               {pending.message}
             </p>
           ) : null}
+          {pending.typed ? (
+            <label className={styles.typed}>
+              <span>
+                Saisissez <b>{pending.typed}</b> pour confirmer
+              </span>
+              <input
+                ref={field}
+                value={typed}
+                autoComplete="off"
+                spellCheck={false}
+                onChange={e => setTyped(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && typed === pending.typed && close(true)}
+              />
+            </label>
+          ) : null}
         </div>
         <div className={styles.actions}>
           {pending.notice ? null : (
@@ -131,6 +153,7 @@ export function ConfirmHost() {
             ref={ok}
             type="button"
             className={pending.danger ? styles.danger : page.primary}
+            disabled={!!pending.typed && typed !== pending.typed}
             onClick={() => close(true)}
           >
             {pending.confirmLabel ?? 'Confirmer'}

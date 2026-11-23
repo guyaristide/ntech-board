@@ -7,6 +7,7 @@ import { log, warn } from './log';
 import { checkMail } from './mail';
 import { listProjects } from './projects';
 import { storageRoot } from './storage';
+import { startBackupJobs } from './backups';
 import { startNotificationJobs } from './notificationMail';
 import { checkPush } from './push';
 import { listen } from './realtime';
@@ -19,6 +20,7 @@ await listen();
 await refreshSuperadmins();
 setInterval(() => void refreshSuperadmins().catch(() => undefined), 30_000).unref();
 startNotificationJobs();
+startBackupJobs();
 checkPush();
 
 const server = serve({ fetch: createApp().fetch, port: env.port }, info =>

@@ -142,7 +142,9 @@
   text-align: right !important;
   white-space: nowrap;
 }
-.rowActions button {
+.rowActions button,
+.rowActions a + a,
+.rowActions button + a {
   margin-left: 4px;
 }
 

@@ -1,0 +1,68 @@
+.create {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0;
+}
+.create input {
+  flex: 1 1 240px;
+  max-width: var(--form-w);
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.when {
+  display: block;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.sub {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+.reason {
+  display: inline-block;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 18px;
+}
+.reason[data-reason='manual'] {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+.reason[data-reason='before-restore'],
+.reason[data-reason='before-delete'] {
+  background: color-mix(in srgb, var(--warn) 22%, transparent);
+  color: var(--text);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+}
+.error,
+.done {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+}
+.error {
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+}
+.done {
+  background: var(--bg-hover);
+  color: var(--text);
+}

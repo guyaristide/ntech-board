@@ -30,6 +30,7 @@ import {
 import { getSettings, getWorkspace, saveSettings } from '../repo';
 import { saveUpload } from '../storage';
 import { notifyNewMember } from '../notificationRules';
+import { backupRoutes } from './backups';
 
 /** Administration d'un projet : membres, invitations, imports, export. */
 export const adminRoutes = new Hono<AppEnv>();
@@ -40,6 +41,7 @@ const boardOrigin = (c: Context<AppEnv>) =>
     ? originFor(c.get('project').slug)
     : originOf(c);
 adminRoutes.use('*', requireRole('admin'));
+adminRoutes.route('/backups', backupRoutes);
 
 adminRoutes.get('/members', async c => c.json(await listMembers(c.get('project').id)));
 

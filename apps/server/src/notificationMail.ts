@@ -265,7 +265,7 @@ export async function remindDueOwners() {
 }
 
 /** Vrai une seule fois par jour et par tâche, toutes instances confondues. */
-async function firstRunToday(name: string) {
+export async function firstRunToday(name: string) {
   const { rowCount } = await pool.query(
     `INSERT INTO job_runs (name, ran_on) VALUES ($1, current_date)
      ON CONFLICT (name) DO UPDATE SET ran_on = current_date WHERE job_runs.ran_on < current_date`,

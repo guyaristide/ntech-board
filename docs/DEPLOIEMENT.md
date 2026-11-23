@@ -66,6 +66,7 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `PLATFORM_HOST` | Hôte de la console de la plateforme, réservée aux super-administrateurs (voir « Console de la plateforme »). Par défaut `boards.neiba-technologies.com` | non |
 | `PUBLIC_ORIGIN` | Adresse publique d’un projet dans les liens des e-mails de notification, `{slug}` étant le projet. Vide : le premier modèle de `PROJECT_HOSTS`, en https (`https://{slug}-board.neiba-technologies.com`). À renseigner seulement si l’adresse publique diffère | non |
 | `NOTIFY_QUIET_MINUTES`, `NOTIFY_DIGEST_HOUR` | Notifications par e-mail : minutes de calme avant d’envoyer un e-mail « tout de suite » (des changements en rafale n’en font qu’un ; 5 par défaut), et heure du serveur pour le récapitulatif quotidien et les rappels d’échéance (8 par défaut). Les e-mails partent par le même SMTP que les liens de connexion | non |
+| `BACKUP_HOUR`, `BACKUP_KEEP_DAILY`, `BACKUP_KEEP_WEEKLY`, `BACKUP_KEEP_MONTHLY`, `BACKUP_KEEP_SAFETY_DAYS` | Sauvegardes automatiques par projet (voir § 8) : heure du serveur de la sauvegarde quotidienne (2 par défaut, `off` pour les désactiver), puis conservation : toutes pendant N jours (14), une par semaine pendant N semaines (8), une par mois pendant N mois (12) ; les sauvegardes prises avant une restauration ou une suppression sont gardées N jours (90) | non |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Notifications système (téléphone, ordinateur), même tableau fermé. Créez la paire une fois avec `npx web-push generate-vapid-keys` ; `VAPID_SUBJECT` est une adresse de contact (`mailto:…`). Sans elles, les notifications restent dans le tableau et par e-mail. **Ne plus changer la paire ensuite** : les abonnements des appareils deviendraient invalides | non, mais nécessaire pour les notifications système |
 
 Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD`, `SECRETS_KEY` et `VAPID_PRIVATE_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
@@ -302,6 +303,21 @@ node apps/server/dist/cli.js import:risks    etourisme seeds/etourisme/risks.jso
 Ouvrez ensuite <https://etourisme-board.neiba-technologies.com>, saisissez votre e-mail, puis cliquez sur le lien reçu. Les membres s'invitent ensuite depuis **Administration**. C'est aussi là que se font les imports suivants : nouveau planning `.xlsx`, nouveau backlog `.json`.
 
 ## 8. Sauvegardes
+
+Deux niveaux se complètent : les sauvegardes par projet, prises par l'application sans rien configurer, et la sauvegarde de toute la base, à programmer une fois dans Coolify.
+
+### Sauvegardes par projet (automatiques)
+
+Chaque nuit, vers l'heure de `BACKUP_HOUR` (2 h par défaut), l'application écrit pour chaque projet un fichier compressé dans le volume `board-storage`, dossier `backups/projects/`. Un projet qui n'a pas changé depuis sa dernière sauvegarde n'est pas recopié.
+
+- **Contenu** : réglages, cadrage, réalisation, discussions et liste des membres. Les fichiers joints eux-mêmes et l'historique des modifications n'y sont pas : ils relèvent de la sauvegarde de la base et du stockage.
+- **Conservation** : toutes les sauvegardes pendant 14 jours, puis une par semaine pendant 8 semaines, puis une par mois pendant 12 mois. Les sauvegardes manuelles restent jusqu'à leur suppression.
+- **Filets de sécurité** : une sauvegarde est prise d'office avant tout retour à une sauvegarde et avant la suppression d'un projet ; elle est gardée 90 jours.
+- **Restauration** : dans le projet, **Administration › Sauvegardes** (ramener le projet à un état passé, en recopiant son adresse pour confirmer) ; dans la console, **Sauvegardes** (recréer un projet supprimé, ou une copie d'un projet à une date donnée).
+
+Ces fichiers sont sur le même serveur que l'application : ils protègent contre une erreur de manipulation, pas contre la perte du serveur. Copiez le volume `board-storage` hors du serveur.
+
+### Sauvegarde de toute la base
 
 Dans la ressource, ouvrez **Scheduled Tasks**, puis **+ Add** :
 

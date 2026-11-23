@@ -13,3 +13,4 @@ export * from './sources';
 export * from './threads';
 export * from './notifications';
 export * from './platform';
+export * from './backups';
