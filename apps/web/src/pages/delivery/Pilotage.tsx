@@ -5,6 +5,7 @@ import {
   byCount,
   casesOf,
   forecast,
+  forecastRange,
   isBlocked,
   isDone,
   platformKeys,
@@ -28,7 +29,8 @@ import { Burndown, Velocity } from './Charts';
 import { day } from './exports';
 import { DeliveryGate, period, shortDay } from './parts';
 import styles from './Pilotage.module.css';
-import { useBurndown } from './usePilotage';
+import { FlowSection } from './FlowSection';
+import { useBurndown, useFlow } from './usePilotage';
 
 const pct = (done: number, total: number) => (total ? Math.round((done / total) * 100) : 0);
 
@@ -103,6 +105,7 @@ export function Pilotage() {
   const unit = count ? 'tickets' : UNIT[settings.delivery.estimation];
   const active = sprints.find(s => s.status === 'active');
   const chart = useBurndown(settings, active, tickets);
+  const flow = useFlow(settings, tickets);
   const v = velocity(sprints, count);
   const own = active ? tickets.filter(t => t.sprint === active.id) : [];
   const ownDone = own.filter(t => isDone(settings, t));
@@ -149,6 +152,8 @@ export function Pilotage() {
             ? `${shortDay(f.date)} · ${f.sprints} sprint${(f.sprints ?? 0) > 1 ? 's' : ''}${f.late ? ', en retard' : ''}`
             : 'Vélocité inconnue';
   };
+  const range = (r: Release) => (r.status === 'Livrée' ? null : forecastRange(settings, r, tickets, sprints));
+  const chance = (n: number) => `${Math.round(n * 100)} %`;
   const releaseColumns: Column<Release>[] = [
     ['Version', r => r.name],
     ['Livraison visée', r => day(r.end)],
@@ -172,6 +177,15 @@ export function Pilotage() {
     ],
     ['Prévision', r => forecastText(r)],
     ['Date prévue', r => day(forecast(settings, r, tickets, sprints).date ?? null)],
+    ['Date probable (1 chance sur 2)', r => day(range(r)?.likely.date ?? null)],
+    ['Date prudente (85 %)', r => day(range(r)?.safe.date ?? null)],
+    [
+      'Probabilité de tenir la date visée (%)',
+      r => {
+        const on = range(r)?.onTime;
+        return on === null || on === undefined ? '' : Math.round(on * 100);
+      },
+    ],
   ];
   const groupColumns: Column<GroupProgress>[] = [
     [by === 'epic' ? 'Cas d’usage' : 'Plateforme', r => r.label],
@@ -337,13 +351,16 @@ export function Pilotage() {
                   <th>Statut</th>
                   <th className={styles.n}>{count ? 'Tickets' : 'Estimation'}</th>
                   <th>Avancement</th>
-                  <th title="Reste à faire divisé par la vélocité moyenne">Prévision</th>
+                  <th title="Reste à faire divisé par la vélocité moyenne ; en dessous, fourchette obtenue en rejouant 2 000 fois la suite du projet avec ce qu’ont livré les derniers sprints clos">
+                    Prévision
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {shownReleases.map(r => {
                   const p = releaseProgress(settings, r, tickets);
                   const f = forecast(settings, r, tickets, sprints);
+                  const g = range(r);
                   return (
                     <tr key={r.id}>
                       <td>
@@ -367,7 +384,22 @@ export function Pilotage() {
                       <td className={styles.progressCell}>
                         <Meter done={count ? p.doneCount : p.done} total={count ? p.count : p.total} />
                       </td>
-                      <td className={f.late ? styles.late : undefined}>{forecastText(r)}</td>
+                      <td>
+                        <span className={`${styles.rangeLine} ${f.late ? styles.late : ''}`}>
+                          {forecastText(r)}
+                        </span>
+                        {g ? (
+                          <span className={styles.range}>
+                            <span>1 chance sur 2 : {shortDay(g.likely.date)}</span>
+                            <span>85 % de chances : {shortDay(g.safe.date)}</span>
+                            {g.onTime !== null ? (
+                              <b data-low={g.onTime < 0.5 || undefined}>
+                                Date visée tenue à {chance(g.onTime)}
+                              </b>
+                            ) : null}
+                          </span>
+                        ) : null}
+                      </td>
                     </tr>
                   );
                 })}
@@ -377,6 +409,8 @@ export function Pilotage() {
         ) : (
           <p className={page.faint}>Aucune version.</p>
         )}
+
+        {flow ? <FlowSection flow={flow} settings={settings} /> : null}
 
         <h2 className={page.h2}>Avancement des US</h2>
         <div className={styles.tabs}>

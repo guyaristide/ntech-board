@@ -14,6 +14,7 @@ import { authRoutes } from './routes/auth';
 import { governanceRoutes } from './routes/governance';
 import { deliveryRoutes } from './routes/delivery';
 import { labelRoutes } from './routes/labels';
+import { flowRoutes } from './routes/flow';
 import { sprintPlanRoutes } from './routes/sprintPlan';
 import { fileRoutes } from './routes/files';
 import { partyRoutes } from './routes/parties';
@@ -79,6 +80,7 @@ export function createApp() {
   api.route('/', deliveryRoutes);
   api.route('/', labelRoutes);
   api.route('/', sprintPlanRoutes);
+  api.route('/', flowRoutes);
   api.route('/', fileRoutes);
   api.route('/', recetteRoutes);
   api.route('/', tokenRoutes);

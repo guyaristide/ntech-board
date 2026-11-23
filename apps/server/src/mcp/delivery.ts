@@ -6,7 +6,9 @@ import {
   carriedFrom,
   casesOf,
   CAMPAIGN_MODE_LABEL,
+  flowMetrics,
   forecast,
+  forecastRange,
   isBlocked,
   isDone,
   releaseProgress,
@@ -15,6 +17,7 @@ import {
   testSummary,
   velocity,
   type SprintDay,
+  type StatusChange,
   type Ticket,
   type WorkspaceData,
 } from '@board/shared';
@@ -185,7 +188,7 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
     {
       title: 'Pilotage',
       description:
-        'Où en est la réalisation : sprint en cours et burndown, vélocité, avancement et prévision de fin de chaque version, tickets bloqués, tickets reportés.',
+        'Où en est la réalisation : sprint en cours et burndown, vélocité, avancement et prévision de fin de chaque version (date simple, fourchette probabiliste, chances de tenir la date visée), flux (temps de cycle, temps par étape, tickets qui stagnent), tickets bloqués, tickets reportés.',
     },
     async () => {
       const ws = await ctx.workspace();
@@ -199,6 +202,10 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
       const v = velocity(ws.sprints, count);
       const blocked = ws.tickets.filter(t => !isDone(s, t) && isBlocked(s, ws.tickets, t));
       const carried = ws.tickets.filter(t => carriedFrom(s, ws.sprints, t).length);
+      const flow = flowMetrics(s, ws.tickets, await ctx.api<StatusChange[]>('GET', '/flow/status-changes'));
+      const span = (d: number | null) =>
+        d === null ? '—' : d < 1 ? `${Math.max(1, Math.round(d * 24))} h` : `${Math.round(d * 10) / 10} j`;
+      const stale = flow.aging.filter(a => a.stale);
       return lines(
         active
           ? `## ${active.name} (${active.start} → ${active.end})\nReste à faire : ${last ? unit(last.remaining!) : '—'} sur un périmètre de ${last ? unit(last.scope!) : '—'} ; rythme idéal ce jour : ${b && last ? unit(Math.round(b.points.find(p => p.day === last.day)!.ideal * 10) / 10) : '—'}.`
@@ -213,8 +220,22 @@ export function registerDelivery(server: McpServer, ctx: Ctx) {
             const done = count
               ? `${p.doneCount}/${p.count} tickets`
               : `${amount(p.done, s)} / ${amount(p.total, s)}`;
-            return `- ${r.name} · ${r.status} · visée ${r.end ?? '—'} · ${done}${f.date ? ` · fin prévue ${f.date} (${f.sprints} sprints)${f.late ? ' EN RETARD' : ''}` : ''}`;
+            const g = r.status === 'Livrée' ? null : forecastRange(s, r, ws.tickets, ws.sprints);
+            const range = g
+              ? ` · simulation : 1 chance sur 2 le ${g.likely.date}, 85 % le ${g.safe.date}${g.onTime === null ? '' : `, date visée tenue à ${Math.round(g.onTime * 100)} %`}`
+              : '';
+            return `- ${r.name} · ${r.status} · visée ${r.end ?? '—'} · ${done}${f.date ? ` · fin prévue ${f.date} (${f.sprints} sprints)${f.late ? ' EN RETARD' : ''}` : ''}${range}`;
           },
+        ),
+        '\n## Flux (tickets terminés sur 90 jours)',
+        `Temps de cycle : médiane ${span(flow.cycle.median)}, 85 % en moins de ${span(flow.cycle.p85)} (${flow.finished} tickets mesurés) ; délai complet médian ${span(flow.lead)}.`,
+        `Temps moyen par étape : ${flow.steps.map(x => `${x.name} ${span(x.days)}`).join(' · ') || '—'}`,
+        `Tickets en cours qui stagnent (plus vieux que 85 % des tickets terminés) : ${stale.length}`,
+        list(
+          stale,
+          a =>
+            `- ${row(ws, a.ticket)} · en cours depuis ${span(a.age)}, dans son étape depuis ${span(a.inStep)}`,
+          '—',
         ),
         `\n## Tickets bloqués : ${blocked.length}`,
         list(blocked, t => `- ${row(ws, t)}`, '—'),

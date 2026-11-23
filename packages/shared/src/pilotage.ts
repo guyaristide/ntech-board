@@ -131,6 +131,64 @@ export function forecast(
   return { remaining, sprints: needed, date, late: !!release.end && date > release.end };
 }
 
+/** Générateur pseudo-aléatoire à graine : la même situation donne toujours la même prévision. */
+function seeded(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Prévision probabiliste de fin d'une version : on rejoue des milliers de fois la suite du projet en
+ * tirant au sort, pour chaque sprint à venir, ce qu'a livré un des derniers sprints clos. On en tire
+ * une date « probable » (une chance sur deux), une date « prudente » (85 %) et la probabilité de tenir
+ * la date visée. Il faut au moins trois sprints clos ; sinon null.
+ */
+export function forecastRange(
+  settings: ProjectSettings,
+  release: Release,
+  tickets: Ticket[],
+  sprints: Sprint[],
+  now = today(),
+  runs = 2000,
+) {
+  const p = releaseProgress(settings, release, tickets);
+  const count = byCount(settings);
+  const remaining = count ? p.count - p.doneCount : p.total - p.done;
+  const history = velocity(sprints, count)
+    .closed.slice(-8)
+    .map(s => delivered(s, count) ?? 0);
+  if (remaining <= 0 || history.length < 3 || !history.some(v => v > 0)) return null;
+  const random = seeded(Math.round(remaining * 100) + history.reduce((n, v, i) => n + v * (i + 7) * 31, 0));
+  const needed: number[] = [];
+  for (let r = 0; r < runs; r++) {
+    let left = remaining;
+    let n = 0;
+    while (left > 0 && n < 200) {
+      left -= history[Math.floor(random() * history.length)];
+      n++;
+    }
+    needed.push(n);
+  }
+  needed.sort((a, b) => a - b);
+  const active = sprints.find(s => s.status === 'active');
+  const from = active?.end && active.end > now ? active.end : now;
+  const dateOf = (n: number) =>
+    iso(new Date(at(from).getTime() + n * settings.delivery.sprintWeeks * 7 * DAY));
+  const pick = (q: number) => needed[Math.min(runs - 1, Math.ceil(q * runs) - 1)];
+  return {
+    samples: history.length,
+    likely: { sprints: pick(0.5), date: dateOf(pick(0.5)) },
+    safe: { sprints: pick(0.85), date: dateOf(pick(0.85)) },
+    /** Part des simulations qui finissent à la date visée ou avant (0 à 1) ; null sans date visée. */
+    onTime: release.end ? needed.filter(n => dateOf(n) <= release.end!).length / runs : null,
+  };
+}
+
 /** Tickets d'une US : ceux qui la réalisent, et leurs sous-tâches. */
 export function ticketsOfStory(tickets: Ticket[], story: string) {
   const direct = tickets.filter(t => t.story === story);

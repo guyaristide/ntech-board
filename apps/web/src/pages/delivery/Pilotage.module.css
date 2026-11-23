@@ -231,3 +231,22 @@ a.kpi:hover {
 .meter[data-empty] > span:first-child {
   visibility: hidden;
 }
+
+/* Fourchette de la prévision probabiliste, sous la prévision simple : une ligne par information. */
+.rangeLine {
+  display: block;
+  min-width: 170px;
+  white-space: normal;
+}
+.range {
+  display: grid;
+  color: var(--text-faint);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.range b {
+  font-weight: 500;
+}
+.range b[data-low] {
+  color: var(--danger);
+}
