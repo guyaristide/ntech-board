@@ -10,6 +10,7 @@ import { Diligences } from './pages/diligences/Diligences';
 import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
+import { SlackLink } from './pages/SlackLink';
 import { McpAccess } from './pages/McpAccess';
 import { Board } from './pages/delivery/Board';
 import { CampaignPage } from './pages/delivery/CampaignPage';
@@ -70,6 +71,7 @@ export function App() {
           <Route path="connexion" element={<Navigate to="/" replace />} />
           <Route element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="slack/relier" element={<SlackLink />} />
             <Route path="backlog" element={<Backlog />} />
             <Route path="us/:id" element={<StoryPage />} />
             <Route path="epic/:id" element={<EpicPage />} />

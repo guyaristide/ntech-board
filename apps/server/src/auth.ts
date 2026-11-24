@@ -78,6 +78,32 @@ export async function closeSession(c: Context) {
   deleteCookie(c, COOKIE, { path: '/' });
 }
 
+/**
+ * Appels internes au nom d'un membre (commande Slack) : le serveur rappelle sa propre API sans passer
+ * par le réseau, avec un secret tiré au démarrage et jamais sorti du processus. Mêmes routes, mêmes
+ * contrôles de rôle que l'interface.
+ */
+const INTERNAL_HEADER = 'x-board-internal';
+const INTERNAL_SECRET = randomBytes(32).toString('hex');
+export const internalHeaders = (userId: string) => ({
+  [INTERNAL_HEADER]: INTERNAL_SECRET,
+  'x-board-user': userId,
+});
+
+async function fromInternal(c: Context<AppEnv>, projectId: string, userId: string) {
+  const { rows } = await pool.query<User & { role: Role | null }>(
+    `SELECT u.id, u.email, u.name, m.role FROM users u
+       LEFT JOIN memberships m ON m.user_id = u.id AND m.project_id = $2
+      WHERE u.id::text = $1`,
+    [userId, projectId],
+  );
+  const row = rows[0];
+  const role: Role | null = row ? (row.role ?? (isSuperadmin(row.email) ? 'admin' : null)) : null;
+  if (!row || !role) return;
+  c.set('user', { id: row.id, email: row.email, name: row.name });
+  c.set('role', role);
+}
+
 /** Résout le projet (sous-domaine) puis l'utilisateur et son rôle (cookie de session). */
 export const context: MiddlewareHandler<AppEnv> = async (c, next) => {
   const host = c.req.header('x-forwarded-host') ?? c.req.header('host') ?? '';
@@ -91,6 +117,11 @@ export const context: MiddlewareHandler<AppEnv> = async (c, next) => {
   c.set('superadmin', false);
   c.set('sessionHash', null);
   c.set('apiToken', null);
+  const inner = c.req.header(INTERNAL_HEADER);
+  if (inner && inner === INTERNAL_SECRET) {
+    await fromInternal(c, project.id, c.req.header('x-board-user') ?? '');
+    return next();
+  }
   const bearer = c.req.header('authorization')?.match(/^Bearer\s+(brd_[A-Za-z0-9_-]{20,})$/)?.[1];
   if (bearer) {
     await fromToken(c, project.id, bearer);

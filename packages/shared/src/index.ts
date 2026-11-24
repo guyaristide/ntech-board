@@ -14,3 +14,4 @@ export * from './threads';
 export * from './notifications';
 export * from './platform';
 export * from './backups';
+export * from './slack';

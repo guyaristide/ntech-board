@@ -15,6 +15,7 @@ import { governanceRoutes } from './routes/governance';
 import { deliveryRoutes } from './routes/delivery';
 import { labelRoutes } from './routes/labels';
 import { flowRoutes } from './routes/flow';
+import { slackRoutes } from './routes/slack';
 import { sprintPlanRoutes } from './routes/sprintPlan';
 import { fileRoutes } from './routes/files';
 import { partyRoutes } from './routes/parties';
@@ -92,6 +93,10 @@ export function createApp() {
   api.route(
     '/',
     mcpRoutes(req => Promise.resolve(app.fetch(req))),
+  );
+  api.route(
+    '/',
+    slackRoutes(req => Promise.resolve(app.fetch(req))),
   );
   api.route('/admin', adminRoutes);
   api.notFound(c => c.json({ error: 'not_found' }, 404));

@@ -18,6 +18,7 @@ import styles from './Parties.module.css';
 import { EditableList } from './EditableList';
 import { SettingsCadrage } from './SettingsCadrage';
 import { SettingsAi } from './SettingsAi';
+import { SettingsSlack } from './SettingsSlack';
 import { SettingsFiles } from './SettingsFiles';
 import { SettingsProject } from './SettingsProject';
 import { SettingsTemplate } from '../SettingsTemplate';
@@ -29,7 +30,7 @@ const TABS = [
   { id: 'delivery', label: 'Réalisation', hint: 'Sprints, tickets, visibilité', icon: 'cycle' },
   { id: 'scoping', label: 'Cadrage', hint: 'Versions, acteurs, risques', icon: 'list' },
   { id: 'files', label: 'Fichiers', hint: 'Pièces jointes, stockages', icon: 'folder' },
-  { id: 'integrations', label: 'Intégrations', hint: 'Accès MCP, analyse Claude', icon: 'plug' },
+  { id: 'integrations', label: 'Intégrations', hint: 'Accès MCP, Claude, Slack', icon: 'plug' },
 ] as const satisfies readonly SideTab[];
 type TabId = (typeof TABS)[number]['id'];
 
@@ -333,6 +334,7 @@ export function Settings() {
           <>
             <SettingsCadrage part="mcp" draft={draft} setDraft={setDraft} />
             <SettingsAi />
+            <SettingsSlack />
           </>
         ) : null}
 

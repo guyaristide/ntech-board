@@ -77,6 +77,8 @@ export const env = {
     monthly: Number(process.env.BACKUP_KEEP_MONTHLY ?? 12),
     safetyDays: Number(process.env.BACKUP_KEEP_SAFETY_DAYS ?? 90),
   },
+  /** Slack : secondes de calme avant de publier un événement (les changements en rafale n'en font qu'un). */
+  slackQuietSeconds: Number(process.env.SLACK_QUIET_SECONDS ?? 90),
   /** Cookies « Secure » : auto (selon X-Forwarded-Proto), true ou false. */
   cookieSecure: process.env.COOKIE_SECURE ?? 'auto',
   sessionDays: Number(process.env.SESSION_DAYS ?? 30),

@@ -67,6 +67,7 @@ Ouvrez l'onglet **Environment Variables** de la ressource. Coolify y liste les v
 | `PUBLIC_ORIGIN` | Adresse publique d’un projet dans les liens des e-mails de notification, `{slug}` étant le projet. Vide : le premier modèle de `PROJECT_HOSTS`, en https (`https://{slug}-board.neiba-technologies.com`). À renseigner seulement si l’adresse publique diffère | non |
 | `NOTIFY_QUIET_MINUTES`, `NOTIFY_DIGEST_HOUR` | Notifications par e-mail : minutes de calme avant d’envoyer un e-mail « tout de suite » (des changements en rafale n’en font qu’un ; 5 par défaut), et heure du serveur pour le récapitulatif quotidien et les rappels d’échéance (8 par défaut). Les e-mails partent par le même SMTP que les liens de connexion | non |
 | `BACKUP_HOUR`, `BACKUP_KEEP_DAILY`, `BACKUP_KEEP_WEEKLY`, `BACKUP_KEEP_MONTHLY`, `BACKUP_KEEP_SAFETY_DAYS` | Sauvegardes automatiques par projet (voir § 8) : heure du serveur de la sauvegarde quotidienne (2 par défaut, `off` pour les désactiver), puis conservation : toutes pendant N jours (14), une par semaine pendant N semaines (8), une par mois pendant N mois (12) ; les sauvegardes prises avant une restauration ou une suppression sont gardées N jours (90) | non |
+| `SLACK_QUIET_SECONDS` | Slack (voir la section Slack) : secondes de calme avant de publier un événement dans le canal ; des changements en rafale ne font qu'un message (90 par défaut). Le webhook et le secret de signature de chaque projet se saisissent dans ses Réglages et sont chiffrés avec `SECRETS_KEY` | non |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Notifications système (téléphone, ordinateur), même tableau fermé. Créez la paire une fois avec `npx web-push generate-vapid-keys` ; `VAPID_SUBJECT` est une adresse de contact (`mailto:…`). Sans elles, les notifications restent dans le tableau et par e-mail. **Ne plus changer la paire ensuite** : les abonnements des appareils deviendraient invalides | non, mais nécessaire pour les notifications système |
 
 Marquez `POSTGRES_PASSWORD`, `SMTP_PASSWORD`, `SECRETS_KEY` et `VAPID_PRIVATE_KEY` comme secrets dans Coolify (option **Is Secret** ou **Locked**, selon la version).
@@ -378,3 +379,20 @@ Un tenant est un projet, servi à l'adresse `<slug>-board.neiba-technologies.com
 ## 10. Mises à jour
 
 Poussez sur `main`, puis lancez **Redeploy** dans Coolify, ou activez le déploiement automatique par webhook. Les migrations s'appliquent au démarrage, et les volumes ne sont pas touchés. Pendant le redémarrage, les navigateurs ouverts se reconnectent seuls au flux temps réel et rechargent les données.
+
+## 11. Slack
+
+Chaque projet se relie à Slack dans **Réglages › Intégrations › Slack**, dans les deux sens. Il faut `SECRETS_KEY` sur le serveur (les secrets Slack sont chiffrés en base) et une application Slack, créée une fois par espace de travail :
+
+1. Ouvrez <https://api.slack.com/apps>, **Create New App**, **From scratch**, donnez-lui un nom (« NTECH Board ») et choisissez l'espace de travail.
+2. **Du tableau vers Slack** : dans **Incoming Webhooks**, activez-les, puis **Add New Webhook** et choisissez le canal. Copiez l'adresse (`https://hooks.slack.com/services/…`) dans les réglages du projet. Un message de bienvenue part dans le canal pour la vérifier.
+3. **De Slack vers le tableau** : dans **Slash Commands**, **Create New Command** : commande `/board`, et comme **Request URL** l'adresse affichée dans les réglages du projet (`https://<projet>-board.neiba-technologies.com/api/slack/command`). Dans **Basic Information › App Credentials**, copiez le **Signing Secret** dans les réglages du projet.
+4. Installez l'application dans l'espace de travail (**Install App**).
+
+Ce qu'il faut savoir :
+
+- **Publication** : création et changement d'étape des tickets, sprints démarrés ou clos, version livrée, risque devenu critique, nouveaux messages, statut des diligences, au choix de l'administrateur. Un événement part après `SLACK_QUIET_SECONDS` de calme : un ticket qui change plusieurs fois d'étape n'est annoncé qu'une fois, et pas du tout s'il revient à son étape de départ. Un envoi refusé est réessayé quatre fois ; la dernière erreur s'affiche dans les réglages.
+- **Commande `/board`** : `ticket <titre>`, `<identifiant>`, `chercher <mots>`, `mes tickets`, `statut <identifiant> <étape>`, `commenter <identifiant> <message>`, `note <texte>` (dépose un échange dans « À relire »), `aide`.
+- **Identité** : à son premier `/board`, chaque personne relie son compte Slack à son compte du tableau (lien valable 30 minutes, à ouvrir en étant connecté au tableau). Ses commandes s'exécutent ensuite avec son rôle et sa visibilité ; `/board delier` détache le compte.
+- **Sécurité** : chaque commande est vérifiée par la signature de Slack (HMAC du corps avec le Signing Secret, à cinq minutes près) ; une requête non signée est refusée.
+- **Un projet, une commande** : la Request URL désigne un projet. Pour piloter plusieurs projets depuis le même espace Slack, créez une commande par projet (`/board-etourisme`, `/board-pfo`…), chacune avec l'adresse de son projet ; le Signing Secret est le même.
