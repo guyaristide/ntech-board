@@ -14,6 +14,7 @@ import page from '../Page.module.css';
 import { AssigneeSelect, useMyParties } from './fields';
 import { TicketLabels } from './Labels';
 import { DeliveryGate, Estimate, Ready, sprintOrder } from './parts';
+import { FindingRefs } from './FindingLinks';
 import { Subtasks, TicketLinks } from './TicketRelations';
 import styles from './Delivery.module.css';
 import { confirmDialog } from '../../ui/Confirm';
@@ -267,6 +268,7 @@ export function TicketPage() {
 
         {ticket.type !== 'subtask' ? <Subtasks ticket={ticket} /> : null}
         <TicketLinks ticket={ticket} />
+        <FindingRefs kind="ticket" id={ticket.id} />
 
         <h2 className={page.h2}>Pièces jointes</h2>
         <Attachments kind="ticket" id={ticket.id} />

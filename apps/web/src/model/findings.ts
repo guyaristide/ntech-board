@@ -1,4 +1,4 @@
-import type { Finding, FindingNature, FindingSeverity, Ticket } from '@board/shared';
+import type { Finding, FindingLink, FindingNature, FindingSeverity, Ticket } from '@board/shared';
 import { api } from './api';
 import { ops } from './store';
 
@@ -13,9 +13,14 @@ export type FindingDraft = {
   expected?: string;
   actual?: string;
   environment?: string;
+  story?: string;
+  related?: FindingLink[];
 };
 type Content = Partial<
-  Pick<Finding, 'title' | 'nature' | 'severity' | 'steps' | 'expected' | 'actual' | 'environment' | 'story'>
+  Pick<
+    Finding,
+    'title' | 'nature' | 'severity' | 'steps' | 'expected' | 'actual' | 'environment' | 'story' | 'related'
+  >
 >;
 export type FindingDecision =
   | { action: 'accept'; ticket?: string; create?: boolean }

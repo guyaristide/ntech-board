@@ -1,8 +1,7 @@
-import { useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   byUrgency,
-  FINDING_NATURES,
   FINDING_NATURE_LABEL,
   FINDING_SEVERITIES,
   FINDING_SEVERITY_LABEL,
@@ -12,14 +11,11 @@ import {
   isOpenFinding,
   type Campaign,
   type Finding,
-  type FindingNature,
-  type FindingSeverity,
 } from '@board/shared';
-import { ApiError } from '../../model/api';
 import { useDelivery } from '../../model/delivery';
-import { findings as actions } from '../../model/findings';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import page from '../Page.module.css';
+import { ReportDialog } from './FindingReport';
 import recette from './Recette.module.css';
 import styles from './Findings.module.css';
 
@@ -39,142 +35,6 @@ export function useCanReport(campaign: Pick<Campaign, 'mode'>) {
   const canEdit = useCanEdit();
   const role = useWorkspace(s => s.session?.role);
   return canEdit || (role === 'viewer' && (campaign.mode === 'client' || campaign.mode === 'mixed'));
-}
-
-/** Formulaire de signalement d'un retour, libre ou sur un cas de test. */
-export function ReportDialog({
-  campaign,
-  caseKey = '',
-  criterion = '',
-  actual = '',
-  onClose,
-}: {
-  campaign: Campaign;
-  caseKey?: string;
-  criterion?: string;
-  actual?: string;
-  onClose: (created: Finding | null) => void;
-}) {
-  const [title, setTitle] = useState('');
-  const [nature, setNature] = useState<FindingNature>('bug');
-  const [severity, setSeverity] = useState<FindingSeverity>('major');
-  const [steps, setSteps] = useState('');
-  const [expected, setExpected] = useState(criterion);
-  const [seen, setSeen] = useState(actual);
-  const [environment, setEnvironment] = useState('');
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  const submit = async (e: FormEvent) => {
-    e.preventDefault();
-    setBusy(true);
-    try {
-      onClose(
-        await actions.create({
-          campaign: campaign.id,
-          caseKey,
-          title: title.trim(),
-          nature,
-          severity,
-          steps,
-          expected,
-          actual: seen,
-          environment,
-        }),
-      );
-    } catch (err) {
-      setError(err instanceof ApiError ? (err.message ?? err.code) : 'Erreur réseau, réessayez.');
-      setBusy(false);
-    }
-  };
-  return (
-    <div className={styles.backdrop} onMouseDown={e => e.target === e.currentTarget && onClose(null)}>
-      <form
-        className={styles.dialog}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Signaler un retour"
-        onSubmit={submit}
-      >
-        <h2>Signaler un retour</h2>
-        <p className={page.faint} style={{ margin: 0 }}>
-          {campaign.name}
-          {criterion ? ` · cas : ${criterion}` : ' · hors cas de test'}
-        </p>
-        <label className={styles.field}>
-          Titre
-          <input
-            value={title}
-            required
-            autoFocus
-            maxLength={300}
-            placeholder="Ce qui ne va pas, en une phrase"
-            onChange={e => setTitle(e.target.value)}
-          />
-        </label>
-        <div className={styles.pair}>
-          <label className={styles.field}>
-            Nature
-            <select value={nature} onChange={e => setNature(e.target.value as FindingNature)}>
-              {FINDING_NATURES.map(n => (
-                <option key={n} value={n}>
-                  {FINDING_NATURE_LABEL[n]}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className={styles.field}>
-            Gravité
-            <select value={severity} onChange={e => setSeverity(e.target.value as FindingSeverity)}>
-              {FINDING_SEVERITIES.map(s => (
-                <option key={s} value={s}>
-                  {FINDING_SEVERITY_LABEL[s]}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <label className={styles.field}>
-          Pour reproduire
-          <textarea value={steps} placeholder={'1. …\n2. …'} onChange={e => setSteps(e.target.value)} />
-        </label>
-        <div className={styles.pair}>
-          <label className={styles.field}>
-            Attendu
-            <textarea value={expected} onChange={e => setExpected(e.target.value)} />
-          </label>
-          <label className={styles.field}>
-            Constaté
-            <textarea value={seen} onChange={e => setSeen(e.target.value)} />
-          </label>
-        </div>
-        <label className={styles.field}>
-          Environnement
-          <input
-            value={environment}
-            maxLength={500}
-            placeholder="Navigateur, appareil, compte de test…"
-            onChange={e => setEnvironment(e.target.value)}
-          />
-        </label>
-        <p className={page.faint} style={{ margin: 0 }}>
-          Les captures d’écran s’ajoutent sur la fiche du retour, juste après.
-        </p>
-        {error ? (
-          <p className={styles.error} role="alert">
-            {error}
-          </p>
-        ) : null}
-        <p className={styles.dialogActions}>
-          <button type="button" className={page.outline} onClick={() => onClose(null)}>
-            Annuler
-          </button>
-          <button type="submit" className={page.primary} disabled={busy || !title.trim()}>
-            Signaler
-          </button>
-        </p>
-      </form>
-    </div>
-  );
 }
 
 /** Retours d'un cas de test, en liens courts. */

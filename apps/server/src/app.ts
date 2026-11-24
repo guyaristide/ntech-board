@@ -44,7 +44,8 @@ export function createApp() {
     secureHeaders({
       contentSecurityPolicy: {
         defaultSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:'],
+        // blob: aperçu local d'une capture avant son envoi.
+        imgSrc: ["'self'", 'data:', 'blob:'],
         styleSrc: ["'self'", "'unsafe-inline'"],
         connectSrc: ["'self'"],
         frameAncestors: ["'none'"],

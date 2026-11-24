@@ -20,6 +20,7 @@ import { confirmDialog } from '../../ui/Confirm';
 import { EditableText } from '../../ui/EditableText';
 import { ThreadSection } from '../../ui/Thread';
 import page from '../Page.module.css';
+import { FindingLinks } from './FindingLinks';
 import { FindingStatusTag } from './FindingParts';
 import { DeliveryGate } from './parts';
 import styles from './Findings.module.css';
@@ -326,6 +327,16 @@ export function FindingPage() {
               </div>
             </>
           ) : null}
+        </div>
+
+        <div className={styles.block}>
+          <h3>Éléments liés</h3>
+          <FindingLinks
+            value={f.related ?? []}
+            exclude={f.id}
+            readOnly={!canEdit}
+            onChange={related => set({ related })}
+          />
         </div>
 
         <NextStep key={f.status} f={f} run={run} />

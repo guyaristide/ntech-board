@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
 import {
+  FINDING_LINK_KINDS,
   FINDING_NATURES,
   FINDING_SEVERITIES,
   isDone,
@@ -44,6 +45,7 @@ const Content = z.object({
   actual: text,
   environment: z.string().max(500),
   story: z.string().max(40),
+  related: z.array(z.object({ kind: z.enum(FINDING_LINK_KINDS), id: z.string().min(1).max(40) })).max(30),
 });
 const Create = Content.partial()
   .required({ title: true })
@@ -95,6 +97,7 @@ findingRoutes.post('/findings', ...member, async c => {
       actual: input.actual ?? result?.comment ?? '',
       environment: input.environment ?? '',
       ticket: '',
+      related: input.related ?? [],
       reason: '',
       reporter: actor.id,
       reporterName: actor.name,

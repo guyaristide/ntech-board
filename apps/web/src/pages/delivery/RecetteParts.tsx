@@ -14,7 +14,8 @@ import { delivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
-import { CaseFindings, ReportDialog, useCanReport } from './FindingParts';
+import { CaseFindings, useCanReport } from './FindingParts';
+import { ReportDialog } from './FindingReport';
 import styles from './Recette.module.css';
 
 const RESULTS: Exclude<TestStatus, ''>[] = ['ok', 'ko', 'reserve', 'na'];
@@ -130,7 +131,6 @@ function CaseRow({
           <ReportDialog
             campaign={campaign}
             caseKey={key}
-            criterion={criterion.text}
             actual={r?.comment ?? ''}
             onClose={() => setReporting(false)}
           />

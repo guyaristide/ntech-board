@@ -63,7 +63,7 @@ async function visible(c: Ctx, id: string) {
 
 fileRoutes.post(
   '/attachments',
-  requireRole('editor'),
+  requireRole('viewer'),
   bodyLimit({
     maxSize: MAX_FILE_MB * 1024 * 1024 + 64 * 1024,
     onError: c =>
@@ -76,6 +76,11 @@ fileRoutes.post(
     const id = String(form.id ?? '');
     if (!(file instanceof File) || !isAttachable(kind) || !id) return c.json({ error: 'invalid' }, 400);
     const { project, user } = who(c);
+    // Un lecteur (le client en recette) ne joint des fichiers qu'aux retours qu'il a signalés.
+    if (c.get('role') === 'viewer') {
+      const own = kind === 'finding' ? await getEntity(project.id, 'finding', id) : null;
+      if (own?.reporter !== user.id) return c.json({ error: 'forbidden' }, 403);
+    }
     if (
       isDeliveryAttachment({ owner: { kind } } as Attachment) &&
       !(await seesDelivery(project.id, c.get('role'), user.id))

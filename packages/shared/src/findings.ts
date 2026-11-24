@@ -35,6 +35,21 @@ export const FINDING_STATUS_LABEL: Record<FindingStatus, string> = {
   rejected: 'Écarté',
 };
 
+/** Éléments qu'un retour peut citer : pour retrouver le contexte, et le retour depuis ces éléments. */
+export const FINDING_LINK_KINDS = ['story', 'ticket', 'risk', 'diligence', 'finding'] as const;
+export type FindingLinkKind = (typeof FINDING_LINK_KINDS)[number];
+export const FINDING_LINK_LABEL: Record<FindingLinkKind, string> = {
+  story: 'US',
+  ticket: 'Ticket',
+  risk: 'Risque',
+  diligence: 'Diligence',
+  finding: 'Retour',
+};
+export interface FindingLink {
+  kind: FindingLinkKind;
+  id: string;
+}
+
 /** Étape de la vie d'un retour : qui, quand, de quel état à quel état, et pourquoi. */
 export interface FindingStep {
   at: string;
@@ -64,6 +79,8 @@ export interface Finding {
   environment: string;
   /** Ticket qui porte la correction. */
   ticket: string;
+  /** Éléments liés : autres tickets, US, risques, diligences, retours. Absent des premiers retours. */
+  related?: FindingLink[];
   /** Motif, pour un retour écarté (doublon, non reproductible, hors périmètre…). */
   reason: string;
   /** Auteur du retour : il est prévenu quand il faut retester. */
@@ -138,3 +155,12 @@ export function closingObstacles(
     s.toRetest ? plural(s.toRetest, 'correction à retester', 'corrections à retester') : '',
   ].filter(Boolean);
 }
+
+/** Retours qui concernent un élément : par leur ticket de correction, leur US, ou un lien. */
+export const findingsAbout = (findings: Finding[], kind: FindingLinkKind, id: string) =>
+  findings.filter(
+    f =>
+      (kind === 'ticket' && f.ticket === id) ||
+      (kind === 'story' && f.story === id) ||
+      (f.related ?? []).some(l => l.kind === kind && l.id === id),
+  );
