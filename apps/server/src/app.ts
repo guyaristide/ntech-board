@@ -14,6 +14,7 @@ import { authRoutes } from './routes/auth';
 import { governanceRoutes } from './routes/governance';
 import { deliveryRoutes } from './routes/delivery';
 import { labelRoutes } from './routes/labels';
+import { findingRoutes } from './routes/findings';
 import { flowRoutes } from './routes/flow';
 import { slackRoutes } from './routes/slack';
 import { sprintPlanRoutes } from './routes/sprintPlan';
@@ -84,6 +85,7 @@ export function createApp() {
   api.route('/', flowRoutes);
   api.route('/', fileRoutes);
   api.route('/', recetteRoutes);
+  api.route('/', findingRoutes);
   api.route('/', tokenRoutes);
   api.route('/', sourceRoutes);
   api.route('/', aiRoutes);

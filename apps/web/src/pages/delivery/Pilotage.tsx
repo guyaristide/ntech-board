@@ -4,6 +4,7 @@ import {
   amount,
   byCount,
   casesOf,
+  findingSummary,
   forecast,
   forecastRange,
   isBlocked,
@@ -97,7 +98,8 @@ function GroupTable({ rows, count, first }: { rows: GroupProgress[]; count: bool
  * d'usage et par plateforme ; rapport COPIL en PDF, pour tout le projet ou une organisation.
  */
 export function Pilotage() {
-  const { settings, releases, sprints, tickets, campaigns } = useDelivery();
+  const { settings, releases, sprints, tickets, campaigns, findings } = useDelivery();
+  const openFindings = findingSummary(findings);
   const ws = useWorkspace();
   const [by, setBy] = useState<'epic' | 'platform'>('epic');
   const [org, setOrg] = useState('');
@@ -302,11 +304,18 @@ export function Pilotage() {
             </span>
           </Link>
           {campaigns.length ? (
-            <Link to="/realisation/recette" className={styles.kpi} data-alert={ko || undefined}>
+            <Link
+              to="/realisation/recette"
+              className={styles.kpi}
+              data-alert={ko || openFindings.bySeverity.blocking || undefined}
+            >
               <span className={styles.kpiLabel}>Recette</span>
               <span className={styles.kpiValue}>{ko}</span>
               <span className={page.faint}>
                 KO dans {testing.length} campagne{testing.length > 1 ? 's' : ''} en cours
+                {openFindings.open
+                  ? ` · ${openFindings.open} retour${openFindings.open > 1 ? 's' : ''} ouvert${openFindings.open > 1 ? 's' : ''}${openFindings.bySeverity.blocking ? `, dont ${openFindings.bySeverity.blocking} bloquant${openFindings.bySeverity.blocking > 1 ? 's' : ''}` : ''}`
+                  : ''}
               </span>
             </Link>
           ) : null}

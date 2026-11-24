@@ -22,6 +22,7 @@ import {
   NotFound,
 } from '../repo';
 import { all, blankTicket, keyOf } from './delivery';
+import { onCaseResult } from '../findings';
 import { blocks } from './schemas';
 import { body } from './workspace';
 
@@ -150,23 +151,23 @@ recetteRoutes.put('/campaigns/:id/results/:key', ...member, async c => {
   const key = c.req.param('key');
   if (!campaign.scope.includes(key.split(':')[0]))
     return c.json({ error: 'invalid', message: 'US hors périmètre.' }, 400);
-  return c.json(
-    await mutate(
-      project,
-      'campaign',
-      campaign.id,
-      user.id,
-      'result',
-      x => ({
-        ...x,
-        results: {
-          ...x.results,
-          [key]: { bug: x.results[key]?.bug ?? '', ...input, by: user.name || user.email, at: now() },
-        },
-      }),
-      { key, ...input },
-    ),
+  const updated = await mutate(
+    project,
+    'campaign',
+    campaign.id,
+    user.id,
+    'result',
+    x => ({
+      ...x,
+      results: {
+        ...x.results,
+        [key]: { bug: x.results[key]?.bug ?? '', ...input, by: user.name || user.email, at: now() },
+      },
+    }),
+    { key, ...input },
   );
+  await onCaseResult(project, campaign.id, key, input.status, { id: user.id, name: user.name || user.email });
+  return c.json((await getEntity(project, 'campaign', campaign.id)) ?? updated);
 });
 
 /** Verdict du client sur une US (modes « client » et « mixte »). */

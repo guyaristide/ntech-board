@@ -213,5 +213,6 @@ export const useDelivery = () =>
       sprints: s.sprints,
       tickets: s.tickets,
       campaigns: s.campaigns,
+      findings: s.findings,
     })),
   );

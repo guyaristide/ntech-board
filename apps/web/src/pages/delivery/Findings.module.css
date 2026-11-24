@@ -1,0 +1,239 @@
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 12px;
+  font-size: 13px;
+}
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.head h2 {
+  margin-bottom: 0;
+}
+
+/* Étiquettes de gravité et d'état : la gravité par un point de couleur, l'état par le fond. */
+.severity,
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 7px;
+  border-radius: 4px;
+  background: var(--bg-hover);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.severity::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  content: '';
+}
+.severity[data-severity='blocking']::before {
+  background: var(--danger);
+}
+.severity[data-severity='blocking'] {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  font-weight: 600;
+}
+.severity[data-severity='major']::before {
+  background: var(--warn);
+}
+.status[data-status='new'] {
+  background: color-mix(in srgb, var(--warn) 22%, transparent);
+}
+.status[data-status='retest'] {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+.status[data-status='closed'],
+.status[data-status='rejected'] {
+  color: var(--text-faint);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.row {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 4px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+.row[data-closed] .title {
+  color: var(--text-faint);
+}
+.id {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.meta {
+  color: var(--text-faint);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.caseLinks {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Formulaire de signalement (boîte de dialogue). */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: start center;
+  padding: 8vh 16px 16px;
+  overflow-y: auto;
+  background: var(--scrim);
+}
+.dialog {
+  display: grid;
+  gap: 12px;
+  width: min(560px, 100%);
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  box-shadow: var(--shadow-card);
+}
+.dialog h2 {
+  margin: 0;
+  font-size: 17px;
+}
+.field {
+  display: grid;
+  gap: 4px;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+}
+.field :is(input, select, textarea) {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+}
+.field textarea {
+  min-height: 62px;
+  resize: vertical;
+}
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.dialogActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 4px 0 0;
+}
+.error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 13px;
+}
+
+/* Fiche d'un retour. */
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-hover);
+  font-size: 14px;
+}
+.banner > span:first-child {
+  flex: 1 1 260px;
+}
+.banner input {
+  flex: 1 1 180px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.select {
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.select:disabled {
+  border-color: transparent;
+  opacity: 1;
+}
+.block {
+  margin: 16px 0 0;
+}
+.block h3 {
+  margin: 0 0 2px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.readonly {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.history {
+  display: grid;
+  gap: 4px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+  .row > .meta {
+    display: none;
+  }
+  .pair {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,6 +1,6 @@
 import { useMemo, useState, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { stepOf } from '@board/shared';
+import { FINDING_STATUS_LABEL, stepOf } from '@board/shared';
 import { useCanEdit, useIsAdmin, useSeesDelivery, useWorkspace } from '../model/store';
 import styles from './QuickFind.module.css';
 
@@ -92,6 +92,13 @@ export function QuickFind({ onClose }: { onClose: () => void }) {
         meta: `Campagne de recette · ${x.status}`,
         text: norm(`${x.id} ${x.name}`),
       })),
+      ...(delivery ? ws.findings : []).map(f => ({
+        to: `/realisation/retour/${f.id}`,
+        code: f.id,
+        title: f.title,
+        meta: `Retour de recette · ${FINDING_STATUS_LABEL[f.status]}`,
+        text: norm(`${f.id} ${f.title} ${f.actual} ${f.steps} ${f.ticket}`),
+      })),
       ...ws.risks.map(r => ({
         to: `/risque/${r.id}`,
         code: r.id,
@@ -170,6 +177,7 @@ export function QuickFind({ onClose }: { onClose: () => void }) {
       ws.sprints,
       ws.releases,
       ws.campaigns,
+      ws.findings,
       ws.risks,
       ws.parties,
       ws.settings,

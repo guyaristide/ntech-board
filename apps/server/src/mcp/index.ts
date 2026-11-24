@@ -13,6 +13,7 @@ import { ApiFailure, MESSAGES, type Ctx } from './context';
 import { registerDelivery } from './delivery';
 import { registerEntities } from './entities';
 import { registerRead } from './read';
+import { registerFindings } from './findings';
 import { registerThreads } from './threads';
 import { registerDeliveryWrite, registerWrite } from './write';
 
@@ -90,6 +91,7 @@ export function mcpRoutes(fetchApi: (req: Request) => Promise<Response>) {
     );
     registerRead(server, ctx);
     registerThreads(server, ctx, role !== 'viewer');
+    if (ctx.delivery) registerFindings(server, ctx, role !== 'viewer');
     if (ctx.delivery) registerDelivery(server, ctx);
     if (role !== 'viewer') registerWrite(server, ctx);
     if (ctx.delivery) registerDeliveryWrite(server, ctx, role !== 'viewer');

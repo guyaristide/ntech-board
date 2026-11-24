@@ -323,6 +323,7 @@ export async function importSnapshot(projectId: string, raw: Partial<WorkspaceDa
     ['sprint', raw.sprints],
     ['ticket', raw.tickets],
     ['campaign', raw.campaigns],
+    ['finding', raw.findings],
   ];
   const report: ImportReport = { added: 0, updated: 0, kept: 0, removed: 0, details: [] };
   await tx(async c => {

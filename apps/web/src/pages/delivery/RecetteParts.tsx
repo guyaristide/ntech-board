@@ -10,11 +10,11 @@ import {
   type TestStatus,
   type VerdictStatus,
 } from '@board/shared';
-import { ApiError } from '../../model/api';
 import { delivery } from '../../model/delivery';
 import { useCanEdit, useWorkspace } from '../../model/store';
 import { Tag } from '../../ui/Tag';
 import page from '../Page.module.css';
+import { CaseFindings, ReportDialog, useCanReport } from './FindingParts';
 import styles from './Recette.module.css';
 
 const RESULTS: Exclude<TestStatus, ''>[] = ['ok', 'ko', 'reserve', 'na'];
@@ -80,7 +80,9 @@ function CaseRow({
 }) {
   const rights = useRecetteRights(campaign);
   const me = useMe();
-  const [error, setError] = useState('');
+  const [error] = useState('');
+  const [reporting, setReporting] = useState(false);
+  const canReport = useCanReport(campaign);
   const key = `${storyId}:${criterion.id}`;
   const r = campaign.results[key];
   const status = r?.status ?? '';
@@ -112,20 +114,26 @@ function CaseRow({
         onChange={c => set(status, c)}
       />
       <span className={styles.follow}>
-        {r?.bug ? (
-          <Link to={`/realisation/ticket/${r.bug}`}>{r.bug}</Link>
-        ) : (status === 'ko' || status === 'reserve') && rights.manage ? (
+        {r?.bug ? <Link to={`/realisation/ticket/${r.bug}`}>{r.bug}</Link> : null}
+        <CaseFindings campaign={campaign.id} caseKey={key} />
+        {(status === 'ko' || status === 'reserve' || status === '') && canReport ? (
           <button
             type="button"
             className={page.ghost}
-            onClick={() =>
-              void delivery
-                .openBug(campaign.id, key)
-                .catch(e => setError(e instanceof ApiError ? (e.message ?? e.code) : 'Erreur'))
-            }
+            title="Signaler une anomalie, une question ou une remarque sur ce cas"
+            onClick={() => setReporting(true)}
           >
-            + Bug
+            + Retour
           </button>
+        ) : null}
+        {reporting ? (
+          <ReportDialog
+            campaign={campaign}
+            caseKey={key}
+            criterion={criterion.text}
+            actual={r?.comment ?? ''}
+            onClose={() => setReporting(false)}
+          />
         ) : null}
         {error ? <span className={styles.error}>{error}</span> : null}
         {r?.by ? (

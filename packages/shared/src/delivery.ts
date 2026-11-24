@@ -167,7 +167,7 @@ export function partiesOfUser(parties: Party[], userId: string | null) {
   return [...persons, ...roles];
 }
 
-export const DELIVERY_KINDS = ['release', 'sprint', 'ticket', 'campaign'] as const;
+export const DELIVERY_KINDS = ['release', 'sprint', 'ticket', 'campaign', 'finding'] as const;
 export type DeliveryKind = (typeof DELIVERY_KINDS)[number];
 export const isDeliveryKind = (kind: string): kind is DeliveryKind =>
   (DELIVERY_KINDS as readonly string[]).includes(kind);

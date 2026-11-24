@@ -25,7 +25,7 @@ const COMMENT_TARGET = {
 const kind = z
   .enum(THREAD_KINDS as unknown as [ThreadKind, ...ThreadKind[]])
   .describe(
-    'Type d’élément : story (US), epic, workshop, reference, phase, risk, diligence, party, release, sprint, ticket, campaign, attachment (pièce jointe)',
+    'Type d’élément : story (US), epic, workshop, reference, phase, risk, diligence, party, release, sprint, ticket, campaign, finding (retour de recette), attachment (pièce jointe)',
   );
 
 const line = (c: ThreadComment, indent = '') =>

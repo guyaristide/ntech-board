@@ -107,6 +107,8 @@ export function pathOf(kind: ThreadKind | string, id: string): string {
       return `/realisation/ticket/${e}`;
     case 'sprint':
       return `/realisation/sprint/${e}`;
+    case 'finding':
+      return `/realisation/retour/${e}`;
     case 'campaign':
       return `/realisation/recette/${e}`;
     case 'release':

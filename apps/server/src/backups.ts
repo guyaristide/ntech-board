@@ -49,6 +49,7 @@ const KINDS: [keyof WorkspaceData, string][] = [
   ['sprints', 'sprint'],
   ['tickets', 'ticket'],
   ['campaigns', 'campaign'],
+  ['findings', 'finding'],
   ['sources', 'source'],
   ['proposals', 'proposal'],
   ['comments', 'comment'],

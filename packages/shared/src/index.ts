@@ -15,3 +15,4 @@ export * from './notifications';
 export * from './platform';
 export * from './backups';
 export * from './slack';
+export * from './findings';

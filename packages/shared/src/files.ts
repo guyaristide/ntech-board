@@ -17,6 +17,7 @@ export const ATTACHABLE_KINDS = [
   'sprint',
   'ticket',
   'campaign',
+  'finding',
 ] as const;
 export type AttachableKind = (typeof ATTACHABLE_KINDS)[number];
 
@@ -211,6 +212,7 @@ export const KIND_FOLDER: Record<AttachableKind, string> = {
   sprint: 'sprints',
   ticket: 'tickets',
   campaign: 'recette',
+  finding: 'retours',
 };
 
 /** Réglages des pièces jointes (Réglages du projet › Fichiers). Les clés d'accès n'y figurent pas. */

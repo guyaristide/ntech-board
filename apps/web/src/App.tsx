@@ -11,6 +11,7 @@ import { EpicPage } from './pages/EpicPage';
 import { Home } from './pages/Home';
 import { Login, ProjectNotFound } from './pages/Login';
 import { SlackLink } from './pages/SlackLink';
+import { FindingPage } from './pages/delivery/FindingPage';
 import { McpAccess } from './pages/McpAccess';
 import { Board } from './pages/delivery/Board';
 import { CampaignPage } from './pages/delivery/CampaignPage';
@@ -91,6 +92,7 @@ export function App() {
             <Route path="realisation/tableau" element={<Board />} />
             <Route path="realisation/mes-tickets" element={<MyTickets />} />
             <Route path="realisation/ticket/:id" element={<TicketPage />} />
+            <Route path="realisation/retour/:id" element={<FindingPage />} />
             <Route path="realisation/recette" element={<Recette />} />
             <Route path="realisation/pilotage" element={<Pilotage />} />
             <Route path="realisation/recette/:id" element={<CampaignPage />} />

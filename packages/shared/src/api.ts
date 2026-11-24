@@ -1,6 +1,7 @@
 import type { Attachment } from './files';
 import type { Proposal, SourceItem } from './sources';
 import type { ThreadComment } from './threads';
+import type { Finding } from './findings';
 import type { Campaign, Release, Sprint, Ticket } from './delivery';
 import type { Party, ProjectSettings } from './parties';
 import type { Diligence, Epic, Phase, Reference, Risk, Story, Workshop } from './types';
@@ -63,6 +64,8 @@ export interface WorkspaceData {
   sprints: Sprint[];
   tickets: Ticket[];
   campaigns: Campaign[];
+  /** Retours de recette. */
+  findings: Finding[];
   attachments: Attachment[];
   /** Messages des fils de discussion, sur tous les éléments. */
   comments: ThreadComment[];
@@ -83,6 +86,7 @@ export type EntityKind =
   | 'sprint'
   | 'ticket'
   | 'campaign'
+  | 'finding'
   | 'reference'
   | 'attachment'
   | 'source'
@@ -100,6 +104,7 @@ export const ENTITY_KINDS: EntityKind[] = [
   'sprint',
   'ticket',
   'campaign',
+  'finding',
   'reference',
   'attachment',
   'source',
@@ -136,7 +141,9 @@ export type EntityOf<K extends EntityKind> = K extends 'story'
                             ? Proposal
                             : K extends 'comment'
                               ? ThreadComment
-                              : Campaign;
+                              : K extends 'finding'
+                                ? Finding
+                                : Campaign;
 
 export interface PresenceEntry {
   userId: string;
@@ -165,6 +172,7 @@ export type ServerEvent =
         | Sprint
         | Ticket
         | Campaign
+        | Finding
         | Reference
         | Attachment
         | SourceItem

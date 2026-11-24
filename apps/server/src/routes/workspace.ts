@@ -70,6 +70,7 @@ workspaceRoutes.get('/workspace', read, async c => {
       sprints: [],
       tickets: [],
       campaigns: [],
+      findings: [],
       attachments: data.attachments.filter(a => !isDeliveryKind(a.owner.kind)),
       comments: withoutDelivery(data.comments, data.attachments),
     });

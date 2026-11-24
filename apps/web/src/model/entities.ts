@@ -24,6 +24,7 @@ export const EMPTY: WorkspaceData = {
   sprints: [],
   tickets: [],
   campaigns: [],
+  findings: [],
   attachments: [],
   sources: [],
   proposals: [],
@@ -42,6 +43,7 @@ export const KEY: Record<
   | 'sprints'
   | 'tickets'
   | 'campaigns'
+  | 'findings'
   | 'references'
   | 'attachments'
   | 'sources'
@@ -59,6 +61,7 @@ export const KEY: Record<
   sprint: 'sprints',
   ticket: 'tickets',
   campaign: 'campaigns',
+  finding: 'findings',
   reference: 'references',
   attachment: 'attachments',
   source: 'sources',

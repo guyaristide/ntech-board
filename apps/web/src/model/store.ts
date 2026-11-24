@@ -248,6 +248,7 @@ export const useWorkspace = create<State>((set, get) => {
           sprints: data.sprints ?? [],
           tickets: (data.tickets ?? []).map(withTicketDefaults),
           campaigns: data.campaigns ?? [],
+          findings: data.findings ?? [],
           sources: data.sources ?? [],
           proposals: data.proposals ?? [],
           settings: withSettingsDefaults(data.settings),

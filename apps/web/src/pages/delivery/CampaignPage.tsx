@@ -6,6 +6,7 @@ import {
   CAMPAIGN_MODE_LABEL,
   CAMPAIGN_STATUSES,
   casesOf,
+  closingObstacles,
   testSummary,
   type CampaignMode,
   type CampaignStatus,
@@ -18,6 +19,7 @@ import { PdfButton } from '../../ui/PdfButton';
 import page from '../Page.module.css';
 import { campaignCases, caseColumns } from './exports';
 import { assigneeName } from './fields';
+import { FindingsSection } from './FindingParts';
 import { DeliveryGate } from './parts';
 import { StatusTag, StoryBlock, TestBar, useRecetteRights } from './RecetteParts';
 import styles from './Recette.module.css';
@@ -31,7 +33,7 @@ export function CampaignPage() {
   const { id = '' } = useParams();
   const navigate = useNavigate();
   const ws = useWorkspace();
-  const { releases, campaigns } = useDelivery();
+  const { releases, campaigns, findings } = useDelivery();
   const [filter, setFilter] = useState<'all' | 'todo' | 'issues'>('all');
   const [adding, setAdding] = useState('');
   const campaign = campaigns.find(x => x.id === id);
@@ -90,7 +92,7 @@ export function CampaignPage() {
                 onClick={async () => {
                   if (
                     !(await confirmDialog(
-                      `Supprimer ${campaign.name} et ses résultats ? Les bugs ouverts sont conservés.`,
+                      `Supprimer ${campaign.name} et ses résultats ? Ses retours sont supprimés ; les tickets ouverts sont conservés.`,
                     ))
                   )
                     return;
@@ -151,7 +153,23 @@ export function CampaignPage() {
               className={styles.select}
               value={campaign.status}
               disabled={!rights.manage}
-              onChange={e => set({ status: e.target.value as CampaignStatus })}
+              onChange={async e => {
+                const status = e.target.value as CampaignStatus;
+                const obstacles =
+                  status === 'Terminée'
+                    ? closingObstacles(campaign, casesOf(campaign, ws.stories), findings)
+                    : [];
+                if (
+                  obstacles.length &&
+                  !(await confirmDialog({
+                    title: `Clore ${campaign.name} avec des réserves ?`,
+                    message: `${obstacles.join(' ; ')}.`,
+                    confirmLabel: 'Clore quand même',
+                  }))
+                )
+                  return;
+                set({ status });
+              }}
             >
               {CAMPAIGN_STATUSES.map(s => (
                 <option key={s}>{s}</option>
@@ -292,6 +310,7 @@ export function CampaignPage() {
             Périmètre vide. Choisissez la version puis « + US de la version », ou ajoutez des US une à une.
           </p>
         ) : null}
+        <FindingsSection campaign={campaign} />
         <h2 className={page.h2}>Pièces jointes</h2>
         <Attachments kind="campaign" id={campaign.id} />
         <ThreadSection kind="campaign" id={campaign.id} />
